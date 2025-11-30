@@ -665,7 +665,7 @@ bool CResourceBrowser::CreateDirectory()
     return false;
 }
 
-bool CResourceBrowser::Delete(QVector<CResourceEntry*> Resources, QVector<CVirtualDirectory*> Directories)
+bool CResourceBrowser::Delete(QList<CResourceEntry*> Resources, QList<CVirtualDirectory*> Directories)
 {
     // Don't delete any resources/directories that are still referenced.
     // This is kind of a hack but there's no good way to clear out these references right now.

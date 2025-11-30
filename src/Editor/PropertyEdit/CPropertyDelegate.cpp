@@ -368,12 +368,12 @@ void CPropertyDelegate::setModelData(QWidget *pEditor, QAbstractItemModel* /*pMo
 
         if (!pObject)
         {
-            const QVector<void*> DataPointers{pData};
+            const QList<void*> DataPointers{pData};
             pCommand = new CEditIntrinsicPropertyCommand(pProp, DataPointers, mpModel, rkIndex);
         }
         else
         {
-            const QVector<CScriptObject*> Objects{pObject};
+            const QList<CScriptObject*> Objects{pObject};
             pCommand = (Type != EPropertyType::Array) ?
                         new CEditScriptPropertyCommand(pProp, Objects, mpModel, rkIndex) :
                         new CResizeScriptArrayCommand (pProp, Objects, mpModel, rkIndex);

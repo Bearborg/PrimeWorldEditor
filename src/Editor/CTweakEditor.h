@@ -4,6 +4,7 @@
 #include "Editor/IEditor.h"
 #include "Tweaks/CTweakData.h"
 
+#include <QList>
 #include <memory>
 
 namespace Ui {
@@ -18,7 +19,7 @@ class CTweakEditor : public IEditor
     std::unique_ptr<Ui::CTweakEditor> mpUI;
 
     /** List of editable tweak assets */
-    QVector<CTweakData*> mTweakAssets;
+    QList<CTweakData*> mTweakAssets;
 
     /** Whether the editor window has been shown before */
     bool mHasBeenShown = false;

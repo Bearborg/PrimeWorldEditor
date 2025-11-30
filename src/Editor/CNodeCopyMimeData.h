@@ -31,7 +31,7 @@ public:
 private:
     CWorldEditor *mpEditor;
     CAssetID mAreaID;
-    QVector<SCopiedNode> mCopiedNodes;
+    QList<SCopiedNode> mCopiedNodes;
     EGame mGame;
 
 public:
@@ -104,7 +104,7 @@ public:
 
     CAssetID AreaID() const                         { return mAreaID; }
     EGame Game() const                              { return mGame; }
-    const QVector<SCopiedNode>& CopiedNodes() const { return mCopiedNodes; }
+    const QList<SCopiedNode>& CopiedNodes() const { return mCopiedNodes; }
 };
 
 #endif // CNODECOPYMIMEDATA

@@ -44,10 +44,10 @@ void CResourceTableView::DeleteSelected()
     // Figure out which indices can actually be deleted
     CResourceProxyModel *pProxy = static_cast<CResourceProxyModel*>(model());
     CResourceTableModel *pModel = static_cast<CResourceTableModel*>(pProxy->sourceModel());
-    QVector<CResourceEntry*> ResourcesToDelete;
-    QVector<CVirtualDirectory*> DirsToDelete;
+    QList<CResourceEntry*> ResourcesToDelete;
+    QList<CVirtualDirectory*> DirsToDelete;
 
-    for (const QModelIndex Index : List)
+    for (const QModelIndex& Index : List)
     {
         const QModelIndex SourceIndex = pProxy->mapToSource(Index);
 

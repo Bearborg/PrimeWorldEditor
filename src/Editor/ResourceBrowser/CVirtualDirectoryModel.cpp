@@ -195,7 +195,7 @@ QModelIndex CVirtualDirectoryModel::GetIndexForDirectory(const CVirtualDirectory
     if (pDir == nullptr)
         return QModelIndex();
 
-    QVector<int> Indices;
+    QList<int> Indices;
     const CVirtualDirectory* pOriginal = pDir;
     const CVirtualDirectory* pParent = pDir->Parent();
 

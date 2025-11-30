@@ -7,7 +7,8 @@
 #include <Core/Scene/CModelNode.h>
 #include <Core/Scene/CScriptNode.h>
 #include <QAbstractTableModel>
-#include <QVector>
+#include <QList>
+#include <QMap>
 
 class CWorldEditor;
 

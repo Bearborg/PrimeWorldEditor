@@ -44,7 +44,7 @@ void CPasteNodesCommand::redo()
     if (!mpMimeData)
         return;
 
-    const QVector<CNodeCopyMimeData::SCopiedNode>& rkNodes = mpMimeData->CopiedNodes();
+    const auto& rkNodes = mpMimeData->CopiedNodes();
     CScene *pScene = mpEditor->Scene();
     CGameArea *pArea = mpEditor->ActiveArea();
     QList<CSceneNode*> PastedNodes;

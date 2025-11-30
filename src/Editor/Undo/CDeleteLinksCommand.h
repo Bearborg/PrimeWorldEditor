@@ -19,11 +19,11 @@ class CDeleteLinksCommand : public IUndoCommand
         uint32 SenderIndex;
         uint32 ReceiverIndex;
     };
-    QVector<SDeletedLink> mLinks;
+    QList<SDeletedLink> mLinks;
 
 public:
     CDeleteLinksCommand() = default;
-    CDeleteLinksCommand(CWorldEditor *pEditor, CScriptObject *pObject, ELinkType Type, const QVector<uint32>& rkIndices);
+    CDeleteLinksCommand(CWorldEditor *pEditor, CScriptObject *pObject, ELinkType Type, const QList<uint32>& rkIndices);
     void undo() override;
     void redo() override;
     bool AffectsCleanState() const override { return true; }

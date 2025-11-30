@@ -14,7 +14,7 @@
 class CFilteredResourceModel : public QAbstractTableModel
 {
     Q_OBJECT
-    QVector<CResourceEntry*> mEntries;
+    QList<CResourceEntry*> mEntries;
     int mInitialRow = 0;
 
 public:

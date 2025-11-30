@@ -622,7 +622,7 @@ void CWorldEditor::OnPropertyModified(IProperty *pProp)
 void CWorldEditor::SetSelectionActive(bool Active)
 {
     // Gather list of selected objects that actually have Active properties
-    QVector<CScriptObject*> Objects;
+    QList<CScriptObject*> Objects;
 
     for (CSelectionIterator It(mpSelection); It; ++It)
     {
@@ -640,7 +640,7 @@ void CWorldEditor::SetSelectionActive(bool Active)
 
         while (!Objects.isEmpty())
         {
-            QVector<CScriptObject*> CommandObjects;
+            QList<CScriptObject*> CommandObjects;
             CScriptTemplate* pTemplate = Objects[0]->Template();
             CBoolProperty* pActiveProperty = pTemplate->ActiveProperty();
 
@@ -1123,7 +1123,7 @@ void CWorldEditor::OnUnlinkClicked()
 
                 if (UnlinkIncoming)
                 {
-                    QVector<uint32> LinkIndices;
+                    QList<uint32> LinkIndices;
                     for (uint32 iLink = 0; iLink < pInst->NumLinks(ELinkType::Incoming); iLink++)
                         LinkIndices.push_back(iLink);
 
@@ -1133,7 +1133,7 @@ void CWorldEditor::OnUnlinkClicked()
 
                 if (UnlinkOutgoing)
                 {
-                    QVector<uint32> LinkIndices;
+                    QList<uint32> LinkIndices;
                     for (uint32 iLink = 0; iLink < pInst->NumLinks(ELinkType::Outgoing); iLink++)
                         LinkIndices.push_back(iLink);
 

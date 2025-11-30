@@ -211,8 +211,8 @@ void CResourceTableContextMenu::ShowDependencies()
 void CResourceTableContextMenu::Delete()
 {
     // Create confirmation message
-    QVector<CResourceEntry*> Resources;
-    QVector<CVirtualDirectory*> Directories;
+    QList<CResourceEntry*> Resources;
+    QList<CVirtualDirectory*> Directories;
 
     for (const QModelIndex& kIndex : mSelectedIndexes)
     {

@@ -31,7 +31,7 @@ class CDeleteSelectionCommand : public IUndoCommand
         uint32 LayerIndex;
         std::vector<char> InstanceData;
     };
-    QVector<SDeletedNode> mDeletedNodes;
+    QList<SDeletedNode> mDeletedNodes;
 
     struct SDeletedLink
     {
@@ -44,7 +44,7 @@ class CDeleteSelectionCommand : public IUndoCommand
         CInstancePtr pSender;
         CInstancePtr pReceiver;
     };
-    QVector<SDeletedLink> mDeletedLinks;
+    QList<SDeletedLink> mDeletedLinks;
 
 public:
     explicit CDeleteSelectionCommand(CWorldEditor *pEditor, const QString& rkCommandName = "Delete");

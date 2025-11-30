@@ -11,8 +11,8 @@
 template<typename EnumT>
 class TEnumComboBox : public QComboBox
 {
-    /** Vector forming an index -> enum mapping */
-    QVector<EnumT> mValueList;
+    /** List forming an index -> enum mapping */
+    QList<EnumT> mValueList;
 
 public:
     /** Constructor */

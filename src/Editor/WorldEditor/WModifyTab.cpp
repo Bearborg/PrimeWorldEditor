@@ -228,7 +228,7 @@ void WModifyTab::OnDeleteLinksClicked()
     if (SelectedIndices.isEmpty())
         return;
 
-    QVector<uint32> Indices;
+    QList<uint32> Indices;
     Indices.reserve(SelectedIndices.size());
     for (const auto& index : SelectedIndices)
         Indices.push_back(index.row());

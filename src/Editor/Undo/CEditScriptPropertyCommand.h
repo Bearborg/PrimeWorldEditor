@@ -8,12 +8,12 @@
 class CEditScriptPropertyCommand : public IEditPropertyCommand
 {
 protected:
-    QVector<CInstancePtr> mInstances;
+    QList<CInstancePtr> mInstances;
     QModelIndex mIndex;
 
 public:
     CEditScriptPropertyCommand(IProperty* pProperty,
-                               const QVector<CScriptObject*>& kInstances,
+                               const QList<CScriptObject*>& kInstances,
                                CPropertyModel* pModel,
                                QModelIndex Index = QModelIndex(),
                                const QString& kCommandName = "Edit Property")
@@ -27,7 +27,7 @@ public:
             mInstances.push_back(CInstancePtr(instance));
     }
 
-    void GetObjectDataPointers(QVector<void*>& OutPointers) const override
+    void GetObjectDataPointers(QList<void*>& OutPointers) const override
     {
         // todo: support multiple objects being edited at once on the property view
         if (mIndex.isValid())

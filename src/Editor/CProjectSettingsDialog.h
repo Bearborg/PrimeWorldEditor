@@ -5,6 +5,7 @@
 #include <Core/GameProject/CGameProject.h>
 #include <Core/Resource/CWorld.h>
 #include <QDialog>
+#include <QList>
 
 #include <memory>
 
@@ -18,8 +19,8 @@ class CProjectSettingsDialog : public QDialog
     std::unique_ptr<Ui::CProjectSettingsDialog> mpUI;
     CGameProject *mpProject = nullptr;
 
-    QVector<CResourceEntry*> mWorldEntries;
-    QVector<CResourceEntry*> mAreaEntries;
+    QList<CResourceEntry*> mWorldEntries;
+    QList<CResourceEntry*> mAreaEntries;
     TResPtr<CWorld> mpWorld;
 
 public:

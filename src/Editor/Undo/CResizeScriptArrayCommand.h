@@ -11,7 +11,7 @@ class CResizeScriptArrayCommand : public CEditScriptPropertyCommand
 
 public:
     CResizeScriptArrayCommand(IProperty* pProperty,
-                              const QVector<CScriptObject*>& rkInstances,
+                              const QList<CScriptObject*>& rkInstances,
                               CPropertyModel* pModel,
                               QModelIndex Index = QModelIndex(),
                               const QString& rkCommandName = "Resize Array"

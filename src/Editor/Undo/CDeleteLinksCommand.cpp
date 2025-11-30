@@ -1,7 +1,7 @@
 #include "CDeleteLinksCommand.h"
 #include <Core/Resource/Script/CLink.h>
 
-CDeleteLinksCommand::CDeleteLinksCommand(CWorldEditor *pEditor, CScriptObject *pObject, ELinkType Type, const QVector<uint32>& rkIndices)
+CDeleteLinksCommand::CDeleteLinksCommand(CWorldEditor *pEditor, CScriptObject *pObject, ELinkType Type, const QList<uint32>& rkIndices)
     : IUndoCommand("Delete Links")
     , mpEditor(pEditor)
 {
@@ -40,7 +40,7 @@ void CDeleteLinksCommand::undo()
         SDeletedLink *pDelLink;
         CLink *pLink;
     };
-    QVector<SNewLink> NewLinks;
+    QList<SNewLink> NewLinks;
 
     for (SDeletedLink& rDelLink : mLinks)
     {
@@ -76,7 +76,7 @@ void CDeleteLinksCommand::undo()
 
 void CDeleteLinksCommand::redo()
 {
-    QVector<CLink*> Links;
+    QList<CLink*> Links;
 
     for (const auto& rLink : mLinks)
     {

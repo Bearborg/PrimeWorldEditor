@@ -6,11 +6,11 @@
 class CEditIntrinsicPropertyCommand : public IEditPropertyCommand
 {
 protected:
-    QVector<void*> mDataPointers;
+    QList<void*> mDataPointers;
 
 public:
     CEditIntrinsicPropertyCommand(IProperty* pProperty,
-                                  const QVector<void*>& kDataPointers,
+                                  const QList<void*>& kDataPointers,
                                   CPropertyModel* pModel,
                                   QModelIndex Index = QModelIndex(),
                                   const QString& kCommandName = "Edit Property")
@@ -19,7 +19,7 @@ public:
     {
     }
 
-    void GetObjectDataPointers(QVector<void*>& rOutPointers) const override
+    void GetObjectDataPointers(QList<void*>& rOutPointers) const override
     {
         rOutPointers = mDataPointers;
     }

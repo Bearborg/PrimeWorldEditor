@@ -12,6 +12,8 @@
 #include <QUndoStack>
 #include <QVBoxLayout>
 
+#include <memory>
+
 namespace Ui {
 class CResourceBrowser;
 }
@@ -97,7 +99,7 @@ public slots:
     void OnSortModeChanged(int Index);
     void OnCreateAssetAction();
     bool CreateDirectory();
-    bool Delete(QVector<CResourceEntry*> Resources, QVector<CVirtualDirectory*> Directories);
+    bool Delete(QList<CResourceEntry*> Resources, QList<CVirtualDirectory*> Directories);
     void OnSearchStringChanged(const QString& SearchString);
     void OnDirectorySelectionChanged(const QModelIndex& rkNewIndex);
     void OnDoubleClickTable(QModelIndex Index);

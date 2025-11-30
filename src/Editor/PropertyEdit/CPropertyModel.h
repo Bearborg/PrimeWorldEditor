@@ -4,6 +4,9 @@
 #include <Core/Resource/Script/Property/Properties.h>
 #include <QAbstractItemModel>
 #include <QFont>
+#include <QList>
+#include <QMap>
+#include <vector>
 
 class CPropertyModel : public QAbstractItemModel
 {
@@ -16,7 +19,7 @@ class CPropertyModel : public QAbstractItemModel
         int ParentID;
         std::vector<int> ChildIDs;
     };
-    QVector<SProperty> mProperties;
+    QList<SProperty> mProperties;
     QMap<IProperty*, int> mPropertyToIDMap;
     int mFirstUnusedID = -1;
 

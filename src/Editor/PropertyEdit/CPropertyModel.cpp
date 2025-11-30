@@ -667,7 +667,7 @@ void CPropertyModel::SetShowPropertyNameValidity(bool Enable)
     mShowNameValidity = Enable;
 
     // Emit data changed so that name colors are updated;
-    const QVector<int> Roles{static_cast<int>(Qt::ForegroundRole)};
+    const QList<int> Roles{static_cast<int>(Qt::ForegroundRole)};
     const QModelIndex TopLeft = index(0, 0, QModelIndex());
     const QModelIndex BottomRight = index(rowCount(QModelIndex()) - 1, 0, QModelIndex());
     emit dataChanged(TopLeft, BottomRight, Roles);

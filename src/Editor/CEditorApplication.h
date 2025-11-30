@@ -3,8 +3,8 @@
 
 #include <Core/GameProject/CGameProject.h>
 #include <QApplication>
+#include <QList>
 #include <QTimer>
-#include <QVector>
 #include <memory>
 
 class CBasicViewport;
@@ -24,7 +24,7 @@ class CEditorApplication : public QApplication
     CWorldEditor *mpWorldEditor = nullptr;
     CResourceBrowser *mpResourceBrowser = nullptr;
     CProjectSettingsDialog *mpProjectDialog = nullptr;
-    QVector<IEditor*> mEditorWindows;
+    QList<IEditor*> mEditorWindows;
     QMap<CResourceEntry*,IEditor*> mEditingMap;
     bool mInitialized = false;
 

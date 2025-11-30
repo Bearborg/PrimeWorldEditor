@@ -8,7 +8,7 @@ void IEditPropertyCommand::SaveObjectStateToArray(std::vector<char>& rVector)
     CVectorOutStream MemStream(&rVector, EEndian::SystemEndian);
     CBasicBinaryWriter Writer(&MemStream, CSerialVersion(IArchive::skCurrentArchiveVersion, 0, mpProperty->Game()));
 
-    QVector<void*> DataPointers;
+    QList<void*> DataPointers;
     GetObjectDataPointers(DataPointers);
 
     for (void* pData : DataPointers)
@@ -22,7 +22,7 @@ void IEditPropertyCommand::RestoreObjectStateFromArray(std::vector<char>& rArray
 {
     CBasicBinaryReader Reader(rArray.data(), rArray.size(), CSerialVersion(IArchive::skCurrentArchiveVersion, 0, mpProperty->Game()));
 
-    QVector<void*> DataPointers;
+    QList<void*> DataPointers;
     GetObjectDataPointers(DataPointers);
 
     for (void* pData : DataPointers)
@@ -100,10 +100,10 @@ bool IEditPropertyCommand::mergeWith(const QUndoCommand *pkOther)
 
         if (pkCmd && pkCmd->mpProperty == mpProperty)
         {
-            QVector<void*> MyPointers;
+            QList<void*> MyPointers;
             GetObjectDataPointers(MyPointers);
 
-            QVector<void*> TheirPointers;
+            QList<void*> TheirPointers;
             pkCmd->GetObjectDataPointers(TheirPointers);
 
             if (TheirPointers.size() == MyPointers.size())

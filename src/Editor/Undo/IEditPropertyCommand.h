@@ -42,7 +42,7 @@ public:
     void SetEditComplete(bool IsComplete);
 
     /** Interface */
-    virtual void GetObjectDataPointers(QVector<void*>& rOutPointers) const = 0;
+    virtual void GetObjectDataPointers(QList<void*>& rOutPointers) const = 0;
 
     /** IUndoCommand/QUndoCommand interface */
     int id() const override;
