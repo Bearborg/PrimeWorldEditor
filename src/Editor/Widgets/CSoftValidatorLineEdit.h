@@ -40,18 +40,18 @@ protected slots:
             if ( mpSoftValidator->validate(Text, DummyPos) == QValidator::Acceptable )
             {
                 NewValidity = true;
-                setStyleSheet("border: 1px solid green");
+                setStyleSheet(QStringLiteral("border: 1px solid green"));
             }
             else
             {
                 NewValidity = false;
-                setStyleSheet("border: 1px solid red");
+                setStyleSheet(QStringLiteral("border: 1px solid red"));
             }
         }
         else
         {
             NewValidity = true;
-            setStyleSheet("");
+            setStyleSheet(QString());
         }
 
         if (NewValidity != mInputIsValid)

@@ -96,8 +96,8 @@ void CResourceSelector::UpdateUI()
     bool HasResource = mpResEntry != nullptr;
 
     // Update main UI
-    mpResNameButton->setText(HasResource ? TO_QSTRING(mpResEntry->Name()) + "." + TO_QSTRING(mpResEntry->CookedExtension().ToString()) : "");
-    mpResNameButton->setToolTip(HasResource ? TO_QSTRING(mpResEntry->CookedAssetPath(true)) : "");
+    mpResNameButton->setText(HasResource ? TO_QSTRING(mpResEntry->Name()) + QLatin1Char{'.'} + TO_QSTRING(mpResEntry->CookedExtension().ToString()) : QString());
+    mpResNameButton->setToolTip(HasResource ? TO_QSTRING(mpResEntry->CookedAssetPath(true)) : QString());
     mpClearButton->setEnabled(HasResource);
 
     // Update context menu
@@ -259,7 +259,7 @@ void CResourceSelector::CopyName()
 
 void CResourceSelector::CopyPath()
 {
-    QString Text = (mpResEntry ? TO_QSTRING(mpResEntry->CookedAssetPath(true)) : "");
+    QString Text = (mpResEntry ? TO_QSTRING(mpResEntry->CookedAssetPath(true)) : QString());
     gpEdApp->clipboard()->setText(Text);
 }
 

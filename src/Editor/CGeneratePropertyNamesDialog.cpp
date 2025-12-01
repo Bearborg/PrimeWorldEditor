@@ -219,7 +219,7 @@ void CGeneratePropertyNamesDialog::OnTreeItemDoubleClicked(QTreeWidgetItem* pIte
 
     const QString Text = pItem->text(0);
 
-    if (!Text.endsWith(".xml"))
+    if (!Text.endsWith(QStringLiteral(".xml")))
         return;
 
     const TString TStrText = TO_TSTRING(Text);

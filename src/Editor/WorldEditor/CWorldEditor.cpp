@@ -741,7 +741,7 @@ void CWorldEditor::UpdateOpenRecentActions()
     // Remove projects that don't exist anymore
     for (const QString& rkProj : RecentProjectsList)
     {
-        if (!FileUtil::Exists( TO_TSTRING(rkProj) ) || rkProj.contains('\\') )
+        if (!FileUtil::Exists(TO_TSTRING(rkProj)) || rkProj.contains(QLatin1Char{'\\'}))
             RecentProjectsList.removeAll(rkProj);
     }
 
@@ -771,14 +771,14 @@ void CWorldEditor::UpdateWindowTitle()
 
     if (pProj)
     {
-        WindowTitle += " - " + TO_QSTRING( pProj->Name() );
+        WindowTitle += QStringLiteral(" - ") + TO_QSTRING(pProj->Name());
 
         if (mpWorld)
         {
-            WindowTitle += " - " + TO_QSTRING(mpWorld->InGameName());
+            WindowTitle += QStringLiteral(" - ") + TO_QSTRING(mpWorld->InGameName());
 
             if (mpArea && CurrentGame() < EGame::DKCReturns)
-                WindowTitle += " - " + TO_QSTRING( mpWorld->AreaInGameName(mpArea->WorldIndex()) );
+                WindowTitle += QStringLiteral(" - ") + TO_QSTRING(mpWorld->AreaInGameName(mpArea->WorldIndex()));
         }
     }
 

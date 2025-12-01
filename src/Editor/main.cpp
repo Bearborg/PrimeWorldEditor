@@ -8,6 +8,7 @@
 #include <Core/Resource/Script/NGameList.h>
 
 #include <QApplication>
+#include <QCoreApplication>
 #include <QIcon>
 #include <QStyleFactory>
 #include <QtGlobal>
@@ -95,7 +96,7 @@ public:
         QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
         CEditorApplication App(argc, argv);
         App.setApplicationName(QStringLiteral("PrimeWorldEditor"));
-        App.setApplicationVersion( APP_VERSION );
+        App.setApplicationVersion(QStringLiteral(APP_VERSION));
         App.setOrganizationName(QStringLiteral("AxioDL"));
         App.setWindowIcon(QIcon(QStringLiteral(":/icons/win/AppIcon.ico")));
 
@@ -116,7 +117,7 @@ public:
         // Init log
         bool Initialized = NLog::InitLog(LocateLogPath());
         if (!Initialized)
-            UICommon::ErrorMsg(nullptr, "Couldn't open log file. Logging will not work for this session.");
+            UICommon::ErrorMsg(nullptr, QCoreApplication::translate("Main", "Couldn't open log file. Logging will not work for this session."));
         qInstallMessageHandler(QtLogRedirect);
 
         // Locate data directory and check write permissions
@@ -129,8 +130,8 @@ public:
 
         if (!gpEditorStore->DatabasePathExists())
         {
-            UICommon::ErrorMsg(nullptr, "Unable to locate PWE resources directory; "
-                                  "PWE's executable must remain as deployed.");
+            UICommon::ErrorMsg(nullptr, QCoreApplication::translate("Main", "Unable to locate PWE resources directory; "
+                                                                    "PWE's executable must remain as deployed."));
             return 1;
         }
 

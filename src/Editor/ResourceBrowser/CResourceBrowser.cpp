@@ -96,7 +96,7 @@ CResourceBrowser::CResourceBrowser(QWidget *pParent)
     mpFilterAllBox = new QCheckBox(this);
     mpFilterAllBox->setChecked(true);
     mpFilterAllBox->setFont(AllBoxFont);
-    mpFilterAllBox->setText("All");
+    mpFilterAllBox->setText(tr("All"));
     mpFilterBoxesLayout->addWidget(mpFilterAllBox);
 
     CreateFilterCheckboxes();
@@ -675,7 +675,7 @@ bool CResourceBrowser::Delete(QList<CResourceEntry*> Resources, QList<CVirtualDi
     {
         if (!Directories[DirIdx]->IsSafeToDelete())
         {
-            ErrorPaths += TO_QSTRING(Directories[DirIdx]->FullPath()) + '\n';
+            ErrorPaths += TO_QSTRING(Directories[DirIdx]->FullPath()) + QLatin1Char{'\n'};
             Directories.removeAt(DirIdx);
             DirIdx--;
         }
@@ -685,7 +685,7 @@ bool CResourceBrowser::Delete(QList<CResourceEntry*> Resources, QList<CVirtualDi
     {
         if (Resources[ResIdx]->IsLoaded() && Resources[ResIdx]->Resource()->IsReferenced())
         {
-            ErrorPaths += TO_QSTRING(Resources[ResIdx]->CookedAssetPath(true)) + '\n';
+            ErrorPaths += TO_QSTRING(Resources[ResIdx]->CookedAssetPath(true)) + QLatin1Char{'\n'};
             Resources.removeAt(ResIdx);
             ResIdx--;
         }
@@ -986,7 +986,7 @@ void CResourceBrowser::ImportAssetNameMap()
 void CResourceBrowser::ExportAssetNames()
 {
     const QString OutFile = UICommon::SaveFileDialog(this, tr("Export asset name map"), QStringLiteral("*.xml"),
-                                                     gResourcesWritable ? *(gDataDir + "resources/gameinfo/") : "");
+                                                     gResourcesWritable ? TO_QSTRING(gDataDir + "resources/gameinfo/") : QString());
     if (OutFile.isEmpty())
         return;
 

@@ -23,7 +23,7 @@ public:
         {
             if (It.Value() != TEnumReflection<EnumT>::ErrorValue())
             {
-                addItem(It.Name());
+                addItem(QString::fromUtf8(It.Name()));
                 mValueList.push_back(It.Value());
             }
         }

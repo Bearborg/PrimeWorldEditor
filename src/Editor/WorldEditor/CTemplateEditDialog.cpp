@@ -174,7 +174,7 @@ void CTemplateEditDialog::RefreshTypeNameOverride()
     }
     else
     {
-        mpValidator->SetTypeNameOverride("");
+        mpValidator->SetTypeNameOverride(QString());
     }
 }
 

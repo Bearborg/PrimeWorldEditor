@@ -121,6 +121,14 @@ target_compile_definitions(
         "APP_VERSION=\"${PROJECT_VERSION}\""
         "APP_FULL_NAME=\"${PWE_APP_NAME} ${PWE_WC_DESCRIBE}\""
         UNICODE
+
+        # Ensures conversions to internal strings and Qt strings are explicit
+        QT_NO_CAST_FROM_ASCII
+        QT_NO_CAST_FROM_BYTEARRAY
+        QT_NO_CAST_TO_ASCII
+
+        # Disable deprecated Qt snprintf functions
+        QT_NO_QSNPRINTF
 )
 
 gather_include_directories(pwe_editor_include_directories pwe_editor)

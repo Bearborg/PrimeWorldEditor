@@ -5,6 +5,7 @@
 #include "Editor/UICommon.h"
 #include "Editor/Undo/TSerializeUndoCommand.h"
 
+#include <QCoreApplication>
 #include <QSettings>
 #include <QShortcut>
 
@@ -18,7 +19,8 @@ class CSetStringIndexCommand : public IUndoCommand
     int mOldIndex, mNewIndex;
 public:
     CSetStringIndexCommand(CStringEditor* pEditor, int OldIndex, int NewIndex)
-        : IUndoCommand("Select String"), mpEditor(pEditor), mOldIndex(OldIndex), mNewIndex(NewIndex)
+        : IUndoCommand(QCoreApplication::translate("CSetStringIndexCommand", "Select String"))
+        , mpEditor(pEditor), mOldIndex(OldIndex), mNewIndex(NewIndex)
     {}
 
     void undo() override { mpEditor->SetActiveString(mOldIndex); }
@@ -32,7 +34,8 @@ class CSetLanguageCommand : public IUndoCommand
     ELanguage mOldLanguage, mNewLanguage;
 public:
     CSetLanguageCommand(CStringEditor* pEditor, ELanguage OldLanguage, ELanguage NewLanguage)
-        : IUndoCommand("Select Language"), mpEditor(pEditor), mOldLanguage(OldLanguage), mNewLanguage(NewLanguage)
+        : IUndoCommand(QCoreApplication::translate("CSetLanguageCommand", "Select Language"))
+        , mpEditor(pEditor), mOldLanguage(OldLanguage), mNewLanguage(NewLanguage)
     {}
 
     void undo() override { mpEditor->SetActiveLanguage(mOldLanguage); }
@@ -111,7 +114,7 @@ void CStringEditor::InitUI()
     {
         const ELanguage Language = mpStringTable->LanguageByIndex(LanguageIdx);
         const char* pkLanguageName = TEnumReflection<ELanguage>::ConvertValueToString(Language);
-        mpUI->EditLanguageTabBar->addTab(pkLanguageName);
+        mpUI->EditLanguageTabBar->addTab(QString::fromUtf8(pkLanguageName));
     }
 
     // Connect signals & slots

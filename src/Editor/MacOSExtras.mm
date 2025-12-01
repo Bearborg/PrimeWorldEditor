@@ -20,7 +20,7 @@ QString MacOSPathToDolphinBinary()
 /* Filter to accumulate relative coordinates of middle and right mouse drags for camera control. */
 bool MouseDragCocoaEventFilter::nativeEventFilter(const QByteArray& eventType, void* message, long*)
 {
-    if (eventType == "mac_generic_NSEvent")
+    if (eventType == QByteArrayLiteral("mac_generic_NSEvent"))
     {
         NSEvent* event = static_cast<NSEvent*>(message);
         NSEventType evType = event.type;

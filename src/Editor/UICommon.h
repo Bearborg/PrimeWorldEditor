@@ -3,6 +3,7 @@
 
 #include "CEditorApplication.h"
 #include <Common/TString.h>
+#include <QCoreApplication>
 #include <QDialogButtonBox>
 #include <QFileDialog>
 #include <QMap>
@@ -15,9 +16,9 @@
 #define UI_APPVAR_VERSION       "%APP_VERSION%"
 
 #define REPLACE_APPVARS(InQString) \
-    InQString.replace(UI_APPVAR_NAME, APP_NAME); \
-    InQString.replace(UI_APPVAR_FULLNAME, APP_FULL_NAME); \
-    InQString.replace(UI_APPVAR_VERSION, APP_VERSION);
+    InQString.replace(QStringLiteral(UI_APPVAR_NAME), QStringLiteral(APP_NAME)); \
+    InQString.replace(QStringLiteral(UI_APPVAR_FULLNAME), QStringLiteral(APP_FULL_NAME)); \
+    InQString.replace(QStringLiteral(UI_APPVAR_VERSION), QStringLiteral(APP_VERSION));
 
 #define SET_WINDOWTITLE_APPVARS(InString) \
     { \
@@ -100,7 +101,7 @@ inline T16String ToT16String(const QString& rkStr)
 #define POP_TICKS_ENABLED \
     gpEdApp->SetEditorTicksEnabled(TicksEnabled);
 
-inline QString OpenFileDialog(QWidget *pParent, const QString& rkCaption, const QString& rkFilter, const QString& rkStartingDir = "")
+inline QString OpenFileDialog(QWidget* pParent, const QString& rkCaption, const QString& rkFilter, const QString& rkStartingDir = {})
 {
     PUSH_TICKS_ENABLED;
     QString Result = QFileDialog::getOpenFileName(pParent, rkCaption, rkStartingDir, rkFilter);
@@ -108,7 +109,7 @@ inline QString OpenFileDialog(QWidget *pParent, const QString& rkCaption, const 
     return Result;
 }
 
-inline QStringList OpenFilesDialog(QWidget *pParent, const QString& rkCaption, const QString& rkFilter, const QString& rkStartingDir = "")
+inline QStringList OpenFilesDialog(QWidget* pParent, const QString& rkCaption, const QString& rkFilter, const QString& rkStartingDir = {})
 {
     PUSH_TICKS_ENABLED;
     QStringList Result = QFileDialog::getOpenFileNames(pParent, rkCaption, rkStartingDir, rkFilter);
@@ -116,7 +117,7 @@ inline QStringList OpenFilesDialog(QWidget *pParent, const QString& rkCaption, c
     return Result;
 }
 
-inline QString SaveFileDialog(QWidget *pParent, const QString& rkCaption, const QString& rkFilter, const QString& rkStartingDir = "")
+inline QString SaveFileDialog(QWidget* pParent, const QString& rkCaption, const QString& rkFilter, const QString& rkStartingDir = {})
 {
     PUSH_TICKS_ENABLED;
     QString Result = QFileDialog::getSaveFileName(pParent, rkCaption, rkStartingDir, rkFilter);
@@ -124,7 +125,7 @@ inline QString SaveFileDialog(QWidget *pParent, const QString& rkCaption, const 
     return Result;
 }
 
-inline QString OpenDirDialog(QWidget *pParent, const QString& rkCaption, const QString& rkStartingDir = "")
+inline QString OpenDirDialog(QWidget* pParent, const QString& rkCaption, const QString& rkStartingDir = {})
 {
     PUSH_TICKS_ENABLED;
     QString Result = QFileDialog::getExistingDirectory(pParent, rkCaption, rkStartingDir);
@@ -133,17 +134,17 @@ inline QString OpenDirDialog(QWidget *pParent, const QString& rkCaption, const Q
 }
 
 // QMessageBox wrappers
-inline void InfoMsg(QWidget *pParent, QString InfoBoxTitle, QString InfoText)
+inline void InfoMsg(QWidget *pParent, const QString& InfoBoxTitle, const QString& InfoText)
 {
     QMessageBox::information(pParent, InfoBoxTitle, InfoText);
 }
 
-inline void ErrorMsg(QWidget *pParent, QString ErrorText)
+inline void ErrorMsg(QWidget *pParent, const QString& ErrorText)
 {
-    QMessageBox::warning(pParent, "Error", ErrorText);
+    QMessageBox::warning(pParent, QCoreApplication::translate("ErrorMsg", "Error"), ErrorText);
 }
 
-inline bool YesNoQuestion(QWidget *pParent, QString InfoBoxTitle, QString Question)
+inline bool YesNoQuestion(QWidget *pParent, const QString& InfoBoxTitle, const QString& Question)
 {
     QMessageBox::StandardButton Button = QMessageBox::question(pParent, InfoBoxTitle, Question, QMessageBox::Yes | QMessageBox::No);
     return Button == QMessageBox::Yes;
@@ -152,7 +153,7 @@ inline bool YesNoQuestion(QWidget *pParent, QString InfoBoxTitle, QString Questi
 inline bool OpenProject()
 {
     QWidget* pMainWindow = (QWidget*) gpEdApp->WorldEditor();
-    QString ProjPath = UICommon::OpenFileDialog(pMainWindow, "Open Project", "Game Project (*.prj)");
+    QString ProjPath = UICommon::OpenFileDialog(pMainWindow, QCoreApplication::translate("OpenProject", "Open Project"), QStringLiteral("Game Project (*.prj)"));
     return ProjPath.isEmpty() ? false : gpEdApp->OpenProject(ProjPath);
 }
 

@@ -407,7 +407,7 @@ QVariant CPropertyModel::data(const QModelIndex& rkIndex, int Role) const
             // Add name
             IProperty *pProp = PropertyForIndex(rkIndex, false);
             const QString DisplayText = data(rkIndex, Qt::DisplayRole).toString();
-            const QString TypeName = pProp->HashableTypeName();
+            const QString TypeName = QString::fromUtf8(pProp->HashableTypeName());
             QString Text = tr("<b>%1</b> <i>(%2)</i>").arg(DisplayText).arg(TypeName);
 
             // Add uncooked notification

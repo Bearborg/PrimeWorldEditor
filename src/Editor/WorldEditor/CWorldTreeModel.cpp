@@ -316,7 +316,7 @@ void CWorldTreeModel::OnProjectChanged(CGameProject *pProj)
             // Add remaining worlds to FrontEnd world
             mWorldList.prepend(SWorldInfo());
             pInfo = &mWorldList.front();
-            pInfo->WorldName = "FrontEnd";
+            pInfo->WorldName = QStringLiteral("FrontEnd");
 
             for (TResourceIterator<EResourceType::World> It; It; ++It)
             {

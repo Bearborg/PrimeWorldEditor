@@ -52,7 +52,7 @@ void CExportGameDialog::InitUI(QString ExportDir)
     CGameInfo GameInfo;
     GameInfo.LoadGameInfo(mGame);
 
-    ExportDir.replace('\\', '/');
+    ExportDir.replace(QLatin1Char{'\\'}, QLatin1Char{'/'});
 
     TString DefaultNameMapPath = CAssetNameMap::DefaultNameMapPath(mGame);
     if (!FileUtil::Exists(DefaultNameMapPath)) DefaultNameMapPath = "";
@@ -68,7 +68,7 @@ void CExportGameDialog::InitUI(QString ExportDir)
     mpUI->GameTitleLineEdit->setText( TO_QSTRING(mGameTitle) );
     mpUI->GameIdLineEdit->setText( TO_QSTRING(mGameID) );
     mpUI->BuildVersionLineEdit->setText(tr("%1 (%2)").arg(mBuildVer).arg(TO_QSTRING(GameInfo.GetBuildName(mBuildVer, mRegion))));
-    mpUI->RegionLineEdit->setText(TEnumReflection<ERegion>::ConvertValueToString(mRegion));
+    mpUI->RegionLineEdit->setText(QString::fromUtf8(TEnumReflection<ERegion>::ConvertValueToString(mRegion)));
 
     // Disc tree widget
     nod::IPartition *pPartition = mpDisc->getDataPartition();

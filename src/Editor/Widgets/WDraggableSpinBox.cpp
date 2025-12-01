@@ -98,7 +98,7 @@ bool WDraggableSpinBox::eventFilter(QObject *, QEvent *pEvent)
 QString WDraggableSpinBox::textFromValue(double Val) const
 {
     QString Str = QString::number(Val, 'f', decimals());
-    int DecIndex = Str.indexOf('.');
+    int DecIndex = Str.indexOf(QLatin1Char{'.'});
     int NumDecs;
 
     if (DecIndex == -1)
@@ -111,23 +111,23 @@ QString WDraggableSpinBox::textFromValue(double Val) const
         int Size = Str.size() + mMinDecimals + 1;
         Str.reserve(Size);
 
-        Str += '.';
+        Str += QLatin1Char{'.'};
 
         for (int iDec = 0; iDec < mMinDecimals; iDec++)
-            Str += '0';
+            Str += QLatin1Char{'0'};
     }
 
     else if ((NumDecs > mMinDecimals) && mTrimTrailingZeroes)
     {
         while (NumDecs > mMinDecimals)
         {
-            if (Str.endsWith('0'))
+            if (Str.endsWith(QLatin1Char{'0'}))
             {
                 Str.chop(1);
                 NumDecs--;
             }
 
-            else if (Str.endsWith('.'))
+            else if (Str.endsWith(QLatin1Char{'.'}))
             {
                 Str.chop(1);
                 break;

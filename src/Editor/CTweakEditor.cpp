@@ -2,6 +2,8 @@
 #include "ui_CTweakEditor.h"
 #include "Editor/Undo/IUndoCommand.h"
 
+#include <QCoreApplication>
+
 /** Internal undo command for changing tabs */
 class CSetTweakIndexCommand : public IUndoCommand
 {
@@ -10,7 +12,7 @@ class CSetTweakIndexCommand : public IUndoCommand
 
 public:
     CSetTweakIndexCommand(CTweakEditor* pEditor, int OldIndex, int NewIndex)
-        : IUndoCommand("Change Tab")
+        : IUndoCommand(QCoreApplication::translate("CSetTweakIndexCommand", "Change Tab"))
         , mpEditor(pEditor)
         , mOldIndex(OldIndex)
         , mNewIndex(NewIndex)

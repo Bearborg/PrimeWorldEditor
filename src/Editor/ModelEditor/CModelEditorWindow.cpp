@@ -754,7 +754,7 @@ void CModelEditorWindow::Import()
 
     SetActiveModel(pModel);
     SET_WINDOWTITLE_APPVARS(tr("%APP_FULL_NAME% - Model Editor: Untitled"));
-    mOutputFilename = "";
+    mOutputFilename.clear();
     gpResourceStore->DestroyUnreferencedResources();
 }
 
@@ -785,7 +785,7 @@ void CModelEditorWindow::ConvertToDDS()
 
 void CModelEditorWindow::ConvertToTXTR()
 {
-    QString Input = QFileDialog::getOpenFileName(this, "DirectDraw Surface (*.dds)", "", "*.dds");
+    QString Input = QFileDialog::getOpenFileName(this, tr("DirectDraw Surface (*.dds)"), QString(), QStringLiteral("*.dds"));
     if (Input.isEmpty()) return;
 
     TString TexFilename = TO_TSTRING(Input);

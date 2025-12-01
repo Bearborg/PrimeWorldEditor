@@ -3,6 +3,7 @@
 #include "Editor/UICommon.h"
 #include "Editor/SDolHeader.h"
 
+#include <QCoreApplication>
 #include <QFileInfo>
 #include <QObject>
 #include <QOverload>
@@ -109,8 +110,8 @@ EQuickplayLaunchResult LaunchQuickplay(QWidget* pParentWidget,
     // Check if quickplay is already running
     if (gpDolphinProcess && gpDolphinProcess->state() != QProcess::NotRunning)
     {
-        if (UICommon::YesNoQuestion(pParentWidget, "Quickplay",
-            "Quickplay is already running. Close the existing session and relaunch?"))
+        if (UICommon::YesNoQuestion(pParentWidget, QCoreApplication::translate("LaunchQuickplay", "Quickplay"),
+            QCoreApplication::translate("LaunchQuickplay", "Quickplay is already running. Close the existing session and relaunch?")))
         {
             KillQuickplay();
         }
@@ -146,8 +147,8 @@ EQuickplayLaunchResult LaunchQuickplay(QWidget* pParentWidget,
     // Check if the user has any dirty packages
     if (gpEdApp->HasAnyDirtyPackages())
     {
-        if (UICommon::YesNoQuestion(pParentWidget, "Uncooked Changes",
-            "You have uncooked changes. Cook before starting quickplay?"))
+        if (UICommon::YesNoQuestion(pParentWidget, QCoreApplication::translate("LaunchQuickplay", "Uncooked Changes"),
+            QCoreApplication::translate("LaunchQuickplay", "You have uncooked changes. Cook before starting quickplay?")))
         {
             gpEdApp->CookAllDirtyPackages();
         }
@@ -299,23 +300,23 @@ bool SetDolphinPath(QWidget* pParentWidget, const QString& kDolphinPath, bool bS
     {
         if (!bSilent)
         {
-            UICommon::ErrorMsg(pParentWidget, "The selected file is not a Dolphin executable!");
+            UICommon::ErrorMsg(pParentWidget, QCoreApplication::translate("SetDolphinPath", "The selected file is not a Dolphin executable!"));
         }
         return false;
     }
 
     // Try to obtain the version from Dolphin
     QProcess DolphinProcess;
-    DolphinProcess.start(kDolphinPath, QStringList() << "--version");
+    DolphinProcess.start(kDolphinPath, QStringList() << QStringLiteral("--version"));
     DolphinProcess.waitForFinished();
-    QString VersionString = DolphinProcess.readLine().trimmed();
+    QString VersionString = QString::fromUtf8(DolphinProcess.readLine().trimmed());
     
     // Make sure we have a valid string
     if (VersionString.isNull())
     {
         if (!bSilent)
         {
-            UICommon::ErrorMsg(pParentWidget, "Unable to validate version string, the selected file is likely not a Dolphin executable");
+            UICommon::ErrorMsg(pParentWidget, QCoreApplication::translate("SetDolphinPath", "Unable to validate version string, the selected file is likely not a Dolphin executable"));
         }
         return false;
     }
@@ -323,12 +324,12 @@ bool SetDolphinPath(QWidget* pParentWidget, const QString& kDolphinPath, bool bS
     // Dolphin's version string is broken into two parts, the first part is the name the second is the version
     // Dolphin unfortunately collide's with KDE Plasma's file manager which also happens to be named "Dolphin"
     // Fortunately the latter uses a lowercase name so we can differentiate.
-    QStringList VersionParts = VersionString.split(' ');
-    if (VersionParts.count() < 2 || (VersionParts[0] != "Dolphin" && VersionParts[0] != "PrimeHack"))
+    QStringList VersionParts = VersionString.split(QLatin1Char{' '});
+    if (VersionParts.count() < 2 || (VersionParts[0] != QStringLiteral("Dolphin") && VersionParts[0] != QStringLiteral("PrimeHack")))
     {
         if (!bSilent)
         {
-            UICommon::ErrorMsg(pParentWidget, "The selected file is not a Dolphin executable!");
+            UICommon::ErrorMsg(pParentWidget, QCoreApplication::translate("SetDolphinPath", "The selected file is not a Dolphin executable!"));
         }
         return false;
     }
@@ -374,13 +375,13 @@ QString GetDolphinPath()
 
 QString AskForDolphinPath(QWidget* pParentWidget) {
 #if defined(Q_OS_WIN)
-    QString Path = UICommon::OpenFileDialog(pParentWidget, "Open Dolphin", "*.exe");
+    QString Path = UICommon::OpenFileDialog(pParentWidget, QCoreApplication::translate("AskForDolphinPath", "Open Dolphin"), QStringLiteral("*.exe"));
 #elif defined(Q_OS_MACOS)
-    QString Path = UICommon::OpenFileDialog(pParentWidget, "Open Dolphin", "*.app");
-    if (Path.endsWith(".app"))
-        Path += "/Contents/MacOS/Dolphin";
+    QString Path = UICommon::OpenFileDialog(pParentWidget, QCoreApplication::translate("AskForDolphinPath", "Open Dolphin"), QStringLiteral("*.app"));
+    if (Path.endsWith(QStringLiteral(".app")))
+        Path += QStringLiteral("/Contents/MacOS/Dolphin");
 #else
-    QString Path = UICommon::OpenFileDialog(pParentWidget, "Open Dolphin", {});
+    QString Path = UICommon::OpenFileDialog(pParentWidget, QCoreApplication::translate("AskForDolphinPath", "Open Dolphin"), {});
 #endif
     return Path;
 }

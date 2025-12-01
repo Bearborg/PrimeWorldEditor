@@ -99,10 +99,10 @@ void CResourceBrowserDelegate::paint(QPainter *pPainter, const QStyleOptionViewI
     // Draw resource info string
     if (pEntry)
     {
-        QString ResInfo = TO_QSTRING( pEntry->TypeInfo()->TypeName() );
+        QString ResInfo = TO_QSTRING(pEntry->TypeInfo()->TypeName());
 
         if (mDisplayAssetIDs)
-            ResInfo.prepend( TO_QSTRING(pEntry->ID().ToString()) + " | " );
+            ResInfo.prepend(TO_QSTRING(pEntry->ID().ToString()) + QStringLiteral(" | "));
 
         QString ElidedResInfo = FontInfo.InfoFontMetrics.elidedText(ResInfo, Qt::ElideRight, GeomInfo.InfoStringRect.width());
 

@@ -105,7 +105,7 @@ void CProjectSettingsDialog::SetupPackagesList()
 
         QString PackageName = TO_QSTRING(pPackage->Name());
         if (pPackage->NeedsRecook())
-            PackageName += '*';
+            PackageName += QLatin1Char{'*'};
         mpUI->PackagesList->addItem(PackageName);
     }
 }
