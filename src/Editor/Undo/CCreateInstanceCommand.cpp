@@ -1,7 +1,9 @@
 #include "CCreateInstanceCommand.h"
 
+#include <QCoreApplication>
+
 CCreateInstanceCommand::CCreateInstanceCommand(CWorldEditor *pEditor, CScriptTemplate *pTemplate, CScriptLayer *pLayer, const CVector3f& rkPosition)
-    : IUndoCommand("Create Instance")
+    : IUndoCommand(QCoreApplication::translate("CCreateInstanceCommand", "Create Instance"))
     , mpEditor(pEditor)
     , mpScene(pEditor->Scene())
     , mpArea(pEditor->ActiveArea())

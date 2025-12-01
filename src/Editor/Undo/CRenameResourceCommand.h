@@ -6,6 +6,8 @@
 #include "Editor/ResourceBrowser/CResourceBrowser.h"
 #include <Core/GameProject/CResourceEntry.h>
 
+#include <QCoreApplication>
+
 class CRenameResourceCommand : public IUndoCommand
 {
     CResourceEntry *mpEntry;
@@ -15,7 +17,7 @@ class CRenameResourceCommand : public IUndoCommand
 
 public:
     CRenameResourceCommand(CResourceEntry *pEntry, const TString& rkNewName)
-        : IUndoCommand("Rename Resource")
+        : IUndoCommand(QCoreApplication::translate("CRenameResourceCommand", "Rename Resource"))
         , mpEntry(pEntry)
         , mOldName(pEntry->Name())
         , mNewName(rkNewName)

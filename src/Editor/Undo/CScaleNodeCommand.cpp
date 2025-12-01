@@ -2,13 +2,15 @@
 #include "EUndoCommand.h"
 #include "Editor/INodeEditor.h"
 
+#include <QCoreApplication>
+
 CScaleNodeCommand::CScaleNodeCommand()
-    : IUndoCommand("Scale")
+    : IUndoCommand(QCoreApplication::translate("CScaleNodeCommand", "Scale"))
 {
 }
 
 CScaleNodeCommand::CScaleNodeCommand(INodeEditor *pEditor, const QList<CSceneNode*>& rkNodes, bool UsePivot, const CVector3f& rkPivot, const CVector3f& rkDelta)
-    : IUndoCommand("Scale"),
+    : IUndoCommand(QCoreApplication::translate("CScaleNodeCommand", "Scale")),
       mpEditor(pEditor)
 {
     mNodeList.reserve(rkNodes.size());

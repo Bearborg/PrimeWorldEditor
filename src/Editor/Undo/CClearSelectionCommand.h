@@ -7,6 +7,8 @@
 #include "Editor/INodeEditor.h"
 #include <Core/Scene/CSceneNode.h>
 
+#include <QCoreApplication>
+
 class CClearSelectionCommand : public IUndoCommand
 {
     CNodeSelection *mpSelection;
@@ -14,7 +16,7 @@ class CClearSelectionCommand : public IUndoCommand
 
 public:
     explicit CClearSelectionCommand(CNodeSelection *pSelection)
-        : IUndoCommand("Clear Selection"),
+        : IUndoCommand(QCoreApplication::translate("CClearSelectionCommand", "Clear Selection")),
           mpSelection(pSelection)
     {
         for (CSelectionIterator It(pSelection); It; ++It)

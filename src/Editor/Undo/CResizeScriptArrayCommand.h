@@ -2,6 +2,7 @@
 #define CRESIZESCRIPTARRAYCOMMAND_H
 
 #include "CEditScriptPropertyCommand.h"
+#include <QCoreApplication>
 
 class CResizeScriptArrayCommand : public CEditScriptPropertyCommand
 {
@@ -14,7 +15,7 @@ public:
                               const QList<CScriptObject*>& rkInstances,
                               CPropertyModel* pModel,
                               QModelIndex Index = QModelIndex(),
-                              const QString& rkCommandName = "Resize Array"
+                              const QString& rkCommandName = QCoreApplication::translate("CResizeScriptArrayCommand", "Resize Array")
                 )
         :   CEditScriptPropertyCommand(pProperty, rkInstances, pModel, Index, rkCommandName)
     {

@@ -7,6 +7,8 @@
 #include <Core/GameProject/CResourceEntry.h>
 #include <Core/GameProject/CResourceStore.h>
 
+#include <QCoreApplication>
+
 class ICreateDeleteResourceCommand : public IUndoCommand
 {
 protected:
@@ -49,7 +51,7 @@ class CCreateResourceCommand : public ICreateDeleteResourceCommand
 {
 public:
     explicit CCreateResourceCommand(CResourceEntry* pEntry)
-        : ICreateDeleteResourceCommand("Create Resource", pEntry)
+        : ICreateDeleteResourceCommand(QCoreApplication::translate("CCreateResourceCommand", "Create Resource"), pEntry)
     {}
 
     void undo() override { DoDelete(); }
@@ -60,7 +62,7 @@ class CDeleteResourceCommand : public ICreateDeleteResourceCommand
 {
 public:
     explicit CDeleteResourceCommand(CResourceEntry* pEntry)
-        : ICreateDeleteResourceCommand("Delete Resource", pEntry)
+        : ICreateDeleteResourceCommand(QCoreApplication::translate("CDeleteResourceCommand", "Delete Resource"), pEntry)
     {}
 
     void undo() override { DoCreate(); }

@@ -2,8 +2,10 @@
 #include "EUndoCommand.h"
 #include "Editor/INodeEditor.h"
 
+#include <QCoreApplication>
+
 CRotateNodeCommand::CRotateNodeCommand()
-    : IUndoCommand("Rotate")
+    : IUndoCommand(QCoreApplication::translate("CRotateNodeCommand", "Rotate"))
 {
 }
 
@@ -16,7 +18,7 @@ CRotateNodeCommand::CRotateNodeCommand(
         const CQuaternion& rkDelta,
         ETransformSpace TransformSpace
     )
-    : IUndoCommand("Rotate"),
+    : IUndoCommand(QCoreApplication::translate("CRotateNodeCommand", "Rotate")),
       mpEditor(pEditor)
 {
     mNodeList.reserve(rkNodes.size());

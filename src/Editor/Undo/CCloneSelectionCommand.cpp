@@ -1,8 +1,10 @@
 #include "CCloneSelectionCommand.h"
 #include "Editor/CSelectionIterator.h"
 
+#include <QCoreApplication>
+
 CCloneSelectionCommand::CCloneSelectionCommand(INodeEditor *pEditor)
-    : IUndoCommand("Clone")
+    : IUndoCommand(QCoreApplication::translate("CCloneSelectionCommand", "Clone"))
     , mpEditor(qobject_cast<CWorldEditor*>(pEditor)) // todo: fix this! bad assumption! (clone handling code is in INodeEditor but active area is in CWorldEditor)
 {
     mOriginalSelection = mpEditor->Selection()->SelectedNodeList();

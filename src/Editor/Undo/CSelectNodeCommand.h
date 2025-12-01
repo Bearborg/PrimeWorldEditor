@@ -6,6 +6,8 @@
 #include "Editor/INodeEditor.h"
 #include <Core/Scene/CSceneNode.h>
 
+#include <QCoreApplication>
+
 class CSelectNodeCommand : public IUndoCommand
 {
     CNodePtr mpNode;
@@ -13,7 +15,7 @@ class CSelectNodeCommand : public IUndoCommand
 
 public:
     CSelectNodeCommand(CNodeSelection *pSelection, CSceneNode *pNode)
-        : IUndoCommand("Select")
+        : IUndoCommand(QCoreApplication::translate("CSelectNodeCommand", "Select"))
         , mpNode(pNode)
         , mpSelection(pSelection)
     {}

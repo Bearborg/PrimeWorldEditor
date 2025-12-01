@@ -5,6 +5,8 @@
 #include "EUndoCommand.h"
 #include "Editor/PropertyEdit/CPropertyModel.h"
 
+#include <QCoreApplication>
+
 class IEditPropertyCommand : public IUndoCommand
 {
 protected:
@@ -30,7 +32,7 @@ public:
             IProperty* pProperty,
             CPropertyModel* pModel,
             const QModelIndex& kIndex,
-            const QString& kCommandName = "Edit Property"
+            const QString& kCommandName = QCoreApplication::translate("IEditPropertyCommand", "Edit Property")
             );
 
     ~IEditPropertyCommand() override = default;

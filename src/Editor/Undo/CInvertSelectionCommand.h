@@ -6,6 +6,8 @@
 #include "Editor/INodeEditor.h"
 #include <Core/Scene/CSceneNode.h>
 
+#include <QCoreApplication>
+
 class CInvertSelectionCommand : public IUndoCommand
 {
     CNodeSelection *mpSelection;
@@ -14,7 +16,7 @@ class CInvertSelectionCommand : public IUndoCommand
 
 public:
     CInvertSelectionCommand(CNodeSelection *pSelection, CScene *pScene, FNodeFlags NodeFlags)
-        : IUndoCommand("Invert Selection")
+        : IUndoCommand(QCoreApplication::translate("CInvertSelectionCommand", "Invert Selection"))
         , mpSelection(pSelection)
     {
         for (CSceneIterator It(pScene, NodeFlags); It; ++It)

@@ -7,6 +7,8 @@
 #include <Core/GameProject/CResourceStore.h>
 #include <Core/GameProject/CVirtualDirectory.h>
 
+#include <QCoreApplication>
+
 class ICreateDeleteDirectoryCommand : public IUndoCommand
 {
 protected:
@@ -64,7 +66,7 @@ class CCreateDirectoryCommand : public ICreateDeleteDirectoryCommand
 {
 public:
     CCreateDirectoryCommand(CResourceStore *pStore, TString ParentPath, TString DirName)
-        : ICreateDeleteDirectoryCommand("Create Directory", pStore, ParentPath, DirName)
+        : ICreateDeleteDirectoryCommand(QCoreApplication::translate("CCreateDirectoryCommand", "Create Directory"), pStore, ParentPath, DirName)
     {}
 
     void undo() override { DoDelete(); }
@@ -75,7 +77,7 @@ class CDeleteDirectoryCommand : public ICreateDeleteDirectoryCommand
 {
 public:
     CDeleteDirectoryCommand(CResourceStore *pStore, TString ParentPath, TString DirName)
-        : ICreateDeleteDirectoryCommand("Delete Directory", pStore, ParentPath, DirName)
+        : ICreateDeleteDirectoryCommand(QCoreApplication::translate("CDeleteDirectoryCommand", "Delete Directory"), pStore, ParentPath, DirName)
     {
         mpDir = pStore->GetVirtualDirectory(ParentPath + DirName, false);
         ASSERT(mpDir);

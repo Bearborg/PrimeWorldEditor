@@ -6,6 +6,8 @@
 #include "Editor/ResourceBrowser/CResourceBrowser.h"
 #include <Core/GameProject/CResourceEntry.h>
 
+#include <QCoreApplication>
+
 class CMoveResourceCommand : public IUndoCommand
 {
     CResourceEntry *mpEntry;
@@ -15,7 +17,7 @@ class CMoveResourceCommand : public IUndoCommand
 
 public:
     CMoveResourceCommand(CResourceEntry *pEntry, CVirtualDirectory *pNewDir)
-        : IUndoCommand("Move Resource")
+        : IUndoCommand(QCoreApplication::translate("CMoveResourceCommand", "Move Resource"))
         , mpEntry(pEntry)
         , mOldDirPath(pEntry->DirectoryPath())
         , mNewDirPath(pNewDir->FullPath())

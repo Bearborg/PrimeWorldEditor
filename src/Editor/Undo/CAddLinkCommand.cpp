@@ -1,8 +1,10 @@
 #include "CAddLinkCommand.h"
 #include <Core/Resource/Script/CLink.h>
 
+#include <QCoreApplication>
+
 CAddLinkCommand::CAddLinkCommand(CWorldEditor *pEditor, CLink Link)
-    : IUndoCommand("Add Link")
+    : IUndoCommand(QCoreApplication::translate("CAddLinkCommand", "Add Link"))
     , mpEditor(pEditor)
     , mLink(Link)
 {

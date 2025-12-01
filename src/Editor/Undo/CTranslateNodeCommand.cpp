@@ -2,13 +2,15 @@
 #include "EUndoCommand.h"
 #include "Editor/INodeEditor.h"
 
+#include <QCoreApplication>
+
 CTranslateNodeCommand::CTranslateNodeCommand()
-    : IUndoCommand("Translate")
+    : IUndoCommand(QCoreApplication::translate("CTranslateNodeCommand", "Translate"))
 {
 }
 
 CTranslateNodeCommand::CTranslateNodeCommand(INodeEditor *pEditor, const QList<CSceneNode*>& rkNodes, const CVector3f& Delta, ETransformSpace TransformSpace)
-    : IUndoCommand("Translate"),
+    : IUndoCommand(QCoreApplication::translate("CTranslateNodeCommand", "Translate")),
       mpEditor(pEditor)
 {
     mNodeList.reserve(rkNodes.size());

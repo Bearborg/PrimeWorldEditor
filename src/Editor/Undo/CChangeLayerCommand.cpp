@@ -1,7 +1,9 @@
 #include "CChangeLayerCommand.h"
 
+#include <QCoreApplication>
+
 CChangeLayerCommand::CChangeLayerCommand(CWorldEditor *pEditor, const QList<CScriptNode*>& rkNodeList, CScriptLayer *pNewLayer)
-    : IUndoCommand("Change Layer")
+    : IUndoCommand(QCoreApplication::translate("CChangeLayerCommand", "Change Layer"))
     , mpNewLayer(pNewLayer)
     , mpEditor(pEditor)
 {

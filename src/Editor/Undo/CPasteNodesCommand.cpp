@@ -1,7 +1,9 @@
 #include "CPasteNodesCommand.h"
 
+#include <QCoreApplication>
+
 CPasteNodesCommand::CPasteNodesCommand(CWorldEditor *pEditor, CScriptLayer *pLayer, CVector3f PastePoint)
-    : IUndoCommand("Paste")
+    : IUndoCommand(QCoreApplication::translate("CPasteNodesCommand", "Paste"))
     , mpEditor(pEditor)
     , mpLayer(pLayer)
     , mPastePoint(PastePoint)

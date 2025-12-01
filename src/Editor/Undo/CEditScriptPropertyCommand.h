@@ -5,6 +5,8 @@
 #include "ObjReferences.h"
 #include "Editor/WorldEditor/CWorldEditor.h"
 
+#include <QCoreApplication>
+
 class CEditScriptPropertyCommand : public IEditPropertyCommand
 {
 protected:
@@ -16,7 +18,7 @@ public:
                                const QList<CScriptObject*>& kInstances,
                                CPropertyModel* pModel,
                                QModelIndex Index = QModelIndex(),
-                               const QString& kCommandName = "Edit Property")
+                               const QString& kCommandName = QCoreApplication::translate("CEditScriptPropertyCommand", "Edit Property"))
         : IEditPropertyCommand(pProperty, pModel, Index, kCommandName)
         , mIndex(Index)
     {

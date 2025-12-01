@@ -2,6 +2,7 @@
 #define CEDITINTRINSICPROPERTYCOMMAND_H
 
 #include "IEditPropertyCommand.h"
+#include <QCoreApplication>
 
 class CEditIntrinsicPropertyCommand : public IEditPropertyCommand
 {
@@ -13,7 +14,7 @@ public:
                                   const QList<void*>& kDataPointers,
                                   CPropertyModel* pModel,
                                   QModelIndex Index = QModelIndex(),
-                                  const QString& kCommandName = "Edit Property")
+                                  const QString& kCommandName = QCoreApplication::translate("CEditIntrinsicPropertyCommand", "Edit Property"))
         : IEditPropertyCommand(pProperty, pModel, Index, kCommandName)
         , mDataPointers(kDataPointers)
     {

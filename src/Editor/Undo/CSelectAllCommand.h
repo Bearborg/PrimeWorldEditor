@@ -7,6 +7,8 @@
 #include "Editor/INodeEditor.h"
 #include <Core/Scene/CSceneNode.h>
 
+#include <QCoreApplication>
+
 class CSelectAllCommand : public IUndoCommand
 {
     CNodePtrList mOldSelection;
@@ -15,7 +17,7 @@ class CSelectAllCommand : public IUndoCommand
 
 public:
     CSelectAllCommand(CNodeSelection *pSelection, CScene *pScene, FNodeFlags NodeFlags)
-        : IUndoCommand("Select All")
+        : IUndoCommand(QCoreApplication::translate("CSelectAllCommand", "Select All"))
         , mpSelection(pSelection)
     {
         for (CSelectionIterator It(pSelection); It; ++It)

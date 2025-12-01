@@ -6,6 +6,8 @@
 #include "Editor/ResourceBrowser/CResourceBrowser.h"
 #include <Core/GameProject/CVirtualDirectory.h>
 
+#include <QCoreApplication>
+
 class CRenameDirectoryCommand : public IUndoCommand
 {
     CVirtualDirectory *mpDir;
@@ -14,7 +16,7 @@ class CRenameDirectoryCommand : public IUndoCommand
 
 public:
     CRenameDirectoryCommand(CVirtualDirectory *pDir, const TString& rkNewName)
-        : IUndoCommand("Rename Directory")
+        : IUndoCommand(QCoreApplication::translate("CRenameDirectoryCommand", "Rename Directory"))
         , mpDir(pDir)
         , mOldName(pDir->Name())
         , mNewName(rkNewName)

@@ -1,8 +1,10 @@
 #include "CDeleteLinksCommand.h"
 #include <Core/Resource/Script/CLink.h>
 
+#include <QCoreApplication>
+
 CDeleteLinksCommand::CDeleteLinksCommand(CWorldEditor *pEditor, CScriptObject *pObject, ELinkType Type, const QList<uint32>& rkIndices)
-    : IUndoCommand("Delete Links")
+    : IUndoCommand(QCoreApplication::translate("CDeleteLinksCommand", "Delete Links"))
     , mpEditor(pEditor)
 {
     mAffectedInstances.push_back(pObject);

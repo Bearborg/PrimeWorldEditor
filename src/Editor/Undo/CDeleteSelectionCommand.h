@@ -7,6 +7,8 @@
 #include "Editor/WorldEditor/CWorldEditor.h"
 #include <Core/Scene/CSceneNode.h>
 
+#include <QCoreApplication>
+
 // todo: currently only supports deleting script nodes; needs support for light nodes as well
 // plus maybe it should be extensible enough to support other possible types
 class CDeleteSelectionCommand : public IUndoCommand
@@ -47,7 +49,7 @@ class CDeleteSelectionCommand : public IUndoCommand
     QList<SDeletedLink> mDeletedLinks;
 
 public:
-    explicit CDeleteSelectionCommand(CWorldEditor *pEditor, const QString& rkCommandName = "Delete");
+    explicit CDeleteSelectionCommand(CWorldEditor *pEditor, const QString& rkCommandName = QCoreApplication::translate("CDeleteSelectionCommand", "Delete"));
     void undo() override;
     void redo() override;
     bool AffectsCleanState() const override { return true; }

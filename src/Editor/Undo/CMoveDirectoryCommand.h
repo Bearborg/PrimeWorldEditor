@@ -7,6 +7,8 @@
 #include <Core/GameProject/CResourceStore.h>
 #include <Core/GameProject/CVirtualDirectory.h>
 
+#include <QCoreApplication>
+
 class CMoveDirectoryCommand : public IUndoCommand
 {
     CResourceStore *mpStore;
@@ -16,7 +18,7 @@ class CMoveDirectoryCommand : public IUndoCommand
 
 public:
     CMoveDirectoryCommand(CResourceStore *pStore, CVirtualDirectory *pDir, CVirtualDirectory *pNewParent)
-        : IUndoCommand("Move Directory")
+        : IUndoCommand(QCoreApplication::translate("CMoveDirectoryCommand", "Move Directory"))
         , mpStore(pStore)
         , mTargetDir(pDir->FullPath())
         , mOldParent(pDir->Parent()->FullPath())
