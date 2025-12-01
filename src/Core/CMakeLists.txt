@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.20)
 
 project(pwe_core CXX C)
 
@@ -20,7 +20,7 @@ file(GLOB_RECURSE source_files
 
 add_library(pwe_core ${source_files})
 
-target_compile_features(pwe_core PRIVATE cxx_std_17)
+target_compile_features(pwe_core PRIVATE cxx_std_23)
 
 target_include_directories(pwe_core
     PUBLIC

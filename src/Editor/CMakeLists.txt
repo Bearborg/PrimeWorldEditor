@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.20)
 
 # TODO: These should be drive by CI if CI ever becomes a thing for PWE.
 set(PWE_APP_NAME "Prime World Editor")
@@ -99,7 +99,7 @@ set_target_properties(pwe_editor PROPERTIES OUTPUT_NAME PrimeWorldEditor DEBUG_P
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_BINARY_DIR}/Info.plist"
         MACOSX_BUNDLE_BUNDLE_NAME "PrimeWorldEditor")
 
-target_compile_features(pwe_editor PRIVATE cxx_std_17)
+target_compile_features(pwe_editor PRIVATE cxx_std_23)
 
 target_link_libraries(
     pwe_editor
