@@ -89,10 +89,8 @@ public:
         QSurfaceFormat::setDefaultFormat(glFormat);
 
         // Create application
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
         QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-#endif
         QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
         CEditorApplication App(argc, argv);
         App.setApplicationName(QStringLiteral("PrimeWorldEditor"));
