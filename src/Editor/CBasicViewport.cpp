@@ -137,12 +137,24 @@ void CBasicViewport::keyPressEvent(QKeyEvent *pEvent)
 {
     switch (pEvent->key())
     {
+    case Qt::Key_PageDown:
     case Qt::Key_Q: mKeysPressed |= EKeyInput::Q; break;
-    case Qt::Key_W: mKeysPressed |= EKeyInput::W; break;
+
+    case Qt::Key_PageUp:
     case Qt::Key_E: mKeysPressed |= EKeyInput::E; break;
+
+    case Qt::Key_Up:
+    case Qt::Key_W: mKeysPressed |= EKeyInput::W; break;
+
+    case Qt::Key_Left:
     case Qt::Key_A: mKeysPressed |= EKeyInput::A; break;
+
+    case Qt::Key_Down:
     case Qt::Key_S: mKeysPressed |= EKeyInput::S; break;
+
+    case Qt::Key_Right:
     case Qt::Key_D: mKeysPressed |= EKeyInput::D; break;
+
     case Qt::Key_Control: mKeysPressed |= EKeyInput::Ctrl; break;
     case Qt::Key_Shift: mKeysPressed |= EKeyInput::Shift; break;
     case Qt::Key_Alt: mKeysPressed |= EKeyInput::Alt; break;
@@ -153,12 +165,24 @@ void CBasicViewport::keyReleaseEvent(QKeyEvent *pEvent)
 {
     switch (pEvent->key())
     {
+    case Qt::Key_PageDown:
     case Qt::Key_Q: mKeysPressed &= ~EKeyInput::Q; break;
-    case Qt::Key_W: mKeysPressed &= ~EKeyInput::W; break;
+
+    case Qt::Key_PageUp:
     case Qt::Key_E: mKeysPressed &= ~EKeyInput::E; break;
+
+    case Qt::Key_Up:
+    case Qt::Key_W: mKeysPressed &= ~EKeyInput::W; break;
+
+    case Qt::Key_Left:
     case Qt::Key_A: mKeysPressed &= ~EKeyInput::A; break;
+
+    case Qt::Key_Down:
     case Qt::Key_S: mKeysPressed &= ~EKeyInput::S; break;
+
+    case Qt::Key_Right:
     case Qt::Key_D: mKeysPressed &= ~EKeyInput::D; break;
+
     case Qt::Key_Control: mKeysPressed &= ~EKeyInput::Ctrl; break;
     case Qt::Key_Shift: mKeysPressed &= ~EKeyInput::Shift; break;
     case Qt::Key_Alt: mKeysPressed &= ~EKeyInput::Alt; break;
