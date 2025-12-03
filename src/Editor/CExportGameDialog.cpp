@@ -336,19 +336,19 @@ void CExportGameDialog::RecursiveAddToTree(const nod::Node *pkNode, QTreeWidgetI
 
     for (auto Iter = NodeList.begin(); Iter != NodeList.end(); Iter++)
     {
-        const nod::Node *pkNode = *Iter;
+        const nod::Node *node = *Iter;
 
-        if (!mpExporter->ShouldExportDiscNode(pkNode, pParent->parent() == nullptr))
+        if (!mpExporter->ShouldExportDiscNode(node, pParent->parent() == nullptr))
             continue;
 
-        const bool IsDir = pkNode->getKind() == nod::Node::Kind::Directory;
+        const bool IsDir = node->getKind() == nod::Node::Kind::Directory;
 
-        const auto nodeName = pkNode->getName();
+        const auto nodeName = node->getName();
         auto* pItem = new QTreeWidgetItem(pParent, QStringList(QString::fromUtf8(nodeName.data(), nodeName.size())));
         pItem->setIcon(0, QIcon(IsDir ? skDirIcon : skFileIcon));
 
         if (IsDir)
-            RecursiveAddToTree(pkNode, pItem);
+            RecursiveAddToTree(node, pItem);
     }
 }
 
