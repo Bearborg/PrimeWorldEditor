@@ -25,8 +25,8 @@ private:
         QString Name;
 
         SEntry() = default;
-        SEntry(uint32 _ID, const QString& rkName)
-            : ID(_ID), Name(rkName) {}
+        SEntry(uint32 _ID, QString rkName)
+            : ID(_ID), Name(std::move(rkName)) {}
 
         bool operator<(const SEntry& rkOther) const
         {
