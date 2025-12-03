@@ -111,8 +111,9 @@ void IEditor::OnUndoStackIndexChanged()
     }
 
     if (CurrentIndex == CleanIndex)
+    {
         setWindowModified(false);
-
+    }
     else
     {
         bool IsClean = true;
@@ -123,19 +124,18 @@ void IEditor::OnUndoStackIndexChanged()
         {
             const QUndoCommand *pkQCmd = mUndoStack.command(i);
 
-            if (const IUndoCommand* pkCmd = dynamic_cast<const IUndoCommand*>(pkQCmd))
+            if (const auto* pkCmd = dynamic_cast<const IUndoCommand*>(pkQCmd))
             {
                 if (pkCmd->AffectsCleanState())
                     IsClean = false;
             }
-
             else if (pkQCmd->childCount() > 0)
             {
                 for (int ChildIdx = 0; ChildIdx < pkQCmd->childCount(); ChildIdx++)
                 {
-                    const IUndoCommand *pkCmd = static_cast<const IUndoCommand*>(pkQCmd->child(ChildIdx));
+                    const auto *childCmd = static_cast<const IUndoCommand*>(pkQCmd->child(ChildIdx));
 
-                    if (pkCmd->AffectsCleanState())
+                    if (childCmd->AffectsCleanState())
                     {
                         IsClean = false;
                         break;
@@ -143,7 +143,8 @@ void IEditor::OnUndoStackIndexChanged()
                 }
             }
 
-            if (!IsClean) break;
+            if (!IsClean)
+                break;
         }
 
         setWindowModified(!IsClean);
