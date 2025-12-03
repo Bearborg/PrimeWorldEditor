@@ -63,14 +63,14 @@ void CCollisionRenderSettingsDialog::SetupWidgets()
     mpUi->HideAiBlockCheckBox->setHidden( Game < EGame::EchoesDemo || Game == EGame::DKCReturns );
 }
 
-void CCollisionRenderSettingsDialog::OnHideMaskChanged(QString NewMask)
+void CCollisionRenderSettingsDialog::OnHideMaskChanged(const QString& NewMask)
 {
     TString MaskStr = TO_TSTRING(NewMask);
     uint64 Mask = (MaskStr.IsHexString() ? MaskStr.ToInt64(16) : 0);
     mpEditor->Viewport()->CollisionRenderSettings().HideMask = Mask;
 }
 
-void CCollisionRenderSettingsDialog::OnHighlightMaskChanged(QString NewMask)
+void CCollisionRenderSettingsDialog::OnHighlightMaskChanged(const QString& NewMask)
 {
     TString MaskStr = TO_TSTRING(NewMask);
     uint64 Mask = (MaskStr.IsHexString() ? MaskStr.ToInt64(16) : 0);

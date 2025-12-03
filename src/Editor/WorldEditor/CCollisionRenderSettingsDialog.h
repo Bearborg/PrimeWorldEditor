@@ -23,8 +23,8 @@ public:
 
 public slots:
     void SetupWidgets();
-    void OnHideMaskChanged(QString NewMask);
-    void OnHighlightMaskChanged(QString NewMask);
+    void OnHideMaskChanged(const QString& NewMask);
+    void OnHighlightMaskChanged(const QString& NewMask);
     void OnWireframeToggled(bool Enable);
     void OnSurfaceTypeToggled(bool Enable);
     void OnStandableTrisToggled(bool Enable);
