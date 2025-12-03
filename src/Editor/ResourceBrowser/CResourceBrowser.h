@@ -81,6 +81,7 @@ public:
 
     // Interface
     bool eventFilter(QObject* pWatched, QEvent* pEvent) override;
+    void keyPressEvent(QKeyEvent* event) override;
 
     // Accessors
     CResourceStore* CurrentStore() const     { return mpStore; }

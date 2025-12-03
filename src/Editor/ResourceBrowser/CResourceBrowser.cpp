@@ -18,6 +18,7 @@
 #include <QCheckBox>
 #include <QFileDialog>
 #include <QInputDialog>
+#include <QKeyEvent>
 #include <QMenu>
 #include <QMessageBox>
 #include <QtConcurrent/QtConcurrentRun>
@@ -516,6 +517,38 @@ bool CResourceBrowser::eventFilter(QObject *pWatched, QEvent *pEvent)
     }
 
     return false;
+}
+
+void CResourceBrowser::keyPressEvent(QKeyEvent* event)
+{
+    // If we don't have focus for one reason or another, then
+    // don't do anything. It's unintuitive to listen on key
+    // inputs when a control isn't in focus.
+    const auto* resource_view = mpUI->ResourceTableView;
+    if (!resource_view->hasFocus())
+    {
+        event->ignore();
+        return;
+    }
+
+    // We only want to handle directory drilldown and returning if only one item is selected.
+    const auto indexes = resource_view->selectionModel()->selectedIndexes();
+    if (indexes.empty() || indexes.size() > 1)
+    {
+        event->ignore();
+        return;
+    }
+
+    const auto key = event->key();
+    if (key == Qt::Key_Return || key == Qt::Key_Enter)
+    {
+        OnDoubleClickTable(indexes.front());
+    }
+    else
+    {
+        // Pass down for any alternative handling
+        event->ignore();
+    }
 }
 
 void CResourceBrowser::RefreshResources()
