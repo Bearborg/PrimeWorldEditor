@@ -1,8 +1,12 @@
 #ifndef CRESOURCEPROXYMODEL
 #define CRESOURCEPROXYMODEL
 
-#include "CResourceTableModel.h"
-#include <QSet>
+#include <Common/TString.h>
+#include <Core/GameProject/CResourceEntry.h>
+#include <Core/GameProject/CVirtualDirectory.h>
+#include <Core/Resource/CResTypeInfo.h>
+#include "Editor/ResourceBrowser/CResourceTableModel.h"
+
 #include <QSortFilterProxyModel>
 
 class CResourceProxyModel : public QSortFilterProxyModel
