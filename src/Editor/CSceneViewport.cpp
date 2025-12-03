@@ -453,7 +453,7 @@ void CSceneViewport::OnSelectConnected()
         Nodes.push_back(mpScene->NodeForInstanceID(ID));
 
     const bool ShouldClear = ((qApp->keyboardModifiers() & Qt::ControlModifier) == 0);
-    mpEditor->BatchSelectNodes(Nodes, ShouldClear, tr("Select Connected"));
+    mpEditor->BatchSelectNodes(std::move(Nodes), ShouldClear, tr("Select Connected"));
 }
 
 void CSceneViewport::OnHideSelection()
