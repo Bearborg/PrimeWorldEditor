@@ -17,15 +17,7 @@ class CFlagsProperty : public TSerializeableTypedProperty<uint32, EPropertyType:
             : Name(rkInName), Mask(InMask)
         {}
 
-        bool operator==(const SBitFlag& other) const
-        {
-            return Name == other.Name && Mask == other.Mask;
-        }
-
-        bool operator!=(const SBitFlag& other) const
-        {
-            return !operator==(other);
-        }
+        bool operator==(const SBitFlag&) const = default;
 
         void Serialize(IArchive& rArc)
         {
