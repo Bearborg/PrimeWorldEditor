@@ -16,7 +16,6 @@ std::unique_ptr<CAudioGroup> CAudioGroupLoader::LoadAGSC(IInputStream& rAGSC, CR
         const uint32 PoolSize = rAGSC.ReadULong();
         rAGSC.Seek(PoolSize + 0x4, SEEK_CUR);
     }
-
     else
     {
         rAGSC.Seek(0x4, SEEK_CUR);
@@ -49,7 +48,8 @@ std::unique_ptr<CAudioGroup> CAudioGroupLoader::LoadAGSC(IInputStream& rAGSC, CR
             const uint16 NumSounds = rAGSC.ReadUShort();
             rAGSC.Seek(0x2, SEEK_CUR);
 
-            for (uint32 iSfx = 0; iSfx < NumSounds; iSfx++)
+            pOut->mDefineIDs.reserve(NumSounds);
+            for (uint32 i = 0; i < NumSounds; i++)
             {
                 pOut->mDefineIDs.push_back(rAGSC.ReadUShort());
                 rAGSC.Seek(0x8, SEEK_CUR);
@@ -65,8 +65,9 @@ std::unique_ptr<CAudioLookupTable> CAudioGroupLoader::LoadATBL(IInputStream& rAT
     auto pOut = std::make_unique<CAudioLookupTable>(pEntry);
     const uint32 NumMacroIDs = rATBL.ReadULong();
 
-    for (uint32 iMacro = 0; iMacro < NumMacroIDs; iMacro++)
-        pOut->mDefineIDs.push_back( rATBL.ReadShort() );
+    pOut->mDefineIDs.reserve(NumMacroIDs);
+    for (uint32 i = 0; i < NumMacroIDs; i++)
+        pOut->mDefineIDs.push_back(rATBL.ReadShort());
 
     return pOut;
 }
@@ -75,9 +76,9 @@ std::unique_ptr<CStringList> CAudioGroupLoader::LoadSTLC(IInputStream& rSTLC, CR
 {
     auto pOut = std::make_unique<CStringList>(pEntry);
     const uint32 NumStrings = rSTLC.ReadULong();
-    pOut->mStringList.reserve(NumStrings);
 
-    for (uint32 iStr = 0; iStr < NumStrings; iStr++)
+    pOut->mStringList.reserve(NumStrings);
+    for (uint32 i = 0; i < NumStrings; i++)
         pOut->mStringList.push_back(rSTLC.ReadString());
 
     return pOut;
