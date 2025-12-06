@@ -39,10 +39,10 @@ void CSceneNode::DrawSelection()
 void CSceneNode::RayAABoxIntersectTest(CRayCollisionTester& rTester, const SViewInfo& /*rkViewInfo*/)
 {
     // Default implementation for virtual function
-    std::pair<bool,float> Result = AABox().IntersectsRay(rTester.Ray());
+    const auto [hit, distance] = AABox().IntersectsRay(rTester.Ray());
 
-    if (Result.first)
-        rTester.AddNode(this, -1, Result.second);
+    if (hit)
+        rTester.AddNode(this, -1, distance);
 }
 
 bool CSceneNode::IsVisible() const
