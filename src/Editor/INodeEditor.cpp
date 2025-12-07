@@ -232,7 +232,7 @@ CNodeSelection* INodeEditor::Selection() const
     return mpSelection;
 }
 
-void INodeEditor::EnterPickMode(FNodeFlags AllowedNodes, bool ExitOnInvalidPick, bool EmitOnInvalidPick, bool EmitHoverOnButtonPress, QCursor Cursor /*= Qt::CrossCursor*/)
+void INodeEditor::EnterPickMode(FNodeFlags AllowedNodes, bool ExitOnInvalidPick, bool EmitOnInvalidPick, bool EmitHoverOnButtonPress, const QCursor& Cursor /*= Qt::CrossCursor*/)
 {
     // If we're already in pick mode, exit first so the previous caller has a chance to disconnect
     if (mPickMode)

@@ -76,7 +76,7 @@ public:
     bool HasSelection() const;
     CNodeSelection* Selection() const;
 
-    void EnterPickMode(FNodeFlags AllowedNodes, bool ExitOnInvalidPick, bool EmitOnInvalidPick, bool EmitHoverOnButtonPress, QCursor Cursor = Qt::CrossCursor);
+    void EnterPickMode(FNodeFlags AllowedNodes, bool ExitOnInvalidPick, bool EmitOnInvalidPick, bool EmitHoverOnButtonPress, const QCursor& Cursor = Qt::CrossCursor);
     void ExitPickMode();
 
     void NotifySelectionTransformed();
@@ -93,7 +93,7 @@ signals:
     void SelectionModified();
     void SelectionTransformed();
 
-    void PickModeEntered(QCursor Cursor);
+    void PickModeEntered(const QCursor& Cursor);
     void PickModeExited();
     void PickModeClick(const SRayIntersection& rkRayIntersect, QMouseEvent *pEvent);
     void PickModeHoverChanged(const SRayIntersection& rkRayIntersect, QMouseEvent *pEvent);
