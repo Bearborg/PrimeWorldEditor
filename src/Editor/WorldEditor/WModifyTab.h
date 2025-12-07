@@ -63,7 +63,7 @@ private:
     std::unique_ptr<Ui::WModifyTab> ui;
 
 private slots:
-    void OnLinkTableDoubleClick(QModelIndex Index);
+    void OnLinkTableDoubleClick(const QModelIndex& Index);
 };
 
 #endif // WMODIFYTAB_H

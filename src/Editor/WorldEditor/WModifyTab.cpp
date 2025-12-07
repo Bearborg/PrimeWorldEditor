@@ -256,7 +256,7 @@ void WModifyTab::OnEditLinkClicked()
 }
 
 // ************ PRIVATE SLOTS ************
-void WModifyTab::OnLinkTableDoubleClick(QModelIndex Index)
+void WModifyTab::OnLinkTableDoubleClick(const QModelIndex& Index)
 {
     if (Index.column() == 0)
     {
