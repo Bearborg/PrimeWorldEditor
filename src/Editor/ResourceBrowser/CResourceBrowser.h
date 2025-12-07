@@ -130,8 +130,8 @@ public slots:
 signals:
     void SelectedResourceChanged(CResourceEntry *pNewRes);
 
-    void ResourceAboutToBeMoved(CResourceEntry *pRes, QString NewPath);
-    void ResourceMoved(CResourceEntry *pRes, CVirtualDirectory *pOldDir, TString OldName);
+    void ResourceAboutToBeMoved(CResourceEntry *pRes, const QString& NewPath);
+    void ResourceMoved(CResourceEntry *pRes, CVirtualDirectory *pOldDir, const TString& OldName);
 
     void ResourceAboutToBeCreated(CVirtualDirectory* pInDir);
     void ResourceCreated(CResourceEntry *pRes);
@@ -139,10 +139,10 @@ signals:
     void ResourceAboutToBeDeleted(CResourceEntry *pRes);
     void ResourceDeleted();
 
-    void DirectoryAboutToBeMoved(CVirtualDirectory *pDir, QString NewPath);
-    void DirectoryMoved(CVirtualDirectory *pDir, CVirtualDirectory *pOldDir, TString OldName);
+    void DirectoryAboutToBeMoved(CVirtualDirectory *pDir, const QString& NewPath);
+    void DirectoryMoved(CVirtualDirectory *pDir, CVirtualDirectory *pOldDir, const TString& OldName);
 
-    void DirectoryAboutToBeCreated(QString DirPath);
+    void DirectoryAboutToBeCreated(const QString& DirPath);
     void DirectoryCreated(CVirtualDirectory *pDir);
 
     void DirectoryAboutToBeDeleted(CVirtualDirectory *pDir);
