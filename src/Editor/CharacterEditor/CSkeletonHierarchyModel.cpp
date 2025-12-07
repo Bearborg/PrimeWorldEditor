@@ -101,12 +101,12 @@ QModelIndex CSkeletonHierarchyModel::IndexForBone(const CBone *pBone) const
     return QModelIndex();
 }
 
-void CSkeletonHierarchyModel::SetSkeleton(CSkeleton *pSkel)
+void CSkeletonHierarchyModel::SetSkeleton(const CSkeleton *pSkel)
 {
-    if (mpSkeleton != pSkel)
-    {
-        beginResetModel();
-        mpSkeleton = pSkel;
-        endResetModel();
-    }
+    if (mpSkeleton == pSkel)
+        return;
+
+    beginResetModel();
+    mpSkeleton = pSkel;
+    endResetModel();
 }

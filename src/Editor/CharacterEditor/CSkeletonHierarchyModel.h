@@ -19,7 +19,7 @@ public:
 
     CBone* BoneForIndex(const QModelIndex& rkIndex) const;
     QModelIndex IndexForBone(const CBone *pBone) const;
-    void SetSkeleton(CSkeleton *pSkel);
+    void SetSkeleton(const CSkeleton *pSkel);
 };
 
 #endif // CSKELETONHIERARCHYMODEL
