@@ -202,7 +202,7 @@ QModelIndex CVirtualDirectoryModel::GetIndexForDirectory(const CVirtualDirectory
     // Get index list
     while (pParent != nullptr)
     {
-        bool Found = false;
+        [[maybe_unused]] bool Found = false;
 
         for (size_t iDir = 0; iDir < pParent->NumSubdirectories(); iDir++)
         {
