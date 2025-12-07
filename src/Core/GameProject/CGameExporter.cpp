@@ -123,12 +123,12 @@ bool CGameExporter::ShouldExportDiscNode(const nod::Node *pkNode, bool IsInRoot)
             switch (mGame)
             {
             case EGame::Prime:
-                return mDiscType == EDiscType::WiiDeAsobu && pkNode->getName() == "MP1JPN" ||
-                       mDiscType == EDiscType::Trilogy && pkNode->getName() == "MP1";
+                return (mDiscType == EDiscType::WiiDeAsobu && pkNode->getName() == "MP1JPN") ||
+                       (mDiscType == EDiscType::Trilogy && pkNode->getName() == "MP1");
 
             case EGame::Echoes:
-                return mDiscType == EDiscType::WiiDeAsobu && pkNode->getName() == "MP2JPN" ||
-                       mDiscType == EDiscType::Trilogy && pkNode->getName() == "MP2";
+                return (mDiscType == EDiscType::WiiDeAsobu && pkNode->getName() == "MP2JPN") ||
+                       (mDiscType == EDiscType::Trilogy && pkNode->getName() == "MP2");
 
             case EGame::Corruption:
                 return mDiscType == EDiscType::Trilogy && pkNode->getName() == "MP3";
@@ -149,12 +149,12 @@ bool CGameExporter::ShouldExportDiscNode(const nod::Node *pkNode, bool IsInRoot)
             switch (mGame)
             {
             case EGame::Prime:
-                return mDiscType == EDiscType::WiiDeAsobu && pkNode->getName() == "rs5mp1jpn_p.dol" ||
-                       mDiscType == EDiscType::Trilogy && pkNode->getName() == "rs5mp1_p.dol";
+                return (mDiscType == EDiscType::WiiDeAsobu && pkNode->getName() == "rs5mp1jpn_p.dol") ||
+                       (mDiscType == EDiscType::Trilogy && pkNode->getName() == "rs5mp1_p.dol");
 
             case EGame::Echoes:
-                return mDiscType == EDiscType::WiiDeAsobu && pkNode->getName() == "rs5mp2jpn_p.dol" ||
-                       mDiscType == EDiscType::Trilogy && pkNode->getName() == "rs5mp2_p.dol";
+                return (mDiscType == EDiscType::WiiDeAsobu && pkNode->getName() == "rs5mp2jpn_p.dol") ||
+                       (mDiscType == EDiscType::Trilogy && pkNode->getName() == "rs5mp2_p.dol");
 
             case EGame::Corruption:
                 return mDiscType == EDiscType::Trilogy && pkNode->getName() == "rs5mp3_p.dol";
