@@ -28,7 +28,7 @@ public:
     void SetNode(CModelNode *pNode);
     void SetActiveMaterial(CMaterial *pMat);
     void SetDrawMode(EDrawMode Mode);
-    void SetClearColor(CColor Color);
+    void SetClearColor(const CColor& Color);
     void SetGridEnabled(bool Enable);
     void Paint() override;
     void OnResize() override;

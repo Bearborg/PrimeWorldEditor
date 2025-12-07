@@ -31,7 +31,7 @@ void CModelEditorViewport::SetDrawMode(EDrawMode Mode)
     mMode = Mode;
 }
 
-void CModelEditorViewport::SetClearColor(CColor Color)
+void CModelEditorViewport::SetClearColor(const CColor& Color)
 {
     mpRenderer->SetClearColor(Color);
 }
