@@ -42,7 +42,6 @@ void WDraggableSpinBox::mouseReleaseEvent(QMouseEvent *pEvent)
                 stepDown();
         }
     }
-
     else if (pEvent->button() == Qt::RightButton)
     {
         setValue(mDefaultValue);
@@ -98,8 +97,8 @@ bool WDraggableSpinBox::eventFilter(QObject *, QEvent *pEvent)
 QString WDraggableSpinBox::textFromValue(double Val) const
 {
     QString Str = QString::number(Val, 'f', decimals());
-    int DecIndex = Str.indexOf(QLatin1Char{'.'});
-    int NumDecs;
+    const auto DecIndex = Str.indexOf(QLatin1Char{'.'});
+    qsizetype NumDecs{};
 
     if (DecIndex == -1)
         NumDecs = 0;
@@ -108,7 +107,7 @@ QString WDraggableSpinBox::textFromValue(double Val) const
 
     if (NumDecs < mMinDecimals)
     {
-        int Size = Str.size() + mMinDecimals + 1;
+        const auto Size = Str.size() + mMinDecimals + 1;
         Str.reserve(Size);
 
         Str += QLatin1Char{'.'};
@@ -116,8 +115,7 @@ QString WDraggableSpinBox::textFromValue(double Val) const
         for (int iDec = 0; iDec < mMinDecimals; iDec++)
             Str += QLatin1Char{'0'};
     }
-
-    else if ((NumDecs > mMinDecimals) && mTrimTrailingZeroes)
+    else if (NumDecs > mMinDecimals && mTrimTrailingZeroes)
     {
         while (NumDecs > mMinDecimals)
         {
@@ -126,14 +124,15 @@ QString WDraggableSpinBox::textFromValue(double Val) const
                 Str.chop(1);
                 NumDecs--;
             }
-
             else if (Str.endsWith(QLatin1Char{'.'}))
             {
                 Str.chop(1);
                 break;
             }
-
-            else break;
+            else
+            {
+                break;
+            }
         }
     }
 
