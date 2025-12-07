@@ -59,5 +59,5 @@ void CResourceTableView::DeleteSelected()
     }
 
     // Delete
-    gpEdApp->ResourceBrowser()->Delete(ResourcesToDelete, DirsToDelete);
+    gpEdApp->ResourceBrowser()->Delete(std::move(ResourcesToDelete), std::move(DirsToDelete));
 }
