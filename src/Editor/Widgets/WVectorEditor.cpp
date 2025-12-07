@@ -175,9 +175,9 @@ void WVectorEditor::SetupUI()
     mpSpinBoxX->setContextMenuPolicy(Qt::NoContextMenu);
     mpSpinBoxY->setContextMenuPolicy(Qt::NoContextMenu);
     mpSpinBoxZ->setContextMenuPolicy(Qt::NoContextMenu);
-    connect(mpSpinBoxX, qOverload<double>(&WDraggableSpinBox::valueChanged), this, &WVectorEditor::SetX);
-    connect(mpSpinBoxY, qOverload<double>(&WDraggableSpinBox::valueChanged), this, &WVectorEditor::SetY);
-    connect(mpSpinBoxZ, qOverload<double>(&WDraggableSpinBox::valueChanged), this, &WVectorEditor::SetZ);
+    connect(mpSpinBoxX, &WDraggableSpinBox::valueChanged, this, &WVectorEditor::SetX);
+    connect(mpSpinBoxY, &WDraggableSpinBox::valueChanged, this, &WVectorEditor::SetY);
+    connect(mpSpinBoxZ, &WDraggableSpinBox::valueChanged, this, &WVectorEditor::SetZ);
     connect(mpSpinBoxX, &WDraggableSpinBox::editingFinished, this, &WVectorEditor::OnSpinBoxEditingDone);
     connect(mpSpinBoxY, &WDraggableSpinBox::editingFinished, this, &WVectorEditor::OnSpinBoxEditingDone);
     connect(mpSpinBoxZ, &WDraggableSpinBox::editingFinished, this, &WVectorEditor::OnSpinBoxEditingDone);

@@ -50,15 +50,15 @@ CCharacterEditor::CCharacterEditor(CAnimSet *pSet, QWidget *parent)
     connect(ui->ActionFastForward, &QAction::triggered, this, &CCharacterEditor::FastForward);
     connect(ui->ActionPrevAnim, &QAction::triggered, this, &CCharacterEditor::PrevAnim);
     connect(ui->ActionNextAnim, &QAction::triggered, this, &CCharacterEditor::NextAnim);
-    connect(mpCharComboBox, qOverload<int>(&QComboBox::currentIndexChanged), this, &CCharacterEditor::SetActiveCharacterIndex);
-    connect(mpAnimComboBox, qOverload<int>(&QComboBox::currentIndexChanged), this, &CCharacterEditor::SetActiveAnimation);
+    connect(mpCharComboBox, &QComboBox::currentIndexChanged, this, &CCharacterEditor::SetActiveCharacterIndex);
+    connect(mpAnimComboBox, &QComboBox::currentIndexChanged, this, &CCharacterEditor::SetActiveAnimation);
 
-    connect(ui->AnimSlider, qOverload<int>(&QSlider::valueChanged), this, qOverload<int>(&CCharacterEditor::SetAnimTime));
+    connect(ui->AnimSlider, &QSlider::valueChanged, this, qOverload<int>(&CCharacterEditor::SetAnimTime));
     connect(ui->PlayPauseButton, &QPushButton::pressed, this, &CCharacterEditor::TogglePlay);
     connect(ui->LoopButton, &QPushButton::toggled, this, &CCharacterEditor::ToggleLoop);
     connect(ui->RewindButton, &QPushButton::pressed, this, &CCharacterEditor::Rewind);
     connect(ui->FastForwardButton, &QPushButton::pressed, this, &CCharacterEditor::FastForward);
-    connect(ui->AnimSpeedSpinBox, qOverload<double>(&WDraggableSpinBox::valueChanged), this, &CCharacterEditor::AnimSpeedSpinBoxChanged);
+    connect(ui->AnimSpeedSpinBox, &WDraggableSpinBox::valueChanged, this, &CCharacterEditor::AnimSpeedSpinBoxChanged);
 
     // Init skeleton tree view
     ui->SkeletonHierarchyTreeView->setModel(&mSkeletonModel);

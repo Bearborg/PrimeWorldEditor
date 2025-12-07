@@ -51,7 +51,7 @@ WEditorProperties::WEditorProperties(QWidget *pParent)
     connect(mpActiveCheckBox, &QCheckBox::clicked, this, &WEditorProperties::OnActiveChanged);
     connect(mpInstanceNameLineEdit, &QLineEdit::textEdited, this, &WEditorProperties::OnInstanceNameEdited);
     connect(mpInstanceNameLineEdit, &QLineEdit::editingFinished, this, &WEditorProperties::OnInstanceNameEditFinished);
-    connect(mpLayersComboBox, qOverload<int>(&QComboBox::currentIndexChanged), this, &WEditorProperties::OnLayerChanged);
+    connect(mpLayersComboBox, &QComboBox::currentIndexChanged, this, &WEditorProperties::OnLayerChanged);
 }
 
 void WEditorProperties::SyncToEditor(CWorldEditor *pEditor)

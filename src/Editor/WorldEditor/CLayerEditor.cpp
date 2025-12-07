@@ -12,7 +12,7 @@ CLayerEditor::CLayerEditor(QWidget *parent)
     ui->setupUi(this);
     ui->LayerSelectComboBox->setModel(mpModel);
 
-    connect(ui->LayerSelectComboBox, qOverload<int>(&QComboBox::currentIndexChanged), this, &CLayerEditor::SetCurrentIndex);
+    connect(ui->LayerSelectComboBox, &QComboBox::currentIndexChanged, this, &CLayerEditor::SetCurrentIndex);
     connect(ui->NameLineEdit, &QLineEdit::textEdited, this, &CLayerEditor::EditLayerName);
     connect(ui->ActiveCheckBox, &QCheckBox::toggled, this, &CLayerEditor::EditLayerActive);
 }

@@ -150,7 +150,7 @@ CResourceBrowser::CResourceBrowser(QWidget *pParent)
     connect(mpUI->SearchBar, &CTimedLineEdit::StoppedTyping, this, &CResourceBrowser::OnSearchStringChanged);
     connect(mpUI->ResourceTreeButton, &QPushButton::pressed, this, &CResourceBrowser::SetResourceTreeView);
     connect(mpUI->ResourceListButton, &QPushButton::pressed, this, &CResourceBrowser::SetResourceListView);
-    connect(mpUI->SortComboBox, qOverload<int>(&QComboBox::currentIndexChanged), this, &CResourceBrowser::OnSortModeChanged);
+    connect(mpUI->SortComboBox, &QComboBox::currentIndexChanged, this, &CResourceBrowser::OnSortModeChanged);
     connect(mpUI->ClearButton, &QPushButton::pressed, this, &CResourceBrowser::OnClearButtonPressed);
 
     connect(mpUI->DirectoryTreeView, &CVirtualDirectoryTreeView::clicked, this, &CResourceBrowser::OnDirectorySelectionChanged);

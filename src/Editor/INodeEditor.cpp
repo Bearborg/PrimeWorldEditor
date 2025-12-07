@@ -38,7 +38,7 @@ INodeEditor::INodeEditor(QWidget *pParent)
     connect(mGizmoActions[1], &QAction::triggered, this, &INodeEditor::OnTranslateTriggered);
     connect(mGizmoActions[2], &QAction::triggered, this, &INodeEditor::OnRotateTriggered);
     connect(mGizmoActions[3], &QAction::triggered, this, &INodeEditor::OnScaleTriggered);
-    connect(mpTransformCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, &INodeEditor::OnTransformSpaceChanged);
+    connect(mpTransformCombo, &QComboBox::currentIndexChanged, this, &INodeEditor::OnTransformSpaceChanged);
     connect(mpSelection, &CNodeSelection::Modified, this, &INodeEditor::OnSelectionModified);
 }
 

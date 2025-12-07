@@ -57,7 +57,7 @@ QWidget* CPropertyDelegate::createEditor(QWidget* pParent, const QStyleOptionVie
 
         case EPropertyType::Bool:
         {
-            QCheckBox *pCheckBox = new QCheckBox(pParent);
+            auto* pCheckBox = new QCheckBox(pParent);
             CONNECT_RELAY(pCheckBox, rkIndex, &QCheckBox::toggled);
             pOut = pCheckBox;
             break;
@@ -65,39 +65,39 @@ QWidget* CPropertyDelegate::createEditor(QWidget* pParent, const QStyleOptionVie
 
         case EPropertyType::Short:
         {
-            WIntegralSpinBox *pSpinBox = new WIntegralSpinBox(pParent);
+            auto* pSpinBox = new WIntegralSpinBox(pParent);
             pSpinBox->setMinimum(INT16_MIN);
             pSpinBox->setMaximum(INT16_MAX);
             pSpinBox->setSuffix(TO_QSTRING(pProp->Suffix()));
-            CONNECT_RELAY(pSpinBox, rkIndex, qOverload<int>(&WIntegralSpinBox::valueChanged));
+            CONNECT_RELAY(pSpinBox, rkIndex, &WIntegralSpinBox::valueChanged);
             pOut = pSpinBox;
             break;
         }
 
         case EPropertyType::Int:
         {
-            WIntegralSpinBox *pSpinBox = new WIntegralSpinBox(pParent);
+            auto* pSpinBox = new WIntegralSpinBox(pParent);
             pSpinBox->setMinimum(INT32_MIN);
             pSpinBox->setMaximum(INT32_MAX);
             pSpinBox->setSuffix(TO_QSTRING(pProp->Suffix()));
-            CONNECT_RELAY(pSpinBox, rkIndex, qOverload<int>(&WIntegralSpinBox::valueChanged));
+            CONNECT_RELAY(pSpinBox, rkIndex, &WIntegralSpinBox::valueChanged);
             pOut = pSpinBox;
             break;
         }
 
         case EPropertyType::Float:
         {
-            WDraggableSpinBox *pSpinBox = new WDraggableSpinBox(pParent);
+            auto* pSpinBox = new WDraggableSpinBox(pParent);
             pSpinBox->setSingleStep(0.1);
             pSpinBox->setSuffix(TO_QSTRING(pProp->Suffix()));
-            CONNECT_RELAY(pSpinBox, rkIndex, qOverload<double>(&WDraggableSpinBox::valueChanged));
+            CONNECT_RELAY(pSpinBox, rkIndex, &WDraggableSpinBox::valueChanged);
             pOut = pSpinBox;
             break;
         }
 
         case EPropertyType::Color:
         {
-            WColorPicker *pColorPicker = new WColorPicker(pParent);
+            auto* pColorPicker = new WColorPicker(pParent);
             CONNECT_RELAY(pColorPicker, rkIndex, &WColorPicker::ColorChanged);
             pOut = pColorPicker;
             break;
@@ -105,17 +105,17 @@ QWidget* CPropertyDelegate::createEditor(QWidget* pParent, const QStyleOptionVie
 
         case EPropertyType::Sound:
         {
-            WIntegralSpinBox *pSpinBox = new WIntegralSpinBox(pParent);
+            auto* pSpinBox = new WIntegralSpinBox(pParent);
             pSpinBox->setMinimum(-1);
             pSpinBox->setMaximum(0xFFFF);
-            CONNECT_RELAY(pSpinBox, rkIndex, qOverload<int>(&WIntegralSpinBox::valueChanged));
+            CONNECT_RELAY(pSpinBox, rkIndex, &WIntegralSpinBox::valueChanged);
             pOut = pSpinBox;
             break;
         }
 
         case EPropertyType::String:
         {
-            QLineEdit *pLineEdit = new QLineEdit(pParent);
+            auto* pLineEdit = new QLineEdit(pParent);
             CONNECT_RELAY(pLineEdit, rkIndex, &QLineEdit::textEdited);
             pOut = pLineEdit;
             break;
@@ -124,23 +124,23 @@ QWidget* CPropertyDelegate::createEditor(QWidget* pParent, const QStyleOptionVie
         case EPropertyType::Enum:
         case EPropertyType::Choice:
         {
-            QComboBox *pComboBox = new QComboBox(pParent);
-            CEnumProperty* pEnum = TPropCast<CEnumProperty>(pProp);
+            auto* pComboBox = new QComboBox(pParent);
+            auto* pEnum = TPropCast<CEnumProperty>(pProp);
 
             for (size_t ValueIdx = 0; ValueIdx < pEnum->NumPossibleValues(); ValueIdx++)
                 pComboBox->addItem(TO_QSTRING(pEnum->ValueName(ValueIdx)));
 
-            CONNECT_RELAY(pComboBox, rkIndex, qOverload<int>(&QComboBox::currentIndexChanged));
+            CONNECT_RELAY(pComboBox, rkIndex, &QComboBox::currentIndexChanged);
             pOut = pComboBox;
             break;
         }
 
         case EPropertyType::Asset:
         {
-            CResourceSelector *pSelector = new CResourceSelector(pParent);
+            auto* pSelector = new CResourceSelector(pParent);
             pSelector->SetFrameVisible(false);
 
-            CAssetProperty *pAsset = TPropCast<CAssetProperty>(pProp);
+            auto* pAsset = TPropCast<CAssetProperty>(pProp);
             pSelector->SetTypeFilter(pAsset->GetTypeFilter());
 
             CONNECT_RELAY(pSelector, rkIndex, &CResourceSelector::ResourceChanged);
@@ -151,7 +151,7 @@ QWidget* CPropertyDelegate::createEditor(QWidget* pParent, const QStyleOptionVie
         case EPropertyType::Array:
         {
             // No relay here, would prefer user to be sure of their change before it's reflected on the UI
-            WIntegralSpinBox *pSpinBox = new WIntegralSpinBox(pParent);
+            auto* pSpinBox = new WIntegralSpinBox(pParent);
             pSpinBox->setMinimum(0);
             pSpinBox->setMaximum(999);
             pOut = pSpinBox;
@@ -170,12 +170,13 @@ QWidget* CPropertyDelegate::createEditor(QWidget* pParent, const QStyleOptionVie
 
         // Handle character
         if (Type == EPropertyType::AnimationSet)
+        {
             pOut = CreateCharacterEditor(pParent, rkIndex);
-
-        // Handle flags
+        }
         else if (Type == EPropertyType::Flags)
         {
-            QCheckBox *pCheckBox = new QCheckBox(pParent);
+            // Handle flags
+            auto* pCheckBox = new QCheckBox(pParent);
             CONNECT_RELAY(pCheckBox, rkIndex, &QCheckBox::toggled);
             pOut = pCheckBox;
         }
@@ -565,7 +566,7 @@ QWidget* CPropertyDelegate::CreateCharacterEditor(QWidget *pParent, const QModel
     // Create widget
     if (Type == EPropertyType::Asset)
     {
-        CResourceSelector* pSelector = new CResourceSelector(pParent);
+        auto* pSelector = new CResourceSelector(pParent);
         pSelector->SetFrameVisible(false);
 
         if (Params.Version() <= EGame::Echoes)
@@ -579,8 +580,8 @@ QWidget* CPropertyDelegate::CreateCharacterEditor(QWidget *pParent, const QModel
 
     if (Type == EPropertyType::Enum || Type == EPropertyType::Choice)
     {
-        QComboBox* pComboBox = new QComboBox(pParent);
-        CAnimSet* pAnimSet = Params.AnimSet();
+        auto* pComboBox = new QComboBox(pParent);
+        auto* pAnimSet = Params.AnimSet();
 
         if (pAnimSet)
         {
@@ -588,14 +589,14 @@ QWidget* CPropertyDelegate::CreateCharacterEditor(QWidget *pParent, const QModel
                 pComboBox->addItem(TO_QSTRING(pAnimSet->Character(CharIdx)->Name));
         }
 
-        CONNECT_RELAY(pComboBox, rkIndex, qOverload<int>(&QComboBox::currentIndexChanged));
+        CONNECT_RELAY(pComboBox, rkIndex, &QComboBox::currentIndexChanged);
         return pComboBox;
     }
 
     if (Type == EPropertyType::Int)
     {
-        WIntegralSpinBox *pSpinBox = new WIntegralSpinBox(pParent);
-        CONNECT_RELAY(pSpinBox, rkIndex, qOverload<int>(&WIntegralSpinBox::valueChanged));
+        auto* pSpinBox = new WIntegralSpinBox(pParent);
+        CONNECT_RELAY(pSpinBox, rkIndex, &WIntegralSpinBox::valueChanged);
         return pSpinBox;
     }
 
@@ -612,12 +613,10 @@ void CPropertyDelegate::SetCharacterEditorData(QWidget *pEditor, const QModelInd
     {
         static_cast<CResourceSelector*>(pEditor)->SetResource(Params.AnimSet());
     }
-
     else if (Type == EPropertyType::Enum || Type == EPropertyType::Choice)
     {
         static_cast<QComboBox*>(pEditor)->setCurrentIndex(Params.CharacterIndex());
     }
-
     else if (Type == EPropertyType::Int && !pEditor->hasFocus())
     {
         int UnkIndex = (Params.Version() <= EGame::Echoes ? rkIndex.row() - 2 : rkIndex.row() - 1);
@@ -637,12 +636,10 @@ void CPropertyDelegate::SetCharacterModelData(QWidget *pEditor, const QModelInde
         CResourceEntry *pEntry = static_cast<CResourceSelector*>(pEditor)->Entry();
         Params.SetResource( pEntry ? pEntry->ID() : CAssetID::InvalidID(gpEdApp->CurrentGame()) );
     }
-
     else if (Type == EPropertyType::Enum || Type == EPropertyType::Choice)
     {
         Params.SetCharIndex( static_cast<QComboBox*>(pEditor)->currentIndex() );
     }
-
     else if (Type == EPropertyType::Int)
     {
         int UnkIndex = (Params.Version() <= EGame::Echoes ? rkIndex.row() - 2 : rkIndex.row() - 1);

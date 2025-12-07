@@ -16,7 +16,7 @@ WCreateTab::WCreateTab(CWorldEditor *pEditor, QWidget *pParent)
 
     connect(mpEditor, &CWorldEditor::LayersModified, this, &WCreateTab::OnLayersChanged);
     connect(gpEdApp, &CEditorApplication::ActiveProjectChanged, this, &WCreateTab::OnActiveProjectChanged);
-    connect(ui->SpawnLayerComboBox, qOverload<int>(&QComboBox::currentIndexChanged), this, &WCreateTab::OnSpawnLayerChanged);
+    connect(ui->SpawnLayerComboBox, &QComboBox::currentIndexChanged, this, &WCreateTab::OnSpawnLayerChanged);
 }
 
 WCreateTab::~WCreateTab() = default;
