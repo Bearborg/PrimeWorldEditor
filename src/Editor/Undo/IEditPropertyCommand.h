@@ -40,7 +40,7 @@ public:
     virtual void SaveOldData();
     virtual void SaveNewData();
 
-    bool IsNewDataDifferent();
+    bool IsNewDataDifferent() const;
     void SetEditComplete(bool IsComplete);
 
     /** Interface */

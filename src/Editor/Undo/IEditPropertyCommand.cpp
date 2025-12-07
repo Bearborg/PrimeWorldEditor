@@ -75,7 +75,7 @@ void IEditPropertyCommand::SaveNewData()
     mSavedNewData = true;
 }
 
-bool IEditPropertyCommand::IsNewDataDifferent()
+bool IEditPropertyCommand::IsNewDataDifferent() const
 {
     if (mOldData.size() != mNewData.size()) return true;
     return memcmp(mOldData.data(), mNewData.data(), mNewData.size()) != 0;
