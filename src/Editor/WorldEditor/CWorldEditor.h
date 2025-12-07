@@ -140,10 +140,10 @@ public slots:
     void UpdateNewLinkLine();
 
     void LaunchQuickplay();
-    void LaunchQuickplayFromLocation(CVector3f Location, bool ForceAsSpawnPosition);
+    void LaunchQuickplayFromLocation(const CVector3f& Location, bool ForceAsSpawnPosition);
 
 protected:
-    QAction* AddEditModeButton(QIcon Icon, QString ToolTip, EWorldEditorMode Mode);
+    QAction* AddEditModeButton(const QIcon& Icon, const QString& ToolTip, EWorldEditorMode Mode);
     void SetSidebar(CWorldEditorSidebar *pSidebar);
     void GizmoModeChanged(CGizmo::EGizmoMode Mode) override;
 
@@ -156,12 +156,12 @@ private slots:
     void OnLinkEnd();
     void OnUnlinkClicked();
 
-    void OnPickModeEnter(QCursor Cursor);
+    void OnPickModeEnter(const QCursor& Cursor);
     void OnPickModeExit();
     void UpdateCameraOrbit();
     void OnCameraSpeedChange(double Speed);
-    void OnTransformSpinBoxModified(CVector3f Value);
-    void OnTransformSpinBoxEdited(CVector3f Value);
+    void OnTransformSpinBoxModified(const CVector3f& Value);
+    void OnTransformSpinBoxEdited(const CVector3f& Value);
 
     void SelectAllTriggered();
     void InvertSelectionTriggered();

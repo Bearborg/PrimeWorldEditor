@@ -440,17 +440,16 @@ void CWorldEditor::OpenProject()
 
 void CWorldEditor::OpenRecentProject()
 {
-    QAction *pSender = qobject_cast<QAction*>(sender());
+    const auto* pSender = qobject_cast<QAction*>(sender());
+    if (!pSender)
+        return;
 
-    if (pSender)
-    {
-        QSettings Settings;
-        QStringList RecentProjectsList = Settings.value(QStringLiteral("WorldEditor/RecentProjectsList")).toStringList();
+    QSettings Settings;
+    const QStringList RecentProjectsList = Settings.value(QStringLiteral("WorldEditor/RecentProjectsList")).toStringList();
 
-        int ProjIndex = pSender->data().toInt();
-        QString ProjPath = RecentProjectsList[ProjIndex];
-        gpEdApp->OpenProject(ProjPath);
-    }
+    const int ProjIndex = pSender->data().toInt();
+    const QString& ProjPath = RecentProjectsList[ProjIndex];
+    gpEdApp->OpenProject(ProjPath);
 }
 
 void CWorldEditor::ExportGame()
@@ -464,7 +463,8 @@ void CWorldEditor::ExportGame()
         return;
 
     CExportGameDialog ExportDialog(IsoPath, ExportDir, this);
-    if (ExportDialog.HasValidDisc()) ExportDialog.exec();
+    if (ExportDialog.HasValidDisc())
+        ExportDialog.exec();
 
     if (ExportDialog.ExportSucceeded())
     {
@@ -965,11 +965,11 @@ void CWorldEditor::LaunchQuickplay()
     LaunchQuickplayFromLocation(CameraPosition, false);
 }
 
-void CWorldEditor::LaunchQuickplayFromLocation(CVector3f Location, bool ForceAsSpawnPosition)
+void CWorldEditor::LaunchQuickplayFromLocation(const CVector3f& Location, bool ForceAsSpawnPosition)
 {
     // This function should not be called if a level is not open in a project.
-    ASSERT( gpEdApp->ActiveProject() != nullptr );
-    ASSERT( mpWorld && mpArea );
+    ASSERT(gpEdApp->ActiveProject() != nullptr);
+    ASSERT(mpWorld && mpArea);
 
     // Fill in parameters and start running
     SQuickplayParameters Parameters = mQuickplayParms;
@@ -988,7 +988,7 @@ void CWorldEditor::LaunchQuickplayFromLocation(CVector3f Location, bool ForceAsS
 }
 
 // ************ PROTECTED ************
-QAction* CWorldEditor::AddEditModeButton(QIcon Icon, QString ToolTip, EWorldEditorMode Mode)
+QAction* CWorldEditor::AddEditModeButton(const QIcon& Icon, const QString& ToolTip, EWorldEditorMode Mode)
 {
     ASSERT(mpEditModeButtonGroup->button(Mode) == nullptr);
 
@@ -1147,7 +1147,7 @@ void CWorldEditor::OnUnlinkClicked()
     }
 }
 
-void CWorldEditor::OnPickModeEnter(QCursor Cursor)
+void CWorldEditor::OnPickModeEnter(const QCursor& Cursor)
 {
     ui->MainViewport->SetCursorState(Cursor);
 }
@@ -1179,9 +1179,10 @@ void CWorldEditor::OnCameraSpeedChange(double Speed)
     ui->CamSpeedSpinBox->blockSignals(false);
 }
 
-void CWorldEditor::OnTransformSpinBoxModified(CVector3f Value)
+void CWorldEditor::OnTransformSpinBoxModified(const CVector3f& Value)
 {
-    if (mpSelection->IsEmpty()) return;
+    if (mpSelection->IsEmpty())
+        return;
 
     switch (mGizmo.Mode())
     {
@@ -1212,9 +1213,10 @@ void CWorldEditor::OnTransformSpinBoxModified(CVector3f Value)
     UpdateGizmoUI();
 }
 
-void CWorldEditor::OnTransformSpinBoxEdited(CVector3f)
+void CWorldEditor::OnTransformSpinBoxEdited(const CVector3f&)
 {
-    if (mpSelection->IsEmpty()) return;
+    if (mpSelection->IsEmpty())
+        return;
 
     if (mGizmo.Mode() == CGizmo::EGizmoMode::Translate)   UndoStack().push(CTranslateNodeCommand::End());
     else if (mGizmo.Mode() == CGizmo::EGizmoMode::Rotate) UndoStack().push(CRotateNodeCommand::End());
