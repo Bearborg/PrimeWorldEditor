@@ -28,10 +28,10 @@ public:
     ~CWorldInfoSidebar() override;
 
 public slots:
-    void OnActiveProjectChanged(CGameProject *pProj);
+    void OnActiveProjectChanged(const CGameProject* pProj);
     void OnAreaFilterStringChanged(const QString& rkFilter);
-    void OnWorldTreeClicked(QModelIndex Index);
-    void OnWorldTreeDoubleClicked(QModelIndex Index);
+    void OnWorldTreeClicked(const QModelIndex& Index);
+    void OnWorldTreeDoubleClicked(const QModelIndex& Index);
     void ClearWorldInfo();
     void ClearAreaInfo();
 };

@@ -1,7 +1,6 @@
 #include "CWorldInfoSidebar.h"
 #include "ui_CWorldInfoSidebar.h"
 
-
 #include "Editor/CEditorApplication.h"
 #include "Editor/UICommon.h"
 #include "Editor/WorldEditor/CWorldEditor.h"
@@ -51,7 +50,7 @@ CWorldInfoSidebar::CWorldInfoSidebar(CWorldEditor *pEditor)
 CWorldInfoSidebar::~CWorldInfoSidebar() = default;
 
 // ************ SLOTS ************
-void CWorldInfoSidebar::OnActiveProjectChanged(CGameProject *pProj)
+void CWorldInfoSidebar::OnActiveProjectChanged(const CGameProject* pProj)
 {
     mpUI->ProjectInfoWidget->setHidden(pProj == nullptr);
     mpUI->WorldInfoWidget->setHidden(true);
@@ -64,7 +63,7 @@ void CWorldInfoSidebar::OnActiveProjectChanged(CGameProject *pProj)
     // Add/remove widgets from the form layout based on the game. This is needed because
     // simply hiding the widgets causes a minor spacing issue. The only fix seems to be
     // actually entirely removing the widgets from the layout when not in use.
-    bool IsEchoes = pProj && (pProj->Game() == EGame::EchoesDemo || pProj->Game() == EGame::Echoes);
+    const bool IsEchoes = pProj && (pProj->Game() == EGame::EchoesDemo || pProj->Game() == EGame::Echoes);
     mpUI->DarkWorldNameStringLabel->setHidden(!IsEchoes);
     mpUI->DarkWorldNameSelector->setHidden(!IsEchoes);
 
@@ -97,17 +96,17 @@ void CWorldInfoSidebar::OnAreaFilterStringChanged(const QString& rkFilter)
     }
 }
 
-void CWorldInfoSidebar::OnWorldTreeClicked(QModelIndex Index)
+void CWorldInfoSidebar::OnWorldTreeClicked(const QModelIndex& Index)
 {
-    QModelIndex RealIndex = mProxyModel.mapToSource(Index);
+    const QModelIndex RealIndex = mProxyModel.mapToSource(Index);
 
     // Fill in world info
-    CWorld *pWorld = mModel.WorldForIndex(RealIndex);
-    mpUI->WorldInfoWidget->setHidden( pWorld == nullptr );
+    CWorld* pWorld = mModel.WorldForIndex(RealIndex);
+    mpUI->WorldInfoWidget->setHidden(pWorld == nullptr);
 
     if (pWorld)
     {
-        mpUI->WorldNameLabel->setText( TO_QSTRING(pWorld->InGameName()) );
+        mpUI->WorldNameLabel->setText(TO_QSTRING(pWorld->InGameName()));
         mpUI->WorldSelector->SetResource(pWorld);
         mpUI->WorldNameSelector->SetResource(pWorld->NameString());
         mpUI->DarkWorldNameSelector->SetResource(pWorld->DarkNameString());
@@ -115,16 +114,16 @@ void CWorldInfoSidebar::OnWorldTreeClicked(QModelIndex Index)
     }
 
     // Fill in area info
-    bool IsArea = !mModel.IndexIsWorld(RealIndex);
+    const bool IsArea = !mModel.IndexIsWorld(RealIndex);
     mpUI->AreaInfoWidget->setHidden(!IsArea);
 
     if (IsArea)
     {
-        int AreaIndex = Editor()->CurrentGame() == EGame::DKCReturns ? 0 : mModel.AreaIndexForIndex(RealIndex);
-        mpUI->AreaNameLabel->setText( TO_QSTRING(pWorld->AreaInGameName(AreaIndex)) );
-        mpUI->AreaSelector->SetResource( pWorld->AreaResourceID(AreaIndex) );
-        mpUI->AreaNameLineEdit->setText( TO_QSTRING(pWorld->AreaInternalName(AreaIndex)) );
-        mpUI->AreaNameSelector->SetResource( pWorld->AreaName(AreaIndex) );
+        const int AreaIndex = Editor()->CurrentGame() == EGame::DKCReturns ? 0 : mModel.AreaIndexForIndex(RealIndex);
+        mpUI->AreaNameLabel->setText(TO_QSTRING(pWorld->AreaInGameName(AreaIndex)));
+        mpUI->AreaSelector->SetResource(pWorld->AreaResourceID(AreaIndex));
+        mpUI->AreaNameLineEdit->setText(TO_QSTRING(pWorld->AreaInternalName(AreaIndex)));
+        mpUI->AreaNameSelector->SetResource(pWorld->AreaName(AreaIndex));
 
         mpUI->AttachedAreasList->clear();
 
@@ -137,17 +136,17 @@ void CWorldInfoSidebar::OnWorldTreeClicked(QModelIndex Index)
     }
 }
 
-void CWorldInfoSidebar::OnWorldTreeDoubleClicked(QModelIndex Index)
+void CWorldInfoSidebar::OnWorldTreeDoubleClicked(const QModelIndex& Index)
 {
-    QModelIndex RealIndex = mProxyModel.mapToSource(Index);
+    const QModelIndex RealIndex = mProxyModel.mapToSource(Index);
 
     if (!mModel.IndexIsWorld(RealIndex))
     {
         TResPtr<CWorld> pWorld = mModel.WorldForIndex(RealIndex);
-        int AreaIndex = mModel.AreaIndexForIndex(RealIndex);
+        const int AreaIndex = mModel.AreaIndexForIndex(RealIndex);
 
         // Validate area actually exists... DKCR has worlds that contain areas that don't exist
-        CAssetID AreaAssetID = pWorld->AreaResourceID(AreaIndex);
+        const CAssetID AreaAssetID = pWorld->AreaResourceID(AreaIndex);
 
         if (gpResourceStore->IsResourceRegistered(AreaAssetID))
         {
