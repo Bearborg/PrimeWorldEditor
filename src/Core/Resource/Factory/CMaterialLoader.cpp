@@ -232,8 +232,11 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadPrimeMaterial()
             // Texture matrix is a reliable way to tell, because every UV anim mode generates a texture matrix
             const uint32 TexMtxIdx = ((TexGens[TexCoordIdx] & 0x3E00) >> 9) / 3;
 
-            if (TexMtxIdx == 10) pPass->mAnimMode = EUVAnimMode::NoUVAnim; // 10 is identity matrix; indicates no UV anim for this pass
-
+            // 10 is identity matrix; indicates no UV anim for this pass
+            if (TexMtxIdx == 10)
+            {
+                pPass->mAnimMode = EUVAnimMode::NoUVAnim;
+            }
             else
             {
                 pPass->mAnimMode = static_cast<EUVAnimMode>(Anims[TexMtxIdx].Mode);
@@ -264,62 +267,65 @@ void CMaterialLoader::ReadCorruptionMatSet()
 }
 
 // Represent passes as contiguous integers for random-access storage in a fixed array.
-EPASS PassFourCCToEnum(CFourCC fcc)
+static EPASS PassFourCCToEnum(CFourCC fcc)
 {
     if (fcc == "DIFF")
         return EPASS::DIFF;
-    else if (fcc == "RIML")
+    if (fcc == "RIML")
         return EPASS::RIML;
-    else if (fcc == "BLOL")
+    if (fcc == "BLOL")
         return EPASS::BLOL;
-    else if (fcc == "CLR ")
+    if (fcc == "CLR ")
         return EPASS::CLR;
-    else if (fcc == "TRAN")
+    if (fcc == "TRAN")
         return EPASS::TRAN;
-    else if (fcc == "INCA")
+    if (fcc == "INCA")
         return EPASS::INCA;
-    else if (fcc == "RFLV")
+    if (fcc == "RFLV")
         return EPASS::RFLV;
-    else if (fcc == "RFLD")
+    if (fcc == "RFLD")
         return EPASS::RFLD;
-    else if (fcc == "LRLD")
+    if (fcc == "LRLD")
         return EPASS::LRLD;
-    else if (fcc == "LURD")
+    if (fcc == "LURD")
         return EPASS::LURD;
-    else if (fcc == "BLOD")
+    if (fcc == "BLOD")
         return EPASS::BLOD;
-    else if (fcc == "BLOI")
+    if (fcc == "BLOI")
         return EPASS::BLOI;
-    else if (fcc == "XRAY")
+    if (fcc == "XRAY")
         return EPASS::XRAY;
-    else if (fcc == "TOON")
+    if (fcc == "TOON")
         return EPASS::TOON;
-    return EPASS::DIFF;
-};
 
-EINT IntFourCCToEnum(CFourCC fcc)
+    return EPASS::DIFF;
+}
+
+static EINT IntFourCCToEnum(CFourCC fcc)
 {
     if (fcc == "OPAC")
         return EINT::OPAC;
-    else if (fcc == "BLOD")
+    if (fcc == "BLOD")
         return EINT::BLOD;
-    else if (fcc == "BLOI")
+    if (fcc == "BLOI")
         return EINT::BLOI;
-    else if (fcc == "BNIF")
+    if (fcc == "BNIF")
         return EINT::BNIF;
-    else if (fcc == "XRBR")
+    if (fcc == "XRBR")
         return EINT::XRBR;
-    return EINT::OPAC;
-};
 
-ECLR ClrFourCCToEnum(CFourCC fcc)
+    return EINT::OPAC;
+}
+
+static ECLR ClrFourCCToEnum(CFourCC fcc)
 {
     if (fcc == "CLR ")
         return ECLR::CLR;
-    else if (fcc == "DIFB")
+    if (fcc == "DIFB")
         return ECLR::DIFB;
+
     return ECLR::CLR;
-};
+}
 
 std::unique_ptr<CMaterial> CMaterialLoader::ReadCorruptionMaterial()
 {
