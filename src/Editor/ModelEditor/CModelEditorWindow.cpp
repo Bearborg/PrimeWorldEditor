@@ -118,6 +118,7 @@ CModelEditorWindow::CModelEditorWindow(CModel *pModel, QWidget *pParent)
     connect(ui->TevKAlphaSelComboBox, &QComboBox::currentIndexChanged, this, qOverload<int>(&CModelEditorWindow::UpdateMaterial));
     connect(ui->TevRasSelComboBox, &QComboBox::currentIndexChanged, this, qOverload<int>(&CModelEditorWindow::UpdateMaterial));
     connect(ui->TexCoordSrcComboBox, &QComboBox::currentIndexChanged, this, qOverload<int>(&CModelEditorWindow::UpdateMaterial));
+    connect(ui->IndTextureResSelector, &CResourceSelector::ResourceChanged, this, qOverload<const CResourceEntry*>(&CModelEditorWindow::UpdateMaterial));
     connect(ui->PassTextureResSelector, &CResourceSelector::ResourceChanged, this, qOverload<const CResourceEntry*>(&CModelEditorWindow::UpdateMaterial));
     connect(ui->TevColor1ComboBox, &QComboBox::currentIndexChanged, this, qOverload<int>(&CModelEditorWindow::UpdateMaterial));
     connect(ui->TevColor2ComboBox, &QComboBox::currentIndexChanged, this, qOverload<int>(&CModelEditorWindow::UpdateMaterial));
