@@ -2,12 +2,11 @@
 #define CRESOURCEPROXYMODEL
 
 #include <Common/TString.h>
-#include <Core/GameProject/CResourceEntry.h>
-#include <Core/GameProject/CVirtualDirectory.h>
-#include <Core/Resource/CResTypeInfo.h>
-#include "Editor/ResourceBrowser/CResourceTableModel.h"
 
 #include <QSortFilterProxyModel>
+
+class CResourceTableModel;
+class CResTypeInfo;
 
 class CResourceProxyModel : public QSortFilterProxyModel
 {
@@ -42,9 +41,9 @@ private:
     ESortMode mSortMode{};
     QSet<CResTypeInfo*> mTypeFilter;
 
-    uint64 mCompareID = 0;
-    uint64 mCompareMask = 0;
-    uint32 mCompareBitLength = 0;
+    uint64_t mCompareID = 0;
+    uint64_t mCompareMask = 0;
+    uint32_t mCompareBitLength = 0;
 };
 
 #endif // CRESOURCEPROXYMODEL

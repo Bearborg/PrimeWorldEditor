@@ -1,5 +1,9 @@
 #include "Editor/ResourceBrowser/CResourceProxyModel.h"
 
+#include <Core/GameProject/CResourceEntry.h>
+#include <Core/GameProject/CVirtualDirectory.h>
+#include "Editor/ResourceBrowser/CResourceTableModel.h"
+
 CResourceProxyModel::CResourceProxyModel(QObject* parent)
     : QSortFilterProxyModel(parent)
 {
@@ -51,8 +55,8 @@ bool CResourceProxyModel::lessThan(const QModelIndex& rkLeft, const QModelIndex&
 
 bool CResourceProxyModel::filterAcceptsRow(int SourceRow, const QModelIndex& rkSourceParent) const
 {
-    QModelIndex Index = mpModel->index(SourceRow, 0, rkSourceParent);
-    CResourceEntry *pEntry = mpModel->IndexEntry(Index);
+    const QModelIndex Index = mpModel->index(SourceRow, 0, rkSourceParent);
+    const CResourceEntry* pEntry = mpModel->IndexEntry(Index);
 
     if (pEntry && !IsTypeAccepted(pEntry->TypeInfo()))
         return false;
@@ -63,7 +67,7 @@ bool CResourceProxyModel::filterAcceptsRow(int SourceRow, const QModelIndex& rkS
         if (!pEntry)
             return false;
 
-        bool HasNameMatch = pEntry->UppercaseName().Contains(mSearchString);
+        const bool HasNameMatch = pEntry->UppercaseName().Contains(mSearchString);
 
         if (!HasNameMatch)
         {
@@ -71,17 +75,17 @@ bool CResourceProxyModel::filterAcceptsRow(int SourceRow, const QModelIndex& rkS
 
             if (mCompareBitLength > 0)
             {
-                const auto IDBitLength = static_cast<uint32>(pEntry->ID().Length()) * 8;
+                const auto IDBitLength = static_cast<uint32_t>(pEntry->ID().Length()) * 8;
 
                 if (mCompareBitLength <= IDBitLength)
                 {
-                    uint64 ID = pEntry->ID().ToLongLong();
-                    uint32 MaxShift = IDBitLength - mCompareBitLength;
+                    const uint64_t ID = pEntry->ID().ToLongLong();
+                    const uint32_t MaxShift = IDBitLength - mCompareBitLength;
 
-                    for (uint32 Shift = 0; Shift <= MaxShift; Shift += 4)
+                    for (uint32_t Shift = 0; Shift <= MaxShift; Shift += 4)
                     {
-                        uint64 ShiftCompare = mCompareID << Shift;
-                        uint64 Mask = mCompareMask << Shift;
+                        const uint64_t ShiftCompare = mCompareID << Shift;
+                        const uint64_t Mask = mCompareMask << Shift;
 
                         if ((ID & Mask) == ShiftCompare)
                         {
@@ -137,7 +141,7 @@ void CResourceProxyModel::SetSearchString(const TString& rkString)
     if (IDString.Size() <= 16 && IDString.IsHexString())
     {
         mCompareBitLength = IDString.Size() * 4;
-        mCompareMask = ((uint64) 1 << mCompareBitLength) - 1;
+        mCompareMask = (1ULL << mCompareBitLength) - 1;
         mCompareID = IDString.ToInt64(16);
 
         if (mCompareMask == 0)
