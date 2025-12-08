@@ -272,7 +272,7 @@ CMaterial* CModel::GetMaterialBySurface(size_t MatSet, size_t Surface)
     return GetMaterialByIndex(MatSet, mSurfaces[Surface]->MaterialID);
 }
 
-bool CModel::HasTransparency(size_t MatSet)
+bool CModel::HasTransparency(size_t MatSet) const
 {
     if (MatSet >= mMaterialSets.size())
         MatSet = mMaterialSets.size() - 1;
@@ -286,7 +286,7 @@ bool CModel::HasTransparency(size_t MatSet)
     return false;
 }
 
-bool CModel::IsSurfaceTransparent(size_t Surface, size_t MatSet)
+bool CModel::IsSurfaceTransparent(size_t Surface, size_t MatSet) const
 {
     if (MatSet >= mMaterialSets.size())
         MatSet = mMaterialSets.size() - 1;

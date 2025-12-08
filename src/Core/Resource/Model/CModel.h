@@ -39,8 +39,8 @@ public:
     CMaterialSet* GetMatSet(size_t MatSet);
     CMaterial* GetMaterialByIndex(size_t MatSet, size_t Index);
     CMaterial* GetMaterialBySurface(size_t MatSet, size_t Surface);
-    bool HasTransparency(size_t MatSet);
-    bool IsSurfaceTransparent(size_t Surface, size_t MatSet);
+    bool HasTransparency(size_t MatSet) const;
+    bool IsSurfaceTransparent(size_t Surface, size_t MatSet) const;
     bool IsLightmapped() const;
 
     bool IsSkinned() const { return mpSkin != nullptr; }

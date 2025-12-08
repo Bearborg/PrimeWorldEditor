@@ -209,14 +209,14 @@ void CSceneNode::AddModelToRenderer(CRenderer *pRenderer, CModel *pModel, size_t
 {
     ASSERT(pModel);
 
-    if (!pModel->HasTransparency(MatSet))
-    {
-        pRenderer->AddMesh(this, -1, AABox(), false, ERenderCommand::DrawMesh);
-    }
-    else
+    if (pModel->HasTransparency(MatSet))
     {
         pRenderer->AddMesh(this, -1, AABox(), false, ERenderCommand::DrawOpaqueParts);
         pRenderer->AddMesh(this, -1, AABox(), true, ERenderCommand::DrawTransparentParts);
+    }
+    else
+    {
+        pRenderer->AddMesh(this, -1, AABox(), false, ERenderCommand::DrawMesh);
     }
 }
 

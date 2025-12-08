@@ -21,12 +21,12 @@ void CGizmo::AddToRenderer(CRenderer *pRenderer, const SViewInfo&)
     // Transform is updated every frame even if the user doesn't modify the gizmo
     // in order to account for scale changes based on camera distance
     UpdateTransform();
-    SModelPart *pPart = mpCurrentParts;
+    const SModelPart* pPart = mpCurrentParts;
 
     // Add all parts to renderer
     for (uint32 iPart = 0; iPart < mNumCurrentParts; iPart++)
     {
-        CModel *pModel = pPart->pModel;
+        const CModel* pModel = pPart->pModel;
 
         // Determine whether to use the mat set for regular (0) or highlight (1)
         const FAxes PartAxes = pPart->ModelAxes;
