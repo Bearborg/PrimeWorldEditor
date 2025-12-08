@@ -51,17 +51,10 @@ public slots:
 class CWorldTreeProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
-    QString mFilterString;
 
 public:
     bool lessThan(const QModelIndex& rkSourceLeft, const QModelIndex& rkSourceRight) const override;
     bool filterAcceptsRow(int SourceRow, const QModelIndex& rkSourceParent) const override;
-
-    void SetFilterString(const QString& rkFilter)
-    {
-        mFilterString = rkFilter;
-        invalidate();
-    }
 };
 
 #endif // CWORLDTREEMODEL_H

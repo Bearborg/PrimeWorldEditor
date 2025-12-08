@@ -56,7 +56,7 @@ void CWorldInfoSidebar::OnActiveProjectChanged(const CGameProject* pProj)
     mpUI->WorldInfoWidget->setHidden(true);
     mpUI->AreaInfoWidget->setHidden(true);
     mpUI->AreaSearchLineEdit->clear();
-    mProxyModel.SetFilterString({});
+    mProxyModel.setFilterRegularExpression(QString());
 
     mpUI->GameNameLabel->setText(pProj ? TO_QSTRING(pProj->Name()) : QString{});
 
@@ -82,7 +82,7 @@ void CWorldInfoSidebar::OnActiveProjectChanged(const CGameProject* pProj)
 
 void CWorldInfoSidebar::OnAreaFilterStringChanged(const QString& rkFilter)
 {
-    mProxyModel.SetFilterString(rkFilter);
+    mProxyModel.setFilterRegularExpression(QRegularExpression(rkFilter, QRegularExpression::CaseInsensitiveOption));
 
     // Expand top-level items that contain matches for the new filter string
     int NumTopLevel = mModel.rowCount(QModelIndex());

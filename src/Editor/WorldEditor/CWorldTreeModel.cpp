@@ -362,16 +362,20 @@ bool CWorldTreeProxyModel::lessThan(const QModelIndex& rkSourceLeft, const QMode
 bool CWorldTreeProxyModel::filterAcceptsRow(int SourceRow, const QModelIndex& rkSourceParent) const
 {
     // Always accept worlds
-    if (!rkSourceParent.isValid() || mFilterString.isEmpty())
+    if (!rkSourceParent.isValid())
         return true;
 
-    const CWorldTreeModel *pModel = qobject_cast<CWorldTreeModel*>(sourceModel());
-    ASSERT(pModel != nullptr);
+    const auto filterExpression = filterRegularExpression();
+    if (filterExpression.pattern().isEmpty())
+        return true;
 
-    for (int iCol = 0; iCol < pModel->columnCount(rkSourceParent); iCol++)
+    const auto* model = qobject_cast<CWorldTreeModel*>(sourceModel());
+    ASSERT(model != nullptr);
+
+    for (int column = 0; column < model->columnCount(rkSourceParent); column++)
     {
-        const QModelIndex Index = pModel->index(SourceRow, iCol, rkSourceParent);
-        if (pModel->data(Index, Qt::DisplayRole).toString().contains(mFilterString, Qt::CaseInsensitive))
+        const QModelIndex index = model->index(SourceRow, column, rkSourceParent);
+        if (model->data(index, Qt::DisplayRole).toString().contains(filterExpression))
             return true;
     }
 
