@@ -113,16 +113,13 @@ void CCamera::ProcessMouseInput(FKeyInputs KeyFlags, FMouseInputs MouseFlags, fl
 
 CRay CCamera::CastRay(CVector2f DeviceCoords) const
 {
-    CMatrix4f InverseVP = (ViewMatrix().Transpose() * ProjectionMatrix().Transpose()).Inverse();
+    const CMatrix4f InverseVP = (ViewMatrix().Transpose() * ProjectionMatrix().Transpose()).Inverse();
 
-    CVector3f RayOrigin = CVector3f(DeviceCoords.X, DeviceCoords.Y, -1.f) * InverseVP;
-    CVector3f RayTarget = CVector3f(DeviceCoords.X, DeviceCoords.Y,  0.f) * InverseVP;
-    CVector3f RayDir = (RayTarget - RayOrigin).Normalized();
+    const auto RayOrigin = CVector3f(DeviceCoords.X, DeviceCoords.Y, -1.f) * InverseVP;
+    const auto RayTarget = CVector3f(DeviceCoords.X, DeviceCoords.Y,  0.f) * InverseVP;
+    const auto RayDir = (RayTarget - RayOrigin).Normalized();
 
-    CRay Ray;
-    Ray.SetOrigin(RayOrigin);
-    Ray.SetDirection(RayDir);
-    return Ray;
+    return {RayOrigin, RayDir};
 }
 
 void CCamera::SetMoveMode(ECameraMoveMode Mode)
