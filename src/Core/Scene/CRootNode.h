@@ -11,7 +11,7 @@ public:
         : CSceneNode(pScene, NodeID, pParent) {}
     ~CRootNode() override = default;
 
-    ENodeType NodeType() override
+    ENodeType NodeType() const override
     {
         return ENodeType::Root;
     }

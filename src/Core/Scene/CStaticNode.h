@@ -10,7 +10,7 @@ class CStaticNode : public CSceneNode
 
 public:
     CStaticNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent = nullptr, CStaticModel *pModel = nullptr);
-    ENodeType NodeType() override;
+    ENodeType NodeType() const override;
     void PostLoad() override;
     void AddToRenderer(CRenderer* pRenderer, const SViewInfo& rkViewInfo) override;
     void Draw(FRenderOptions Options, int ComponentIndex, ERenderCommand Command, const SViewInfo& rkViewInfo) override;

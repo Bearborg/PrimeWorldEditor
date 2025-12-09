@@ -19,7 +19,7 @@ class CCharacterNode : public CSceneNode
 public:
     explicit CCharacterNode(CScene *pScene, uint32 NodeID, CAnimSet *pChar = nullptr, CSceneNode *pParent = nullptr);
 
-    ENodeType NodeType() override;
+    ENodeType NodeType() const override;
     void PostLoad() override;
     void AddToRenderer(CRenderer *pRenderer, const SViewInfo& rkViewInfo) override;
     void Draw(FRenderOptions Options, int ComponentIndex, ERenderCommand Command, const SViewInfo& rkViewInfo) override;

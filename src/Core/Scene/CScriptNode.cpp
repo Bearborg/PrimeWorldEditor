@@ -73,7 +73,7 @@ CScriptNode::CScriptNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent, CSc
     mpExtra = CScriptExtra::CreateExtra(this);
 }
 
-ENodeType CScriptNode::NodeType()
+ENodeType CScriptNode::NodeType() const
 {
     return ENodeType::Script;
 }

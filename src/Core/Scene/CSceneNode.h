@@ -104,7 +104,7 @@ protected:
 public:
     explicit CSceneNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent = nullptr);
     ~CSceneNode() override;
-    virtual ENodeType NodeType() = 0;
+    virtual ENodeType NodeType() const = 0;
     virtual void PostLoad() {}
     virtual void OnTransformed() {}
     void AddToRenderer(CRenderer* /*pRenderer*/, const SViewInfo& /*rkViewInfo*/) override {}

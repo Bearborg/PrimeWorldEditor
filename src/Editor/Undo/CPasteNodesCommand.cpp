@@ -86,28 +86,30 @@ void CPasteNodesCommand::redo()
     // 1. If the link receiver has also been copied then redirect to the copied version.
     // 2. If we're pasting into the same area that this data was copied from and the receiver still exists, connect to original receiver.
     // 3. If neither of those things is true, then delete the link.
-    for (CSceneNode *pNode : PastedNodes)
+    for (const CSceneNode* pNode : PastedNodes)
     {
         if (pNode && pNode->NodeType() == ENodeType::Script)
         {
-            CScriptObject *pInstance = static_cast<CScriptNode*>(pNode)->Instance();
+            const auto* pInstance = static_cast<const CScriptNode*>(pNode)->Instance();
 
             for (size_t iLink = 0; iLink < pInstance->NumLinks(ELinkType::Outgoing); iLink++)
             {
-                CLink *pLink = pInstance->Link(ELinkType::Outgoing, iLink);
-                int Index = mpMimeData->IndexOfInstanceID(pLink->ReceiverID());
+                CLink* pLink = pInstance->Link(ELinkType::Outgoing, iLink);
+                const int Index = mpMimeData->IndexOfInstanceID(pLink->ReceiverID());
 
                 if (Index != -1)
                 {
-                    CScriptObject *pNewTarget = static_cast<CScriptNode*>(PastedNodes[Index])->Instance();
+                    const auto* pNewTarget = static_cast<CScriptNode*>(PastedNodes[Index])->Instance();
                     pLink->SetReceiver(pNewTarget->InstanceID());
                 }
                 else if (mpMimeData->AreaID() != pArea->ID() || pArea->InstanceByID(pLink->ReceiverID()) == nullptr)
                 {
-                    CScriptObject *pSender = pLink->Sender();
-                    CScriptObject *pReceiver = pLink->Receiver();
-                    if (pSender) pSender->RemoveLink(ELinkType::Outgoing, pLink);
-                    if (pReceiver) pReceiver->RemoveLink(ELinkType::Incoming, pLink);
+                    CScriptObject* pSender = pLink->Sender();
+                    CScriptObject* pReceiver = pLink->Receiver();
+                    if (pSender)
+                        pSender->RemoveLink(ELinkType::Outgoing, pLink);
+                    if (pReceiver)
+                        pReceiver->RemoveLink(ELinkType::Incoming, pLink);
 
                     delete pLink;
                     iLink--;

@@ -39,7 +39,7 @@ public:
     EGame Game() const               { return mGame; }
 
     // Default implementations for CSceneNode
-    ENodeType NodeType() override { return ENodeType::ScriptExtra; }
+    ENodeType NodeType() const override { return ENodeType::ScriptExtra; }
     void RayAABoxIntersectTest(CRayCollisionTester& /*rTester*/, const SViewInfo& /*rkViewInfo*/) override {}
     SRayIntersection RayNodeIntersectTest(const CRay& /*rkRay*/, uint32 /*AssetID*/, const SViewInfo& /*rkViewInfo*/) override
     {

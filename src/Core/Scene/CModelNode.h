@@ -17,7 +17,7 @@ class CModelNode : public CSceneNode
 public:
     explicit CModelNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent = nullptr, CModel *pModel = nullptr);
 
-    ENodeType NodeType() override;
+    ENodeType NodeType() const override;
     void PostLoad() override;
     void AddToRenderer(CRenderer* pRenderer, const SViewInfo& rkViewInfo) override;
     void Draw(FRenderOptions Options, int ComponentIndex, ERenderCommand Command, const SViewInfo& rkViewInfo) override;

@@ -10,7 +10,7 @@ CCharacterNode::CCharacterNode(CScene *pScene, uint32 NodeID, CAnimSet *pChar /*
     SetCharSet(pChar);
 }
 
-ENodeType CCharacterNode::NodeType()
+ENodeType CCharacterNode::NodeType() const
 {
     return ENodeType::Character;
 }

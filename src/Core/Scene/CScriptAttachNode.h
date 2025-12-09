@@ -26,7 +26,7 @@ public:
     void ParentDisplayAssetChanged(CResource *pNewDisplayAsset);
     CModel* Model() const;
 
-    ENodeType NodeType() override { return ENodeType::ScriptAttach; }
+    ENodeType NodeType() const override { return ENodeType::ScriptAttach; }
     void AddToRenderer(CRenderer* pRenderer, const SViewInfo& rkViewInfo) override;
     void Draw(FRenderOptions Options, int ComponentIndex, ERenderCommand Command, const SViewInfo& rkViewInfo) override;
     void DrawSelection() override;

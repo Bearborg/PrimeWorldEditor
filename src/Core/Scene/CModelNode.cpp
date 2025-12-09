@@ -11,7 +11,7 @@ CModelNode::CModelNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent, CMode
     SetModel(pModel);
 }
 
-ENodeType CModelNode::NodeType()
+ENodeType CModelNode::NodeType() const
 {
     return ENodeType::Model;
 }

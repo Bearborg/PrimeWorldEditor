@@ -118,7 +118,7 @@ public:
     void UpdateBounds()                                { mBoundsDirty = true; }
     void SetAllowedNodeTypes(FNodeFlags Types)         { mAllowedNodes = Types; }
     bool IsAllowedType(ENodeType Type) const           { return (mAllowedNodes & Type) != 0; }
-    bool IsAllowedType(CSceneNode *pNode) const        { return (mAllowedNodes & pNode->NodeType()) != 0; }
+    bool IsAllowedType(const CSceneNode *pNode) const  { return (mAllowedNodes & pNode->NodeType()) != 0; }
     const QList<CSceneNode*>& SelectedNodeList() const { return mSelectedNodes; }
 
 signals:

@@ -411,7 +411,7 @@ void CInstancesModel::NodeCreated(CSceneNode *pNode)
     {
         if (pNode->NodeType() == ENodeType::Script)
         {
-            CScriptNode *pScript = static_cast<CScriptNode*>(pNode);
+            const auto* pScript = static_cast<const CScriptNode*>(pNode);
             CScriptObject *pObj = pScript->Instance();
             pObj->Template()->SortObjects();
 
@@ -441,8 +441,8 @@ void CInstancesModel::NodeAboutToBeDeleted(CSceneNode *pNode)
 
     if (mModelType == EInstanceModelType::Types)
     {
-        const auto *pScript = static_cast<CScriptNode*>(pNode);
-        const CScriptObject *pObj = pScript->Instance();
+        const auto* pScript = static_cast<const CScriptNode*>(pNode);
+        const CScriptObject* pObj = pScript->Instance();
 
         if (pObj->Template()->NumObjects() <= 1)
         {

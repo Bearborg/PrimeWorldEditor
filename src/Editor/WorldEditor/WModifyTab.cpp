@@ -81,8 +81,8 @@ void WModifyTab::GenerateUI()
 
             if (mpSelectedNode->NodeType() == ENodeType::Script)
             {
-                CScriptNode *pScriptNode = static_cast<CScriptNode*>(mpSelectedNode);
-                CScriptObject *pObj = pScriptNode->Instance();
+                const auto* pScriptNode = static_cast<const CScriptNode*>(mpSelectedNode);
+                CScriptObject* pObj = pScriptNode->Instance();
 
                 // Set up UI
                 ui->ObjectsTabWidget->show();
@@ -118,7 +118,7 @@ void WModifyTab::OnInstanceLinksModified(const QList<CScriptObject*>& rkInstance
 {
     if (mpSelectedNode && mpSelectedNode->NodeType() == ENodeType::Script)
     {
-        CScriptObject *pInstance = static_cast<CScriptNode*>(mpSelectedNode)->Instance();
+        const auto* pInstance = static_cast<const CScriptNode*>(mpSelectedNode)->Instance();
 
         if (pInstance && rkInstances.contains(pInstance))
         {
@@ -247,7 +247,7 @@ void WModifyTab::OnEditLinkClicked()
 
         if (SelectedIndices.size() == 1)
         {
-            CScriptObject *pInst = static_cast<CScriptNode*>(mpSelectedNode)->Instance();
+            const auto* pInst = static_cast<const CScriptNode*>(mpSelectedNode)->Instance();
             CLinkDialog *pDialog = mpWorldEditor->LinkDialog();
             pDialog->EditLink(pInst->Link(Type, SelectedIndices.front().row()));
             pDialog->show();

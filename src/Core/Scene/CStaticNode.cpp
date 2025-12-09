@@ -13,7 +13,7 @@ CStaticNode::CStaticNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent, CSt
     SetName("Static Node");
 }
 
-ENodeType CStaticNode::NodeType()
+ENodeType CStaticNode::NodeType() const
 {
     return ENodeType::Static;
 }

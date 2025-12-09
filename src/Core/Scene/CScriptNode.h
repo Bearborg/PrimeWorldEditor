@@ -37,7 +37,7 @@ public:
     EGameModeVisibility mGameModeVisibility{EGameModeVisibility::Untested};
 
     CScriptNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent = nullptr, CScriptObject *pObject = nullptr);
-    ENodeType NodeType() override;
+    ENodeType NodeType() const override;
     void PostLoad() override;
     void OnTransformed() override;
     void AddToRenderer(CRenderer* pRenderer, const SViewInfo& rkViewInfo) override;

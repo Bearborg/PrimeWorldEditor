@@ -20,7 +20,7 @@ CLightNode::CLightNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent, CLigh
     }
 }
 
-ENodeType CLightNode::NodeType()
+ENodeType CLightNode::NodeType() const
 {
     return ENodeType::Light;
 }

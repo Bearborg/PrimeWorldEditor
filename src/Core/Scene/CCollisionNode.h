@@ -10,7 +10,7 @@ class CCollisionNode : public CSceneNode
 
 public:
     CCollisionNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent = nullptr, CCollisionMeshGroup *pCollision = nullptr);
-    ENodeType NodeType() override;
+    ENodeType NodeType() const override;
     void AddToRenderer(CRenderer *pRenderer, const SViewInfo& rkViewInfo) override;
     void Draw(FRenderOptions Options, int ComponentIndex, ERenderCommand Command, const SViewInfo& rkViewInfo) override;
     void RayAABoxIntersectTest(CRayCollisionTester& rTester, const SViewInfo& rkViewInfo) override;

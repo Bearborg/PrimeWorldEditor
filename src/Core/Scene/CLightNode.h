@@ -9,7 +9,7 @@ class CLightNode : public CSceneNode
     CLight *mpLight;
 public:
     CLightNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent = nullptr, CLight *Light = nullptr);
-    ENodeType NodeType() override;
+    ENodeType NodeType() const override;
     void AddToRenderer(CRenderer* pRenderer, const SViewInfo& ViewInfo) override;
     void Draw(FRenderOptions Options, int ComponentIndex, ERenderCommand Command, const SViewInfo& ViewInfo) override;
     void DrawSelection() override;

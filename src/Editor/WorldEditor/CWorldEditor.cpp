@@ -800,7 +800,7 @@ void CWorldEditor::UpdateStatusBar()
     {
         if (ui->MainViewport->underMouse())
         {
-            CSceneNode *pHoverNode = ui->MainViewport->HoverNode();
+            const CSceneNode* pHoverNode = ui->MainViewport->HoverNode();
 
             if (pHoverNode && mpSelection->IsAllowedType(pHoverNode))
                 StatusText = TO_QSTRING(pHoverNode->Name());
@@ -895,11 +895,11 @@ void CWorldEditor::UpdateCursor()
 {
     if (ui->MainViewport->IsCursorVisible() && !mPickMode)
     {
-        CSceneNode *pHoverNode = ui->MainViewport->HoverNode();
+        const CSceneNode* pHoverNode = ui->MainViewport->HoverNode();
 
         if (ui->MainViewport->IsHoveringGizmo())
             ui->MainViewport->SetCursorState(Qt::SizeAllCursor);
-        else if ((pHoverNode) && mpSelection->IsAllowedType(pHoverNode))
+        else if (pHoverNode && mpSelection->IsAllowedType(pHoverNode))
             ui->MainViewport->SetCursorState(Qt::PointingHandCursor);
         else
             ui->MainViewport->SetCursorState(Qt::ArrowCursor);
@@ -955,7 +955,7 @@ void CWorldEditor::UpdateNewLinkLine()
 
             if (ui->MainViewport->underMouse() && !ui->MainViewport->IsMouseInputActive() && IsPicking)
             {
-                CSceneNode* pHoverNode = ui->MainViewport->HoverNode();
+                const CSceneNode* pHoverNode = ui->MainViewport->HoverNode();
                 const CScriptObject* pInst = (pSender ? pSender : pReceiver);
 
                 CVector3f Start = mScene.NodeForInstance(pInst)->CenterPoint();

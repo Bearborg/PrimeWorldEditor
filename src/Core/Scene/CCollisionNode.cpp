@@ -11,7 +11,7 @@ CCollisionNode::CCollisionNode(CScene *pScene, uint32 NodeID, CSceneNode *pParen
     SetName("Collision");
 }
 
-ENodeType CCollisionNode::NodeType()
+ENodeType CCollisionNode::NodeType() const
 {
     return ENodeType::Collision;
 }

@@ -74,8 +74,8 @@ void WEditorProperties::SetLayerComboBox()
 
     if (mpDisplayNode && mpDisplayNode->NodeType() == ENodeType::Script)
     {
-        CScriptNode *pScript = static_cast<CScriptNode*>(mpDisplayNode);
-        CScriptLayer *pLayer = pScript->Instance()->Layer();
+        const auto* pScript = static_cast<const CScriptNode*>(mpDisplayNode);
+        const auto* pLayer = pScript->Instance()->Layer();
         for (size_t iLyr = 0; iLyr < mpEditor->ActiveArea()->NumScriptLayers(); iLyr++)
         {
             if (mpEditor->ActiveArea()->ScriptLayer(iLyr) == pLayer)
@@ -98,7 +98,7 @@ void WEditorProperties::SetLayerComboBox()
 // ************ PUBLIC SLOTS ************
 void WEditorProperties::OnSelectionModified()
 {
-    CNodeSelection *pSelection = mpEditor->Selection();
+    const CNodeSelection* pSelection = mpEditor->Selection();
     mpDisplayNode = (pSelection->Size() == 1 ? pSelection->Front() : nullptr);
 
     if (pSelection->IsEmpty() || pSelection->Size() != 1 || mpDisplayNode->NodeType() != ENodeType::Script)
@@ -125,7 +125,6 @@ void WEditorProperties::OnSelectionModified()
 
         mpInstanceInfoLabel->setToolTip({});
     }
-
     else
     {
         CScriptNode *pScript = static_cast<CScriptNode*>(mpDisplayNode);

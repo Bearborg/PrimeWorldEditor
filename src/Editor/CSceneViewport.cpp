@@ -86,15 +86,17 @@ void CSceneViewport::CheckGizmoInput(const CRay& rkRay)
         else
             mGizmoHovering = false;
     }
-
     // Gizmo transforming: Run gizmo input with ray/mouse coords
     else if (mGizmoTransforming)
     {
-        bool transformed = pGizmo->TransformFromInput(rkRay, mCamera);
-        if (transformed) emit GizmoMoved();
+        const bool transformed = pGizmo->TransformFromInput(rkRay, mCamera);
+        if (transformed)
+            emit GizmoMoved();
     }
-
-    else mGizmoHovering = false;
+    else
+    {
+        mGizmoHovering = false;
+    }
 }
 
 SRayIntersection CSceneViewport::SceneRayCast(const CRay& rkRay)
@@ -105,8 +107,7 @@ SRayIntersection CSceneViewport::SceneRayCast(const CRay& rkRay)
         return SRayIntersection();
     }
 
-    SRayIntersection Intersect = mpScene->SceneRayCast(rkRay, mViewInfo);
-
+    const SRayIntersection Intersect = mpScene->SceneRayCast(rkRay, mViewInfo);
     if (Intersect.Hit)
     {
         if (mpHoverNode)
@@ -116,7 +117,6 @@ SRayIntersection CSceneViewport::SceneRayCast(const CRay& rkRay)
         mpHoverNode->SetMouseHovering(true);
         mHoverPoint = rkRay.PointOnRay(Intersect.Distance);
     }
-
     else
     {
         mHoverPoint = rkRay.PointOnRay(10.f);
@@ -128,7 +128,9 @@ SRayIntersection CSceneViewport::SceneRayCast(const CRay& rkRay)
 
 void CSceneViewport::ResetHover()
 {
-    if (mpHoverNode) mpHoverNode->SetMouseHovering(false);
+    if (mpHoverNode)
+        mpHoverNode->SetMouseHovering(false);
+
     mpHoverNode = nullptr;
 }
 
@@ -243,17 +245,18 @@ QMouseEvent CSceneViewport::CreateMouseEvent()
 
 void CSceneViewport::FindConnectedObjects(uint32 InstanceID, bool SearchOutgoing, bool SearchIncoming, QList<uint32>& rIDList)
 {
-    CScriptNode *pScript = mpScene->NodeForInstanceID(InstanceID);
-    if (!pScript) return;
+    const CScriptNode* pScript = mpScene->NodeForInstanceID(InstanceID);
+    if (!pScript)
+        return;
 
-    CScriptObject *pInst = pScript->Instance();
+    const CScriptObject* pInst = pScript->Instance();
     rIDList.push_back(InstanceID);
 
     if (SearchOutgoing)
     {
         for (size_t iLink = 0; iLink < pInst->NumLinks(ELinkType::Outgoing); iLink++)
         {
-            CLink *pLink = pInst->Link(ELinkType::Outgoing, iLink);
+            const CLink* pLink = pInst->Link(ELinkType::Outgoing, iLink);
 
             if (!rIDList.contains(pLink->ReceiverID()))
                 FindConnectedObjects(pLink->ReceiverID(), SearchOutgoing, SearchIncoming, rIDList);
@@ -264,7 +267,7 @@ void CSceneViewport::FindConnectedObjects(uint32 InstanceID, bool SearchOutgoing
     {
         for (size_t iLink = 0; iLink < pInst->NumLinks(ELinkType::Incoming); iLink++)
         {
-            CLink *pLink = pInst->Link(ELinkType::Incoming, iLink);
+            const CLink* pLink = pInst->Link(ELinkType::Incoming, iLink);
 
             if (!rIDList.contains(pLink->SenderID()))
                 FindConnectedObjects(pLink->SenderID(), SearchOutgoing, SearchIncoming, rIDList);
@@ -293,9 +296,10 @@ void CSceneViewport::CheckUserInput()
         if (!mpEditor->Gizmo()->IsTransforming())
             mRayIntersection = SceneRayCast(Ray);
     }
-
     else
+    {
         mRayIntersection = SRayIntersection();
+    }
 
     QMouseEvent Event = CreateMouseEvent();
     emit InputProcessed(mRayIntersection, &Event);
@@ -309,10 +313,10 @@ void CSceneViewport::Paint()
     mpRenderer->BeginFrame();
 
     // todo: The sky should really just be a regular node in the background depth group instead of having special rendering code here
-    if ((mViewInfo.ShowFlags & EShowFlag::Sky) || mViewInfo.GameMode)
+    if ((mViewInfo.ShowFlags & EShowFlag::Sky) != 0 || mViewInfo.GameMode)
     {
-        CModel *pSky = mpScene->ActiveSkybox();
-        if (pSky) mpRenderer->RenderSky(pSky, mViewInfo);
+        if (CModel* pSky = mpScene->ActiveSkybox())
+            mpRenderer->RenderSky(pSky, mViewInfo);
     }
 
     mCamera.LoadMatrices();
@@ -331,7 +335,8 @@ void CSceneViewport::Paint()
         mGrid.AddToRenderer(mpRenderer.get(), mViewInfo);
 
     // Draw the line for the link the user is editing.
-    if (mLinkLineEnabled) mLinkLine.AddToRenderer(mpRenderer.get(), mViewInfo);
+    if (mLinkLineEnabled)
+        mLinkLine.AddToRenderer(mpRenderer.get(), mViewInfo);
 
     mpRenderer->RenderBuckets(mViewInfo);
     mpRenderer->EndFrame();
@@ -344,12 +349,12 @@ void CSceneViewport::ContextMenu(QContextMenuEvent *pEvent)
 
     // Set up actions
     TString NodeName;
-    bool HasHoverNode = (mpHoverNode && (mpHoverNode->NodeType() != ENodeType::Static) && (mpHoverNode->NodeType() != ENodeType::Model));
-    bool HasSelection = mpEditor->HasSelection();
-    bool IsScriptNode = (mpHoverNode && mpHoverNode->NodeType() == ENodeType::Script);
+    const bool HasHoverNode = (mpHoverNode && (mpHoverNode->NodeType() != ENodeType::Static) && (mpHoverNode->NodeType() != ENodeType::Model));
+    const bool HasSelection = mpEditor->HasSelection();
+    const bool IsScriptNode = (mpHoverNode && mpHoverNode->NodeType() == ENodeType::Script);
 
-    CWorldEditor* pOwnerWorldEd = qobject_cast<CWorldEditor*>(mpEditor);
-    bool QuickplayEnabled = (pOwnerWorldEd && pOwnerWorldEd->IsQuickplayEnabled());
+    const auto* pOwnerWorldEd = qobject_cast<const CWorldEditor*>(mpEditor);
+    const bool QuickplayEnabled = (pOwnerWorldEd && pOwnerWorldEd->IsQuickplayEnabled());
 
     mpToggleSelectAction->setVisible(HasHoverNode);
     mpSelectConnectedMenu->menuAction()->setVisible(IsScriptNode);
@@ -381,10 +386,10 @@ void CSceneViewport::ContextMenu(QContextMenuEvent *pEvent)
         mpHideHoverTypeAction->setText(tr("Hide all %1 objects").arg(TO_QSTRING(pScript->Template()->Name())));
         mpHideHoverLayerAction->setText(tr("Hide layer %1").arg(TO_QSTRING(pScript->Instance()->Layer()->Name())));
     }
-
     else if (HasHoverNode)
+    {
         NodeName = mpHoverNode->Name();
-
+    }
     mpHideHoverNodeAction->setText(tr("Hide %1").arg(TO_QSTRING(NodeName)));
 
     // Show menu
@@ -424,10 +429,10 @@ void CSceneViewport::OnMouseRelease(QMouseEvent *pEvent)
             mpEditor->EndGizmoTransform();
             mGizmoTransforming = false;
         }
-
-        // Object selection/deselection
-        else
+        else // Object selection/deselection
+        {
             emit ViewportClick(mRayIntersection, pEvent);
+        }
     }
 }
 
