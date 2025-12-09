@@ -3,6 +3,8 @@
 #include <Common/Math/CQuaternion.h>
 #include <Common/Math/MathUtil.h>
 
+#include <algorithm>
+
 const float CCamera::default_move_speed = 1.0f;
 const float CCamera::default_look_speed = 1.0f;
 
@@ -204,8 +206,7 @@ CTransform4f CCamera::GetCameraTransform() const
 void CCamera::ValidatePitch()
 {
     // This function mainly just exists to ensure the camera doesn't flip upside down
-    if (mPitch > Math::skHalfPi)  mPitch = Math::skHalfPi;
-    if (mPitch < -Math::skHalfPi) mPitch = -Math::skHalfPi;
+    mPitch = std::clamp(mPitch, -Math::skHalfPi, Math::skHalfPi);
 }
 
 void CCamera::UpdateTransform() const
