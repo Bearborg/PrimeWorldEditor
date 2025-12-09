@@ -3,6 +3,9 @@
 #include <Common/Math/CQuaternion.h>
 #include <Common/Math/MathUtil.h>
 
+const float CCamera::default_move_speed = 1.0f;
+const float CCamera::default_look_speed = 1.0f;
+
 CCamera::CCamera()
     : mYaw(-Math::skHalfPi)
 {
@@ -70,7 +73,13 @@ void CCamera::Snap(CVector3f Position)
 
 void CCamera::ProcessKeyInput(FKeyInputs KeyFlags, double DeltaTime)
 {
-    float FDeltaTime = (float) DeltaTime;
+    const auto FDeltaTime = static_cast<float>(DeltaTime);
+
+    // Generally the camera moves at a fixed rate without any modifier
+    // key held down. However in a lot of editors, it's a little more intuitive
+    // to allow holding down e.g. Shift for a toggleable speed.
+    const auto is_shift_pressed = (KeyFlags & EKeyInput::Shift) != 0;
+    mMoveSpeed = is_shift_pressed ? 2.0f : default_move_speed;
 
     if (KeyFlags & EKeyInput::W) Zoom(FDeltaTime * 25.f);
     if (KeyFlags & EKeyInput::S) Zoom(-FDeltaTime * 25.f);

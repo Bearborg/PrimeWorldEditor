@@ -26,6 +26,9 @@ enum class ECameraMoveMode
  * const function). */
 class CCamera
 {
+    static const float default_move_speed;
+    static const float default_look_speed;
+
     ECameraMoveMode mMode{ECameraMoveMode::Free};
     mutable CVector3f mPosition;
     mutable CVector3f mDirection;
@@ -37,8 +40,8 @@ class CCamera
     float mPitch = 0.0f;
     CVector3f mOrbitTarget;
     mutable float mOrbitDistance = 0.0f;
-    float mMoveSpeed = 1.0f;
-    float mLookSpeed = 1.0f;
+    float mMoveSpeed = default_move_speed;
+    float mLookSpeed = default_look_speed;
 
     mutable CMatrix4f mViewMatrix;
     mutable CMatrix4f mProjectionMatrix;
