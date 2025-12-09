@@ -53,7 +53,6 @@ public:
 
     void ArrayAboutToBeResized(const QModelIndex& rkIndex, uint32 NewSize);
     void ArrayResized(const QModelIndex& rkIndex, uint32 OldSize);
-    void ResizeArray(const QModelIndex& rkIndex, uint32 NewSize);
     void ClearSlot(int ID);
 
     EPropertyType GetEffectiveFieldType(IProperty* pProperty) const;
