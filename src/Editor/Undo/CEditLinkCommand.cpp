@@ -1,4 +1,6 @@
-#include "CEditLinkCommand.h"
+#include "Editor/Undo/CEditLinkCommand.h"
+
+#include "Editor/WorldEditor/CWorldEditor.h"
 
 #include <QCoreApplication>
 
