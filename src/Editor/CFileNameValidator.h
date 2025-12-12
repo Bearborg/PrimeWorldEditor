@@ -3,7 +3,7 @@
 
 #include <QValidator>
 
-#include "UICommon.h"
+#include "Editor/UICommon.h"
 #include <Common/FileUtil.h>
 
 class CFileNameValidator : public QValidator
@@ -11,7 +11,7 @@ class CFileNameValidator : public QValidator
     bool mIsDirectory;
 
 public:
-    CFileNameValidator(bool IsDirectory, QObject *pParent = nullptr)
+    explicit CFileNameValidator(bool IsDirectory, QObject *pParent = nullptr)
         : QValidator(pParent)
         , mIsDirectory(IsDirectory)
     {}
