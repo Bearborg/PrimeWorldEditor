@@ -18,19 +18,17 @@ public:
 
     QValidator::State validate(QString& rInput, int&) const override
     {
-        QValidator::State Out = QValidator::Acceptable;
+        auto Out = QValidator::Acceptable;
 
-        if (!FileUtil::IsValidName( TO_TSTRING(rInput), mIsDirectory ))
+        if (!FileUtil::IsValidName(TO_TSTRING(rInput), mIsDirectory))
         {
             // Uh oh, the input is invalid. Only invalid characters will be considered entirely
             // invalid; other errors will be considered intermediate.
             Out = QValidator::Intermediate;
 
-            for (int ChrIdx = 0; ChrIdx < rInput.size(); ChrIdx++)
+            for (const auto Chr : rInput)
             {
-                char Chr = rInput.at(ChrIdx).toLatin1();
-
-                if (!FileUtil::IsValidFileNameCharacter(Chr))
+                if (!FileUtil::IsValidFileNameCharacter(Chr.toLatin1()))
                 {
                     Out = QValidator::Invalid;
                     break;
