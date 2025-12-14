@@ -282,8 +282,8 @@ bool CWorldEditor::SetArea(CWorld *pWorld, int AreaIndex)
 
     if (pCamera->MoveMode() == ECameraMoveMode::Free)
     {
-        CTransform4f AreaTransform = mpArea->Transform();
-        CVector3f AreaPosition(AreaTransform[0][3], AreaTransform[1][3], AreaTransform[2][3]);
+        const CTransform4f& AreaTransform = mpArea->Transform();
+        const CVector3f AreaPosition(AreaTransform[0][3], AreaTransform[1][3], AreaTransform[2][3]);
         pCamera->Snap(AreaPosition);
     }
 

@@ -89,8 +89,8 @@ public:
     void ClearExtraDependencies();
 
     // Accessors
-    uint32 WorldIndex() const                                    { return mWorldIndex; }
-    CTransform4f Transform() const                               { return mTransform; }
+    uint32_t WorldIndex() const                                  { return mWorldIndex; }
+    const CTransform4f& Transform() const                        { return mTransform; }
     CMaterialSet* Materials() const                              { return mpMaterialSet; }
     size_t NumWorldModels() const                                { return mWorldModels.size(); }
     size_t NumStaticModels() const                               { return mStaticWorldModels.size(); }
@@ -105,9 +105,9 @@ public:
     CAssetID PathID() const                                      { return mPathID; }
     CPoiToWorld* PoiToWorldMap() const                           { return mpPoiToWorldMap; }
     CAssetID PortalAreaID() const                                { return mPortalAreaID; }
-    CAABox AABox() const                                         { return mAABox; }
+    const CAABox& AABox() const                                  { return mAABox; }
 
-    void SetWorldIndex(uint32 NewWorldIndex)                     { mWorldIndex = NewWorldIndex; }
+    void SetWorldIndex(uint32_t NewWorldIndex)                   { mWorldIndex = NewWorldIndex; }
 };
 
 #endif // CGAMEAREA_H

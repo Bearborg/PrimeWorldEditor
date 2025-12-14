@@ -574,7 +574,7 @@ void CScriptNode::GeneratePosition()
     if (!mHasValidPosition)
     {
         // Default to center of the active area; this is to prevent recursion issues
-        const CTransform4f AreaTransform = mpScene->ActiveArea()->Transform();
+        const CTransform4f& AreaTransform = mpScene->ActiveArea()->Transform();
         mPosition = CVector3f(AreaTransform[0][3], AreaTransform[1][3], AreaTransform[2][3]);
         mHasValidPosition = true;
         MarkTransformChanged();
