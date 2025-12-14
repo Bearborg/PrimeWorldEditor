@@ -11,10 +11,10 @@ class CAnimationParameters
     EGame mGame = EGame::Prime;
     CAssetID mCharacterID;
 
-    uint32 mCharIndex = 0;
-    uint32 mAnimIndex = 0;
-    uint32 mUnknown2 = 0;
-    uint32 mUnknown3 = 0;
+    uint32_t mCharIndex = 0;
+    uint32_t mAnimIndex = 0;
+    uint32_t mUnknown2 = 0;
+    uint32_t mUnknown3 = 0;
 
 public:
     CAnimationParameters();
@@ -32,13 +32,13 @@ public:
     TString GetCurrentCharacterName(int32 NodeIndex = -1) const;
 
     // Accessors
-    EGame Version() const            { return mGame; }
-    CAssetID ID() const              { return mCharacterID; }
-    CAnimSet* AnimSet() const        { return (CAnimSet*) gpResourceStore->LoadResource(mCharacterID); }
-    uint32 CharacterIndex() const    { return mCharIndex; }
-    uint32 AnimIndex() const         { return mAnimIndex; }
-    void SetCharIndex(uint32 Index)  { mCharIndex = Index; }
-    void SetAnimIndex(uint32 Index)  { mAnimIndex = Index; }
+    EGame Version() const             { return mGame; }
+    CAssetID ID() const               { return mCharacterID; }
+    CAnimSet* AnimSet() const         { return (CAnimSet*) gpResourceStore->LoadResource(mCharacterID); }
+    uint32_t CharacterIndex() const   { return mCharIndex; }
+    uint32_t AnimIndex() const        { return mAnimIndex; }
+    void SetCharIndex(uint32_t Index) { mCharIndex = Index; }
+    void SetAnimIndex(uint32_t Index) { mAnimIndex = Index; }
 
     void SetGame(EGame Game)
     {
@@ -54,9 +54,9 @@ public:
         }
     }
 
-    uint32 Unknown(uint32 Index) const;
+    uint32_t Unknown(uint32_t Index) const;
     void SetResource(const CAssetID& rkID);
-    void SetUnknown(uint32 Index, uint32 Value);
+    void SetUnknown(uint32_t Index, uint32_t Value);
 
     bool operator==(const CAnimationParameters&) const = default;
 };

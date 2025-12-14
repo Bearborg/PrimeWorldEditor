@@ -28,10 +28,10 @@ CAnimationParameters::CAnimationParameters(IInputStream& rSCLY, EGame Game)
 
     else if (Game == EGame::DKCReturns)
     {
-        uint8 Flags = rSCLY.ReadByte();
+        const uint8_t Flags = rSCLY.ReadByte();
 
         // 0x80 - CharacterAnimationSet is empty.
-        if (Flags & 0x80)
+        if ((Flags & 0x80) != 0)
         {
             mAnimIndex = -1;
             mUnknown2 = 0;
@@ -42,13 +42,13 @@ CAnimationParameters::CAnimationParameters(IInputStream& rSCLY, EGame Game)
         mCharacterID = CAssetID(rSCLY, Game);
 
         // 0x20 - Default Anim is present
-        if (Flags & 0x20)
+        if ((Flags & 0x20) != 0)
             mAnimIndex = rSCLY.ReadLong();
         else
             mAnimIndex = -1;
 
         // 0x40 - Two-value struct is present
-        if (Flags & 0x40)
+        if ((Flags & 0x40) != 0)
         {
             mUnknown2 = rSCLY.ReadLong();
             mUnknown3 = rSCLY.ReadLong();
@@ -68,53 +68,54 @@ void CAnimationParameters::Write(IOutputStream& rSCLY)
         if (mCharacterID.IsValid())
         {
             mCharacterID.Write(rSCLY);
-            rSCLY.WriteLong(mCharIndex);
-            rSCLY.WriteLong(mAnimIndex);
+            rSCLY.WriteULong(mCharIndex);
+            rSCLY.WriteULong(mAnimIndex);
         }
         else
         {
             CAssetID::skInvalidID32.Write(rSCLY);
-            rSCLY.WriteLong(0);
-            rSCLY.WriteLong(mGame >= EGame::EchoesDemo ? 0 : 0xFFFFFFFF);
+            rSCLY.WriteULong(0);
+            rSCLY.WriteULong(mGame >= EGame::EchoesDemo ? 0 : 0xFFFFFFFF);
         }
     }
-
     else if (mGame <= EGame::Corruption)
     {
         if (mCharacterID.IsValid())
         {
             mCharacterID.Write(rSCLY);
-            rSCLY.WriteLong(mAnimIndex);
+            rSCLY.WriteULong(mAnimIndex);
         }
 
         else
         {
             CAssetID::skInvalidID64.Write(rSCLY);
-            rSCLY.WriteLong(0xFFFFFFFF);
+            rSCLY.WriteULong(0xFFFFFFFF);
         }
     }
-
     else
     {
         if (!mCharacterID.IsValid())
-            rSCLY.WriteByte((uint8) 0x80);
-
+        {
+            rSCLY.WriteUByte(uint8_t{0x80});
+        }
         else
         {
-            uint8 Flag = 0;
-            if (mAnimIndex != -1) Flag |= 0x20;
-            if (mUnknown2 != 0 || mUnknown3 != 0) Flag |= 0x40;
+            uint8_t Flag = 0;
+            if (mAnimIndex != -1)
+                Flag |= 0x20;
+            if (mUnknown2 != 0 || mUnknown3 != 0)
+                Flag |= 0x40;
 
-            rSCLY.WriteByte(Flag);
+            rSCLY.WriteUByte(Flag);
             mCharacterID.Write(rSCLY);
 
-            if (Flag & 0x20)
-                rSCLY.WriteLong(mAnimIndex);
+            if ((Flag & 0x20) != 0)
+                rSCLY.WriteULong(mAnimIndex);
 
-            if (Flag & 0x40)
+            if ((Flag & 0x40) != 0)
             {
-                rSCLY.WriteLong(mUnknown2);
-                rSCLY.WriteLong(mUnknown3);
+                rSCLY.WriteULong(mUnknown2);
+                rSCLY.WriteULong(mUnknown3);
             }
         }
     }
@@ -139,7 +140,7 @@ void CAnimationParameters::Serialize(IArchive& rArc)
     }
 }
 
-const SSetCharacter* CAnimationParameters::GetCurrentSetCharacter(int32 NodeIndex) const
+const SSetCharacter* CAnimationParameters::GetCurrentSetCharacter(int32_t NodeIndex) const
 {
     const CAnimSet *pSet = AnimSet();
 
@@ -155,20 +156,20 @@ const SSetCharacter* CAnimationParameters::GetCurrentSetCharacter(int32 NodeInde
     return nullptr;
 }
 
-CModel* CAnimationParameters::GetCurrentModel(int32 NodeIndex)
+CModel* CAnimationParameters::GetCurrentModel(int32_t NodeIndex)
 {
     const SSetCharacter *pkChar = GetCurrentSetCharacter(NodeIndex);
     return pkChar != nullptr ? pkChar->pModel : nullptr;
 }
 
-TString CAnimationParameters::GetCurrentCharacterName(int32 NodeIndex) const
+TString CAnimationParameters::GetCurrentCharacterName(int32_t NodeIndex) const
 {
     const SSetCharacter *pkChar = GetCurrentSetCharacter(NodeIndex);
     return pkChar != nullptr ? pkChar->Name : "";
 }
 
 // ************ ACCESSORS ************
-uint32 CAnimationParameters::Unknown(uint32 Index) const
+uint32 CAnimationParameters::Unknown(uint32_t Index) const
 {
     // mAnimIndex isn't unknown, but I'm too lazy to move it because there's a lot
     // of UI stuff that depends on these functions atm for accessing and editing parameters.
@@ -204,7 +205,7 @@ void CAnimationParameters::SetResource(const CAssetID& rkID)
     }
 }
 
-void CAnimationParameters::SetUnknown(uint32 Index, uint32 Value)
+void CAnimationParameters::SetUnknown(uint32_t Index, uint32_t Value)
 {
     switch (Index)
     {
