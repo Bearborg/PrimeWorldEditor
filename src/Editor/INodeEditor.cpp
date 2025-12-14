@@ -13,10 +13,10 @@ INodeEditor::INodeEditor(QWidget *pParent)
     mGizmoActions.append(new QAction(QIcon(QStringLiteral(":/icons/Rotate.svg")), tr("Rotate"), this));
     mGizmoActions.append(new QAction(QIcon(QStringLiteral(":/icons/Scale.svg")), tr("Scale"), this));
 
-    mGizmoActions[0]->setShortcut(QKeySequence(Qt::Key_Control, Qt::Key_Q));
-    mGizmoActions[1]->setShortcut(QKeySequence(Qt::Key_Control, Qt::Key_W));
-    mGizmoActions[2]->setShortcut(QKeySequence(Qt::Key_Control, Qt::Key_E));
-    mGizmoActions[3]->setShortcut(QKeySequence(Qt::Key_Control, Qt::Key_R));
+    mGizmoActions[0]->setShortcuts({QKeySequence(Qt::CTRL | Qt::Key_Q), QKeySequence(Qt::CTRL | Qt::Key_Insert)});
+    mGizmoActions[1]->setShortcuts({QKeySequence(Qt::CTRL | Qt::Key_W), QKeySequence(Qt::CTRL | Qt::Key_Home)});
+    mGizmoActions[2]->setShortcuts({QKeySequence(Qt::CTRL | Qt::Key_E), QKeySequence(Qt::CTRL | Qt::Key_PageUp)});
+    mGizmoActions[3]->setShortcuts({QKeySequence(Qt::CTRL | Qt::Key_R), QKeySequence(Qt::CTRL | Qt::Key_PageDown)});
 
     mpGizmoGroup = new QActionGroup(this);
 
