@@ -327,7 +327,7 @@ std::unique_ptr<CDependencyTree> CStringTable::BuildDependencyTree() const
                     }
                     else
                     {
-                        errorf("Unrecognized image type: %s", *ImageType);
+                        warnf("Unrecognized image type: %s", *ImageType);
                         continue;
                     }
 
