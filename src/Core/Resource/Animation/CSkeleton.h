@@ -35,12 +35,12 @@ public:
     explicit CSkeleton(CResourceEntry *pEntry = nullptr);
     ~CSkeleton() override;
     void UpdateTransform(CBoneTransformData& rData, CAnimation *pAnim, float Time, bool AnchorRoot);
-    CBone* BoneByID(uint32 BoneID) const;
+    CBone* BoneByID(uint32_t BoneID) const;
     CBone* BoneByName(std::string_view name) const;
-    uint32 MaxBoneID() const;
+    uint32_t MaxBoneID() const;
 
     void Draw(FRenderOptions Options, const CBoneTransformData *pkData);
-    std::pair<int32, float> RayIntersect(const CRay& rkRay, const CBoneTransformData& rkData) const;
+    std::pair<int, float> RayIntersect(const CRay& rkRay, const CBoneTransformData& rkData) const;
 
     size_t NumBones() const  { return mBones.size(); }
     CBone* RootBone() const  { return mpRootBone; }
@@ -53,7 +53,7 @@ class CBone
     CSkeleton *mpSkeleton;
     CBone *mpParent = nullptr;
     std::vector<CBone*> mChildren;
-    uint32 mID = 0;
+    uint32_t mID = 0;
     CVector3f mPosition;
     CVector3f mLocalPosition;
     CQuaternion mRotation;
@@ -74,12 +74,12 @@ public:
     CBone* Parent() const                        { return mpParent; }
     size_t NumChildren() const                   { return mChildren.size(); }
     CBone* ChildByIndex(size_t Index) const      { return mChildren[Index]; }
-    uint32 ID() const                            { return mID; }
-    CVector3f Position() const                   { return mPosition; }
-    CVector3f LocalPosition() const              { return mLocalPosition; }
-    CQuaternion Rotation() const                 { return mRotation; }
-    CQuaternion LocalRotation() const            { return mLocalRotation; }
-    TString Name() const                         { return mName; }
+    uint32_t ID() const                          { return mID; }
+    const CVector3f& Position() const            { return mPosition; }
+    const CVector3f& LocalPosition() const       { return mLocalPosition; }
+    const CQuaternion& Rotation() const          { return mRotation; }
+    const CQuaternion& LocalRotation() const     { return mLocalRotation; }
+    const TString& Name() const                  { return mName; }
     bool IsSelected() const                      { return mSelected; }
 
     void SetSelected(bool Selected)              { mSelected = Selected; }

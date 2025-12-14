@@ -70,7 +70,7 @@ CSkeleton::CSkeleton(CResourceEntry *pEntry)
 
 CSkeleton::~CSkeleton() = default;
 
-CBone* CSkeleton::BoneByID(uint32 BoneID) const
+CBone* CSkeleton::BoneByID(uint32_t BoneID) const
 {
     const auto iter = std::find_if(mBones.begin(), mBones.end(),
                                    [BoneID](const auto& bone) { return bone->ID() == BoneID; });
@@ -92,7 +92,7 @@ CBone* CSkeleton::BoneByName(std::string_view name) const
     return iter->get();
 }
 
-uint32 CSkeleton::MaxBoneID() const
+uint32_t CSkeleton::MaxBoneID() const
 {
     const auto iter = std::max_element(mBones.cbegin(), mBones.cend(),
                                        [](const auto& a, const auto& b) { return a->ID() < b->ID(); });
@@ -155,9 +155,9 @@ void CSkeleton::Draw(FRenderOptions /*Options*/, const CBoneTransformData *pkDat
     }
 }
 
-std::pair<int32,float> CSkeleton::RayIntersect(const CRay& rkRay, const CBoneTransformData& rkData) const
+std::pair<int, float> CSkeleton::RayIntersect(const CRay& rkRay, const CBoneTransformData& rkData) const
 {
-    std::pair<int32,float> Out(-1, FLT_MAX);
+    std::pair<int, float> Out(-1, FLT_MAX);
 
     for (const auto& pBone : mBones)
     {
