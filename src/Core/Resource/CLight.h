@@ -43,17 +43,17 @@ private:
 
 public:
     // Accessors
-    ELightType Type() const              { return mType; }
-    uint32 LayerIndex() const            { return mLayerIndex; }
-    CVector3f Position() const           { return mPosition; }
-    CVector3f Direction() const          { return mDirection; }
-    CColor Color() const                 { return mColor; }
-    CVector3f DistAttenuation() const    { return mDistAttenCoefficients; }
-    CVector3f AngleAttenuation() const   { return mAngleAttenCoefficients; }
+    ELightType Type() const                   { return mType; }
+    uint32 LayerIndex() const                 { return mLayerIndex; }
+    const CVector3f& Position() const         { return mPosition; }
+    const CVector3f& Direction() const        { return mDirection; }
+    const CColor& Color() const               { return mColor; }
+    const CVector3f& DistAttenuation() const  { return mDistAttenCoefficients; }
+    const CVector3f& AngleAttenuation() const { return mAngleAttenCoefficients; }
 
-    void SetLayer(uint32 Index)                      { mLayerIndex = Index; }
-    void SetPosition(const CVector3f& rkPosition)    { mPosition = rkPosition; }
-    void SetDirection(const CVector3f& rkDirection)  { mDirection = rkDirection; }
+    void SetLayer(uint32 Index)                     { mLayerIndex = Index; }
+    void SetPosition(const CVector3f& rkPosition)   { mPosition = rkPosition; }
+    void SetDirection(const CVector3f& rkDirection) { mDirection = rkDirection; }
 
     float GetRadius() const;
     float GetIntensity() const;

@@ -126,14 +126,14 @@ void CSceneNode::BuildLightList(CGameArea *pArea)
         Index = 0;
 
     struct SLightEntry {
-        CLight *pLight;
+        CLight* pLight;
         float Distance;
 
-        SLightEntry(CLight *_pLight, float _Distance)
-            : pLight(_pLight), Distance(_Distance) {}
+        SLightEntry(CLight* pLight_, float Distance_)
+            : pLight(pLight_), Distance(Distance_) {}
 
         bool operator<(const SLightEntry& rkOther) const {
-            return (Distance < rkOther.Distance);
+            return Distance < rkOther.Distance;
         }
     };
     std::vector<SLightEntry> LightEntries;
@@ -159,7 +159,7 @@ void CSceneNode::BuildLightList(CGameArea *pArea)
             if (IsInRange)
             {
                 const float Dist = mPosition.Distance(pLight->Position());
-                LightEntries.push_back(SLightEntry(pLight, Dist));
+                LightEntries.emplace_back(pLight, Dist);
             }
         }
     }
