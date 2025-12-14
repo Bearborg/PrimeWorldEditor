@@ -1,7 +1,10 @@
-#include "CStaticModel.h"
+#include "Core/Resource/Model/CStaticModel.h"
+
+#include "Core/OpenGL/CIndexBuffer.h"
+#include "Core/OpenGL/GLCommon.h"
 #include "Core/Render/CDrawUtil.h"
 #include "Core/Render/CRenderer.h"
-#include "Core/OpenGL/GLCommon.h"
+#include "Core/Resource/CMaterial.h"
 
 CStaticModel::CStaticModel()
     : CBasicModel(nullptr)
@@ -38,8 +41,8 @@ void CStaticModel::BufferGL()
     {
         SSurface *pSurf = mSurfaces[iSurf];
 
-        const auto VBOStartOffset = static_cast<uint16>(mVBO.Size());
-        mVBO.Reserve(static_cast<uint16>(pSurf->VertexCount));
+        const auto VBOStartOffset = static_cast<uint16_t>(mVBO.Size());
+        mVBO.Reserve(static_cast<uint16_t>(pSurf->VertexCount));
 
         for (const auto& pPrim : pSurf->Primitives)
         {
@@ -47,7 +50,7 @@ void CStaticModel::BufferGL()
             pIBO->Reserve(pPrim.Vertices.size() + 1); // Allocate enough space for this primitive, plus the restart index
 
             // Next step: add new vertices to the VBO and create a small index buffer for the current primitive
-            std::vector<uint16> Indices(pPrim.Vertices.size());
+            std::vector<uint16_t> Indices(pPrim.Vertices.size());
             for (size_t iVert = 0; iVert < pPrim.Vertices.size(); iVert++)
                 Indices[iVert] = mVBO.AddIfUnique(pPrim.Vertices[iVert], VBOStartOffset);
 
@@ -72,7 +75,7 @@ void CStaticModel::BufferGL()
 
         // Make sure the number of submesh offset vectors matches the number of IBOs, then add the offsets
         while (mIBOs.size() > mSurfaceEndOffsets.size())
-            mSurfaceEndOffsets.emplace_back(std::vector<uint32>(mSurfaces.size()));
+            mSurfaceEndOffsets.emplace_back(mSurfaces.size());
 
         for (size_t iIBO = 0; iIBO < mIBOs.size(); iIBO++)
             mSurfaceEndOffsets[iIBO][iSurf] = mIBOs[iIBO].GetSize();
@@ -139,7 +142,7 @@ void CStaticModel::Draw(FRenderOptions Options)
     mVBO.Unbind();
 }
 
-void CStaticModel::DrawSurface(FRenderOptions Options, uint32 Surface)
+void CStaticModel::DrawSurface(FRenderOptions Options, uint32_t Surface)
 {
     if (!mBuffered)
         BufferGL();
@@ -152,11 +155,11 @@ void CStaticModel::DrawSurface(FRenderOptions Options, uint32 Surface)
         for (size_t iIBO = 0; iIBO < mIBOs.size(); iIBO++)
         {
             // Since there is a shared IBO for every mesh, we need two things to draw a single one: an offset and a size
-            uint32 Offset = 0;
+            uint32_t Offset = 0;
             if (Surface > 0)
                 Offset = mSurfaceEndOffsets[iIBO][Surface - 1];
 
-            const uint32 Size = mSurfaceEndOffsets[iIBO][Surface] - Offset;
+            const uint32_t Size = mSurfaceEndOffsets[iIBO][Surface] - Offset;
 
             // The chosen submesh doesn't use this IBO
             if (Size == 0)
@@ -198,7 +201,7 @@ void CStaticModel::DrawWireframe(FRenderOptions Options, CColor WireColor /*= CC
     glBlendFunc(GL_ONE, GL_ZERO);
 
     // Draw surfaces
-    for (uint32 iSurf = 0; iSurf < mSurfaces.size(); iSurf++)
+    for (uint32_t iSurf = 0; iSurf < mSurfaces.size(); iSurf++)
         DrawSurface(Options, iSurf);
 
     // Cleanup
@@ -236,6 +239,6 @@ CIndexBuffer* CStaticModel::InternalGetIBO(EPrimitiveType Primitive)
             return &ibo;
     }
 
-    mIBOs.emplace_back(CIndexBuffer(type));
+    mIBOs.emplace_back(type);
     return &mIBOs.back();
 }

@@ -6,6 +6,7 @@
 #include <QDialog>
 
 class CWorldEditor;
+struct SRayIntersection;
 
 class CLinkDialog : public QDialog
 {

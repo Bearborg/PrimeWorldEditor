@@ -1,7 +1,6 @@
 #ifndef GLCOMMON_H
 #define GLCOMMON_H
 
-#include <Common/BasicTypes.h>
 #include <GL/glew.h>
 #include <array>
 

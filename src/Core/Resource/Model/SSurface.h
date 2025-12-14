@@ -2,26 +2,22 @@
 #define SSURFACE_H
 
 #include "CVertex.h"
-#include "Core/Resource/CMaterialSet.h"
 #include "Core/OpenGL/GLCommon.h"
-#include "Core/SRayIntersection.h"
-#include <Common/BasicTypes.h>
 #include <Common/Math/CAABox.h>
-#include <Common/Math/CRay.h>
-#include <Common/Math/CTransform4f.h>
 #include <Common/Math/CVector3f.h>
+#include <cstdint>
 #include <vector>
 
 // Should prolly be a class
 struct SSurface
 {
-    uint32 VertexCount = 0;
-    uint32 TriangleCount = 0;
+    uint32_t VertexCount = 0;
+    uint32_t TriangleCount = 0;
     CAABox AABox;
     CVector3f CenterPoint;
-    uint32 MaterialID = 0;
+    uint32_t MaterialID = 0;
     CVector3f ReflectionDirection;
-    uint16 MeshID = 0;
+    uint16_t MeshID = 0;
 
     struct SPrimitive
     {

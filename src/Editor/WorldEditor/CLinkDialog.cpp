@@ -5,6 +5,7 @@
 #include "Editor/Undo/CAddLinkCommand.h"
 #include "Editor/Undo/CEditLinkCommand.h"
 #include <Core/Resource/Script/CScriptObject.h>
+#include <Core/SRayIntersection.h>
 
 CLinkDialog::CLinkDialog(CWorldEditor *pEditor, QWidget *pParent)
     : QDialog(pParent)

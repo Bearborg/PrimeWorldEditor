@@ -1,9 +1,12 @@
 #ifndef CSTATICMODEL_H
 #define CSTATICMODEL_H
 
-#include "CBasicModel.h"
+#include "Core/Resource/Model/CBasicModel.h"
 #include "Core/Render/FRenderOptions.h"
-#include "Core/OpenGL/CIndexBuffer.h"
+#include <vector>
+
+class CIndexBuffer;
+class CMaterial;
 
 /* A CStaticModel is meant for meshes that don't move. It only links to one material,
  * and is used to combine surfaces from different world models into shared VBOs and
@@ -12,7 +15,7 @@ class CStaticModel : public CBasicModel
 {
     CMaterial *mpMaterial = nullptr;
     std::vector<CIndexBuffer> mIBOs;
-    std::vector<std::vector<uint32>> mSurfaceEndOffsets;
+    std::vector<std::vector<uint32_t>> mSurfaceEndOffsets;
     bool mTransparent = false;
 
 public:
@@ -25,7 +28,7 @@ public:
     void GenerateMaterialShaders();
     void ClearGLBuffer() override;
     void Draw(FRenderOptions Options);
-    void DrawSurface(FRenderOptions Options, uint32 Surface);
+    void DrawSurface(FRenderOptions Options, uint32_t Surface);
     void DrawWireframe(FRenderOptions Options, CColor WireColor = CColor::White());
 
     CMaterial* GetMaterial();
