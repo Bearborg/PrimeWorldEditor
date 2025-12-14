@@ -21,7 +21,7 @@ public:
     virtual void BuildRenderData();
 
     /** Accessors */
-    CAABox Bounds() const
+    const CAABox& Bounds() const
     {
         return mAABox;
     }
