@@ -142,19 +142,7 @@ public:
     }
 
     // Operators
-    bool operator==(const CLink& rkOther) const
-    {
-        return (mpArea == rkOther.mpArea) &&
-               (mStateID == rkOther.mStateID) &&
-               (mMessageID == rkOther.mMessageID) &&
-               (mSenderID == rkOther.mSenderID) &&
-               (mReceiverID == rkOther.mReceiverID);
-    }
-
-    bool operator!=(const CLink& rkOther) const
-    {
-        return (!(*this == rkOther));
-    }
+    bool operator==(const CLink&) const = default;
 
     // Accessors
     CGameArea* Area() const          { return mpArea; }
