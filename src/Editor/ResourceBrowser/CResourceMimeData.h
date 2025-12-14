@@ -13,24 +13,23 @@ class CResourceMimeData : public QMimeData
 
 public:
     CResourceMimeData(QList<CResourceEntry*> entries, QList<CVirtualDirectory*> directories)
-        : QMimeData()
-        , mEntries(std::move(entries))
+        : mEntries(std::move(entries))
         , mDirectories(std::move(directories))
     {
     }
 
     explicit CResourceMimeData(CResourceEntry *pEntry)
-        : QMimeData(), mEntries{pEntry}
+        : mEntries{pEntry}
     {
     }
 
     explicit CResourceMimeData(CVirtualDirectory *pDir)
-        : QMimeData(), mDirectories{pDir}
+        : mDirectories{pDir}
     {
     }
 
-    const QList<CResourceEntry*>& Resources() const         { return mEntries; }
-    const QList<CVirtualDirectory*>& Directories() const    { return mDirectories; }
+    const QList<CResourceEntry*>& Resources() const      { return mEntries; }
+    const QList<CVirtualDirectory*>& Directories() const { return mDirectories; }
 };
 
 #endif // CRESOURCEMIMEDATA_H
