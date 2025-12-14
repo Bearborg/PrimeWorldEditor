@@ -111,9 +111,7 @@ public:
 
     uint32 SenderIndex() const
     {
-        CScriptObject *pSender = mpArea->InstanceByID(mSenderID);
-
-        if (pSender)
+        if (const CScriptObject* pSender = mpArea->InstanceByID(mSenderID))
         {
             for (uint32 iLink = 0; iLink < pSender->NumLinks(ELinkType::Outgoing); iLink++)
             {
@@ -127,9 +125,7 @@ public:
 
     uint32 ReceiverIndex() const
     {
-        CScriptObject *pReceiver = mpArea->InstanceByID(mReceiverID);
-
-        if (pReceiver)
+        if (const CScriptObject* pReceiver = mpArea->InstanceByID(mReceiverID))
         {
             for (uint32 iLink = 0; iLink < pReceiver->NumLinks(ELinkType::Incoming); iLink++)
             {
