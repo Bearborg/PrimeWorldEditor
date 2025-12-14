@@ -247,9 +247,9 @@ public:
     }
 
     CScriptTemplate* ScriptTemplate() const { return mpScriptTemplate; }
-    TString Name() const { return mName; }
-    TString Description() const { return mDescription; }
-    TString Suffix() const { return mSuffix; }
+    const TString& Name() const { return mName; }
+    const TString& Description() const { return mDescription; }
+    const TString& Suffix() const { return mSuffix; }
 
     TIDString IDString(bool FullyQualified) const
     {

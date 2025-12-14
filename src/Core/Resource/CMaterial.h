@@ -126,14 +126,14 @@ public:
     void SetNumPasses(size_t NumPasses);
 
     // Accessors
-    TString Name() const                         { return mName; }
+    const TString& Name() const                  { return mName; }
     EGame Version() const                        { return mVersion; }
     FMaterialOptions Options() const             { return mOptions; }
     FVertexDescription VtxDesc() const           { return mVtxDesc; }
     GLenum BlendSrcFac() const                   { return mBlendSrcFac; }
     GLenum BlendDstFac() const                   { return mBlendDstFac; }
-    CColor Konst(size_t KIndex) const            { return mKonstColors[KIndex]; }
-    CColor TevColor(ETevOutput Out) const        { return mTevColors[static_cast<size_t>(Out)]; }
+    const CColor& Konst(size_t KIndex) const     { return mKonstColors[KIndex]; }
+    const CColor& TevColor(ETevOutput Out) const { return mTevColors[static_cast<size_t>(Out)]; }
     CTexture* IndTexture() const                 { return mpIndirectTexture; }
     bool IsLightingEnabled() const               { return mLightingEnabled; }
     uint32 EchoesUnknownA() const                { return mEchoesUnknownA; }

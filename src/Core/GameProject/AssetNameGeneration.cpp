@@ -136,11 +136,11 @@ void GenerateAssetNames(CGameProject *pProj)
     {
         // Set world name
         TResPtr<CWorld> pWorld = It->Load();
-        TString WorldName = pWorld->Name();
-        TString WorldDir = kWorldsRoot + WorldName + '/';
+        const TString& WorldName = pWorld->Name();
+        const TString WorldDir = kWorldsRoot + WorldName + '/';
 
-        TString WorldMasterName = "!" + WorldName + "_Master";
-        TString WorldMasterDir = WorldDir + WorldMasterName + '/';
+        const TString WorldMasterName = "!" + WorldName + "_Master";
+        const TString WorldMasterDir = WorldDir + WorldMasterName + '/';
         ApplyGeneratedName(*It, WorldMasterDir, WorldMasterName);
 
         // Move world stuff
@@ -453,8 +453,8 @@ void GenerateAssetNames(CGameProject *pProj)
 
     for (TResourceIterator<EResourceType::AudioGroup> It(pStore); It; ++It)
     {
-        CAudioGroup *pGroup = (CAudioGroup*) It->Load();
-        TString GroupName = pGroup->GroupName();
+        auto* pGroup = static_cast<CAudioGroup*>(It->Load());
+        const TString& GroupName = pGroup->GroupName();
         ApplyGeneratedName(*It, kAudioGrpDir, GroupName);
     }
 #endif
@@ -467,7 +467,7 @@ void GenerateAssetNames(CGameProject *pProj)
     for (TResourceIterator<EResourceType::AudioMacro> It(pStore); It; ++It)
     {
         const auto* pMacro = static_cast<CAudioMacro*>(It->Load());
-        TString MacroName = pMacro->MacroName();
+        const TString& MacroName = pMacro->MacroName();
         ApplyGeneratedName(*It, kSfxDir, MacroName);
 
         for (size_t iSamp = 0; iSamp < pMacro->NumSamples(); iSamp++)
@@ -508,8 +508,8 @@ void GenerateAssetNames(CGameProject *pProj)
         for (size_t iChar = 0; iChar < pSet->NumCharacters(); iChar++)
         {
             const SSetCharacter *pkChar = pSet->Character(iChar);
+            const TString& CharName = pkChar->Name;
 
-            TString CharName = pkChar->Name;
             if (iChar == 0) NewSetName = CharName;
 
             if (pkChar->pModel)     ApplyGeneratedName(pkChar->pModel->Entry(), SetDir, CharName);

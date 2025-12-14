@@ -50,7 +50,7 @@ public:
     // Accessors
     CVirtualDirectory* Parent() const    { return mpParent; }
     bool IsRoot() const                  { return !mpParent; }
-    TString Name() const                 { return mName; }
+    const TString& Name() const          { return mName; }
 
     size_t NumSubdirectories() const                                 { return mSubdirectories.size(); }
     CVirtualDirectory* SubdirectoryByIndex(size_t Index)             { return mSubdirectories[Index]; }

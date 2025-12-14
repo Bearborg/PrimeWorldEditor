@@ -302,15 +302,17 @@ void CTemplateEditDialog::FindEquivalentProperties(IProperty* pProperty)
     {
         pProperty = pProperty->Archetype();
     }
-    TString Name = pProperty->Name();
+
+    const TString& Name = pProperty->Name();
     TIDString IDString = pProperty->IDString(true);
     CScriptTemplate* pScript = pProperty->ScriptTemplate();
 
     // Now iterate over all games, check for an equivalent property in an equivalent XML file.
-    for (int GameIdx = 0; GameIdx < (int) EGame::Max; GameIdx++)
+    for (int GameIdx = 0; GameIdx < int(EGame::Max); GameIdx++)
     {
-        EGame Game = (EGame) GameIdx;
-        if (Game <= EGame::Prime || Game == mGame) continue;
+        const auto Game = static_cast<EGame>(GameIdx);
+        if (Game <= EGame::Prime || Game == mGame)
+            continue;
 
         CGameTemplate* pGame = NGameList::GetGameTemplate(Game);
 
@@ -319,7 +321,7 @@ void CTemplateEditDialog::FindEquivalentProperties(IProperty* pProperty)
 
         if (pScript)
         {
-            uint32 ObjectID = pScript->ObjectID();
+            const uint32 ObjectID = pScript->ObjectID();
             CScriptTemplate* pEquivalentScript = pGame->TemplateByID(ObjectID);
 
             if (pEquivalentScript)
@@ -330,13 +332,13 @@ void CTemplateEditDialog::FindEquivalentProperties(IProperty* pProperty)
         // Check for equivalent properties in a property template
         else
         {
-            pStruct = TPropCast<CStructProperty>( pGame->FindPropertyArchetype(Name) );
+            pStruct = TPropCast<CStructProperty>(pGame->FindPropertyArchetype(Name));
         }
 
         // If we have a struct, check if thestruct contains an equivalent property.
         if (pStruct)
         {
-            IProperty* pEquivalentProperty = pStruct->ChildByIDString( IDString );
+            IProperty* pEquivalentProperty = pStruct->ChildByIDString(IDString);
 
             if (pEquivalentProperty)
             {

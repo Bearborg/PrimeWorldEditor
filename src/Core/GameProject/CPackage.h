@@ -68,8 +68,8 @@ public:
     TString CookedPackagePath(bool Relative) const;
 
     // Accessors
-    TString Name() const                                         { return mPakName; }
-    TString Path() const                                         { return mPakPath; }
+    const TString& Name() const                                  { return mPakName; }
+    const TString& Path() const                                  { return mPakPath; }
     CGameProject* Project() const                                { return mpProject; }
     size_t NumNamedResources() const                             { return mResources.size(); }
     const SNamedResource& NamedResourceByIndex(size_t Idx) const { return mResources[Idx]; }

@@ -33,8 +33,8 @@ public:
     void RayAABoxIntersectTest(CRayCollisionTester& rTester, const SViewInfo& rkViewInfo) override;
     SRayIntersection RayNodeIntersectTest(const CRay& rkRay, uint32 AssetID, const SViewInfo& rkViewInfo) override;
 
-    IProperty* AttachProperty() const { return mpAttachAssetProp; }
-    TString LocatorName() const       { return mLocatorName; }
+    IProperty* AttachProperty() const  { return mpAttachAssetProp; }
+    const TString& LocatorName() const { return mLocatorName; }
 
 protected:
     void CalculateTransform(CTransform4f& rOut) const override;

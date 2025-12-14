@@ -310,7 +310,7 @@ QVariant CPropertyModel::data(const QModelIndex& rkIndex, int Role) const
                 if (pParent != nullptr && pParent->Type() == EPropertyType::Array)
                 {
                     // For direct array sub-properties, display the element index after the name
-                    const TString ElementName = pProp->Name();
+                    const TString& ElementName = pProp->Name();
                     return tr("%1 %2").arg(TO_QSTRING(ElementName)).arg(rkIndex.row() + 1);
                 }
 
@@ -418,7 +418,7 @@ QVariant CPropertyModel::data(const QModelIndex& rkIndex, int Role) const
             }
 
             // Add description
-            const TString Desc = pProp->Description();
+            const TString& Desc = pProp->Description();
             if (!Desc.IsEmpty())
                 Text += tr("<br/>%1").arg(TO_QSTRING(Desc));
 

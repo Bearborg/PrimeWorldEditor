@@ -436,7 +436,7 @@ void CAreaDependencyListBuilder::BuildDependencyList(std::list<CAssetID>& rAsset
                     // For MP3, exclude the CMDL/CSKR properties for the suit assets - only include default character assets
                     if (mGame == EGame::Corruption && mIsPlayerActor)
                     {
-                        TString PropID = pDep->PropertyID();
+                        const TString& PropID = pDep->PropertyID();
 
                         if (PropID == "0x846397A8" || PropID == "0x685A4C01" ||
                             PropID == "0x9834ECC9" || PropID == "0x188B8960" ||

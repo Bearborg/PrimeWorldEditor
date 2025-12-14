@@ -81,9 +81,9 @@ public:
     // Accessors
     CGameProject* Project() const            { return mpProj; }
     EGame Game() const                       { return mGame; }
-    TString DatabaseRootPath() const         { return mDatabasePath; }
+    const TString& DatabaseRootPath() const  { return mDatabasePath; }
     bool DatabasePathExists() const          { return mDatabasePathExists; }
-    TString ResourcesDir() const             { return IsEditorStore() ? DatabaseRootPath() : DatabaseRootPath() + "Resources/"; }
+    TString ResourcesDir() const             { return IsEditorStore() ? TString(DatabaseRootPath()) : DatabaseRootPath() + "Resources/"; }
     TString DatabasePath() const             { return DatabaseRootPath() + "ResourceDatabaseCache.bin"; }
     CVirtualDirectory* RootDirectory() const { return mpDatabaseRoot; }
     uint32 NumTotalResources() const         { return mResourceEntries.size(); }

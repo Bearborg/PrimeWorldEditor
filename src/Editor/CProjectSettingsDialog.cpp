@@ -171,7 +171,7 @@ void CProjectSettingsDialog::BuildISO()
             }
 
             const nod::Header& rkHeader = pBaseDisc->getHeader();
-            TString GameID = pProj->GameID();
+            const TString& GameID = pProj->GameID();
 
             if (strncmp(*GameID, rkHeader.m_gameID, 6) != 0)
             {

@@ -108,7 +108,7 @@ public:
     friend void Serialize(IArchive& rArc, SAudioGrp& rAudioGrp);
 
     // Accessors
-    TString Name() const                 { return mName; }
+    const TString& Name() const          { return mName; }
     CStringTable* NameString() const     { return mpWorldName; }
     CStringTable* DarkNameString() const { return mpDarkWorldName; }
     CResource* SaveWorld() const         { return mpSaveWorld; }
@@ -119,7 +119,7 @@ public:
     CAssetID AreaResourceID(size_t AreaIndex) const                      { return mAreas[AreaIndex].AreaResID; }
     uint32 AreaAttachedCount(size_t AreaIndex) const                     { return mAreas[AreaIndex].AttachedAreaIDs.size(); }
     uint32 AreaAttachedID(size_t AreaIndex, size_t AttachedIndex) const  { return mAreas[AreaIndex].AttachedAreaIDs[AttachedIndex]; }
-    TString AreaInternalName(size_t AreaIndex) const                     { return mAreas[AreaIndex].InternalName; }
+    const TString& AreaInternalName(size_t AreaIndex) const              { return mAreas[AreaIndex].InternalName; }
     CStringTable* AreaName(size_t AreaIndex) const                       { return mAreas[AreaIndex].pAreaName; }
     bool DoesAreaAllowPakDuplicates(size_t AreaIndex) const              { return mAreas[AreaIndex].AllowPakDuplicates; }
 

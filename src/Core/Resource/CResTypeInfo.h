@@ -39,7 +39,7 @@ public:
 
     // Accessors
     EResourceType Type() const       { return mType; }
-    TString TypeName() const         { return mTypeName; }
+    const TString& TypeName() const  { return mTypeName; }
     bool CanBeSerialized() const     { return mCanBeSerialized; }
     bool CanHaveDependencies() const { return mCanHaveDependencies; }
     bool CanBeCreated() const        { return mCanBeCreated; }

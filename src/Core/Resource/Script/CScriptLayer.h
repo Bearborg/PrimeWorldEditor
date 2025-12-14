@@ -76,7 +76,7 @@ public:
 
     // Accessors
     CGameArea* Area() const      { return mpArea; }
-    TString Name() const         { return mLayerName; }
+    const TString& Name() const  { return mLayerName; }
     bool IsActive() const        { return mActive; }
     bool IsVisible() const       { return mVisible; }
     size_t NumInstances() const  { return mInstances.size(); }

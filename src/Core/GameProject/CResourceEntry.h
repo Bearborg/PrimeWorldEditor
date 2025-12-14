@@ -106,7 +106,7 @@ public:
     CAssetID ID() const                      { return mID; }
     CVirtualDirectory* Directory() const     { return mpDirectory; }
     TString DirectoryPath() const            { return mpDirectory->FullPath(); }
-    TString Name() const                     { return mName; }
+    const TString& Name() const              { return mName; }
     const TString& UppercaseName() const     { return mCachedUppercaseName; }
     EResourceType ResourceType() const       { return mpTypeInfo->Type(); }
 

@@ -145,13 +145,13 @@ public:
 
     // Accessors
     CGameTemplate* GameTemplate() const              { return mpGame; }
-    TString Name() const                             { return mpProperties->Name(); }
+    const TString& Name() const                      { return mpProperties->Name(); }
     ERotationType RotationType() const               { return mRotationType; }
     EScaleType ScaleType() const                     { return mScaleType; }
     float PreviewScale() const                       { return mPreviewScale; }
     uint32 ObjectID() const                          { return mObjectID; }
     bool IsVisible() const                           { return mVisible; }
-    TString SourceFile() const                       { return mSourceFile; }
+    const TString& SourceFile() const                { return mSourceFile; }
     CStructProperty* Properties() const              { return mpProperties.get(); }
     size_t NumAttachments() const                    { return mAttachments.size(); }
     const SAttachment& Attachment(size_t Index) const    { return mAttachments[Index]; }

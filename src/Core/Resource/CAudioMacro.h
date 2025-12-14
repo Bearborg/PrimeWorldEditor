@@ -27,7 +27,7 @@ public:
     }
 
     // Accessors
-    TString MacroName() const                    { return mMacroName; }
+    const TString& MacroName() const             { return mMacroName; }
     size_t NumSamples() const                    { return mSamples.size(); }
     CAssetID SampleByIndex(size_t Index) const   { return mSamples[Index]; }
 };

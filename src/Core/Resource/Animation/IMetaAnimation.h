@@ -52,7 +52,7 @@ public:
     // Accessors
     CAnimation* Animation() const   { return mpAnim; }
     uint32 ID() const               { return mID; }
-    TString Name() const            { return mName; }
+    const TString& Name() const     { return mName; }
 };
 
 // Base MetaAnimation interface

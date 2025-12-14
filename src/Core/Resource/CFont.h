@@ -70,8 +70,8 @@ public:
                            uint32 FontSize = CFONT_DEFAULT_SIZE);
 
     // Accessors
-    TString FontName() const    { return mFontName; }
-    CTexture* Texture() const   { return mpFontTexture; }
+    const TString& FontName() const { return mFontName; }
+    CTexture* Texture() const       { return mpFontTexture; }
 private:
     static void InitBuffers();
     static void ShutdownBuffers();

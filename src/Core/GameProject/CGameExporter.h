@@ -79,7 +79,7 @@ public:
     void LoadResource(const CAssetID& rkID, std::vector<uint8>& rBuffer);
     bool ShouldExportDiscNode(const nod::Node *pkNode, bool IsInRoot) const;
 
-    TString ProjectPath() const  { return mProjectPath; }
+    const TString& ProjectPath() const  { return mProjectPath; }
 
 protected:
     bool ExtractDiscData();

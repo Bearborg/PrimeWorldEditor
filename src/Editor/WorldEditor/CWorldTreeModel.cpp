@@ -82,7 +82,7 @@ QVariant CWorldTreeModel::data(const QModelIndex& rkIndex, int Role) const
             const int AreaIndex = AreaIndexForIndex(rkIndex);
             ASSERT(pWorld);
 
-            const TString AreaInternalName = pWorld->AreaInternalName(AreaIndex);
+            const TString& AreaInternalName = pWorld->AreaInternalName(AreaIndex);
             const TString AreaInGameName = (gpEdApp->ActiveProject()->Game() == EGame::DKCReturns ? pWorld->InGameName() : pWorld->AreaInGameName(AreaIndexForIndex(rkIndex)));
 
             // Return name

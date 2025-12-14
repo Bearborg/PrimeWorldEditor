@@ -73,7 +73,7 @@ public:
     static std::unique_ptr<CGameProject> LoadProject(const TString& rkProjPath, IProgressNotifier *pProgress);
 
     // Directory Handling
-    TString ProjectRoot() const                      { return mProjectRoot; }
+    const TString& ProjectRoot() const               { return mProjectRoot; }
     TString ProjectPath() const                      { return mProjectRoot + FileUtil::SanitizeName(mProjectName, false) + ".prj"; }
     TString HiddenFilesDir() const                   { return mProjectRoot + ".project/"; }
     TString DiscDir(bool Relative) const             { return Relative ? "Disc/" : mProjectRoot + "Disc/"; }
@@ -86,7 +86,7 @@ public:
     // Accessors
     void SetProjectName(TString name) { mProjectName = std::move(name); }
 
-    TString Name() const                                 { return mProjectName; }
+    const TString& Name() const                          { return mProjectName; }
     size_t NumPackages() const                           { return mPackages.size(); }
     CPackage* PackageByIndex(size_t Index) const         { return mPackages[Index].get(); }
     void AddPackage(std::unique_ptr<CPackage>&& package) { mPackages.push_back(std::move(package)); }
@@ -96,7 +96,7 @@ public:
     CTweakManager* TweakManager() const                  { return mpTweakManager.get(); }
     EGame Game() const                                   { return mGame; }
     ERegion Region() const                               { return mRegion; }
-    TString GameID() const                               { return mGameID; }
+    const TString& GameID() const                        { return mGameID; }
     float BuildVersion() const                           { return mBuildVersion; }
     bool IsWiiBuild() const                              { return mBuildVersion >= 3.f; }
     bool IsTrilogy() const                               { return mGame <= EGame::Corruption && mBuildVersion >= 3.593f; }

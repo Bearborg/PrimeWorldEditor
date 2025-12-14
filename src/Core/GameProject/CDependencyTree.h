@@ -102,7 +102,7 @@ public:
     void Serialize(IArchive& rArc) override;
 
     // Accessors
-    TString PropertyID() const   { return mIDString; }
+    const TString& PropertyID() const   { return mIDString; }
 };
 
 // Node representing a single animset dependency referenced by a script property. Indicates which character is being used.
