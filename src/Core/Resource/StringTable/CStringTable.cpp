@@ -131,7 +131,7 @@ void CStringTable::SetStringName(size_t StringIndex, TString kNewName)
     mStringNames[StringIndex] = std::move(kNewName);
 
     // Strip empty string names
-    while (mStringNames.back().IsEmpty())
+    while (!mStringNames.empty() && mStringNames.back().IsEmpty())
         mStringNames.pop_back();
 }
 
