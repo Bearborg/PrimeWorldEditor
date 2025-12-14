@@ -299,11 +299,12 @@ void CRenderer::RenderSky(CModel *pSkyboxModel, const SViewInfo& rkViewInfo)
 
 void CRenderer::AddMesh(IRenderable *pRenderable, int ComponentIndex, const CAABox& rkAABox, bool Transparent, ERenderCommand Command, EDepthGroup DepthGroup /*= eMidground*/)
 {
-    SRenderablePtr Ptr;
-    Ptr.pRenderable = pRenderable;
-    Ptr.ComponentIndex = ComponentIndex;
-    Ptr.AABox = rkAABox;
-    Ptr.Command = Command;
+    const SRenderablePtr Ptr{
+        .pRenderable = pRenderable,
+        .ComponentIndex = ComponentIndex,
+        .AABox = rkAABox,
+        .Command = Command,
+    };
 
     switch (DepthGroup)
     {
