@@ -37,10 +37,8 @@ std::unique_ptr<CDependencyTree> CModel::BuildDependencyTree() const
     auto pTree = std::make_unique<CDependencyTree>();
     std::set<CAssetID> TextureIDs;
 
-    for (CMaterialSet* set : mMaterialSets)
-    {
+    for (const auto* set : mMaterialSets)
         set->GetUsedTextureIDs(TextureIDs);
-    }
 
     for (const auto& id : TextureIDs)
         pTree->AddDependency(id);

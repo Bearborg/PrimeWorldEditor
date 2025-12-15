@@ -18,7 +18,7 @@ public:
     CMaterialSet() = default;
     ~CMaterialSet() = default;
 
-    std::unique_ptr<CMaterialSet> Clone()
+    std::unique_ptr<CMaterialSet> Clone() const
     {
         auto pOut = std::make_unique<CMaterialSet>();
 
@@ -34,7 +34,7 @@ public:
         return mMaterials.size();
     }
 
-    CMaterial* MaterialByIndex(size_t Index, bool TryBloom)
+    CMaterial* MaterialByIndex(size_t Index, bool TryBloom) const
     {
         if (Index >= NumMaterials())
             return nullptr;
@@ -46,7 +46,7 @@ public:
         return Ret;
     }
 
-    CMaterial* MaterialByName(const TString& rkName)
+    CMaterial* MaterialByName(const TString& rkName) const
     {
         const auto iter = std::find_if(mMaterials.begin(), mMaterials.end(),
                                        [&rkName](const auto& entry) { return entry->Name() == rkName; });
@@ -57,7 +57,7 @@ public:
         return iter->get();
     }
 
-    uint32 MaterialIndexByName(const TString& rkName)
+    uint32 MaterialIndexByName(const TString& rkName) const
     {
         for (uint32 i = 0; i < mMaterials.size(); i++)
         {
@@ -68,7 +68,7 @@ public:
         return UINT32_MAX;
     }
 
-    void GetUsedTextureIDs(std::set<CAssetID>& rOut)
+    void GetUsedTextureIDs(std::set<CAssetID>& rOut) const
     {
         for (const auto& material : mMaterials)
         {
