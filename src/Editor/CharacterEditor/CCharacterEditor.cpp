@@ -3,9 +3,11 @@
 
 #include <Common/Macros.h>
 #include "Editor/UICommon.h"
+#include <Core/Scene/CScene.h>
+#include <Core/Scene/CCharacterNode.h>
 
+#include <QComboBox>
 #include <QFileDialog>
-#include <QMessageBox>
 #include <QTreeView>
 
 #include <algorithm>

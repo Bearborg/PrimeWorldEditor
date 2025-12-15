@@ -1,21 +1,23 @@
 #ifndef CCHARACTEREDITOR_H
 #define CCHARACTEREDITOR_H
 
-#include "IEditor.h"
-#include "CCharacterEditorViewport.h"
-#include "CSkeletonHierarchyModel.h"
-#include <Core/Scene/CScene.h>
-#include <Core/Scene/CCharacterNode.h>
-
-#include <QComboBox>
-#include <QMainWindow>
-#include <QTimer>
+#include "Editor/IEditor.h"
+#include "Editor/CharacterEditor/CCharacterEditorViewport.h"
+#include "Editor/CharacterEditor/CSkeletonHierarchyModel.h"
 
 #include <memory>
 
 namespace Ui {
 class CCharacterEditor;
 }
+
+class CAnimation;
+class CAnimSet;
+class CBone;
+class CCharacterNode;
+class CScene;
+class CSkeleton;
+class QComboBox;
 
 class CCharacterEditor : public IEditor
 {

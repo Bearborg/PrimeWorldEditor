@@ -3,8 +3,10 @@
 
 #include "Editor/CBasicViewport.h"
 #include "Editor/CGridRenderable.h"
-#include <Core/Scene/CCharacterNode.h>
+
 #include <memory>
+
+class CCharacterNode;
 
 class CCharacterEditorViewport : public CBasicViewport
 {

@@ -1,4 +1,6 @@
-#include "CCharacterEditorViewport.h"
+#include "Editor/CharacterEditor/CCharacterEditorViewport.h"
+
+#include <Core/Scene/CCharacterNode.h>
 
 CCharacterEditorViewport::CCharacterEditorViewport(QWidget *pParent)
     : CBasicViewport(pParent), mpRenderer{std::make_unique<CRenderer>()}
