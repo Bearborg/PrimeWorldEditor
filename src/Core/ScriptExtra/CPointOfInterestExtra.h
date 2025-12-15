@@ -1,9 +1,12 @@
 #ifndef CPOINTOFINTERESTEXTRA_H
 #define CPOINTOFINTERESTEXTRA_H
 
-#include "CScriptExtra.h"
-#include "Core/Resource/Scan/CScan.h"
-#include <Common/CColor.h>
+#include "Core/Resource/TResPtr.h"
+#include "Core/Resource/Script/Property/TPropertyRef.h"
+#include "Core/ScriptExtra/CScriptExtra.h"
+
+class CColor;
+class CScan;
 
 class CPointOfInterestExtra : public CScriptExtra
 {

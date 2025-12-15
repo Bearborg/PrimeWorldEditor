@@ -1,4 +1,9 @@
-#include "CPointOfInterestExtra.h"
+#include "Core/ScriptExtra/CPointOfInterestExtra.h"
+
+#include <Common/CColor.h>
+#include "Core/Resource/Scan/CScan.h"
+#include "Core/Resource/Script/CScriptObject.h"
+#include "Core/Resource/Script/CScriptTemplate.h"
 
 //@todo pull these values from tweaks instead of hardcoding them
 constexpr CColor skRegularColor   = CColor::Integral(0xFF,0x70,0x00);

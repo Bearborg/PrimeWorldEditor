@@ -1,5 +1,6 @@
 #include "Core/ScriptExtra/CScriptExtra.h"
 
+#include "Core/Resource/Script/CScriptObject.h"
 #include "Core/Scene/CScriptNode.h"
 #include "Core/ScriptExtra/CDamageableTriggerExtra.h"
 #include "Core/ScriptExtra/CDoorExtra.h"

@@ -1,45 +1,50 @@
-#include "CScan.h"
+#include "Resource/Scan/CScan.h"
 
-CScan::CScan(CResourceEntry* pEntry /*= 0*/)
+#include "Core/Resource/Script/CGameTemplate.h"
+#include "Core/Resource/Script/NGameList.h"
+
+CScan::CScan(CResourceEntry* pEntry)
     : CResource(pEntry)
 {
-    CGameTemplate* pGameTemplate = NGameList::GetGameTemplate( Game() );
+    CGameTemplate* pGameTemplate = NGameList::GetGameTemplate(Game());
     mpTemplate = pGameTemplate->FindMiscTemplate("ScannableObjectInfo");
-    ASSERT( mpTemplate != nullptr );
+    ASSERT(mpTemplate != nullptr);
 
     CStructProperty* pProperties = mpTemplate->Properties();
-    mPropertyData.resize( pProperties->DataSize() );
-    pProperties->Construct( mPropertyData.data() );
+    mPropertyData.resize(pProperties->DataSize());
+    pProperties->Construct(mPropertyData.data());
 }
+
+CScan::~CScan() = default;
 
 CStructRef CScan::ScanData() const
 {
-    return CStructRef((void*) mPropertyData.data(), mpTemplate->Properties());
+    return CStructRef((void*)mPropertyData.data(), mpTemplate->Properties());
 }
 
 /** Convenience property accessors */
 CAssetRef CScan::ScanStringPropertyRef() const
 {
-    const uint kStringIdMP1 = 0x1;
-    const uint kStringIdMP2 = 0x2F5B6423;
+    constexpr uint32_t kStringIdMP1 = 0x1;
+    constexpr uint32_t kStringIdMP2 = 0x2F5B6423;
 
     IProperty* pProperty = mpTemplate->Properties()->ChildByID(
         Game() <= EGame::Prime ? kStringIdMP1 : kStringIdMP2
     );
 
-    return CAssetRef( (void*) mPropertyData.data(), pProperty );
+    return CAssetRef((void*)mPropertyData.data(), pProperty);
 }
 
 CBoolRef CScan::IsCriticalPropertyRef() const
 {
-    const uint kIsCriticalIdMP1 = 0x4;
-    const uint kIsCriticalIdMP2 = 0x7B714814;
+    constexpr uint32_t kIsCriticalIdMP1 = 0x4;
+    constexpr uint32_t kIsCriticalIdMP2 = 0x7B714814;
 
     IProperty* pProperty = mpTemplate->Properties()->ChildByID(
         Game() <= EGame::Prime ? kIsCriticalIdMP1 : kIsCriticalIdMP2
     );
 
-    return CBoolRef( (void*) mPropertyData.data(), pProperty );
+    return CBoolRef((void*)mPropertyData.data(), pProperty);
 }
 
 /** CResource interface */

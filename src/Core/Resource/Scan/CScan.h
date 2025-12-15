@@ -1,10 +1,13 @@
 #ifndef CSCAN_H
 #define CSCAN_H
 
-#include <Common/Common.h>
-#include "Core/Resource/Animation/CAnimationParameters.h"
-#include "Core/Resource/Script/CGameTemplate.h"
-#include "Core/Resource/Script/NGameList.h"
+#include "Core/Resource/CResource.h"
+#include "Core/Resource/Script/Property/TPropertyRef.h"
+
+#include <memory>
+
+class CDependencyTree;
+class CScriptTemplate;
 
 /** Scannable object parameters from SCAN assets */
 class CScan : public CResource
@@ -17,10 +20,12 @@ class CScan : public CResource
     CScriptTemplate* mpTemplate;
 
     /** Scan property data */
-    std::vector<uint8> mPropertyData;
+    std::vector<uint8_t> mPropertyData;
 
 public:
     explicit CScan(CResourceEntry* pEntry = nullptr);
+    ~CScan() override;
+
     CStructRef ScanData() const;
 
     /** Convenience property accessors */
