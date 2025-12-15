@@ -3,8 +3,10 @@
 
 #include "Editor/CBasicViewport.h"
 #include "Editor/CGridRenderable.h"
-#include <Core/Scene/CCollisionNode.h>
+
 #include <memory>
+
+class CCollisionNode;
 
 /** Preview viewport for the collision editor */
 class CCollisionEditorViewport : public CBasicViewport
@@ -19,6 +21,7 @@ class CCollisionEditorViewport : public CBasicViewport
 public:
     /** Constructor */
     explicit CCollisionEditorViewport(QWidget* pParent = nullptr);
+    ~CCollisionEditorViewport() override;
 
     /** CBasicViewport interface */
     void Paint() override;

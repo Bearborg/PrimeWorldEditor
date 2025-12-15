@@ -2,14 +2,16 @@
 #define CCOLLISIONEDITOR_H
 
 #include "Editor/IEditor.h"
-#include "CCollisionEditorViewport.h"
-#include <Core/Scene/CCollisionNode.h>
-#include <Core/Scene/CScene.h>
+#include "Editor/CollisionEditor/CCollisionEditorViewport.h"
+
 #include <memory>
 
 namespace Ui {
 class CCollisionEditor;
 }
+
+class CCollisionNode;
+class CScene;
 
 /** Editor window for dynamic collision (DCLN assets) */
 class CCollisionEditor : public IEditor
@@ -30,6 +32,7 @@ public:
     /** Constructor/destructor */
     explicit CCollisionEditor(CCollisionMeshGroup* pCollisionMesh, QWidget* pParent = nullptr);
     ~CCollisionEditor() override;
+
     CCollisionEditorViewport* Viewport() const override;
 
 public slots:

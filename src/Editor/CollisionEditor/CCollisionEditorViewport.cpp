@@ -1,4 +1,6 @@
-#include "CCollisionEditorViewport.h"
+#include "Editor/CollisionEditor/CCollisionEditorViewport.h"
+
+#include <Core/Scene/CCollisionNode.h>
 
 /** Constructor */
 CCollisionEditorViewport::CCollisionEditorViewport(QWidget* pParent)
@@ -17,6 +19,8 @@ CCollisionEditorViewport::CCollisionEditorViewport(QWidget* pParent)
     mViewInfo.CollisionSettings.DrawBoundingHierarchy = false;
     mViewInfo.CollisionSettings.BoundingHierarchyRenderDepth = 0;
 }
+
+CCollisionEditorViewport::~CCollisionEditorViewport() = default;
 
 /** CBasicViewport interface */
 void CCollisionEditorViewport::Paint()

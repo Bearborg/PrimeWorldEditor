@@ -2,10 +2,11 @@
 #include "ui_CCollisionEditor.h"
 
 #include "Editor/UICommon.h"
+#include <Core/Scene/CCollisionNode.h>
+#include <Core/Scene/CScene.h>
 
 #include <QLabel>
 #include <QSlider>
-#include <QSpacerItem>
 
 CCollisionEditor::CCollisionEditor(CCollisionMeshGroup* pCollisionMesh, QWidget* pParent)
     : IEditor(pParent)
