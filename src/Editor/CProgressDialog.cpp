@@ -1,6 +1,6 @@
-#include "CProgressDialog.h"
+#include "Editor/CProgressDialog.h"
 #include "ui_CProgressDialog.h"
-#include "CEditorApplication.h"
+
 #include <QCloseEvent>
 
 CProgressDialog::CProgressDialog(const QString& OperationName, bool UseBusyIndicator, bool AlertOnFinish, QWidget *pParent)

@@ -1,13 +1,10 @@
 #ifndef CPROGRESSDIALOG_H
 #define CPROGRESSDIALOG_H
 
-#include "IProgressNotifierUI.h"
-#include "UICommon.h"
-#include <Core/GameProject/CGameProject.h>
-#include <Core/IProgressNotifier.h>
+#include "Editor/IProgressNotifierUI.h"
+#include "Editor/UICommon.h"
 
 #include <QDialog>
-#include <QFuture>
 #include <QFutureWatcher>
 
 #include <memory>
