@@ -1,4 +1,7 @@
-#include "CTexture.h"
+#include "Core/Resource/CTexture.h"
+
+#include <Common/Math/CVector2f.h>
+
 #include <cmath>
 
 CTexture::CTexture(CResourceEntry *pEntry)

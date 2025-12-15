@@ -1,7 +1,8 @@
-#include "CDrawUtil.h"
-#include "CGraphics.h"
+#include "Core/Render/CDrawUtil.h"
+
 #include "Core/GameProject/CResourceStore.h"
-#include <Common/Log.h>
+#include "Core/Render/CGraphics.h"
+#include "Core/Resource/CMaterial.h"
 #include <Common/Math/CTransform4f.h>
 
 // ************ PUBLIC ************

@@ -5,6 +5,7 @@
 #include "Core/Render/CDrawUtil.h"
 #include "Core/Render/CRenderer.h"
 #include "Core/Resource/CMaterial.h"
+#include "Core/Resource/Model/SSurface.h"
 
 CStaticModel::CStaticModel()
     : CBasicModel(nullptr)
@@ -12,8 +13,7 @@ CStaticModel::CStaticModel()
 }
 
 CStaticModel::CStaticModel(CMaterial *pMat)
-    : CBasicModel()
-    , mpMaterial(pMat)
+    : mpMaterial(pMat)
     , mTransparent((pMat->Options() & EMaterialOption::Transparent) != 0)
 {
 }

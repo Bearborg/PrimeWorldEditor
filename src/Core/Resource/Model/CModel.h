@@ -1,14 +1,19 @@
 #ifndef CMODEL_H
 #define CMODEL_H
 
-#include "CBasicModel.h"
-#include "SSurface.h"
-#include "Core/Resource/CMaterialSet.h"
-#include "Core/Resource/Animation/CSkeleton.h"
-#include "Core/Resource/Animation/CSkin.h"
-#include "Core/OpenGL/CIndexBuffer.h"
+#include <Common/CColor.h>
 #include "Core/OpenGL/GLCommon.h"
+#include <Core/Resource/TResPtr.h>
+#include "Core/Resource/Model/CBasicModel.h"
 #include "Core/Render/FRenderOptions.h"
+
+#include <memory>
+#include <vector>
+
+class CIndexBuffer;
+class CMaterial;
+class CMaterialSet;
+class CSkin;
 
 class CModel : public CBasicModel
 {

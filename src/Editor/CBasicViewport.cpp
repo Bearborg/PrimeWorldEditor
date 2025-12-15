@@ -1,9 +1,11 @@
-#include "CBasicViewport.h"
+#include "Editor/CBasicViewport.h"
 
 #include <Common/Math/MathUtil.h>
+#include <Core/OpenGL/CShader.h>
 #include <Core/Render/CCamera.h>
 #include <Core/Render/CDrawUtil.h>
 #include <Core/Render/CGraphics.h>
+#include <Core/Resource/CMaterial.h>
 #include <Editor/MacOSExtras.h>
 
 #include <QCursor>

@@ -2,6 +2,7 @@
 
 #include "Core/Render/CGraphics.h"
 #include "Core/Render/CRenderer.h"
+#include "Core/Resource/Model/SSurface.h"
 #include "Core/Resource/Script/CScriptObject.h"
 #include "Core/Resource/Script/Property/IProperty.h"
 #include "Core/Scene/CScriptNode.h"

@@ -1,6 +1,7 @@
 #ifndef CSTATICMODEL_H
 #define CSTATICMODEL_H
 
+#include "Core/OpenGL/GLCommon.h"
 #include "Core/Resource/Model/CBasicModel.h"
 #include "Core/Render/FRenderOptions.h"
 #include <vector>

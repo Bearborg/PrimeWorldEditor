@@ -1,9 +1,14 @@
-#include "CModel.h"
+#include "Core/Resource/Model/CModel.h"
+
 #include "Core/Render/CDrawUtil.h"
 #include "Core/Render/CRenderer.h"
+#include "Core/Resource/CMaterialSet.h"
+#include "Core/Resource/Animation/CSkeleton.h"
+#include "Core/Resource/Animation/CSkin.h"
 #include "Core/Resource/Area/CGameArea.h"
+#include "Core/Resource/Model/SSurface.h"
+#include "Core/OpenGL/CIndexBuffer.h"
 #include "Core/OpenGL/GLCommon.h"
-#include <Common/Macros.h>
 
 CModel::CModel(CResourceEntry *pEntry)
     : CBasicModel(pEntry)
@@ -13,7 +18,6 @@ CModel::CModel(CResourceEntry *pEntry)
 }
 
 CModel::CModel(CMaterialSet *pSet, bool OwnsMatSet)
-    : CBasicModel()
 {
     mHasOwnMaterials = OwnsMatSet;
     mHasOwnSurfaces = true;

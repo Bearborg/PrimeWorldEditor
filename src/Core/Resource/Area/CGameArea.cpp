@@ -1,4 +1,6 @@
-#include "CGameArea.h"
+#include "Core/Resource/Area/CGameArea.h"
+
+#include "Core/Resource/Model/SSurface.h"
 #include "Core/Resource/Script/CScriptLayer.h"
 #include "Core/Resource/Script/CScriptTemplate.h"
 #include "Core/Render/CRenderer.h"

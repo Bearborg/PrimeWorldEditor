@@ -1,5 +1,6 @@
-#include "CFont.h"
-#include "Core/GameProject/CResourceStore.h"
+#include "Core/Resource/CFont.h"
+
+#include "Core/OpenGL/CShader.h"
 #include "Core/Render/CDrawUtil.h"
 #include "Core/Render/CRenderer.h"
 

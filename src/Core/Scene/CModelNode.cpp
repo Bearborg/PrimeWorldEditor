@@ -1,7 +1,10 @@
-#include "CModelNode.h"
+#include "Core/Scene/CModelNode.h"
+
 #include "Core/Render/CDrawUtil.h"
 #include "Core/Render/CRenderer.h"
 #include "Core/Render/CGraphics.h"
+#include "Core/Resource/Model/CModel.h"
+#include "Core/Resource/Model/SSurface.h"
 #include <Common/Math/MathUtil.h>
 
 CModelNode::CModelNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent, CModel *pModel)
@@ -10,6 +13,8 @@ CModelNode::CModelNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent, CMode
     mScale = CVector3f::One();
     SetModel(pModel);
 }
+
+CModelNode::~CModelNode() = default;
 
 ENodeType CModelNode::NodeType() const
 {
@@ -181,4 +186,9 @@ void CModelNode::SetModel(CModel *pModel)
     }
 
     MarkTransformChanged();
+}
+
+uint32_t CModelNode::FindMeshID() const
+{
+    return mpModel->GetSurface(0)->MeshID;
 }

@@ -8,6 +8,7 @@
 #include <memory>
 #include <vector>
 
+class CAnimation;
 class CCollisionNode;
 class CLightParameters;
 class CModelNode;
@@ -15,6 +16,7 @@ class CResource;
 class CScriptAttachNode;
 class CScriptExtra;
 class CScriptObject;
+class CSkeleton;
 
 class CScriptNode : public CSceneNode
 {
@@ -22,8 +24,8 @@ class CScriptNode : public CSceneNode
     CScriptExtra *mpExtra = nullptr;
 
     TResPtr<CResource> mpDisplayAsset;
-    uint32 mCharIndex = 0;
-    uint32 mAnimIndex = 0;
+    uint32_t mCharIndex = 0;
+    uint32_t mAnimIndex = 0;
     CCollisionNode *mpCollisionNode;
     std::vector<CScriptAttachNode*> mAttachments;
 
@@ -42,7 +44,7 @@ public:
     };
     EGameModeVisibility mGameModeVisibility{EGameModeVisibility::Untested};
 
-    explicit CScriptNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent = nullptr, CScriptObject *pObject = nullptr);
+    explicit CScriptNode(CScene *pScene, uint32_t NodeID, CSceneNode *pParent = nullptr, CScriptObject *pObject = nullptr);
     ~CScriptNode() override;
 
     ENodeType NodeType() const override;
@@ -52,7 +54,7 @@ public:
     void Draw(FRenderOptions Options, int ComponentIndex, ERenderCommand Command, const SViewInfo& rkViewInfo) override;
     void DrawSelection() override;
     void RayAABoxIntersectTest(CRayCollisionTester& rTester, const SViewInfo& rkViewInfo) override;
-    SRayIntersection RayNodeIntersectTest(const CRay& rkRay, uint32 AssetID, const SViewInfo& rkViewInfo) override;
+    SRayIntersection RayNodeIntersectTest(const CRay& rkRay, uint32_t AssetID, const SViewInfo& rkViewInfo) override;
     bool AllowsRotate() const override;
     bool AllowsScale() const override;
     bool IsVisible() const override;
@@ -71,7 +73,7 @@ public:
     bool HasPreviewVolume() const;
     CAABox PreviewVolumeAABox() const;
     CVector2f BillboardScale() const;
-    CTransform4f BoneTransform(uint32 BoneID, EAttachType AttachType, bool Absolute) const;
+    CTransform4f BoneTransform(uint32_t BoneID, EAttachType AttachType, bool Absolute) const;
 
     CModel* ActiveModel() const;
     CAnimSet* ActiveAnimSet() const;

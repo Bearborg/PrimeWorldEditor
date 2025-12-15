@@ -1,4 +1,6 @@
-#include "CBasicModel.h"
+#include "Core/Resource/Model/CBasicModel.h"
+
+#include "Core/Resource/Model/SSurface.h"
 
 CBasicModel::CBasicModel(CResourceEntry *pEntry)
     : CResource(pEntry)

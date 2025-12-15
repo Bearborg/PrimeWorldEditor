@@ -2,7 +2,9 @@
 
 #include "Core/Resource/Cooker/CMaterialCooker.h"
 #include "Core/Resource/Cooker/CSectionMgrOut.h"
+#include "Core/Resource/CMaterial.h"
 #include "Core/Resource/Model/CModel.h"
+#include "Core/Resource/Model/SSurface.h"
 
 #include <algorithm>
 

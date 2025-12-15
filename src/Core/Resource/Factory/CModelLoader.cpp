@@ -6,6 +6,7 @@
 #include "Core/Resource/Factory/CSectionMgrIn.h"
 #include "Core/Resource/Model/CBasicModel.h"
 #include "Core/Resource/Model/CModel.h"
+#include "Core/Resource/Model/SSurface.h"
 
 #include <map>
 

@@ -7,6 +7,7 @@
 #include "Core/Render/CGraphics.h"
 #include "Core/Render/CRenderer.h"
 #include "Core/Resource/Animation/CAnimSet.h"
+#include "Core/Resource/Model/SSurface.h"
 #include "Core/Resource/Script/CGameTemplate.h"
 #include "Core/Resource/Script/CScriptLayer.h"
 #include "Core/Resource/Script/CScriptObject.h"

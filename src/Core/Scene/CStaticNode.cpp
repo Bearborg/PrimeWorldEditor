@@ -1,9 +1,9 @@
 #include "Core/Scene/CStaticNode.h"
 
 #include "Core/Render/CGraphics.h"
-#include "Core/Render/CDrawUtil.h"
 #include "Core/Render/CRenderer.h"
 #include "Core/Resource/Model/CStaticModel.h"
+#include "Core/Resource/Model/SSurface.h"
 #include <Common/Math/MathUtil.h>
 
 CStaticNode::CStaticNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent, CStaticModel *pModel)

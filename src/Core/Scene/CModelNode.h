@@ -1,13 +1,14 @@
 #ifndef CMODELNODE_H
 #define CMODELNODE_H
 
-#include "CSceneNode.h"
-#include "Core/Resource/Model/CModel.h"
+#include "Core/Scene/CSceneNode.h"
+
+class CModel;
 
 class CModelNode : public CSceneNode
 {
     TResPtr<CModel> mpModel;
-    uint32 mActiveMatSet = 0;
+    uint32_t mActiveMatSet = 0;
     bool mWorldModel = false;
     bool mForceAlphaOn = false;
     CColor mTintColor{CColor::White()};
@@ -15,7 +16,8 @@ class CModelNode : public CSceneNode
     CColor mScanOverlayColor;
 
 public:
-    explicit CModelNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent = nullptr, CModel *pModel = nullptr);
+    explicit CModelNode(CScene *pScene, uint32_t NodeID, CSceneNode *pParent = nullptr, CModel *pModel = nullptr);
+    ~CModelNode() override;
 
     ENodeType NodeType() const override;
     void PostLoad() override;
@@ -23,13 +25,13 @@ public:
     void Draw(FRenderOptions Options, int ComponentIndex, ERenderCommand Command, const SViewInfo& rkViewInfo) override;
     void DrawSelection() override;
     void RayAABoxIntersectTest(CRayCollisionTester& Tester, const SViewInfo& rkViewInfo) override;
-    SRayIntersection RayNodeIntersectTest(const CRay& Ray, uint32 AssetID, const SViewInfo& rkViewInfo) override;
+    SRayIntersection RayNodeIntersectTest(const CRay& Ray, uint32_t AssetID, const SViewInfo& rkViewInfo) override;
     CColor TintColor(const SViewInfo& rkViewInfo) const override;
 
     // Setters
     void SetModel(CModel *pModel);
 
-    void SetMatSet(uint32 MatSet)                    { mActiveMatSet = MatSet; }
+    void SetMatSet(uint32_t MatSet)                  { mActiveMatSet = MatSet; }
     void SetWorldModel(bool World)                   { mWorldModel = World; }
     void ForceAlphaEnabled(bool Enable)              { mForceAlphaOn = Enable; }
     void SetTintColor(const CColor& rkTintColor)     { mTintColor = rkTintColor; }
@@ -37,9 +39,9 @@ public:
     void SetScanOverlayEnabled(bool Enable)          { mEnableScanOverlay = Enable; }
     void SetScanOverlayColor(const CColor& rkColor)  { mScanOverlayColor = rkColor; }
     CModel* Model() const                            { return mpModel; }
-    uint32 MatSet() const                            { return mActiveMatSet; }
+    uint32_t MatSet() const                          { return mActiveMatSet; }
     bool IsWorldModel() const                        { return mWorldModel; }
-    uint32 FindMeshID() const                        { return mpModel->GetSurface(0)->MeshID; }
+    uint32_t FindMeshID() const;
 };
 
 #endif // CMODELNODE_H

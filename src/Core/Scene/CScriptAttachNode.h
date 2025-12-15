@@ -5,6 +5,7 @@
 #include "Core/Resource/Script/Property/Properties.h"
 #include "Core/Resource/Script/CScriptTemplate.h"
 
+class CBone;
 class CScriptNode;
 
 class CScriptAttachNode : public CSceneNode

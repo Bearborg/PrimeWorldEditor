@@ -4,10 +4,14 @@
 #include "Core/OpenGL/CVertexBuffer.h"
 #include "Core/OpenGL/CDynamicVertexBuffer.h"
 #include "Core/OpenGL/CIndexBuffer.h"
+#include "Core/OpenGL/CShader.h"
+#include "Core/Resource/TResPtr.h"
 #include "Core/Resource/Model/CModel.h"
 #include "Core/Resource/CLight.h"
+#include "Core/Resource/CTexture.h"
 
 #include <array>
+#include <memory>
 #include <optional>
 
 /**
