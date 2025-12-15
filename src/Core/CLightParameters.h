@@ -6,9 +6,9 @@
 
 enum class EWorldLightingOptions
 {
-    Unknown1,
+    Zero,
     NormalLighting,
-    Unknown2,
+    NoShadowCast,
     DisableWorldLighting,
 };
 
