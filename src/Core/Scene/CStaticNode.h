@@ -1,8 +1,9 @@
 #ifndef CSTATICNODE_H
 #define CSTATICNODE_H
 
-#include "CSceneNode.h"
-#include "Core/Resource/Model/CStaticModel.h"
+#include <Core/Scene/CSceneNode.h>
+
+class CStaticModel;
 
 class CStaticNode : public CSceneNode
 {

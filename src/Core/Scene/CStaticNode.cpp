@@ -1,7 +1,9 @@
-#include "CStaticNode.h"
+#include "Core/Scene/CStaticNode.h"
+
 #include "Core/Render/CGraphics.h"
 #include "Core/Render/CDrawUtil.h"
 #include "Core/Render/CRenderer.h"
+#include "Core/Resource/Model/CStaticModel.h"
 #include <Common/Math/MathUtil.h>
 
 CStaticNode::CStaticNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent, CStaticModel *pModel)
@@ -60,7 +62,8 @@ void CStaticNode::AddToRenderer(CRenderer *pRenderer, const SViewInfo& rkViewInf
 
 void CStaticNode::Draw(FRenderOptions Options, int ComponentIndex, ERenderCommand /*Command*/, const SViewInfo& rkViewInfo)
 {
-    if (!mpModel) return;
+    if (!mpModel)
+        return;
 
     bool IsLightingEnabled = CGraphics::sLightMode == CGraphics::ELightingMode::World || rkViewInfo.GameMode;
     bool UseWhiteAmbient   = (mpModel->GetMaterial()->Options() & EMaterialOption::DrawWhiteAmbientDKCR) != 0;
@@ -73,7 +76,6 @@ void CStaticNode::Draw(FRenderOptions Options, int ComponentIndex, ERenderComman
         CGraphics::sPixelBlock.LightmapMultiplier = 1.0f;
         CGraphics::UpdateLightBlock();
     }
-
     else
     {
         LoadLights(rkViewInfo);
@@ -95,7 +97,9 @@ void CStaticNode::Draw(FRenderOptions Options, int ComponentIndex, ERenderComman
 
 void CStaticNode::DrawSelection()
 {
-    if (!mpModel) return;
+    if (!mpModel)
+        return;
+
     LoadModelMatrix();
     mpModel->DrawWireframe(ERenderOption::None, WireframeColor());
 }
