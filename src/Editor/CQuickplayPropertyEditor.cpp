@@ -1,9 +1,15 @@
-#include "CQuickplayPropertyEditor.h"
+#include "Editor/CQuickplayPropertyEditor.h"
 #include "ui_CQuickplayPropertyEditor.h"
-#include "UICommon.h"
-#include "WorldEditor/CWorldEditor.h"
+
+#include "Editor/NDolphinIntegration.h"
+#include "Editor/UICommon.h"
+#include "Editor/WorldEditor/CWorldEditor.h"
+#include <Core/Resource/CWorld.h>
+#include <Core/Resource/Area/CGameArea.h>
 #include <Core/Resource/Script/CScriptLayer.h>
+
 #include <QFileInfo>
+#include <QListWidgetItem>
 #include <QPushButton>
 #include <QValidator>
 

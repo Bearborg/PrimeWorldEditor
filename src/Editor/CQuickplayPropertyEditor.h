@@ -1,18 +1,18 @@
 #ifndef CQUICKPLAYPROPERTYEDITOR_H
 #define CQUICKPLAYPROPERTYEDITOR_H
 
-#include <QListWidgetItem>
 #include <QMenu>
-#include "NDolphinIntegration.h"
-
-#include <Core/Resource/CWorld.h>
-#include <Core/Resource/Area/CGameArea.h>
-
 #include <memory>
 
 namespace Ui {
 class CQuickplayPropertyEditor;
 }
+
+class CGameArea;
+class CWorld;
+class QListWidgetItem;
+
+struct SQuickplayParameters;
 
 /** Property editor widget for quickplay.
  *  @todo may want this to use a CPropertyView eventually.
