@@ -3,15 +3,21 @@
 
 #include <Common/EGame.h>
 #include <Core/GameProject/CGameExporter.h>
-#include <Core/GameProject/CGameProject.h>
+
 #include <QDialog>
 #include <QString>
-#include <nod/DiscBase.hpp>
+
 #include <memory>
+
+namespace nod {
+class DiscBase;
+}
 
 namespace Ui {
 class CExportGameDialog;
 }
+
+class CGameExporter;
 
 class CExportGameDialog : public QDialog
 {

@@ -1,8 +1,8 @@
-#include "CExportGameDialog.h"
+#include "Editor/CExportGameDialog.h"
 #include "ui_CExportGameDialog.h"
-#include "CProgressDialog.h"
-#include "UICommon.h"
 
+#include "Editor/CProgressDialog.h"
+#include "Editor/UICommon.h"
 #include <Common/Macros.h>
 #include <Core/GameProject/CAssetNameMap.h>
 #include <Core/GameProject/CGameExporter.h>
@@ -16,6 +16,7 @@
 #include <QVBoxLayout>
 #include <QtConcurrentRun>
 
+#include <nod/DiscBase.hpp>
 #include <nod/nod.hpp>
 
 CExportGameDialog::CExportGameDialog(const QString& rkIsoPath, const QString& rkExportDir, QWidget *pParent /*= 0*/)
