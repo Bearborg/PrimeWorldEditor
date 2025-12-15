@@ -1,5 +1,7 @@
-#include "CSceneIterator.h"
-#include "CScene.h"
+#include "Core/Scene/CSceneIterator.h"
+
+#include "Core/Scene/CScene.h"
+#include "Core/Scene/CSceneNode.h"
 
 CSceneIterator::CSceneIterator(CScene *pScene, FNodeFlags AllowedNodeTypes /*= eAllNodeTypes*/, bool AllowHiddenNodes /*= false*/)
     : mpScene(pScene)

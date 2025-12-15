@@ -1,13 +1,25 @@
-#include "CScene.h"
-#include "CSceneIterator.h"
+#include "Core/Scene/CScene.h"
+#include "Core/Scene/CSceneIterator.h"
+
+#include "Core/CAreaAttributes.h"
+#include "Core/CRayCollisionTester.h"
+#include "Core/SRayIntersection.h"
 #include "Core/Render/CGraphics.h"
 #include "Core/Resource/CPoiToWorld.h"
+#include "Core/Resource/CWorld.h"
+#include "Core/Resource/Area/CGameArea.h"
 #include "Core/Resource/Script/CScriptLayer.h"
-#include "Core/CRayCollisionTester.h"
+#include "Core/Render/CRenderer.h"
+#include "Core/Render/SViewInfo.h"
+#include "Core/Scene/CCollisionNode.h"
+#include "Core/Scene/CLightNode.h"
+#include "Core/Scene/CModelNode.h"
+#include "Core/Scene/CRootNode.h"
+#include "Core/Scene/CSceneNode.h"
+#include "Core/Scene/CScriptNode.h"
+#include "Core/Scene/CStaticNode.h"
 
-#include <Common/FileIO/CFileInStream.h>
 #include <Common/TString.h>
-#include <Common/Math/CRay.h>
 
 #include <list>
 #include <string>
@@ -23,12 +35,12 @@ CScene::~CScene()
     delete mpSceneRootNode;
 }
 
-bool CScene::IsNodeIDUsed(uint32 ID) const
+bool CScene::IsNodeIDUsed(uint32_t ID) const
 {
     return mNodeMap.contains(ID);
 }
 
-uint32 CScene::CreateNodeID(uint32 SuggestedID) const
+uint32_t CScene::CreateNodeID(uint32_t SuggestedID) const
 {
     if (SuggestedID != UINT32_MAX)
     {
@@ -38,7 +50,7 @@ uint32 CScene::CreateNodeID(uint32 SuggestedID) const
             return SuggestedID;
     }
 
-    uint32 ID = 0;
+    uint32_t ID = 0;
 
     while (IsNodeIDUsed(ID))
         ID++;
@@ -46,12 +58,12 @@ uint32 CScene::CreateNodeID(uint32 SuggestedID) const
     return ID;
 }
 
-CModelNode* CScene::CreateModelNode(CModel *pModel, uint32 NodeID)
+CModelNode* CScene::CreateModelNode(CModel *pModel, uint32_t NodeID)
 {
     if (pModel == nullptr)
         return nullptr;
 
-    const uint32 ID = CreateNodeID(NodeID);
+    const uint32_t ID = CreateNodeID(NodeID);
     auto* pNode = new CModelNode(this, ID, mpAreaRootNode, pModel);
     mNodes[ENodeType::Model].push_back(pNode);
     mNodeMap.insert_or_assign(ID, pNode);
@@ -59,12 +71,12 @@ CModelNode* CScene::CreateModelNode(CModel *pModel, uint32 NodeID)
     return pNode;
 }
 
-CStaticNode* CScene::CreateStaticNode(CStaticModel *pModel, uint32 NodeID)
+CStaticNode* CScene::CreateStaticNode(CStaticModel *pModel, uint32_t NodeID)
 {
     if (pModel == nullptr)
         return nullptr;
 
-    const uint32 ID = CreateNodeID(NodeID);
+    const uint32_t ID = CreateNodeID(NodeID);
     auto* pNode = new CStaticNode(this, ID, mpAreaRootNode, pModel);
     mNodes[ENodeType::Static].push_back(pNode);
     mNodeMap.insert_or_assign(ID, pNode);
@@ -72,12 +84,12 @@ CStaticNode* CScene::CreateStaticNode(CStaticModel *pModel, uint32 NodeID)
     return pNode;
 }
 
-CCollisionNode* CScene::CreateCollisionNode(CCollisionMeshGroup *pMesh, uint32 NodeID)
+CCollisionNode* CScene::CreateCollisionNode(CCollisionMeshGroup *pMesh, uint32_t NodeID)
 {
     if (pMesh == nullptr)
         return nullptr;
 
-    const uint32 ID = CreateNodeID(NodeID);
+    const uint32_t ID = CreateNodeID(NodeID);
     auto* pNode = new CCollisionNode(this, ID, mpAreaRootNode, pMesh);
     mNodes[ENodeType::Collision].push_back(pNode);
     mNodeMap.insert_or_assign(ID, pNode);
@@ -85,13 +97,13 @@ CCollisionNode* CScene::CreateCollisionNode(CCollisionMeshGroup *pMesh, uint32 N
     return pNode;
 }
 
-CScriptNode* CScene::CreateScriptNode(CScriptObject *pObj, uint32 NodeID)
+CScriptNode* CScene::CreateScriptNode(CScriptObject *pObj, uint32_t NodeID)
 {
     if (pObj == nullptr)
         return nullptr;
 
-    const uint32 ID = CreateNodeID(NodeID);
-    const uint32 InstanceID = pObj->InstanceID();
+    const uint32_t ID = CreateNodeID(NodeID);
+    const uint32_t InstanceID = pObj->InstanceID();
 
     auto *pNode = new CScriptNode(this, ID, mpAreaRootNode, pObj);
     mNodes[ENodeType::Script].push_back(pNode);
@@ -112,12 +124,12 @@ CScriptNode* CScene::CreateScriptNode(CScriptObject *pObj, uint32 NodeID)
     return pNode;
 }
 
-CLightNode* CScene::CreateLightNode(CLight *pLight, uint32 NodeID)
+CLightNode* CScene::CreateLightNode(CLight *pLight, uint32_t NodeID)
 {
     if (pLight == nullptr)
         return nullptr;
 
-    const uint32 ID = CreateNodeID(NodeID);
+    const uint32_t ID = CreateNodeID(NodeID);
     auto *pNode = new CLightNode(this, ID, mpAreaRootNode, pLight);
     mNodes[ENodeType::Light].push_back(pNode);
     mNodeMap.insert_or_assign(ID, pNode);
@@ -304,7 +316,7 @@ SRayIntersection CScene::SceneRayCast(const CRay& rkRay, const SViewInfo& rkView
     return Tester.TestNodes(rkViewInfo);
 }
 
-CSceneNode* CScene::NodeByID(uint32 NodeID)
+CSceneNode* CScene::NodeByID(uint32_t NodeID)
 {
     const auto it = mNodeMap.find(NodeID);
 
@@ -314,7 +326,7 @@ CSceneNode* CScene::NodeByID(uint32 NodeID)
     return nullptr;
 }
 
-CScriptNode* CScene::NodeForInstanceID(uint32 InstanceID)
+CScriptNode* CScene::NodeForInstanceID(uint32_t InstanceID)
 {
     const auto it = mScriptMap.find(InstanceID);
 
