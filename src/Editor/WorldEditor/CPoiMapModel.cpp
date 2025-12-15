@@ -1,8 +1,16 @@
-#include "CPoiMapModel.h"
-#include "CWorldEditor.h"
+#include "Editor/WorldEditor/CPoiMapModel.h"
+
 #include "Editor/UICommon.h"
+#include "Editor/WorldEditor/CWorldEditor.h"
+#include <Core/Resource/CPoiToWorld.h>
+#include <Core/Resource/CWorld.h>
+#include <Core/Resource/Scan/CScan.h>
+#include <Core/Scene/CModelNode.h>
 #include <Core/Scene/CSceneIterator.h>
+#include <Core/Scene/CScriptNode.h>
 #include <Core/ScriptExtra/CPointOfInterestExtra.h>
+
+#include <QAbstractListModel>
 
 CPoiMapModel::CPoiMapModel(CWorldEditor *pEditor, QObject *pParent)
     : QAbstractListModel(pParent)
@@ -10,6 +18,8 @@ CPoiMapModel::CPoiMapModel(CWorldEditor *pEditor, QObject *pParent)
 {
     connect(pEditor, &CWorldEditor::MapChanged, this, &CPoiMapModel::OnMapChange);
 }
+
+CPoiMapModel::~CPoiMapModel() = default;
 
 QVariant CPoiMapModel::headerData(int Section, Qt::Orientation Orientation, int Role) const
 {

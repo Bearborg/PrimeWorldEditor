@@ -1,4 +1,7 @@
-#include "CChangeLayerCommand.h"
+#include "Editor/Undo/CChangeLayerCommand.h"
+
+#include "Editor/WorldEditor/CWorldEditor.h"
+#include <Core/Scene/CScriptNode.h>
 
 #include <QCoreApplication>
 

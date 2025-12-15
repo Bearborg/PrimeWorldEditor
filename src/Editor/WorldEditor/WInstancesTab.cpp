@@ -1,7 +1,8 @@
-#include "WInstancesTab.h"
+#include "Editor/WorldEditor/WInstancesTab.h"
 #include "ui_WInstancesTab.h"
 
-#include "CWorldEditor.h"
+#include "Editor/UICommon.h"
+#include "Editor/WorldEditor/CWorldEditor.h"
 #include <Core/Resource/Script/CScriptLayer.h>
 #include <Core/Resource/Script/NGameList.h>
 #include <Core/Scene/CScene.h>

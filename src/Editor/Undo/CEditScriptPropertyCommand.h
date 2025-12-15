@@ -1,9 +1,8 @@
 #ifndef CEDITSCRIPTPROPERTYCOMMAND_H
 #define CEDITSCRIPTPROPERTYCOMMAND_H
 
-#include "IEditPropertyCommand.h"
-#include "ObjReferences.h"
-#include "Editor/WorldEditor/CWorldEditor.h"
+#include "Editor/Undo/IEditPropertyCommand.h"
+#include "Editor/Undo/ObjReferences.h"
 
 #include <QCoreApplication>
 

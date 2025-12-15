@@ -1,5 +1,8 @@
-#include "IEditPropertyCommand.h"
+#include "Editor/Undo/IEditPropertyCommand.h"
+
 #include "Editor/CEditorApplication.h"
+#include "Editor/PropertyEdit/CPropertyModel.h"
+#include "Editor/Undo/EUndoCommand.h"
 #include "Editor/WorldEditor/CWorldEditor.h"
 
 /** Save the current state of the object properties to the given data buffer */

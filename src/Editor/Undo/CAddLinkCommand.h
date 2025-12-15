@@ -1,10 +1,11 @@
 #ifndef CADDLINKCOMMAND_H
 #define CADDLINKCOMMAND_H
 
-#include "IUndoCommand.h"
-#include "ObjReferences.h"
-#include "Editor/WorldEditor/CWorldEditor.h"
+#include "Editor/Undo/IUndoCommand.h"
+#include "Editor/Undo/ObjReferences.h"
 #include <Core/Resource/Script/CLink.h>
+
+class CWorldEditor;
 
 class CAddLinkCommand : public IUndoCommand
 {

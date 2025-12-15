@@ -1,6 +1,8 @@
-#include "CRotateNodeCommand.h"
-#include "EUndoCommand.h"
+#include "Editor/Undo/CRotateNodeCommand.h"
+
 #include "Editor/INodeEditor.h"
+#include "Editor/Undo/EUndoCommand.h"
+#include <Core/Scene/CSceneNode.h>
 
 #include <QCoreApplication>
 

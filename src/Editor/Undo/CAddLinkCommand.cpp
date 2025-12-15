@@ -1,4 +1,6 @@
-#include "CAddLinkCommand.h"
+#include "Editor/Undo/CAddLinkCommand.h"
+
+#include "Editor/WorldEditor/CWorldEditor.h"
 #include <Core/Resource/Script/CLink.h>
 
 #include <QCoreApplication>

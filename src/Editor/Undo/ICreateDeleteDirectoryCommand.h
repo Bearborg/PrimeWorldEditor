@@ -1,7 +1,7 @@
 #ifndef CCREATEDIRECTORYCOMMAND_H
 #define CCREATEDIRECTORYCOMMAND_H
 
-#include "IUndoCommand.h"
+#include "Editor/Undo/IUndoCommand.h"
 #include "Editor/CEditorApplication.h"
 #include "Editor/ResourceBrowser/CResourceBrowser.h"
 #include <Core/GameProject/CResourceStore.h>

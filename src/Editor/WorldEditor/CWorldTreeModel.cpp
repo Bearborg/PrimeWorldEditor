@@ -1,11 +1,13 @@
-#include "CWorldTreeModel.h"
-#include "CEditorApplication.h"
-#include "CWorldEditor.h"
-#include "UICommon.h"
+#include "Editor/WorldEditor/CWorldTreeModel.h"
+
+#include "Editor/CEditorApplication.h"
+#include "Editor/UICommon.h"
+#include "Editor/WorldEditor/CWorldEditor.h"
 #include <Core/GameProject/CGameProject.h>
 #include <Core/GameProject/CResourceIterator.h>
-#include <QIcon>
+#include <Core/Resource/CWorld.h>
 
+#include <QIcon>
 #include <memory>
 
 CWorldTreeModel::CWorldTreeModel(CWorldEditor *pEditor)
@@ -13,6 +15,8 @@ CWorldTreeModel::CWorldTreeModel(CWorldEditor *pEditor)
     connect(gpEdApp, &CEditorApplication::ActiveProjectChanged, this, &CWorldTreeModel::OnProjectChanged);
     connect(pEditor, &CWorldEditor::MapChanged, this, &CWorldTreeModel::OnMapChanged);
 }
+
+CWorldTreeModel::~CWorldTreeModel() = default;
 
 int CWorldTreeModel::rowCount(const QModelIndex& rkParent) const
 {

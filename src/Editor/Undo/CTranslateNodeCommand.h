@@ -1,11 +1,13 @@
 #ifndef CTRANSLATENODECOMMAND_H
 #define CTRANSLATENODECOMMAND_H
 
-#include "IUndoCommand.h"
-#include "ObjReferences.h"
-#include <Core/Scene/CSceneNode.h>
-#include "Editor/INodeEditor.h"
+#include "Editor/Undo/IUndoCommand.h"
+#include "Editor/Undo/ObjReferences.h"
+
 #include <QList>
+
+class CSceneNode;
+class INodeEditor;
 
 class CTranslateNodeCommand : public IUndoCommand
 {

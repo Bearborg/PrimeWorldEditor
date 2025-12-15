@@ -1,12 +1,9 @@
 #ifndef CPOIMAPSIDEBAR_H
 #define CPOIMAPSIDEBAR_H
 
-#include "CPoiMapModel.h"
-#include "CPoiListDialog.h"
-#include "CWorldEditorSidebar.h"
+#include "Editor/WorldEditor/CPoiMapModel.h"
+#include "Editor/WorldEditor/CWorldEditorSidebar.h"
 
-#include <QItemSelection>
-#include <QMainWindow>
 #include <QSortFilterProxyModel>
 
 #include <memory>
@@ -14,6 +11,9 @@
 namespace Ui {
 class CPoiMapSidebar;
 }
+
+class QMouseEvent;
+struct SRayIntersection;
 
 class CPoiMapSidebar : public CWorldEditorSidebar
 {

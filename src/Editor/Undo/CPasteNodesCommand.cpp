@@ -1,6 +1,10 @@
-#include "CPasteNodesCommand.h"
+#include "Editor/Undo/CPasteNodesCommand.h"
+
+#include "Editor/CNodeCopyMimeData.h"
+#include "Editor/WorldEditor/CWorldEditor.h"
 
 #include <QCoreApplication>
+#include <QClipboard>
 
 CPasteNodesCommand::CPasteNodesCommand(CWorldEditor *pEditor, CScriptLayer *pLayer, CVector3f PastePoint)
     : IUndoCommand(QCoreApplication::translate("CPasteNodesCommand", "Paste"))

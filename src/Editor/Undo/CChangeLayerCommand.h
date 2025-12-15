@@ -1,10 +1,14 @@
 #ifndef CCHANGELAYERCOMMAND_H
 #define CCHANGELAYERCOMMAND_H
 
-#include "IUndoCommand.h"
-#include "ObjReferences.h"
-#include "Editor/WorldEditor/CWorldEditor.h"
-#include <Core/Scene/CScriptNode.h>
+#include "Editor/Undo/IUndoCommand.h"
+#include "Editor/Undo/ObjReferences.h"
+
+#include <QMap>
+
+class CScriptLayer;
+class CScriptNode;
+class CWorldEditor;
 
 class CChangeLayerCommand : public IUndoCommand
 {

@@ -1,7 +1,8 @@
 #ifndef CRENAMERESOURCECOMMAND_H
 #define CRENAMERESOURCECOMMAND_H
 
-#include "IUndoCommand.h"
+#include "Editor/Undo/IUndoCommand.h"
+
 #include "Editor/CEditorApplication.h"
 #include "Editor/ResourceBrowser/CResourceBrowser.h"
 #include <Core/GameProject/CResourceEntry.h>

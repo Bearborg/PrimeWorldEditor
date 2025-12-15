@@ -1,9 +1,9 @@
 #ifndef CDESELECTNODECOMMAND_H
 #define CDESELECTNODECOMMAND_H
 
-#include "IUndoCommand.h"
-#include "ObjReferences.h"
-#include "Editor/INodeEditor.h"
+#include "Editor/Undo/IUndoCommand.h"
+#include "Editor/Undo/ObjReferences.h"
+
 #include <Core/Scene/CSceneNode.h>
 
 #include <QCoreApplication>

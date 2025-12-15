@@ -1,4 +1,6 @@
-#include "CDeleteLinksCommand.h"
+#include "Editor/Undo/CDeleteLinksCommand.h"
+
+#include "Editor/WorldEditor/CWorldEditor.h"
 #include <Core/Resource/Script/CLink.h>
 
 #include <QCoreApplication>

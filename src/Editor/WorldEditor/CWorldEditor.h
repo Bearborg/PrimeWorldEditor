@@ -1,37 +1,12 @@
 #ifndef CWORLDEDITOR_H
 #define CWORLDEDITOR_H
 
-#include "CCollisionRenderSettingsDialog.h"
-#include "CEditorApplication.h"
-#include "CLinkDialog.h"
-#include "CPoiMapSidebar.h"
-#include "CScriptEditSidebar.h"
-#include "CTweakEditor.h"
-#include "CWorldInfoSidebar.h"
-#include "NDolphinIntegration.h"
-#include "Editor/INodeEditor.h"
-#include "Editor/CGeneratePropertyNamesDialog.h"
 #include "Editor/CGizmo.h"
 #include "Editor/CSceneViewport.h"
+#include "Editor/INodeEditor.h"
+#include "Editor/NDolphinIntegration.h"
 
-#include <Common/CTimer.h>
-#include <Common/EKeyInputs.h>
-#include <Common/Math/CRay.h>
-#include <Common/Math/ETransformSpace.h>
-#include <Core/Render/CRenderer.h>
-#include <Core/Resource/Area/CGameArea.h>
-#include <Core/Resource/CWorld.h>
 #include <Core/Resource/TResPtr.h>
-#include <Core/Scene/CScene.h>
-#include <Core/SRayIntersection.h>
-
-#include <QComboBox>
-#include <QDir>
-#include <QFile>
-#include <QList>
-#include <QMainWindow>
-#include <QTimer>
-#include <QToolButton>
 
 #include <array>
 #include <memory>
@@ -39,6 +14,24 @@
 namespace Ui {
 class CWorldEditor;
 }
+
+class CCollisionRenderSettingsDialog;
+class CGameArea;
+class CGeneratePropertyNamesDialog;
+class CLinkDialog;
+class CPoiMapSidebar;
+class CScriptEditSidebar;
+class CScriptObject;
+class CTweakEditor;
+class CWorld;
+class CWorldEditorSidebar;
+class CWorldInfoSidebar;
+struct SRayIntersection;
+
+class QAction;
+class QButtonGroup;
+class QMenu;
+class QVBoxLayout;
 
 enum EWorldEditorMode
 {
@@ -99,7 +92,6 @@ public:
     CLinkDialog* LinkDialog() const  { return mpLinkDialog; }
     CGeneratePropertyNamesDialog* NameGeneratorDialog() const    { return mpGeneratePropertyNamesDialog; }
     CTweakEditor* TweakEditor()      { return mpTweakEditor; }
-    CResourceBrowser* ResourceBrowser() const;
     CSceneViewport* Viewport() const override;
 
 public slots:

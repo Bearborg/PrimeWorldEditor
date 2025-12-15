@@ -1,4 +1,8 @@
-#include "CCreateInstanceCommand.h"
+#include "Editor/Undo/CCreateInstanceCommand.h"
+
+#include "Editor/WorldEditor/CWorldEditor.h"
+#include <Core/Resource/Area/CGameArea.h>
+#include <Core/Resource/Script/CScriptLayer.h>
 
 #include <QCoreApplication>
 

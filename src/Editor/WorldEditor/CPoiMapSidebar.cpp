@@ -1,12 +1,14 @@
-#include "CPoiMapSidebar.h"
+#include "Editor/WorldEditor/CPoiMapSidebar.h"
 #include "ui_CPoiMapSidebar.h"
-#include "CWorldEditor.h"
-#include "Editor/UICommon.h"
 
-#include <Core/Resource/Cooker/CPoiToWorldCooker.h>
+#include "Editor/UICommon.h"
+#include "Editor/WorldEditor/CPoiListDialog.h"
+#include "Editor/WorldEditor/CWorldEditor.h"
+
 #include <Core/Resource/Scan/CScan.h>
 #include <Core/Resource/Script/CGameTemplate.h>
 #include <Core/Resource/Script/NGameList.h>
+#include <Core/Scene/CModelNode.h>
 #include <Core/ScriptExtra/CPointOfInterestExtra.h>
 
 #include <QMouseEvent>

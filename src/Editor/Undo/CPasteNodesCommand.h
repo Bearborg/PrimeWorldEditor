@@ -1,12 +1,14 @@
 #ifndef CPASTENODESCOMMAND
 #define CPASTENODESCOMMAND
 
-#include "IUndoCommand.h"
-#include "ObjReferences.h"
-#include "Editor/CNodeCopyMimeData.h"
-#include "Editor/WorldEditor/CWorldEditor.h"
-#include <QClipboard>
+#include "Editor/Undo/IUndoCommand.h"
+#include "Editor/Undo/ObjReferences.h"
+
 #include <memory>
+
+class CNodeCopyMimeData;
+class CScriptLayer;
+class CWorldEditor;
 
 class CPasteNodesCommand : public IUndoCommand
 {

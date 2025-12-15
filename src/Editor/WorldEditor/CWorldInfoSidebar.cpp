@@ -5,6 +5,8 @@
 #include "Editor/UICommon.h"
 #include "Editor/WorldEditor/CWorldEditor.h"
 
+#include <Core/Resource/CWorld.h>
+
 CWorldInfoSidebar::CWorldInfoSidebar(CWorldEditor *pEditor)
     : CWorldEditorSidebar(pEditor)
     , mpUI(std::make_unique<Ui::CWorldInfoSidebar>())

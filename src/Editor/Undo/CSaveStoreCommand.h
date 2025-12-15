@@ -1,7 +1,7 @@
 #ifndef CSAVESTORECOMMAND_H
 #define CSAVESTORECOMMAND_H
 
-#include "IUndoCommand.h"
+#include "Editor/Undo/IUndoCommand.h"
 #include <Core/GameProject/CResourceStore.h>
 
 #include <QCoreApplication>

@@ -1,15 +1,16 @@
 #ifndef CPOIMAPMODEL_H
 #define CPOIMAPMODEL_H
 
-#include <Core/Resource/CPoiToWorld.h>
-#include <Core/Resource/CWorld.h>
 #include <Core/Resource/TResPtr.h>
-#include <Core/Scene/CModelNode.h>
-#include <Core/Scene/CScriptNode.h>
 #include <QAbstractTableModel>
 #include <QList>
 #include <QMap>
 
+class CGameArea;
+class CModelNode;
+class CScriptNode;
+class CPoiToWorld;
+class CWorld;
 class CWorldEditor;
 
 class CPoiMapModel : public QAbstractListModel
@@ -24,6 +25,7 @@ class CPoiMapModel : public QAbstractListModel
 
 public:
     explicit CPoiMapModel(CWorldEditor *pEditor, QObject *pParent = nullptr);
+    ~CPoiMapModel() override;
 
     QVariant headerData(int Section, Qt::Orientation Orientation, int Role) const override;
     int rowCount(const QModelIndex& rkParent) const override;

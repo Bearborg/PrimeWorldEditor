@@ -2,6 +2,7 @@
 #define CWORLDEDITORSIDEBAR_H
 
 #include <QWidget>
+
 class CWorldEditor;
 
 class CWorldEditorSidebar : public QWidget

@@ -1,12 +1,13 @@
 #ifndef CPOILISTDIALOG_H
 #define CPOILISTDIALOG_H
 
-#include "CPoiMapModel.h"
+#include "Editor/WorldEditor/CPoiMapModel.h"
 #include "Editor/UICommon.h"
 
 #include <Core/Resource/Scan/CScan.h>
 #include <Core/Resource/Script/CScriptTemplate.h>
 #include <Core/Scene/CScene.h>
+#include <Core/Scene/CScriptNode.h>
 #include <Core/ScriptExtra/CPointOfInterestExtra.h>
 
 #include <QAbstractListModel>
@@ -14,9 +15,7 @@
 #include <QDialog>
 #include <QHBoxLayout>
 #include <QListView>
-#include <QPushButton>
 #include <QSortFilterProxyModel>
-#include <QVBoxLayout>
 
 class CPoiListModel : public QAbstractListModel
 {

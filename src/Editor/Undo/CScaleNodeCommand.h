@@ -1,11 +1,13 @@
 #ifndef CSCALENODECOMMAND_H
 #define CSCALENODECOMMAND_H
 
-#include "IUndoCommand.h"
-#include "ObjReferences.h"
-#include "Editor/INodeEditor.h"
-#include <Core/Scene/CSceneNode.h>
+#include "Editor/Undo/IUndoCommand.h"
+#include "Editor/Undo/ObjReferences.h"
+
 #include <QList>
+
+class CSceneNode;
+class INodeEditor;
 
 class CScaleNodeCommand : public IUndoCommand
 {

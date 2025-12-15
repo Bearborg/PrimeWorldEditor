@@ -1,8 +1,9 @@
-#include "CSceneViewport.h"
-#include "CSelectionIterator.h"
-#include "UICommon.h"
+#include "Editor/CSceneViewport.h"
+
+#include "Editor/CSelectionIterator.h"
+#include "Editor/UICommon.h"
 #include "Editor/Undo/UndoCommands.h"
-#include <Core/Render/CDrawUtil.h>
+#include "Editor/WorldEditor/CWorldEditor.h"
 #include <Core/Render/SViewInfo.h>
 #include <Core/Resource/Script/CScriptLayer.h>
 #include <Core/Scene/CSceneIterator.h>

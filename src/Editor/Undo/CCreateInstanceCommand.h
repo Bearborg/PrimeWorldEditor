@@ -1,13 +1,14 @@
 #ifndef CCREATEINSTANCECOMMAND_H
 #define CCREATEINSTANCECOMMAND_H
 
-#include "IUndoCommand.h"
-#include "CClearSelectionCommand.h"
-#include "CSelectNodeCommand.h"
-#include "Editor/WorldEditor/CWorldEditor.h"
-#include <Core/Resource/Area/CGameArea.h>
-#include <Core/Resource/Script/CScriptLayer.h>
-#include <Core/Resource/Script/CScriptObject.h>
+#include "Editor/Undo/IUndoCommand.h"
+#include "Editor/Undo/ObjReferences.h"
+
+class CGameArea;
+class CScene;
+class CScriptLayer;
+class CScriptTemplate;
+class CWorldEditor;
 
 class CCreateInstanceCommand : public IUndoCommand
 {

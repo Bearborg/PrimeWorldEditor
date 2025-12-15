@@ -1,10 +1,13 @@
-#include "CDeleteSelectionCommand.h"
+#include "Editor/Undo/CDeleteSelectionCommand.h"
+
 #include "Editor/CSelectionIterator.h"
+#include "Editor/WorldEditor/CWorldEditor.h"
 #include <Common/FileIO.h>
 #include <Core/Resource/Cooker/CScriptCooker.h>
 #include <Core/Resource/Factory/CScriptLoader.h>
+#include <Core/Scene/CSceneNode.h>
 
-CDeleteSelectionCommand::CDeleteSelectionCommand(CWorldEditor *pEditor, const QString& rkCommandName /*= "Delete"*/)
+CDeleteSelectionCommand::CDeleteSelectionCommand(CWorldEditor *pEditor, const QString& rkCommandName)
     : IUndoCommand(rkCommandName)
     , mpEditor(pEditor)
 {

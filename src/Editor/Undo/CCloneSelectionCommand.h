@@ -1,9 +1,11 @@
 #ifndef CCLONESELECTIONCOMMAND_H
 #define CCLONESELECTIONCOMMAND_H
 
-#include "IUndoCommand.h"
-#include "ObjReferences.h"
-#include "Editor/WorldEditor/CWorldEditor.h"
+#include "Editor/Undo/IUndoCommand.h"
+#include "Editor/Undo/ObjReferences.h"
+
+class INodeEditor;
+class CWorldEditor;
 
 class CCloneSelectionCommand : public IUndoCommand
 {

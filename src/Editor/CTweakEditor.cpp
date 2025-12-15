@@ -1,5 +1,7 @@
-#include "CTweakEditor.h"
+#include "Editor/CTweakEditor.h"
 #include "ui_CTweakEditor.h"
+
+#include "Editor/UICommon.h"
 #include "Editor/Undo/IUndoCommand.h"
 
 #include <QCoreApplication>

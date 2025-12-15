@@ -1,11 +1,15 @@
 #ifndef IEDITPROPERTYCOMMAND_H
 #define IEDITPROPERTYCOMMAND_H
 
-#include "IUndoCommand.h"
-#include "EUndoCommand.h"
-#include "Editor/PropertyEdit/CPropertyModel.h"
+#include "Editor/Undo/IUndoCommand.h"
 
 #include <QCoreApplication>
+#include <QModelIndex>
+
+#include <vector>
+
+class IProperty;
+class CPropertyModel;
 
 class IEditPropertyCommand : public IUndoCommand
 {

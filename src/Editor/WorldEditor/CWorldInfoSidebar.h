@@ -1,10 +1,9 @@
 #ifndef CWORLDINFOSIDEBAR_H
 #define CWORLDINFOSIDEBAR_H
 
-#include <QWidget>
 #include <QSortFilterProxyModel>
-#include "CWorldEditorSidebar.h"
-#include "CWorldTreeModel.h"
+#include "Editor/WorldEditor/CWorldEditorSidebar.h"
+#include "Editor/WorldEditor/CWorldTreeModel.h"
 
 #include <memory>
 

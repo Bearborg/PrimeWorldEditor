@@ -1,7 +1,8 @@
 #ifndef CRESIZESCRIPTARRAYCOMMAND_H
 #define CRESIZESCRIPTARRAYCOMMAND_H
 
-#include "CEditScriptPropertyCommand.h"
+#include "Editor/PropertyEdit/CPropertyModel.h"
+#include "Editor/Undo/CEditScriptPropertyCommand.h"
 #include <QCoreApplication>
 
 class CResizeScriptArrayCommand : public CEditScriptPropertyCommand

@@ -1,6 +1,8 @@
-#include "CTranslateNodeCommand.h"
-#include "EUndoCommand.h"
+#include "Editor/Undo/CTranslateNodeCommand.h"
+
+#include <Core/Scene/CSceneNode.h>
 #include "Editor/INodeEditor.h"
+#include "Editor/Undo/EUndoCommand.h"
 
 #include <QCoreApplication>
 

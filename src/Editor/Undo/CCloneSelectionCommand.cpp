@@ -1,5 +1,7 @@
-#include "CCloneSelectionCommand.h"
+#include "Editor/Undo/CCloneSelectionCommand.h"
+
 #include "Editor/CSelectionIterator.h"
+#include "Editor/WorldEditor/CWorldEditor.h"
 
 #include <QCoreApplication>
 

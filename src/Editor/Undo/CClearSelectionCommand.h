@@ -1,11 +1,10 @@
 #ifndef CCLEARSELECTIONCOMMAND_H
 #define CCLEARSELECTIONCOMMAND_H
 
-#include "IUndoCommand.h"
-#include "ObjReferences.h"
+#include "Editor/Undo/IUndoCommand.h"
+#include "Editor/Undo/ObjReferences.h"
+
 #include "Editor/CSelectionIterator.h"
-#include "Editor/INodeEditor.h"
-#include <Core/Scene/CSceneNode.h>
 
 #include <QCoreApplication>
 

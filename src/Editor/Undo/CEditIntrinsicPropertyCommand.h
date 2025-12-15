@@ -1,7 +1,7 @@
 #ifndef CEDITINTRINSICPROPERTYCOMMAND_H
 #define CEDITINTRINSICPROPERTYCOMMAND_H
 
-#include "IEditPropertyCommand.h"
+#include "Editor/Undo/IEditPropertyCommand.h"
 #include <QCoreApplication>
 
 class CEditIntrinsicPropertyCommand : public IEditPropertyCommand

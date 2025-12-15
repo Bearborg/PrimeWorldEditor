@@ -1,5 +1,7 @@
-#include "CSelectInstanceDialog.h"
+#include "Editor/WorldEditor/CSelectInstanceDialog.h"
 #include "ui_CSelectInstanceDialog.h"
+
+#include <QPushButton>
 
 CSelectInstanceDialog::CSelectInstanceDialog(CWorldEditor *pEditor, QWidget *pParent)
     : QDialog(pParent)

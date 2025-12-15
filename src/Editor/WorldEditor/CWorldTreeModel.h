@@ -1,9 +1,16 @@
 #ifndef CWORLDTREEMODEL_H
 #define CWORLDTREEMODEL_H
 
-#include <Core/Resource/CWorld.h>
+#include <Common/CAssetID.h>
+#include <Core/Resource/TResPtr.h>
+
 #include <QAbstractItemModel>
+#include <QList>
 #include <QSortFilterProxyModel>
+
+class CGameProject;
+class CResourceEntry;
+class CWorld;
 class CWorldEditor;
 
 struct STreeArea
@@ -26,6 +33,7 @@ class CWorldTreeModel : public QAbstractItemModel
 
 public:
     explicit CWorldTreeModel(CWorldEditor *pEditor);
+    ~CWorldTreeModel() override;
 
     int rowCount(const QModelIndex& rkParent) const override;
     int columnCount(const QModelIndex& rkParent) const override;

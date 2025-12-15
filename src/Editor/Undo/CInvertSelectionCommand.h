@@ -1,9 +1,9 @@
 #ifndef CINVERTSELECTIONCOMMAND_H
 #define CINVERTSELECTIONCOMMAND_H
 
-#include "IUndoCommand.h"
-#include "ObjReferences.h"
-#include "Editor/INodeEditor.h"
+#include "Editor/Undo/IUndoCommand.h"
+#include "Editor/Undo/ObjReferences.h"
+
 #include <Core/Scene/CSceneNode.h>
 
 #include <QCoreApplication>

@@ -1,4 +1,6 @@
-#include "WEditorProperties.h"
+#include "Editor/WorldEditor/WEditorProperties.h"
+
+#include "Editor/UICommon.h"
 #include "Editor/Undo/CEditScriptPropertyCommand.h"
 #include <Core/Resource/Script/CScriptLayer.h>
 

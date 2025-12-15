@@ -1,9 +1,11 @@
 #ifndef CDELETELINKSCOMMAND_H
 #define CDELETELINKSCOMMAND_H
 
-#include "IUndoCommand.h"
-#include "ObjReferences.h"
-#include "Editor/WorldEditor/CWorldEditor.h"
+#include "Editor/Undo/IUndoCommand.h"
+#include "Editor/Undo/ObjReferences.h"
+
+class CScriptObject;
+class CWorldEditor;
 
 class CDeleteLinksCommand : public IUndoCommand
 {

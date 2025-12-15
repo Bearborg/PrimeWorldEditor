@@ -1,6 +1,8 @@
-#include "CScaleNodeCommand.h"
-#include "EUndoCommand.h"
+#include "Editor/Undo/CScaleNodeCommand.h"
+
 #include "Editor/INodeEditor.h"
+#include "Editor/Undo/EUndoCommand.h"
+#include <Core/Scene/CSceneNode.h>
 
 #include <QCoreApplication>
 

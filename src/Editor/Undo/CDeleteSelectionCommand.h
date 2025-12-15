@@ -1,13 +1,15 @@
 #ifndef CDELETESELECTIONCOMMAND_H
 #define CDELETESELECTIONCOMMAND_H
 
-#include "CDeleteLinksCommand.h"
-#include "IUndoCommand.h"
-#include "ObjReferences.h"
-#include "Editor/WorldEditor/CWorldEditor.h"
-#include <Core/Scene/CSceneNode.h>
+#include "Editor/Undo/IUndoCommand.h"
+#include "Editor/Undo/ObjReferences.h"
 
 #include <QCoreApplication>
+#include <vector>
+
+class CGameArea;
+class CScriptLayer;
+class CWorldEditor;
 
 // todo: currently only supports deleting script nodes; needs support for light nodes as well
 // plus maybe it should be extensible enough to support other possible types
