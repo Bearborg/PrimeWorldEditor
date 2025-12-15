@@ -1,23 +1,21 @@
 #ifndef CMODELEDITORWINDOW_H
 #define CMODELEDITORWINDOW_H
 
-#include "IEditor.h"
-#include "CModelEditorViewport.h"
-#include <Core/GameProject/CResourceStore.h>
-#include <Core/Render/CRenderer.h>
-#include <Core/Resource/CFont.h>
-#include <Core/Resource/Model/CModel.h>
-#include <Core/Scene/CScene.h>
-#include <Core/Scene/CModelNode.h>
-
-#include <QMainWindow>
-#include <QTimer>
+#include "Editor/IEditor.h"
+#include "Editor/ModelEditor/CModelEditorViewport.h"
 
 #include <memory>
 
 namespace Ui {
 class CModelEditorWindow;
 }
+
+class CMaterial;
+class CMaterialPass;
+class CModel;
+class CModelNode;
+class CResourceEntry;
+class CScene;
 
 // the model editor is messy and old as fuck, it needs a total rewrite
 class CModelEditorWindow : public IEditor

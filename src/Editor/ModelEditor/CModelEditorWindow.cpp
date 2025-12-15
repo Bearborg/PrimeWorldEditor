@@ -1,15 +1,19 @@
-#include "CModelEditorWindow.h"
+#include "Editor/ModelEditor/CModelEditorWindow.h"
 #include "ui_CModelEditorWindow.h"
+
 #include "Editor/UICommon.h"
 #include "Editor/Widgets/WColorPicker.h"
 
 #include <Common/TString.h>
-#include <Core/Render/CDrawUtil.h>
+#include <Core/GameProject/CResourceStore.h>
 #include <Core/Render/CRenderer.h>
+#include <Core/Resource/CFont.h>
 #include <Core/Resource/Cooker/CTextureEncoder.h>
 #include <Core/Resource/Factory/CModelLoader.h>
 #include <Core/Resource/Factory/CMaterialLoader.h>
 #include <Core/Resource/Factory/CTextureDecoder.h>
+#include <Core/Resource/Model/CModel.h>
+#include <Core/Scene/CModelNode.h>
 #include <Core/Scene/CScene.h>
 
 #include <QFileDialog>

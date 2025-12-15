@@ -3,8 +3,12 @@
 
 #include "Editor/CBasicViewport.h"
 #include "Editor/CGridRenderable.h"
-#include <Core/Scene/CModelNode.h>
+
 #include <memory>
+
+class CMaterial;
+class CModelNode;
+class CRenderer;
 
 class CModelEditorViewport : public CBasicViewport
 {
