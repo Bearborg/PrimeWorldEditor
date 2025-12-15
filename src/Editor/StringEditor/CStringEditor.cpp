@@ -1,9 +1,11 @@
-#include "CStringEditor.h"
+#include "Editor/StringEditor/CStringEditor.h"
 #include "ui_CStringEditor.h"
 
-#include "CStringDelegate.h"
 #include "Editor/UICommon.h"
+#include "Editor/StringEditor/CStringDelegate.h"
+#include "Editor/StringEditor/CStringListModel.h"
 #include "Editor/Undo/TSerializeUndoCommand.h"
+#include <Core/Resource/StringTable/CStringTable.h>
 
 #include <QCoreApplication>
 #include <QSettings>

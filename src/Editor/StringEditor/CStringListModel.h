@@ -3,9 +3,10 @@
 
 #include <QAbstractListModel>
 #include <Core/Resource/TResPtr.h>
-#include <Core/Resource/StringTable/CStringTable.h>
+#include <Core/Resource/StringTable/ELanguage.h>
 
 class CStringEditor;
+class CStringTable;
 
 /** Model for listing available strings in a string table */
 class CStringListModel : public QAbstractListModel
@@ -21,6 +22,7 @@ class CStringListModel : public QAbstractListModel
 
 public:
     explicit CStringListModel(CStringEditor* pInEditor);
+    ~CStringListModel() override;
 
     /** Change the preview language display */
     void SetPreviewLanguage(ELanguage InLanguage);

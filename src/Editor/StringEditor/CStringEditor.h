@@ -1,18 +1,18 @@
 #ifndef CSTRINGEDITOR_H
 #define CSTRINGEDITOR_H
 
-#include "IEditor.h"
-
-#include "CStringListModel.h"
-#include <Core/Resource/StringTable/CStringTable.h>
-
-#include <QMainWindow>
+#include "Editor/IEditor.h"
+#include <Core/Resource/TResPtr.h>
+#include <Core/Resource/StringTable/ELanguage.h>
 
 #include <memory>
 
 namespace Ui {
 class CStringEditor;
 }
+
+class CStringListModel;
+class CStringTable;
 
 /** Editor window for string tables (STRG assets) */
 class CStringEditor : public IEditor
@@ -29,10 +29,10 @@ class CStringEditor : public IEditor
     ELanguage mCurrentLanguage{ELanguage::English};
 
     /** Index of the string being edited */
-    uint32 mCurrentStringIndex = UINT32_MAX;
+    uint32_t mCurrentStringIndex = UINT32_MAX;
 
     /** Current string count */
-    uint32 mCurrentStringCount = 0;
+    uint32_t mCurrentStringCount = 0;
 
     /** Model for the string list view */
     CStringListModel* mpListModel = nullptr;

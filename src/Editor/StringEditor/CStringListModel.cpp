@@ -1,7 +1,9 @@
-#include "CStringListModel.h"
-#include "CStringEditor.h"
-#include "CStringMimeData.h"
+#include "Editor/StringEditor/CStringListModel.h"
+
 #include "Editor/UICommon.h"
+#include "Editor/StringEditor/CStringEditor.h"
+#include "Editor/StringEditor/CStringMimeData.h"
+#include <Core/Resource/StringTable/CStringTable.h>
 
 #include <QMimeData>
 
@@ -11,6 +13,8 @@ CStringListModel::CStringListModel(CStringEditor* pInEditor)
     , mpStringTable(pInEditor->StringTable())
 {
 }
+
+CStringListModel::~CStringListModel() = default;
 
 /** Change the preview language display */
 void CStringListModel::SetPreviewLanguage(ELanguage InLanguage)
