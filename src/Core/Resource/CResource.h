@@ -51,7 +51,7 @@ public:
     EResourceType Type() const       { return mpEntry->TypeInfo()->Type(); }
     TString Source() const           { return mpEntry ? mpEntry->CookedAssetPath(true).GetFileName() : ""; }
     TString FullSource() const       { return mpEntry ? mpEntry->CookedAssetPath(true) : ""; }
-    CAssetID ID() const              { return mpEntry ? mpEntry->ID() : CAssetID::skInvalidID64; }
+    const CAssetID& ID() const       { return mpEntry ? mpEntry->ID() : CAssetID::skInvalidID64; }
     EGame Game() const               { return mpEntry ? mpEntry->Game() : EGame::Invalid; }
     bool IsReferenced() const        { return mRefCount > 0; }
     void Lock()                      { mRefCount++; }

@@ -104,7 +104,7 @@ public:
     CResTypeInfo* TypeInfo() const           { return mpTypeInfo; }
     CResourceStore* ResourceStore() const    { return mpStore; }
     CDependencyTree* Dependencies() const    { return mpDependencies.get(); }
-    CAssetID ID() const                      { return mID; }
+    const CAssetID& ID() const               { return mID; }
     CVirtualDirectory* Directory() const     { return mpDirectory; }
     TString DirectoryPath() const;
     const TString& Name() const              { return mName; }
