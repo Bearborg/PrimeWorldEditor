@@ -1,5 +1,6 @@
 #include "Core/ScriptExtra/CDoorExtra.h"
 
+#include "Core/SRayIntersection.h"
 #include "Core/Render/CGraphics.h"
 #include "Core/Render/CRenderer.h"
 #include "Core/Resource/Model/SSurface.h"
@@ -116,7 +117,7 @@ void CDoorExtra::RayAABoxIntersectTest(CRayCollisionTester& rTester, const SView
         rTester.AddNodeModel(this, mpShieldModel);
 }
 
-SRayIntersection CDoorExtra::RayNodeIntersectTest(const CRay& rkRay, uint32 AssetID, const SViewInfo& rkViewInfo)
+SRayIntersection CDoorExtra::RayNodeIntersectTest(const CRay& rkRay, uint32_t AssetID, const SViewInfo& rkViewInfo)
 {
     const FRenderOptions Options = rkViewInfo.pRenderer->RenderOptions();
 

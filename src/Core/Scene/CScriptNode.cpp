@@ -1,6 +1,7 @@
 #include "Core/Scene/CScriptNode.h"
 
 #include "Core/CLightParameters.h"
+#include "Core/SRayIntersection.h"
 #include "Core/GameProject/CResourceStore.h"
 #include "Core/Render/CCamera.h"
 #include "Core/Render/CDrawUtil.h"
@@ -253,9 +254,7 @@ void CScriptNode::DrawSelection()
 
         pModel->DrawWireframe(ERenderOption::None, WireframeColor());
     }
-
-    // Draw rotation arrow for billboards
-    else
+    else // Draw rotation arrow for billboards
     {
         // Create model matrix that doesn't take scaling into account, and draw
         CTransform4f Transform;
@@ -356,7 +355,7 @@ void CScriptNode::RayAABoxIntersectTest(CRayCollisionTester& rTester, const SVie
         attachment->RayAABoxIntersectTest(rTester, rkViewInfo);
 }
 
-SRayIntersection CScriptNode::RayNodeIntersectTest(const CRay& rkRay, uint32 AssetID, const SViewInfo& rkViewInfo)
+SRayIntersection CScriptNode::RayNodeIntersectTest(const CRay& rkRay, uint32_t AssetID, const SViewInfo& rkViewInfo)
 {
     const FRenderOptions Options = rkViewInfo.pRenderer->RenderOptions();
 
@@ -597,7 +596,7 @@ void CScriptNode::GeneratePosition()
         // In the case of one link, apply an offset so the new position isn't the same place as the object it's linked to
         if (NumLinks == 1)
         {
-            const uint32 LinkedID = (mpInstance->NumLinks(ELinkType::Incoming) > 0 ? mpInstance->Link(ELinkType::Incoming, 0)->SenderID() : mpInstance->Link(ELinkType::Outgoing, 0)->ReceiverID());
+            const uint32_t LinkedID = (mpInstance->NumLinks(ELinkType::Incoming) > 0 ? mpInstance->Link(ELinkType::Incoming, 0)->SenderID() : mpInstance->Link(ELinkType::Outgoing, 0)->ReceiverID());
             CScriptNode* pNode = mpScene->NodeForInstanceID(LinkedID);
             pNode->GeneratePosition();
             mPosition = pNode->AbsolutePosition();

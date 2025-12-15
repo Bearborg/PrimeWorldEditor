@@ -45,7 +45,7 @@ public:
     void Draw(FRenderOptions Options, int ComponentIndex, ERenderCommand Command, const SViewInfo& rkViewInfo) override;
     void DrawSelection() override;
     void RayAABoxIntersectTest(CRayCollisionTester& rTester, const SViewInfo& rkViewInfo) override;
-    SRayIntersection RayNodeIntersectTest(const CRay& rkRay, uint32 ComponentIndex, const SViewInfo& rkViewInfo) override;
+    SRayIntersection RayNodeIntersectTest(const CRay& rkRay, uint32_t ComponentIndex, const SViewInfo& rkViewInfo) override;
 };
 
 #endif // CDAMAGEABLETRIGGEREXTRA_H

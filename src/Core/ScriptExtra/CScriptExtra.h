@@ -36,12 +36,7 @@ public:
     // Default implementations for CSceneNode
     ENodeType NodeType() const override { return ENodeType::ScriptExtra; }
     void RayAABoxIntersectTest(CRayCollisionTester& /*rTester*/, const SViewInfo& /*rkViewInfo*/) override {}
-    SRayIntersection RayNodeIntersectTest(const CRay& /*rkRay*/, uint32 /*AssetID*/, const SViewInfo& /*rkViewInfo*/) override
-    {
-        SRayIntersection out;
-        out.Hit = false;
-        return out;
-    }
+    SRayIntersection RayNodeIntersectTest(const CRay& /*rkRay*/, uint32_t /*AssetID*/, const SViewInfo& /*rkViewInfo*/) override;
     CColor WireframeColor() const override { return mpParent->WireframeColor(); }
 
     // Virtual CScriptExtra functions

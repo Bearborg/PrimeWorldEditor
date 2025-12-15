@@ -1,12 +1,13 @@
 #include "Core/Scene/CStaticNode.h"
 
+#include "Core/SRayIntersection.h"
 #include "Core/Render/CGraphics.h"
 #include "Core/Render/CRenderer.h"
 #include "Core/Resource/Model/CStaticModel.h"
 #include "Core/Resource/Model/SSurface.h"
 #include <Common/Math/MathUtil.h>
 
-CStaticNode::CStaticNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent, CStaticModel *pModel)
+CStaticNode::CStaticNode(CScene *pScene, uint32_t NodeID, CSceneNode *pParent, CStaticModel *pModel)
     : CSceneNode(pScene, NodeID, pParent)
     , mpModel(pModel)
 {
@@ -14,6 +15,8 @@ CStaticNode::CStaticNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent, CSt
     mScale = CVector3f::One();
     SetName("Static Node");
 }
+
+CStaticNode::~CStaticNode() = default;
 
 ENodeType CStaticNode::NodeType() const
 {
@@ -47,7 +50,7 @@ void CStaticNode::AddToRenderer(CRenderer *pRenderer, const SViewInfo& rkViewInf
     else
     {
         const size_t NumSurfaces = mpModel->GetSurfaceCount();
-        for (uint32 iSurf = 0; iSurf < NumSurfaces; iSurf++)
+        for (uint32_t iSurf = 0; iSurf < NumSurfaces; iSurf++)
         {
             CAABox TransformedBox = mpModel->GetSurfaceAABox(iSurf).Transformed(Transform());
 
@@ -115,7 +118,7 @@ void CStaticNode::RayAABoxIntersectTest(CRayCollisionTester& rTester, const SVie
     if (!BoxResult.first)
         return;
 
-    for (uint32 iSurf = 0; iSurf < mpModel->GetSurfaceCount(); iSurf++)
+    for (uint32_t iSurf = 0; iSurf < mpModel->GetSurfaceCount(); iSurf++)
     {
         const auto [intersects, distance] = mpModel->GetSurfaceAABox(iSurf).Transformed(Transform()).IntersectsRay(rkRay);
 
@@ -124,7 +127,7 @@ void CStaticNode::RayAABoxIntersectTest(CRayCollisionTester& rTester, const SVie
     }
 }
 
-SRayIntersection CStaticNode::RayNodeIntersectTest(const CRay& rkRay, uint32 AssetID, const SViewInfo& rkViewInfo)
+SRayIntersection CStaticNode::RayNodeIntersectTest(const CRay& rkRay, uint32_t AssetID, const SViewInfo& rkViewInfo)
 {
     SRayIntersection Out;
     Out.pNode = this;

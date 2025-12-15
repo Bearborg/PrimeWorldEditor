@@ -1,5 +1,9 @@
-#include "CRayCollisionTester.h"
+#include "Core/CRayCollisionTester.h"
+
+#include "Core/SRayIntersection.h"
+#include "Core/Render/SViewInfo.h"
 #include "Core/Scene/CSceneNode.h"
+#include "Core/Resource/Model/CBasicModel.h"
 
 CRayCollisionTester::CRayCollisionTester(const CRay& rkRay)
     : mRay(rkRay)
@@ -8,7 +12,7 @@ CRayCollisionTester::CRayCollisionTester(const CRay& rkRay)
 
 CRayCollisionTester::~CRayCollisionTester() = default;
 
-void CRayCollisionTester::AddNode(CSceneNode *pNode, uint32 ComponentIndex, float Distance)
+void CRayCollisionTester::AddNode(CSceneNode *pNode, uint32_t ComponentIndex, float Distance)
 {
     SRayIntersection& rIntersection = mBoxIntersectList.emplace_back();
     rIntersection.pNode = pNode;

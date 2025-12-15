@@ -1,5 +1,6 @@
 #include "Core/ScriptExtra/CDamageableTriggerExtra.h"
 
+#include "Core/SRayIntersection.h"
 #include "Core/Render/CDrawUtil.h"
 #include "Core/Render/CGraphics.h"
 #include "Core/Render/CRenderer.h"
@@ -134,7 +135,7 @@ CDamageableTriggerExtra::ERenderSide CDamageableTriggerExtra::RenderSideForDirec
 {
     // Get the index of the largest XYZ component
     const CVector3f AbsDir(Math::Abs(rkDir.X), Math::Abs(rkDir.Y), Math::Abs(rkDir.Z));
-    uint32 Max = (AbsDir.X > AbsDir.Y ? 0 : 1);
+    uint32_t Max = (AbsDir.X > AbsDir.Y ? 0 : 1);
     Max = (AbsDir[Max] > AbsDir.Z ? Max : 2);
 
     // Check whether the direction is positive or negative. If the absolute value of the component matches the input one, then it's positive.
@@ -186,7 +187,7 @@ void CDamageableTriggerExtra::PropertyModified(IProperty* pProperty)
     }
     else
     {
-        for (uint32 TextureIdx = 0; TextureIdx < 3; TextureIdx++)
+        for (uint32_t TextureIdx = 0; TextureIdx < 3; TextureIdx++)
         {
             if (pProperty == mTextureAssets[TextureIdx].Property())
             {
@@ -283,7 +284,7 @@ void CDamageableTriggerExtra::RayAABoxIntersectTest(CRayCollisionTester& rTester
     }
 }
 
-SRayIntersection CDamageableTriggerExtra::RayNodeIntersectTest(const CRay& rkRay, uint32 /*ComponentIndex*/, const SViewInfo& /*rkViewInfo*/)
+SRayIntersection CDamageableTriggerExtra::RayNodeIntersectTest(const CRay& rkRay, uint32_t /*ComponentIndex*/, const SViewInfo& /*rkViewInfo*/)
 {
     // The bounding box and all other tests already passed in RayAABoxIntersectTest, so we
     // already know that we have a positive.

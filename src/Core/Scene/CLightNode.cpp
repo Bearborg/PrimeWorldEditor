@@ -1,12 +1,14 @@
 #include "Core/Scene/CLightNode.h"
 
+#include "Core/SRayIntersection.h"
 #include "Core/Render/CCamera.h"
 #include "Core/Render/CDrawUtil.h"
 #include "Core/Render/CGraphics.h"
 #include "Core/Render/CRenderer.h"
+#include "Core/Resource/CLight.h"
 #include <Common/Math/MathUtil.h>
 
-CLightNode::CLightNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent, CLight *pLight)
+CLightNode::CLightNode(CScene *pScene, uint32_t NodeID, CSceneNode *pParent, CLight *pLight)
     : CSceneNode(pScene, NodeID, pParent)
     , mpLight(pLight)
 {
@@ -21,6 +23,8 @@ CLightNode::CLightNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent, CLigh
     case ELightType::Custom:       SetName("Custom Light");      break;
     }
 }
+
+CLightNode::~CLightNode() = default;
 
 ENodeType CLightNode::NodeType() const
 {
@@ -66,7 +70,7 @@ void CLightNode::RayAABoxIntersectTest(CRayCollisionTester& rTester, const SView
         rTester.AddNode(this, 0, distance);
 }
 
-SRayIntersection CLightNode::RayNodeIntersectTest(const CRay& rkRay, uint32 AssetID, const SViewInfo& rkViewInfo)
+SRayIntersection CLightNode::RayNodeIntersectTest(const CRay& rkRay, uint32_t AssetID, const SViewInfo& rkViewInfo)
 {
     // todo: come up with a better way to share this code between CScriptNode and CLightNode
     SRayIntersection Out;

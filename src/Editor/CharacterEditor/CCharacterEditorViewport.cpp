@@ -1,5 +1,6 @@
 #include "Editor/CharacterEditor/CCharacterEditorViewport.h"
 
+#include <Core/SRayIntersection.h>
 #include <Core/Scene/CCharacterNode.h>
 
 CCharacterEditorViewport::CCharacterEditorViewport(QWidget *pParent)

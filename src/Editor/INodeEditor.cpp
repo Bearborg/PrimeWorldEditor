@@ -1,6 +1,8 @@
-#include "INodeEditor.h"
-#include "CSelectionIterator.h"
+#include "Editor/INodeEditor.h"
+
+#include "Editor/CSelectionIterator.h"
 #include "Editor/Undo/UndoCommands.h"
+#include <Core/SRayIntersection.h>
 #include <QMouseEvent>
 
 INodeEditor::INodeEditor(QWidget *pParent)

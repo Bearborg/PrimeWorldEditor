@@ -1,5 +1,6 @@
 #include "Core/Scene/CModelNode.h"
 
+#include "Core/SRayIntersection.h"
 #include "Core/Render/CDrawUtil.h"
 #include "Core/Render/CRenderer.h"
 #include "Core/Render/CGraphics.h"
@@ -7,7 +8,7 @@
 #include "Core/Resource/Model/SSurface.h"
 #include <Common/Math/MathUtil.h>
 
-CModelNode::CModelNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent, CModel *pModel)
+CModelNode::CModelNode(CScene *pScene, uint32_t NodeID, CSceneNode *pParent, CModel *pModel)
     : CSceneNode(pScene, NodeID, pParent)
 {
     mScale = CVector3f::One();
@@ -46,7 +47,7 @@ void CModelNode::AddToRenderer(CRenderer *pRenderer, const SViewInfo& rkViewInfo
     {
         pRenderer->AddMesh(this, -1, AABox(), false, ERenderCommand::DrawOpaqueParts);
 
-        for (uint32 iSurf = 0; iSurf < mpModel->GetSurfaceCount(); iSurf++)
+        for (uint32_t iSurf = 0; iSurf < mpModel->GetSurfaceCount(); iSurf++)
         {
             if (mpModel->IsSurfaceTransparent(iSurf, mActiveMatSet))
                 pRenderer->AddMesh(this, iSurf, mpModel->GetSurfaceAABox(iSurf).Transformed(Transform()), true, ERenderCommand::DrawTransparentParts);
@@ -143,7 +144,7 @@ void CModelNode::RayAABoxIntersectTest(CRayCollisionTester& rTester, const SView
         rTester.AddNodeModel(this, mpModel);
 }
 
-SRayIntersection CModelNode::RayNodeIntersectTest(const CRay& rkRay, uint32 AssetID, const SViewInfo& rkViewInfo)
+SRayIntersection CModelNode::RayNodeIntersectTest(const CRay& rkRay, uint32_t AssetID, const SViewInfo& rkViewInfo)
 {
     SRayIntersection Out;
     Out.pNode = this;

@@ -1,5 +1,6 @@
 #include "Core/ScriptExtra/CScriptExtra.h"
 
+#include "Core/SRayIntersection.h"
 #include "Core/Resource/Script/CScriptObject.h"
 #include "Core/Scene/CScriptNode.h"
 #include "Core/ScriptExtra/CDamageableTriggerExtra.h"
@@ -20,6 +21,13 @@ CScriptExtra::CScriptExtra(CScriptObject* pInstance, CScene* pScene, CScriptNode
 }
 
 CScriptExtra::~CScriptExtra() = default;
+
+SRayIntersection CScriptExtra::RayNodeIntersectTest(const CRay&, uint32_t, const SViewInfo&)
+{
+    SRayIntersection out;
+    out.Hit = false;
+    return out;
+}
 
 CScriptExtra* CScriptExtra::CreateExtra(CScriptNode *pNode)
 {

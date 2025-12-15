@@ -1,15 +1,18 @@
 #include "Core/Scene/CCharacterNode.h"
 
+#include "Core/SRayIntersection.h"
 #include "Core/Render/CGraphics.h"
 #include "Core/Render/CRenderer.h"
 
-CCharacterNode::CCharacterNode(CScene *pScene, uint32 NodeID, CAnimSet *pChar /*= 0*/, CSceneNode *pParent /*= 0*/)
+CCharacterNode::CCharacterNode(CScene *pScene, uint32_t NodeID, CAnimSet *pChar /*= 0*/, CSceneNode *pParent /*= 0*/)
     : CSceneNode(pScene, NodeID, pParent)
     , mAnimated(true)
     , mAnimTime(0.f)
 {
     SetCharSet(pChar);
 }
+
+CCharacterNode::~CCharacterNode() = default;
 
 ENodeType CCharacterNode::NodeType() const
 {
@@ -80,7 +83,7 @@ void CCharacterNode::Draw(FRenderOptions Options, int ComponentIndex, ERenderCom
     }
 }
 
-SRayIntersection CCharacterNode::RayNodeIntersectTest(const CRay& rkRay, uint32 /*AssetID*/, const SViewInfo& rkViewInfo)
+SRayIntersection CCharacterNode::RayNodeIntersectTest(const CRay& rkRay, uint32_t /*AssetID*/, const SViewInfo& rkViewInfo)
 {
     // Check for bone under ray. Doesn't check for model intersections atm
     if (mpCharacter && rkViewInfo.ShowFlags.HasFlag(EShowFlag::Skeletons))
@@ -108,7 +111,7 @@ SRayIntersection CCharacterNode::RayNodeIntersectTest(const CRay& rkRay, uint32 
     return SRayIntersection();
 }
 
-CVector3f CCharacterNode::BonePosition(uint32 BoneID)
+CVector3f CCharacterNode::BonePosition(uint32_t BoneID)
 {
     UpdateTransformData();
     const CSkeleton* pSkel = mpCharacter ? mpCharacter->Character(mActiveCharSet)->pSkeleton : nullptr;
@@ -131,7 +134,7 @@ void CCharacterNode::SetCharSet(CAnimSet *pChar)
         mLocalAABox = CAABox::One();
 }
 
-void CCharacterNode::SetActiveChar(uint32 CharIndex)
+void CCharacterNode::SetActiveChar(uint32_t CharIndex)
 {
     mActiveCharSet = CharIndex;
     ConditionalSetDirty();
@@ -145,7 +148,7 @@ void CCharacterNode::SetActiveChar(uint32 CharIndex)
     }
 }
 
-void CCharacterNode::SetActiveAnim(uint32 AnimIndex)
+void CCharacterNode::SetActiveAnim(uint32_t AnimIndex)
 {
     mActiveAnim = AnimIndex;
     ConditionalSetDirty();

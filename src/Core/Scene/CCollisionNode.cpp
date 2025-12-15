@@ -1,15 +1,20 @@
-#include "CCollisionNode.h"
-#include "CScene.h"
+#include "Core/Scene/CCollisionNode.h"
+
+#include "Core/SRayIntersection.h"
 #include "Core/Render/CDrawUtil.h"
 #include "Core/Render/CGraphics.h"
 #include "Core/Render/CRenderer.h"
+#include "Core/Resource/Collision/CCollisionMeshGroup.h"
+#include "Core/Scene/CScene.h"
 
-CCollisionNode::CCollisionNode(CScene *pScene, uint32 NodeID, CSceneNode *pParent, CCollisionMeshGroup *pCollision)
+CCollisionNode::CCollisionNode(CScene *pScene, uint32_t NodeID, CSceneNode *pParent, CCollisionMeshGroup *pCollision)
     : CSceneNode(pScene, NodeID, pParent)
 {
     SetCollision(pCollision);
     SetName("Collision");
 }
+
+CCollisionNode::~CCollisionNode() = default;
 
 ENodeType CCollisionNode::NodeType() const
 {
@@ -116,7 +121,7 @@ void CCollisionNode::RayAABoxIntersectTest(CRayCollisionTester& /*rTester*/, con
     // todo
 }
 
-SRayIntersection CCollisionNode::RayNodeIntersectTest(const CRay& /*rkRay*/, uint32 /*AssetID*/, const SViewInfo& /*rkViewInfo*/)
+SRayIntersection CCollisionNode::RayNodeIntersectTest(const CRay& /*rkRay*/, uint32_t /*AssetID*/, const SViewInfo& /*rkViewInfo*/)
 {
     // todo
     SRayIntersection Result;

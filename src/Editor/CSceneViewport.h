@@ -1,10 +1,11 @@
 #ifndef CSCENEVIEWPORT_H
 #define CSCENEVIEWPORT_H
 
-#include "CBasicViewport.h"
-#include "CGridRenderable.h"
-#include "CLineRenderable.h"
-#include "INodeEditor.h"
+#include "Core/SRayIntersection.h"
+#include "Editor/CBasicViewport.h"
+#include "Editor/CGridRenderable.h"
+#include "Editor/CLineRenderable.h"
+#include "Editor/INodeEditor.h"
 
 class CSceneViewport : public CBasicViewport
 {

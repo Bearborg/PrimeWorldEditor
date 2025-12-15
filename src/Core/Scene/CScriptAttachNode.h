@@ -1,9 +1,9 @@
 #ifndef CSCRIPTATTACHNODE_H
 #define CSCRIPTATTACHNODE_H
 
-#include "CSceneNode.h"
 #include "Core/Resource/Script/Property/Properties.h"
 #include "Core/Resource/Script/CScriptTemplate.h"
+#include "Core/Scene/CSceneNode.h"
 
 class CBone;
 class CScriptNode;
@@ -23,6 +23,8 @@ class CScriptAttachNode : public CSceneNode
 
 public:
     explicit CScriptAttachNode(CScene *pScene, const SAttachment& rkAttachment, CScriptNode *pParent);
+    ~CScriptAttachNode() override;
+
     void AttachPropertyModified();
     void ParentDisplayAssetChanged(CResource *pNewDisplayAsset);
     CModel* Model() const;
@@ -32,7 +34,7 @@ public:
     void Draw(FRenderOptions Options, int ComponentIndex, ERenderCommand Command, const SViewInfo& rkViewInfo) override;
     void DrawSelection() override;
     void RayAABoxIntersectTest(CRayCollisionTester& rTester, const SViewInfo& rkViewInfo) override;
-    SRayIntersection RayNodeIntersectTest(const CRay& rkRay, uint32 AssetID, const SViewInfo& rkViewInfo) override;
+    SRayIntersection RayNodeIntersectTest(const CRay& rkRay, uint32_t AssetID, const SViewInfo& rkViewInfo) override;
 
     IProperty* AttachProperty() const  { return mpAttachAssetProp; }
     const TString& LocatorName() const { return mLocatorName; }

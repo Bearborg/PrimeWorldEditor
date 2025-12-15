@@ -1,9 +1,9 @@
 #ifndef INODEEDITOR_H
 #define INODEEDITOR_H
 
-#include "IEditor.h"
-#include "CGizmo.h"
-#include "CNodeSelection.h"
+#include "Editor/CGizmo.h"
+#include "Editor/IEditor.h"
+#include "Editor/CNodeSelection.h"
 #include <Common/Math/ETransformSpace.h>
 #include <Core/Scene/CScene.h>
 
