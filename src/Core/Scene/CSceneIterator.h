@@ -1,8 +1,10 @@
 #ifndef CSCENEITERATOR_H
 #define CSCENEITERATOR_H
 
-#include "ENodeType.h"
+#include "Core/Scene/ENodeType.h"
+
 #include <unordered_map>
+#include <vector>
 
 class CScene;
 class CSceneNode;
@@ -18,7 +20,7 @@ class CSceneIterator
     std::vector<CSceneNode*>::iterator mVectorIterator;
 
 public:
-    CSceneIterator(CScene *pScene, FNodeFlags AllowedNodeTypes = ENodeType::All, bool AllowHiddenNodes = false);
+    explicit CSceneIterator(CScene *pScene, FNodeFlags AllowedNodeTypes = ENodeType::All, bool AllowHiddenNodes = false);
 
     CSceneNode* Next()
     {
