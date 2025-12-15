@@ -1,7 +1,9 @@
 #ifndef NGAMELIST_H
 #define NGAMELIST_H
 
-#include "CGameTemplate.h"
+#include <Common/EGame.h>
+
+class CGameTemplate;
 
 namespace NGameList
 {

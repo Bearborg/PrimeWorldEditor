@@ -1,5 +1,7 @@
-#include "NGameList.h"
+#include "Core/Resource/Script/NGameList.h"
+
 #include <Common/Log.h>
+#include "Core/Resource/Script/CGameTemplate.h"
 
 #include <array>
 

@@ -1,7 +1,14 @@
-#include "NPropertyMap.h"
-#include "NGameList.h"
-#include <Common/NBasics.h>
+#include "Core/Resource/Script/NPropertyMap.h"
+
+#include "Core/GameProject/CResourceStore.h"
+#include "Core/Resource/Script/NGameList.h"
+#include "Core/Resource/Script/Property/IProperty.h"
 #include <Common/Serialization/XML.h>
+
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <vector>
 
 /** NPropertyMap: Namespace for property ID -> name mappings */
 namespace NPropertyMap
@@ -32,7 +39,7 @@ void RegisterTypeName(uint32 TypeHash, TString TypeName)
 {
     ASSERT(!TypeName.IsEmpty());
     ASSERT(TypeName != "Unknown");
-    gHashToTypeName.emplace( std::make_pair<uint32, TString>(std::move(TypeHash), std::move(TypeName)) );
+    gHashToTypeName.emplace(std::move(TypeHash), std::move(TypeName));
 }
 
 /** Key structure for name map lookups */

@@ -1,6 +1,7 @@
 #include "Core/Tweaks/CTweakLoader.h"
 
 #include "Core/Resource/Factory/CScriptLoader.h"
+#include "Core/Resource/Script/CGameTemplate.h"
 #include "Core/Resource/Script/NGameList.h"
 #include "Core/Tweaks/CTweakData.h"
 
