@@ -1,12 +1,16 @@
 #ifndef CLAYEREDITOR_H
 #define CLAYEREDITOR_H
 
-#include "CLayerModel.h"
+#include <Core/Resource/TResPtr.h>
 #include <QDialog>
 
 namespace Ui {
 class CLayerEditor;
 }
+
+class CGameArea;
+class CLayerModel;
+class CScriptLayer;
 
 class CLayerEditor : public QDialog
 {

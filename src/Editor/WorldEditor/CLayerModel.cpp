@@ -1,5 +1,7 @@
-#include "CLayerModel.h"
+#include "Editor/WorldEditor/CLayerModel.h"
+
 #include "Editor/UICommon.h"
+#include <Core/Resource/Area/CGameArea.h>
 #include <Core/Resource/Script/CScriptLayer.h>
 
 CLayerModel::CLayerModel(QObject *pParent)

@@ -1,7 +1,8 @@
-#include "CLayerEditor.h"
+#include "Editor/WorldEditor/CLayerEditor.h"
 #include "ui_CLayerEditor.h"
-#include "Editor/UICommon.h"
 
+#include "Editor/UICommon.h"
+#include "Editor/WorldEditor/CLayerModel.h"
 #include <Core/Resource/Script/CScriptLayer.h>
 
 CLayerEditor::CLayerEditor(QWidget *parent)
