@@ -2,7 +2,6 @@
 #define CTWEAKEDITOR_H
 
 #include "Editor/IEditor.h"
-#include "Tweaks/CTweakData.h"
 
 #include <QList>
 #include <memory>
@@ -10,6 +9,9 @@
 namespace Ui {
 class CTweakEditor;
 }
+
+class CGameProject;
+class CTweakData;
 
 class CTweakEditor : public IEditor
 {
