@@ -1,10 +1,14 @@
-#include "CAreaLoader.h"
-#include "CCollisionLoader.h"
-#include "CModelLoader.h"
-#include "CMaterialLoader.h"
-#include "CScriptLoader.h"
+#include "Core/Resource/Factory/CAreaLoader.h"
+
 #include "Core/CompressionUtil.h"
-#include <Common/Log.h>
+#include "Core/GameProject/CResourceStore.h"
+#include "Core/Resource/Area/CGameArea.h"
+#include "Core/Resource/Factory/CCollisionLoader.h"
+#include "Core/Resource/Factory/CModelLoader.h"
+#include "Core/Resource/Factory/CMaterialLoader.h"
+#include "Core/Resource/Factory/CScriptLoader.h"
+#include "Core/Resource/Factory/CSectionMgrIn.h"
+#include "Core/Resource/Script/CLink.h"
 
 #include <Common/CFourCC.h>
 
@@ -789,7 +793,7 @@ std::unique_ptr<CGameArea> CAreaLoader::LoadMREA(IInputStream& MREA, CResourceEn
     return ptr;
 }
 
-EGame CAreaLoader::GetFormatVersion(uint32 Version)
+EGame CAreaLoader::GetFormatVersion(uint32_t Version)
 {
     switch (Version)
     {
