@@ -1,10 +1,30 @@
-#include "CGameInfo.h"
-#include "CResourceStore.h"
-#include <Common/FileUtil.h>
+#include "Core/GameProject/CGameInfo.h"
+
+#include "Core/GameProject/CResourceStore.h"
+#include <Common/Macros.h>
+#include <Common/Serialization/IArchive.h>
+#include <Common/Serialization/XML.h>
 #include <algorithm>
 
 constexpr char gkGameInfoDir[] = "resources/gameinfo";
 constexpr char gkGameInfoExt[] = "xml";
+
+struct CGameInfo::SBuildInfo
+{
+    float Version;
+    ERegion Region;
+    TString Name;
+
+    void Serialize(IArchive& rArc)
+    {
+        rArc << SerialParameter("Version", Version)
+             << SerialParameter("Region", Region)
+             << SerialParameter("Name", Name);
+    }
+};
+
+CGameInfo::CGameInfo() = default;
+CGameInfo::~CGameInfo() = default;
 
 bool CGameInfo::LoadGameInfo(EGame Game)
 {
