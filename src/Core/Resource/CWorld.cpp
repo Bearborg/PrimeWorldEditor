@@ -72,7 +72,7 @@ TString CWorld::AreaInGameName(uint32 AreaIndex) const
         return "!!" + rkArea.InternalName;
 }
 
-uint32 CWorld::AreaIndex(CAssetID AreaID) const
+uint32 CWorld::AreaIndex(const CAssetID& AreaID) const
 {
     for (uint32 AreaIdx = 0; AreaIdx < mAreas.size(); AreaIdx++)
     {
