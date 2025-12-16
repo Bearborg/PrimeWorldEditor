@@ -1,75 +1,33 @@
 #ifndef CPOILISTDIALOG_H
 #define CPOILISTDIALOG_H
 
-#include "Editor/WorldEditor/CPoiMapModel.h"
-#include "Editor/UICommon.h"
-
-#include <Core/Resource/Scan/CScan.h>
-#include <Core/Resource/Script/CScriptTemplate.h>
-#include <Core/Scene/CScene.h>
-#include <Core/Scene/CScriptNode.h>
-#include <Core/ScriptExtra/CPointOfInterestExtra.h>
-
 #include <QAbstractListModel>
-#include <QDialogButtonBox>
 #include <QDialog>
-#include <QHBoxLayout>
-#include <QListView>
+#include <QList>
 #include <QSortFilterProxyModel>
+
+class CPoiMapModel;
+class CScene;
+class CScriptNode;
+class CScriptTemplate;
+class QDialogButtonBox;
+class QListView;
 
 class CPoiListModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    CScriptTemplate *mpPoiTemplate;
+    CScriptTemplate* mpPoiTemplate;
     QList<CScriptNode*> mObjList;
 
 public:
-    CPoiListModel(CScriptTemplate *pPoiTemplate, const CPoiMapModel *pMapModel, CScene *pScene, QWidget *pParent = nullptr)
-        : QAbstractListModel(pParent)
-        , mpPoiTemplate(pPoiTemplate)
-    {
-        for (const auto* obj : mpPoiTemplate->ObjectList())
-        {
-            auto* pNode = pScene->NodeForInstance(obj);
+    explicit CPoiListModel(CScriptTemplate* pPoiTemplate, const CPoiMapModel* pMapModel, CScene* pScene, QWidget* pParent = nullptr);
+    ~CPoiListModel() override;
 
-            if (!pMapModel->IsPoiTracked(pNode))
-                mObjList.push_back(pNode);
-        }
-    }
+    int rowCount(const QModelIndex&) const override;
+    QVariant data(const QModelIndex& rkIndex, int Role) const override;
 
-    int rowCount(const QModelIndex&) const override
-    {
-        return mObjList.size();
-    }
-
-    QVariant data(const QModelIndex& rkIndex, int Role) const override
-    {
-        if (!rkIndex.isValid())
-            return QVariant();
-
-        if (Role == Qt::DisplayRole)
-            return TO_QSTRING(mObjList[rkIndex.row()]->Instance()->InstanceName());
-
-        if (Role == Qt::DecorationRole)
-        {
-            const CScriptNode *pNode = mObjList[rkIndex.row()];
-            const CScan *pScan = static_cast<CPointOfInterestExtra*>(pNode->Extra())->GetScan();
-            const bool IsImportant = (pScan ? pScan->IsCriticalPropertyRef() : false);
-
-            if (IsImportant)
-                return QIcon(QStringLiteral(":/icons/POI Important.svg"));
-            else
-                return QIcon(QStringLiteral(":/icons/POI Normal.svg"));
-        }
-
-        return QVariant();
-    }
-
-    CScriptNode* PoiForIndex(const QModelIndex& rkIndex) const
-    {
-        return mObjList[rkIndex.row()];
-    }
+    CScriptNode* PoiForIndex(const QModelIndex& rkIndex) const;
 };
 
 class CPoiListDialog : public QDialog
@@ -80,63 +38,18 @@ class CPoiListDialog : public QDialog
     QSortFilterProxyModel mModel;
     QList<CScriptNode*> mSelection;
 
-    QListView *mpListView;
-    QDialogButtonBox *mpButtonBox;
+    QListView* mpListView;
+    QDialogButtonBox* mpButtonBox;
 
 public:
-    CPoiListDialog(CScriptTemplate *pPoiTemplate, const CPoiMapModel *pMapModel, CScene *pScene, QWidget *pParent = nullptr)
-        : QDialog(pParent)
-        , mSourceModel(pPoiTemplate, pMapModel, pScene)
-    {
-        mpListView = new QListView(this);
-        mpButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    explicit CPoiListDialog(CScriptTemplate* pPoiTemplate, const CPoiMapModel* pMapModel, CScene* pScene, QWidget* pParent = nullptr);
+    ~CPoiListDialog() override;
 
-        QHBoxLayout *pButtonLayout = new QHBoxLayout();
-        pButtonLayout->addStretch();
-        pButtonLayout->addWidget(mpButtonBox);
-
-        QVBoxLayout *pLayout = new QVBoxLayout();
-        pLayout->addWidget(mpListView);
-        pLayout->addLayout(pButtonLayout);
-        setLayout(pLayout);
-
-        mModel.setSourceModel(&mSourceModel);
-        mpListView->setModel(&mModel);
-        mModel.sort(0);
-
-        setWindowTitle(tr("Add POIs"));
-        mpListView->setEditTriggers(QListView::NoEditTriggers);
-        mpListView->setSelectionMode(QListView::ExtendedSelection);
-        mpListView->setVerticalScrollMode(QListView::ScrollPerPixel);
-
-        connect(mpListView, &QListView::doubleClicked, this, &CPoiListDialog::OnOkClicked);
-        connect(mpButtonBox, &QDialogButtonBox::accepted, this, &CPoiListDialog::OnOkClicked);
-        connect(mpButtonBox, &QDialogButtonBox::rejected, this, &CPoiListDialog::OnCancelClicked);
-    }
-
-    const QList<CScriptNode*>& Selection() const
-    {
-        return mSelection;
-    }
+    const QList<CScriptNode*>& Selection() const { return mSelection; }
 
 public slots:
-    void OnOkClicked()
-    {
-        QModelIndexList SelectedIndices = mpListView->selectionModel()->selectedRows();
-
-        for (const QModelIndex& rkIndex : SelectedIndices)
-        {
-            QModelIndex SourceIndex = mModel.mapToSource(rkIndex);
-            mSelection.push_back(mSourceModel.PoiForIndex(SourceIndex));
-        }
-
-        close();
-    }
-
-    void OnCancelClicked()
-    {
-        close();
-    }
+    void OnOkClicked();
+    void OnCancelClicked();
 };
 
 #endif // CPOILISTDIALOG_H
