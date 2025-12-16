@@ -13,6 +13,7 @@
 #include <Core/GameProject/COpeningBanner.h>
 #include <Core/Resource/CWorld.h>
 #include <nod/nod.hpp>
+#include <nod/DiscBase.hpp>
 
 #include <QFileDialog>
 #include <QFuture>

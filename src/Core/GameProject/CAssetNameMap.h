@@ -30,7 +30,7 @@ public:
 
     bool LoadAssetNames(TString Path = "");
     bool SaveAssetNames(TString Path = "");
-    bool GetNameInfo(CAssetID ID, TString& rOutDirectory, TString& rOutName, bool& rOutAutoGenDir, bool& rOutAutoGenName);
+    bool GetNameInfo(const CAssetID& ID, TString& rOutDirectory, TString& rOutName, bool& rOutAutoGenDir, bool& rOutAutoGenName);
     void CopyFromStore(CResourceStore *pStore);
 
     static TString DefaultNameMapPath(EIDLength IDLength);

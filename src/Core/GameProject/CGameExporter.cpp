@@ -1,15 +1,17 @@
-#include "CGameExporter.h"
-#include "CGameInfo.h"
-#include "CResourceIterator.h"
-#include "CResourceStore.h"
+#include "Core/GameProject/CGameExporter.h"
+
 #include "Core/CompressionUtil.h"
+#include "Core/GameProject/CAssetNameMap.h"
+#include "Core/GameProject/CGameInfo.h"
+#include "Core/GameProject/CGameProject.h"
+#include "Core/GameProject/CResourceIterator.h"
+#include "Core/GameProject/CResourceStore.h"
 #include "Core/Resource/CWorld.h"
 #include "Core/Resource/Script/CGameTemplate.h"
 #include <Common/Macros.h>
 #include <Common/CScopedTimer.h>
 #include <Common/FileIO.h>
 #include <Common/FileUtil.h>
-#include <Common/Serialization/CXMLWriter.h>
 
 #include <nod/nod.hpp>
 #include <nod/DiscBase.hpp>
@@ -38,6 +40,8 @@ CGameExporter::CGameExporter(EDiscType DiscType, EGame Game, bool FrontEnd, EReg
     ASSERT(mGame != EGame::Invalid);
     ASSERT(mRegion != ERegion::Unknown);
 }
+
+CGameExporter::~CGameExporter() = default;
 
 bool CGameExporter::Export(nod::DiscBase *pDisc, const TString& rkOutputDir, CAssetNameMap *pNameMap, CGameInfo *pGameInfo, IProgressNotifier *pProgress)
 {

@@ -1,9 +1,12 @@
 #include "Core/GameProject/CAssetNameMap.h"
 
-#include <Common/Serialization/XML.h>
 #include "Core/GameProject/CResourceIterator.h"
 #include "Core/GameProject/CResourceEntry.h"
 #include "Core/GameProject/CResourceStore.h"
+
+#include <Common/CFourCC.h>
+#include <Common/Macros.h>
+#include <Common/Serialization/XML.h>
 
 constexpr char gkAssetMapPath[] = "resources/gameinfo/AssetNameMap";
 constexpr char gkAssetMapExt[] = "xml";
@@ -55,7 +58,7 @@ CAssetNameMap::CAssetNameMap(EGame Game)
 
 CAssetNameMap::~CAssetNameMap() = default;
 
-bool CAssetNameMap::LoadAssetNames(TString Path /*= ""*/)
+bool CAssetNameMap::LoadAssetNames(TString Path)
 {
     if (Path.IsEmpty())
         Path = DefaultNameMapPath(mIDLength);
@@ -86,7 +89,7 @@ bool CAssetNameMap::LoadAssetNames(TString Path /*= ""*/)
     }
 }
 
-bool CAssetNameMap::SaveAssetNames(TString Path /*= ""*/)
+bool CAssetNameMap::SaveAssetNames(TString Path)
 {
     if (Path.IsEmpty())
         Path = DefaultNameMapPath(mIDLength);
@@ -97,13 +100,13 @@ bool CAssetNameMap::SaveAssetNames(TString Path /*= ""*/)
     return Writer.Save();
 }
 
-bool CAssetNameMap::GetNameInfo(CAssetID ID, TString& rOutDirectory, TString& rOutName, bool& rOutAutoGenDir, bool& rOutAutoGenName)
+bool CAssetNameMap::GetNameInfo(const CAssetID& ID, TString& rOutDirectory, TString& rOutName, bool& rOutAutoGenDir, bool& rOutAutoGenName)
 {
-    auto It = mMap.find(ID);
+    const auto It = mMap.find(ID);
 
     if (It != mMap.end())
     {
-        SAssetNameInfo& rInfo = It->second;
+        const SAssetNameInfo& rInfo = It->second;
         rOutName = rInfo.Name;
         rOutDirectory = rInfo.Directory;
         rOutAutoGenDir = rInfo.AutoGenDir;
@@ -112,7 +115,7 @@ bool CAssetNameMap::GetNameInfo(CAssetID ID, TString& rOutDirectory, TString& rO
     }
     else
     {
-        EGame Game = (ID.Length() == EIDLength::k32Bit ? EGame::Prime : EGame::Corruption);
+        const EGame Game = (ID.Length() == EIDLength::k32Bit ? EGame::Prime : EGame::Corruption);
         rOutDirectory = CResourceStore::StaticDefaultResourceDirPath(Game);
         rOutName = ID.ToString();
         rOutAutoGenDir = true;
@@ -121,21 +124,21 @@ bool CAssetNameMap::GetNameInfo(CAssetID ID, TString& rOutDirectory, TString& rO
     }
 }
 
-void CAssetNameMap::CopyFromStore(CResourceStore *pStore /*= gpResourceStore*/)
+void CAssetNameMap::CopyFromStore(CResourceStore *pStore)
 {
     // Do a first pass to remove old paths from used set to prevent false positives from eg. if two resources switch places
-    ASSERT( CAssetID::GameIDLength(pStore->Game()) == mIDLength );
+    ASSERT(CAssetID::GameIDLength(pStore->Game()) == mIDLength);
 
     for (CResourceIterator It(pStore); It; ++It)
     {
         if (It->IsCategorized() || It->IsNamed())
         {
-            auto Find = mMap.find(It->ID());
+            const auto Find = mMap.find(It->ID());
 
             if (Find != mMap.end())
             {
-                SAssetNameInfo& rInfo = Find->second;
-                auto UsedFind = mUsedSet.find(rInfo);
+                const SAssetNameInfo& rInfo = Find->second;
+                const auto UsedFind = mUsedSet.find(rInfo);
                 ASSERT(UsedFind != mUsedSet.end());
                 mUsedSet.erase(UsedFind);
             }
@@ -147,15 +150,16 @@ void CAssetNameMap::CopyFromStore(CResourceStore *pStore /*= gpResourceStore*/)
     {
         if (It->IsCategorized() || It->IsNamed())
         {
-            CAssetID ID = It->ID();
+            const CAssetID& ID = It->ID();
             ASSERT(ID.Length() == mIDLength);
 
-            TString Name = It->Name();
-            TString Directory = It->Directory()->FullPath();
-            CFourCC Type = It->CookedExtension();
-            bool AutoName = It->HasFlag(EResEntryFlag::AutoResName);
-            bool AutoDir = It->HasFlag(EResEntryFlag::AutoResDir);
-            SAssetNameInfo NameInfo { Name, Directory, Type, AutoName, AutoDir };
+            SAssetNameInfo NameInfo{
+                .Name = It->Name(),
+                .Directory = It->Directory()->FullPath(),
+                .Type = It->CookedExtension(),
+                .AutoGenName = It->HasFlag(EResEntryFlag::AutoResName),
+                .AutoGenDir = It->HasFlag(EResEntryFlag::AutoResDir),
+            };
 
             // Check for conflicts with new name
             if (mUsedSet.contains(NameInfo))
@@ -169,17 +173,15 @@ void CAssetNameMap::CopyFromStore(CResourceStore *pStore /*= gpResourceStore*/)
                     NumConflicted++;
                 }
 
-                TString OldPath = NameInfo.FullPath();
-                TString NewPath = NewNameInfo.FullPath();
                 warnf("Detected name conflict when copying asset name from the resource store; renaming.");
-                warnf("\tOld Path: %s", *OldPath);
-                warnf("\tNew Path: %s", *NewPath);
+                warnf("\tOld Path: %s", NameInfo.FullPath().CString());
+                warnf("\tNew Path: %s", NewNameInfo.FullPath().CString());
                 NameInfo.Name = NewNameInfo.Name;
             }
 
             // Assign to map
-            mMap[ID] = NameInfo;
-            mUsedSet.insert(NameInfo);
+            mMap.insert_or_assign(ID, NameInfo);
+            mUsedSet.insert(std::move(NameInfo));
         }
     }
 }

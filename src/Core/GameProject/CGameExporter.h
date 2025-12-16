@@ -1,16 +1,25 @@
 #ifndef CGAMEEXPORTER_H
 #define CGAMEEXPORTER_H
 
-#include "Core/GameProject/CAssetNameMap.h"
-#include "Core/GameProject/CGameInfo.h"
-#include "Core/GameProject/CGameProject.h"
-#include "Core/GameProject/CResourceStore.h"
 #include <Common/CAssetID.h>
-#include <Common/Flags.h>
+#include <Common/CFourCC.h>
 #include <Common/TString.h>
+#include <cstdint>
 #include <map>
 #include <memory>
-#include <nod/DiscBase.hpp>
+#include <vector>
+
+namespace nod {
+class DiscBase;
+class ExtractionContext;
+class Node;
+}
+
+class CAssetNameMap;
+class CGameInfo;
+class CGameProject;
+class CResourceStore;
+class IProgressNotifier;
 
 enum class EDiscType
 {
@@ -75,6 +84,8 @@ public:
     };
 
     CGameExporter(EDiscType DiscType, EGame Game, bool FrontEnd, ERegion Region, const TString& rkGameName, const TString& rkGameID, float BuildVersion);
+    ~CGameExporter();
+
     bool Export(nod::DiscBase *pDisc, const TString& rkOutputDir, CAssetNameMap *pNameMap, CGameInfo *pGameInfo, IProgressNotifier *pProgress);
     void LoadResource(const CAssetID& rkID, std::vector<uint8_t>& rBuffer);
     bool ShouldExportDiscNode(const nod::Node *pkNode, bool IsInRoot) const;
