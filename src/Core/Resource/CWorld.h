@@ -119,7 +119,7 @@ public:
     CResource* MapWorld() const          { return mpMapWorld; }
 
     size_t NumAreas() const                                                { return mAreas.size(); }
-    CAssetID AreaResourceID(size_t AreaIndex) const                        { return mAreas[AreaIndex].AreaResID; }
+    const CAssetID& AreaResourceID(size_t AreaIndex) const                 { return mAreas[AreaIndex].AreaResID; }
     uint32_t AreaAttachedCount(size_t AreaIndex) const                     { return mAreas[AreaIndex].AttachedAreaIDs.size(); }
     uint32_t AreaAttachedID(size_t AreaIndex, size_t AttachedIndex) const  { return mAreas[AreaIndex].AttachedAreaIDs[AttachedIndex]; }
     const TString& AreaInternalName(size_t AreaIndex) const                { return mAreas[AreaIndex].InternalName; }

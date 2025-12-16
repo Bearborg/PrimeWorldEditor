@@ -204,7 +204,7 @@ void GenerateAssetNames(CGameProject *pProj)
         {
             // Determine area name
             TString AreaName = pWorld->AreaInternalName(iArea);
-            CAssetID AreaID = pWorld->AreaResourceID(iArea);
+            const CAssetID& AreaID = pWorld->AreaResourceID(iArea);
 
             if (AreaName.IsEmpty())
                 AreaName = AreaID.ToString();
@@ -225,7 +225,7 @@ void GenerateAssetNames(CGameProject *pProj)
                 CDependencyGroup *pGroup = dynamic_cast<CDependencyGroup*>(pMapWorld);
                 ASSERT(pGroup != nullptr);
 
-                CAssetID MapID = pGroup->DependencyByIndex(iArea);
+                const CAssetID& MapID = pGroup->DependencyByIndex(iArea);
                 CResourceEntry *pMapEntry = pStore->FindEntry(MapID);
                 ASSERT(pMapEntry != nullptr);
 

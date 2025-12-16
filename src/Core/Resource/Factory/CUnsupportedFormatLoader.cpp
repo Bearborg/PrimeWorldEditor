@@ -440,7 +440,7 @@ std::unique_ptr<CMapArea> CUnsupportedFormatLoader::LoadMAPA(IInputStream& /*rMA
     TResPtr<CMapArea> pMap = ptr.get();
 
     // We don't actually read the file. Just fetch the name string so we can build the dependency tree.
-    const CAssetID MapAreaID = pMap->ID();
+    const CAssetID& MapAreaID = pMap->ID();
 
     // Find a MapWorld that contains this MapArea
     CAssetID MapWorldID;

@@ -585,7 +585,7 @@ void CGameExporter::ExportResourceEditorData()
                 // Set area duplicate flags
                 for (size_t iArea = 0; iArea < pWorld->NumAreas(); iArea++)
                 {
-                    const CAssetID AreaID = pWorld->AreaResourceID(iArea);
+                    const CAssetID& AreaID = pWorld->AreaResourceID(iArea);
                     const auto Find = mAreaDuplicateMap.find(AreaID);
 
                     if (Find != mAreaDuplicateMap.cend())

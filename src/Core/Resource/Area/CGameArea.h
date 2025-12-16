@@ -101,9 +101,9 @@ public:
     size_t NumLightLayers() const                                { return mLightLayers.size(); }
     size_t NumLights(size_t LayerIndex) const                    { return (LayerIndex < mLightLayers.size() ? mLightLayers[LayerIndex].size() : 0); }
     CLight* Light(size_t LayerIndex, size_t LightIndex)          { return &mLightLayers[LayerIndex][LightIndex]; }
-    CAssetID PathID() const                                      { return mPathID; }
+    const CAssetID& PathID() const                               { return mPathID; }
     CPoiToWorld* PoiToWorldMap() const                           { return mpPoiToWorldMap; }
-    CAssetID PortalAreaID() const                                { return mPortalAreaID; }
+    const CAssetID& PortalAreaID() const                         { return mPortalAreaID; }
     const CAABox& AABox() const                                  { return mAABox; }
 
     void SetWorldIndex(uint32_t NewWorldIndex)                   { mWorldIndex = NewWorldIndex; }

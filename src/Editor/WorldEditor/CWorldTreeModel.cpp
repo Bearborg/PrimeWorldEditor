@@ -226,7 +226,7 @@ void CWorldTreeModel::OnProjectChanged(CGameProject *pProj)
             // Metroid Prime series; fetch all world assets
             std::list<CAssetID> WorldIDs;
             pProj->GetWorldList(WorldIDs);
-            QList<CAssetID> QWorldIDs = QList<CAssetID>(WorldIDs.begin(), WorldIDs.end());
+            auto QWorldIDs = QList<CAssetID>(WorldIDs.begin(), WorldIDs.end());
 
             for (const CAssetID& rkID : QWorldIDs)
             {
@@ -243,7 +243,7 @@ void CWorldTreeModel::OnProjectChanged(CGameProject *pProj)
                         // Add areas
                         for (size_t iArea = 0; iArea < pWorld->NumAreas(); iArea++)
                         {
-                            CAssetID AreaID = pWorld->AreaResourceID(iArea);
+                            const CAssetID& AreaID = pWorld->AreaResourceID(iArea);
                             CResourceEntry *pAreaEntry = pWorld->Entry()->ResourceStore()->FindEntry(AreaID);
                             ASSERT(pAreaEntry);
                             Info.Areas.push_back(pAreaEntry);

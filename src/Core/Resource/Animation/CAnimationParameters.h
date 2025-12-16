@@ -3,6 +3,7 @@
 
 #include "Core/Resource/TResPtr.h"
 #include <Common/EGame.h>
+#include <cstdint>
 
 class CModel;
 
@@ -27,13 +28,13 @@ public:
     void Write(IOutputStream& rSCLY);
     void Serialize(IArchive& rArc);
 
-    const SSetCharacter* GetCurrentSetCharacter(int32 NodeIndex = -1) const;
-    CModel* GetCurrentModel(int32 NodeIndex = -1);
-    TString GetCurrentCharacterName(int32 NodeIndex = -1) const;
+    const SSetCharacter* GetCurrentSetCharacter(int32_t NodeIndex = -1) const;
+    CModel* GetCurrentModel(int32_t NodeIndex = -1);
+    TString GetCurrentCharacterName(int32_t NodeIndex = -1) const;
 
     // Accessors
     EGame Version() const             { return mGame; }
-    CAssetID ID() const               { return mCharacterID; }
+    const CAssetID& ID() const        { return mCharacterID; }
     CAnimSet* AnimSet() const         { return (CAnimSet*) gpResourceStore->LoadResource(mCharacterID); }
     uint32_t CharacterIndex() const   { return mCharIndex; }
     uint32_t AnimIndex() const        { return mAnimIndex; }

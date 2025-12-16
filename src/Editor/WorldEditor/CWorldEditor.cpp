@@ -277,7 +277,7 @@ bool CWorldEditor::SetArea(CWorld *pWorld, int AreaIndex)
 
     // Load new area
     mpWorld = pWorld;
-    CAssetID AreaID = mpWorld->AreaResourceID(AreaIndex);
+    const CAssetID& AreaID = mpWorld->AreaResourceID(AreaIndex);
     CResourceEntry *pAreaEntry = gpResourceStore->FindEntry(AreaID);
     ASSERT(pAreaEntry);
 

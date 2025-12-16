@@ -148,7 +148,7 @@ void CWorldInfoSidebar::OnWorldTreeDoubleClicked(const QModelIndex& Index)
         const int AreaIndex = mModel.AreaIndexForIndex(RealIndex);
 
         // Validate area actually exists... DKCR has worlds that contain areas that don't exist
-        const CAssetID AreaAssetID = pWorld->AreaResourceID(AreaIndex);
+        const CAssetID& AreaAssetID = pWorld->AreaResourceID(AreaIndex);
 
         if (gpResourceStore->IsResourceRegistered(AreaAssetID))
         {

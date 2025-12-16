@@ -66,8 +66,8 @@ void IDependencyNode::ParseProperties(CResourceEntry* pParentEntry, CStructPrope
         }
         else if (Type == EPropertyType::AnimationSet)
         {
-            CAnimationParameters Params = TPropCast<CAnimationSetProperty>(pProp)->Value(pData);
-            CAssetID ID = Params.ID();
+            const auto Params = TPropCast<CAnimationSetProperty>(pProp)->Value(pData);
+            const CAssetID& ID = Params.ID();
 
             if (ID.IsValid())
             {

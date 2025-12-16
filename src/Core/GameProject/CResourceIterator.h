@@ -78,7 +78,7 @@ template<EResourceType ResType>
 class TResourceIterator : public CResourceIterator
 {
 public:
-    explicit TResourceIterator(CResourceStore *pStore = gpResourceStore)
+    explicit TResourceIterator(const CResourceStore *pStore = gpResourceStore)
         : CResourceIterator(pStore)
     {
         if (mpCurEntry && mpCurEntry->ResourceType() != ResType)

@@ -12,9 +12,9 @@ class CDependencyGroup : public CResource
 public:
     explicit CDependencyGroup(CResourceEntry *pEntry = nullptr) : CResource(pEntry) {}
 
-    void Clear()                                     { mDependencies.clear(); }
-    uint32_t NumDependencies() const                 { return mDependencies.size(); }
-    CAssetID DependencyByIndex(size_t Index) const   { return mDependencies[Index]; }
+    void Clear()                                          { mDependencies.clear(); }
+    uint32_t NumDependencies() const                      { return mDependencies.size(); }
+    const CAssetID& DependencyByIndex(size_t Index) const { return mDependencies[Index]; }
 
     void AddDependency(const CAssetID& rkID)
     {

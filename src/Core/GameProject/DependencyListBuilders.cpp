@@ -66,7 +66,7 @@ void CCharacterUsageMap::FindUsagesForArea(CWorld *pWorld, size_t AreaIndex)
 
         mCurrentAreaAllowsDupes = pWorld->DoesAreaAllowPakDuplicates(iArea);
 
-        const CAssetID AreaID = pWorld->AreaResourceID(iArea);
+        const CAssetID& AreaID = pWorld->AreaResourceID(iArea);
         CResourceEntry *pEntry = mpStore->FindEntry(AreaID);
         ASSERT(pEntry && pEntry->ResourceType() == EResourceType::Area);
 
@@ -128,7 +128,7 @@ void CCharacterUsageMap::ParseDependencyNode(IDependencyNode *pNode)
     if (Type == EDependencyNodeType::CharacterProperty)
     {
         auto *pDep = static_cast<CCharPropertyDependency*>(pNode);
-        const CAssetID ResID = pDep->ID();
+        const CAssetID& ResID = pDep->ID();
         const auto Find = mUsageMap.find(ResID);
 
         if (!mIsInitialArea && !mStillLookingIDs.contains(ResID))
@@ -368,7 +368,7 @@ void CPackageDependencyListBuilder::FindUniversalAreaAssets()
                         // Area IDs
                         for (size_t AreaIdx = 0; AreaIdx < pUniverseWorld->NumAreas(); AreaIdx++)
                         {
-                            const CAssetID AreaID = pUniverseWorld->AreaResourceID(AreaIdx);
+                            const CAssetID& AreaID = pUniverseWorld->AreaResourceID(AreaIdx);
 
                             if (AreaID.IsValid())
                                 mUniversalAreaAssets.insert(AreaID);
@@ -381,7 +381,7 @@ void CPackageDependencyListBuilder::FindUniversalAreaAssets()
                         {
                             for (size_t DepIdx = 0; DepIdx < pMapWorld->NumDependencies(); DepIdx++)
                             {
-                                const CAssetID DepID = pMapWorld->DependencyByIndex(DepIdx);
+                                const CAssetID& DepID = pMapWorld->DependencyByIndex(DepIdx);
 
                                 if (DepID.IsValid())
                                     mUniversalAreaAssets.insert(DepID);
