@@ -1,5 +1,6 @@
 #include "Core/Tweaks/CTweakManager.h"
 
+#include <Common/FileUtil.h>
 #include "Core/GameProject/CGameProject.h"
 #include "Core/GameProject/CResourceIterator.h"
 #include "Core/Tweaks/CTweakCooker.h"

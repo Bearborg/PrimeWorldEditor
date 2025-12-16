@@ -1,11 +1,14 @@
 #include "Core/GameProject/CGameExporter.h"
 
+#include "Core/CAudioManager.h"
 #include "Core/CompressionUtil.h"
+#include "Core/IProgressNotifier.h"
 #include "Core/GameProject/CAssetNameMap.h"
 #include "Core/GameProject/CGameInfo.h"
 #include "Core/GameProject/CGameProject.h"
 #include "Core/GameProject/CResourceIterator.h"
 #include "Core/GameProject/CResourceStore.h"
+#include "Core/GameProject/CPackage.h"
 #include "Core/Resource/CWorld.h"
 #include "Core/Resource/Script/CGameTemplate.h"
 #include <Common/Macros.h>

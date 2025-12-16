@@ -2,6 +2,7 @@
 
 #include <Common/CFourCC.h>
 #include <Common/Macros.h>
+#include <Core/CAudioManager.h>
 #include <Core/GameProject/CGameProject.h>
 #include <Core/Resource/CAudioGroup.h>
 #include "Core/Resource/CDependencyGroup.h"

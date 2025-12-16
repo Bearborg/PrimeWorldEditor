@@ -28,6 +28,7 @@
 #include "Editor/WorldEditor/WCreateTab.h"
 #include "Editor/WorldEditor/WModifyTab.h"
 
+#include <Common/FileUtil.h>
 #include <Core/SRayIntersection.h>
 #include <Core/GameProject/CGameProject.h>
 #include <Core/Resource/CWorld.h>

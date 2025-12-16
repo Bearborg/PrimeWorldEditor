@@ -15,9 +15,12 @@
 #include "Editor/Undo/CSaveStoreCommand.h"
 #include "Editor/Undo/ICreateDeleteDirectoryCommand.h"
 #include "Editor/Undo/ICreateDeleteResourceCommand.h"
+#include <Common/FileUtil.h>
 #include <Core/GameProject/AssetNameGeneration.h>
 #include <Core/GameProject/CAssetNameMap.h>
 #include <Core/GameProject/CResourceIterator.h>
+#include <Core/Resource/CResource.h>
+#include <Core/Resource/CResTypeInfo.h>
 
 #include <QButtonGroup>
 #include <QCheckBox>

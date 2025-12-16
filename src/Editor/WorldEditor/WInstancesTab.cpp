@@ -3,6 +3,7 @@
 
 #include "Editor/UICommon.h"
 #include "Editor/WorldEditor/CWorldEditor.h"
+#include <Core/Resource/Script/CGameTemplate.h>
 #include <Core/Resource/Script/CScriptLayer.h>
 #include <Core/Resource/Script/NGameList.h>
 #include <Core/Scene/CScene.h>

@@ -5,6 +5,7 @@
 #include "Core/GameProject/CResourceEntry.h"
 #include "Core/GameProject/CResourceIterator.h"
 #include "Core/Resource/Cooker/CResourceCooker.h"
+#include <Common/FileUtil.h>
 
 #include <algorithm>
 

@@ -1,6 +1,8 @@
-#include "TestDialog.h"
+#include "Editor/TestDialog.h"
 #include "ui_TestDialog.h"
-#include "CEditorApplication.h"
+
+#include "Editor/CEditorApplication.h"
+#include <Core/CAudioManager.h>
 #include <Core/GameProject/CGameProject.h>
 
 TestDialog::TestDialog(QWidget *pParent)
@@ -17,8 +19,11 @@ TestDialog::~TestDialog() = default;
 
 void TestDialog::OnSpinBoxChanged(int NewValue)
 {
-    if (sender() != ui->spinBox) ui->spinBox->setValue(NewValue);
-    if (sender() != ui->spinBox_2) ui->spinBox_2->setValue(NewValue);
+    if (sender() != ui->spinBox)
+        ui->spinBox->setValue(NewValue);
+
+    if (sender() != ui->spinBox_2)
+        ui->spinBox_2->setValue(NewValue);
 }
 
 void TestDialog::OnFind()

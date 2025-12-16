@@ -4,7 +4,10 @@
 #include "Core/Resource/Script/CLink.h"
 #include "Core/Resource/Script/CScriptTemplate.h"
 #include "Core/Resource/Script/Property/Properties.h"
+#include <Common/CFourCC.h>
 #include <Common/EGame.h>
+#include <Common/TString.h>
+#include <cstdint>
 #include <map>
 #include <memory>
 
@@ -46,12 +49,11 @@ struct TTemplatePath
     std::shared_ptr<TemplateT> pTemplate;
 
     /** Constructor */
-    TTemplatePath()
-    {}
+    TTemplatePath() = default;
 
-    TTemplatePath(const TString& kInPath, TemplateT* pInTemplate)
-        : Path(kInPath)
-        , pTemplate( std::shared_ptr<TemplateT>(pInTemplate) )
+    TTemplatePath(TString kInPath, TemplateT* pInTemplate)
+        : Path(std::move(kInPath))
+        , pTemplate(std::shared_ptr<TemplateT>(pInTemplate))
     {}
 
     /** Serializer */
@@ -85,12 +87,14 @@ class CGameTemplate
 
 public:
     CGameTemplate();
+    ~CGameTemplate();
+
     void Serialize(IArchive& Arc);
     void Load(const TString& kFilePath);
     void Save();
     void SaveGameTemplates(bool ForceAll = false);
 
-    uint32_t GameVersion(TString VersionName);
+    uint32_t GameVersion(const TString& VersionName);
     CScriptTemplate* TemplateByID(uint32_t ObjectID);
     CScriptTemplate* TemplateByID(const CFourCC& ObjectID);
     CScriptTemplate* TemplateByIndex(uint32_t Index);

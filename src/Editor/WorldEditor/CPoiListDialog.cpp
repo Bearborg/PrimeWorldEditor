@@ -4,6 +4,7 @@
 #include "Editor/WorldEditor/CPoiMapModel.h"
 
 #include <Core/Resource/Scan/CScan.h>
+#include <Core/Resource/Script/CScriptObject.h>
 #include <Core/Resource/Script/CScriptTemplate.h>
 #include <Core/Scene/CScene.h>
 #include <Core/Scene/CScriptNode.h>

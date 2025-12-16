@@ -1,7 +1,10 @@
-#include "NDolphinIntegration.h"
+#include "Editor/NDolphinIntegration.h"
+
 #include "Editor/MacOSExtras.h"
 #include "Editor/UICommon.h"
 #include "Editor/SDolHeader.h"
+#include <Common/FileUtil.h>
+#include <Core/GameProject/CResourceStore.h>
 
 #include <QCoreApplication>
 #include <QFileInfo>

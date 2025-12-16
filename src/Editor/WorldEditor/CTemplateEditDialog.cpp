@@ -2,6 +2,7 @@
 #include "ui_CTemplateEditDialog.h"
 
 #include "Editor/UICommon.h"
+#include <Common/FileUtil.h>
 #include <Core/Resource/Script/CGameTemplate.h>
 #include <Core/Resource/Script/NGameList.h>
 #include <Core/Resource/Script/NPropertyMap.h>

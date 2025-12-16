@@ -2,6 +2,7 @@
 #define CSCANEDITOR_H
 
 #include "Editor/IEditor.h"
+#include <Core/Resource/TResPtr.h>
 #include <memory>
 
 namespace Ui {

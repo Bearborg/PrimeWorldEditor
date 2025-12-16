@@ -5,12 +5,13 @@
 #include <Common/CFourCC.h>
 #include <Common/TString.h>
 #include <Common/Serialization/IArchive.h>
-#include "Core/IProgressNotifier.h"
 
+#include <list>
 #include <set>
 #include <vector>
 
 class CGameProject;
+class IProgressNotifier;
 
 enum class EPackageDefinitionVersion
 {
@@ -48,13 +49,9 @@ class CPackage
     mutable std::set<CAssetID> mCachedDependencies;
 
 public:
-    CPackage() = default;
-    CPackage(CGameProject *pProj, TString rkName, TString rkPath)
-        : mpProject(pProj)
-        , mPakName(std::move(rkName))
-        , mPakPath(std::move(rkPath))
-        , mCacheDirty(true)
-    {}
+    CPackage();
+    CPackage(CGameProject* pProj, TString rkName, TString rkPath);
+    ~CPackage();
 
     bool Load();
     bool Save();

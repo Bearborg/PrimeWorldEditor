@@ -1,10 +1,12 @@
-#include "CGeneratePropertyNamesDialog.h"
+#include "Editor/CGeneratePropertyNamesDialog.h"
 #include "ui_CGeneratePropertyNamesDialog.h"
 
+#include "Editor/UICommon.h"
 #include "Editor/Widgets/CCheckableTreeWidgetItem.h"
-#include "UICommon.h"
+#include <Core/GameProject/CResourceStore.h>
 #include <Core/Resource/Script/NGameList.h>
 #include <Core/Resource/Script/NPropertyMap.h>
+#include <Common/FileUtil.h>
 #include <QtConcurrentRun>
 #include <QThreadPool>
 #include <iterator>

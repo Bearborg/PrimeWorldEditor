@@ -1,5 +1,6 @@
 #include "Core/Resource/Factory/CWorldLoader.h"
 
+#include "Core/GameProject/CGameInfo.h"
 #include "Core/GameProject/CGameProject.h"
 #include "Core/GameProject/CResourceStore.h"
 #include "Core/Resource/CWorld.h"

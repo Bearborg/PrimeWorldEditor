@@ -1,24 +1,24 @@
 #ifndef CGAMEPROJECT_H
 #define CGAMEPROJECT_H
 
-#include "Core/CAudioManager.h"
-#include "Core/IProgressNotifier.h"
-#include "Core/GameProject/CGameInfo.h"
-#include "Core/GameProject/CPackage.h"
-#include "Core/GameProject/CResourceStore.h"
-#include "Core/Resource/Script/CGameTemplate.h"
-#include "Core/Tweaks/CTweakManager.h"
 #include <Common/CAssetID.h>
 #include <Common/EGame.h>
-#include <Common/FileUtil.h>
 #include <Common/TString.h>
 #include <Common/FileIO/CFileLock.h>
 
+#include <list>
 #include <memory>
 #include <string_view>
 #include <vector>
 
 namespace nod { class DiscWii; }
+
+class CAudioManager;
+class CGameInfo;
+class CPackage;
+class CResourceStore;
+class CTweakManager;
+class IProgressNotifier;
 
 enum class EProjectVersion
 {
@@ -41,16 +41,16 @@ class CGameProject
     TString mProjectRoot;
     std::vector<std::unique_ptr<CPackage>> mPackages;
     std::unique_ptr<CResourceStore> mpResourceStore;
-    std::unique_ptr<CGameInfo> mpGameInfo = std::make_unique<CGameInfo>();
-    std::unique_ptr<CAudioManager> mpAudioManager = std::make_unique<CAudioManager>(this);
-    std::unique_ptr<CTweakManager> mpTweakManager = std::make_unique<CTweakManager>(this);
+    std::unique_ptr<CGameInfo> mpGameInfo;
+    std::unique_ptr<CAudioManager> mpAudioManager;
+    std::unique_ptr<CTweakManager> mpTweakManager;
 
     // Keep file handle open for the .prj file to prevent users from opening the same project
     // in multiple instances of PWE
     CFileLock mProjFileLock;
 
     // Private Constructor
-    CGameProject() = default;
+    CGameProject();
 
 public:
     ~CGameProject();
@@ -76,7 +76,7 @@ public:
 
     // Directory Handling
     const TString& ProjectRoot() const               { return mProjectRoot; }
-    TString ProjectPath() const                      { return mProjectRoot + FileUtil::SanitizeName(mProjectName, false) + ".prj"; }
+    TString ProjectPath() const;
     TString HiddenFilesDir() const                   { return mProjectRoot + ".project/"; }
     TString DiscDir(bool Relative) const             { return Relative ? "Disc/" : mProjectRoot + "Disc/"; }
     TString PackagesDir(bool Relative) const         { return Relative ? "Packages/" : mProjectRoot + "Packages/"; }
@@ -91,7 +91,7 @@ public:
     const TString& Name() const                          { return mProjectName; }
     size_t NumPackages() const                           { return mPackages.size(); }
     CPackage* PackageByIndex(size_t Index) const         { return mPackages[Index].get(); }
-    void AddPackage(std::unique_ptr<CPackage>&& package) { mPackages.push_back(std::move(package)); }
+    void AddPackage(std::unique_ptr<CPackage>&& package);
     CResourceStore* ResourceStore() const                { return mpResourceStore.get(); }
     CGameInfo* GameInfo() const                          { return mpGameInfo.get(); }
     CAudioManager* AudioManager() const                  { return mpAudioManager.get(); }

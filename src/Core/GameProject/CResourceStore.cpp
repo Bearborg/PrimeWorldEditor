@@ -1,8 +1,10 @@
-#include "CResourceStore.h"
-#include "CGameExporter.h"
-#include "CGameProject.h"
-#include "CResourceIterator.h"
+#include "Core/GameProject/CResourceStore.h"
+
+#include "Core/CAudioManager.h"
 #include "Core/IUIRelay.h"
+#include "Core/GameProject/CGameExporter.h"
+#include "Core/GameProject/CGameProject.h"
+#include "Core/GameProject/CResourceIterator.h"
 #include "Core/Resource/CResource.h"
 #include <Common/Macros.h>
 #include <Common/FileUtil.h>

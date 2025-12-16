@@ -1,7 +1,8 @@
-#include "CEditorApplication.h"
-#include "CUIRelay.h"
-#include "MacOSExtras.h"
-#include "UICommon.h"
+#include "Editor/CEditorApplication.h"
+#include "Editor/CUIRelay.h"
+#include "Editor/MacOSExtras.h"
+#include "Editor/UICommon.h"
+#include <Common/FileUtil.h>
 #include <Common/Log.h>
 
 #include <Core/NCoreTests.h>

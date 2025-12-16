@@ -4,8 +4,6 @@
 #include "Core/GameProject/CVirtualDirectory.h"
 #include "Core/Resource/EResType.h"
 #include <Common/CAssetID.h>
-#include <Common/CFourCC.h>
-#include <Common/FileUtil.h>
 #include <Common/TString.h>
 #include <map>
 #include <memory>

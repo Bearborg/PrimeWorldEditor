@@ -1,9 +1,13 @@
-#include "CResourceDelegate.h"
-#include "CResourceBrowser.h"
-#include "CResourceProxyModel.h"
-#include "CResourceTableModel.h"
+#include "Editor/ResourceBrowser/CResourceDelegate.h"
+
 #include "Editor/CFileNameValidator.h"
 #include "Editor/UICommon.h"
+#include "Editor/ResourceBrowser/CResourceBrowser.h"
+#include "Editor/ResourceBrowser/CResourceProxyModel.h"
+#include "Editor/ResourceBrowser/CResourceTableModel.h"
+#include <Core/GameProject/CResourceEntry.h>
+#include <Core/GameProject/CVirtualDirectory.h>
+#include <Core/Resource/CResTypeInfo.h>
 #include <Common/Common.h>
 
 #include <QLineEdit>
@@ -136,9 +140,9 @@ void CResourceBrowserDelegate::setEditorData(QWidget *pEditor, const QModelIndex
     CResourceEntry *pEntry = GetIndexEntry(rkIndex);
 
     if (pEntry)
-        pLineEdit->setText( TO_QSTRING(pEntry->Name()) );
+        pLineEdit->setText(TO_QSTRING(pEntry->Name()));
     else
-        pLineEdit->setText( TO_QSTRING(GetIndexDirectory(rkIndex)->Name()) );
+        pLineEdit->setText(TO_QSTRING(GetIndexDirectory(rkIndex)->Name()));
 }
 
 void CResourceBrowserDelegate::setModelData(QWidget *pEditor, QAbstractItemModel *, const QModelIndex& rkIndex) const

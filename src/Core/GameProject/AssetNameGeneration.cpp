@@ -1,6 +1,7 @@
 #include "Core/GameProject/AssetNameGeneration.h"
 
 #include "Core/GameProject/CGameProject.h"
+#include "Core/GameProject/CPackage.h"
 #include "Core/GameProject/CResourceIterator.h"
 #include "Core/Resource/CAudioGroup.h"
 #include "Core/Resource/CAudioMacro.h"
@@ -10,6 +11,8 @@
 #include "Core/Resource/Scan/CScan.h"
 #include "Core/Resource/Scan/SScanParametersMP1.h"
 #include "Core/Resource/Script/CScriptLayer.h"
+#include "Core/Resource/Script/CScriptTemplate.h"
+#include <Common/FileUtil.h>
 #include <Common/Math/MathUtil.h>
 
 #define REVERT_AUTO_NAMES 1

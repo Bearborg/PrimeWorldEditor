@@ -1,6 +1,7 @@
 #include "Core/GameProject/CPackage.h"
 
 #include "Core/CompressionUtil.h"
+#include "Core/IProgressNotifier.h"
 #include "Core/GameProject/DependencyListBuilders.h"
 #include "Core/GameProject/CGameProject.h"
 #include "Core/Resource/Cooker/CWorldCooker.h"
@@ -11,6 +12,18 @@
 #include <Common/Serialization/XML.h>
 
 using namespace tinyxml2;
+
+CPackage::CPackage() = default;
+
+CPackage::CPackage(CGameProject* pProj, TString rkName, TString rkPath)
+    : mpProject(pProj)
+    , mPakName(std::move(rkName))
+    , mPakPath(std::move(rkPath))
+    , mCacheDirty(true)
+{
+}
+
+CPackage::~CPackage() = default;
 
 bool CPackage::Load()
 {

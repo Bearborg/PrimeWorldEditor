@@ -1,6 +1,7 @@
 #include "Core/GameProject/CResourceEntry.h"
 
 #include "Core/GameProject/CGameProject.h"
+#include "Core/GameProject/CPackage.h"
 #include "Core/GameProject/CResourceStore.h"
 #include "Core/GameProject/CVirtualDirectory.h"
 #include "Core/Resource/CResource.h"

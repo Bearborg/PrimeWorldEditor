@@ -4,6 +4,7 @@
 #include "Editor/UICommon.h"
 #include "Editor/Undo/IUndoCommand.h"
 #include <Core/Tweaks/CTweakData.h>
+#include <Core/Tweaks/CTweakManager.h>
 
 #include <QCoreApplication>
 

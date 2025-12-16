@@ -10,6 +10,7 @@ namespace Ui {
 class CCollisionEditor;
 }
 
+class CCollisionMeshGroup;
 class CCollisionNode;
 class CScene;
 

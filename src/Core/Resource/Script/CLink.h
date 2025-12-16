@@ -17,9 +17,9 @@ struct SState
     SState()
     {}
 
-    SState(uint32_t InID, const TString& kInName)
+    SState(uint32_t InID, TString kInName)
         : ID(InID)
-        , Name(kInName)
+        , Name(std::move(kInName))
     {}
 
     void Serialize(IArchive& Arc)
@@ -44,9 +44,9 @@ struct SMessage
     SMessage()
     {}
 
-    SMessage(uint32_t InID, const TString& kInName)
+    SMessage(uint32_t InID, TString kInName)
         : ID(InID)
-        , Name(kInName)
+        , Name(std::move(kInName))
     {}
 
     void Serialize(IArchive& Arc)

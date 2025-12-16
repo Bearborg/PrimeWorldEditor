@@ -1,7 +1,15 @@
-#include "CGameProject.h"
-#include "CResourceIterator.h"
-#include "IUIRelay.h"
+#include "Core/GameProject/CGameProject.h"
+
+#include "Core/CAudioManager.h"
+#include "Core/IProgressNotifier.h"
+#include "Core/IUIRelay.h"
+#include "Core/GameProject/CGameInfo.h"
+#include "Core/GameProject/CPackage.h"
+#include "Core/GameProject/CResourceIterator.h"
+#include "Core/GameProject/CResourceStore.h"
 #include "Core/Resource/Script/CGameTemplate.h"
+#include "Core/Tweaks/CTweakManager.h"
+#include <Common/FileUtil.h>
 #include <Common/Serialization/XML.h>
 #include <nod/DiscGCN.hpp>
 #include <nod/DiscWii.hpp>
@@ -11,6 +19,13 @@
 #else
 #define TStringToNodString(string) *string
 #endif
+
+CGameProject::CGameProject()
+    : mpGameInfo{std::make_unique<CGameInfo>()}
+    , mpAudioManager{std::make_unique<CAudioManager>(this)}
+    , mpTweakManager{std::make_unique<CTweakManager>(this)}
+{
+}
 
 CGameProject::~CGameProject()
 {
@@ -301,4 +316,14 @@ std::unique_ptr<CGameProject> CGameProject::LoadProject(const TString& rkProjPat
     pProj->mpAudioManager->LoadAssets();
     pProj->mpTweakManager->LoadTweaks();
     return pProj;
+}
+
+TString CGameProject::ProjectPath() const
+{
+    return mProjectRoot + FileUtil::SanitizeName(mProjectName, false) + ".prj";
+}
+
+void CGameProject::AddPackage(std::unique_ptr<CPackage>&& package)
+{
+    mPackages.push_back(std::move(package));
 }

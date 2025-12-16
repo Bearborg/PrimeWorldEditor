@@ -3,6 +3,7 @@
 
 #include "Editor/CProgressDialog.h"
 #include "Editor/UICommon.h"
+#include <Common/FileUtil.h>
 #include <Common/Macros.h>
 #include <Core/GameProject/CAssetNameMap.h>
 #include <Core/GameProject/CGameExporter.h>
@@ -56,10 +57,12 @@ void CExportGameDialog::InitUI(QString ExportDir)
     ExportDir.replace(QLatin1Char{'\\'}, QLatin1Char{'/'});
 
     TString DefaultNameMapPath = CAssetNameMap::DefaultNameMapPath(mGame);
-    if (!FileUtil::Exists(DefaultNameMapPath)) DefaultNameMapPath = "";
+    if (!FileUtil::Exists(DefaultNameMapPath))
+        DefaultNameMapPath = "";
 
     TString DefaultGameInfoPath = CGameInfo::GetDefaultGameInfoPath(mGame);
-    if (!FileUtil::Exists(DefaultGameInfoPath)) DefaultGameInfoPath = "";
+    if (!FileUtil::Exists(DefaultGameInfoPath))
+        DefaultGameInfoPath = "";
 
     mpUI->OutputDirectoryLineEdit->setText(ExportDir);
     mpUI->AssetNameMapLineEdit->setText(TO_QSTRING(DefaultNameMapPath));

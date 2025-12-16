@@ -3,6 +3,7 @@
 
 #include "Editor/IEditor.h"
 #include "Editor/ModelEditor/CModelEditorViewport.h"
+#include <Core/Resource/ETevEnums.h>
 
 #include <memory>
 

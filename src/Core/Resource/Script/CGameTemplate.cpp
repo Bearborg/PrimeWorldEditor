@@ -1,11 +1,15 @@
 #include "Core/Resource/Script/CGameTemplate.h"
 
+#include <Common/FileUtil.h>
+#include <Common/Macros.h>
 #include <Common/Serialization/CXMLReader.h>
 #include <Common/Serialization/CXMLWriter.h>
 #include "Core/Resource/Script/NPropertyMap.h"
-#include "Core/Resource/Factory/CWorldLoader.h"
+
+#include <list>
 
 CGameTemplate::CGameTemplate() = default;
+CGameTemplate::~CGameTemplate() = default;
 
 void CGameTemplate::Serialize(IArchive& Arc)
 {
@@ -135,7 +139,7 @@ void CGameTemplate::SaveGameTemplates(bool ForceAll)
     }
 }
 
-uint32 CGameTemplate::GameVersion(TString VersionName)
+uint32 CGameTemplate::GameVersion(const TString& VersionName)
 {
     return UINT32_MAX;
 }

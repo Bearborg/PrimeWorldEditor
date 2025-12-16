@@ -1,6 +1,9 @@
-#include "CVirtualDirectory.h"
-#include "CResourceEntry.h"
-#include "CResourceStore.h"
+#include "Core/GameProject/CVirtualDirectory.h"
+
+#include <Common/FileUtil.h>
+#include <Common/Macros.h>
+#include "Core/GameProject/CResourceEntry.h"
+#include "Core/GameProject/CResourceStore.h"
 #include "Core/Resource/CResource.h"
 #include <algorithm>
 

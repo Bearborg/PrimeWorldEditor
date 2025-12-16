@@ -7,10 +7,12 @@
 #include "Editor/NDolphinIntegration.h"
 #include "Editor/UICommon.h"
 #include "Editor/ResourceBrowser/CResourceBrowser.h"
+#include <Common/FileUtil.h>
 #include <Common/Macros.h>
-#include <Core/GameProject/CGameExporter.h>
+#include <Core/GameProject/CGameInfo.h>
 #include <Core/GameProject/CGameProject.h>
 #include <Core/GameProject/COpeningBanner.h>
+#include <Core/GameProject/CPackage.h>
 #include <Core/Resource/CWorld.h>
 #include <nod/nod.hpp>
 #include <nod/DiscBase.hpp>

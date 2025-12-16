@@ -5,6 +5,7 @@
 #include <Core/Resource/CPoiToWorld.h>
 #include <Core/Resource/CWorld.h>
 #include <Core/Resource/Scan/CScan.h>
+#include <Core/Resource/Script/CScriptObject.h>
 #include <Core/Scene/CModelNode.h>
 #include <Core/Scene/CSceneIterator.h>
 #include <Core/Scene/CScriptNode.h>

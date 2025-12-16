@@ -17,8 +17,10 @@
 #include <Common/Macros.h>
 #include <Common/CTimer.h>
 #include <Core/GameProject/CGameProject.h>
+#include <Core/GameProject/CPackage.h>
 #include <Core/GameProject/CResourceIterator.h>
 #include <Core/Resource/CWorld.h>
+#include <Core/Tweaks/CTweakManager.h>
 
 #include <QFuture>
 #include <QtConcurrentRun>

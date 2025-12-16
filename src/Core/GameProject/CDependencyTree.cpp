@@ -1,5 +1,6 @@
 #include "Core/GameProject/CDependencyTree.h"
 
+#include "Core/CAudioManager.h"
 #include "Core/GameProject/CGameProject.h"
 #include "Core/Resource/CAudioGroup.h"
 #include "Core/Resource/Animation/CAnimSet.h"
