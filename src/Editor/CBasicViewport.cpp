@@ -46,9 +46,12 @@ void CBasicViewport::initializeGL()
 
 void CBasicViewport::paintGL()
 {
+    const auto WidthF = static_cast<float>(width());
+    const auto HeightF = static_cast<float>(height());
+
     // Prep render
-    float scale = devicePixelRatioF();
-    glViewport(0, 0, (int)((float)width() * scale), (int)((float)height() * scale));
+    const auto scale = devicePixelRatio();
+    glViewport(0, 0, static_cast<int>(WidthF * scale), static_cast<int>(HeightF * scale));
     glLineWidth(1.f);
     glEnable(GL_DEPTH_TEST);
     mViewInfo.ViewFrustum = mCamera.FrustumPlanes();
@@ -65,9 +68,12 @@ void CBasicViewport::paintGL()
 
 void CBasicViewport::resizeGL(int Width, int Height)
 {
-    mCamera.SetAspectRatio((float) Width / Height);
-    float scale = devicePixelRatioF();
-    glViewport(0, 0, (int)((float)Width * scale), (int)((float)Height * scale));
+    const auto WidthF = static_cast<float>(Width);
+    const auto HeightF = static_cast<float>(Height);
+
+    mCamera.SetAspectRatio(WidthF / HeightF);
+    const auto scale = devicePixelRatio();
+    glViewport(0, 0, static_cast<int>(WidthF * scale), static_cast<int>(HeightF * scale));
     OnResize();
 }
 
@@ -134,7 +140,7 @@ void CBasicViewport::mouseMoveEvent(QMouseEvent* /*pEvent*/)
 void CBasicViewport::wheelEvent(QWheelEvent *pEvent)
 {
     // Maybe track a "wheel delta" member variable and let CCamera decide what to do with it?
-    mCamera.Zoom(pEvent->angleDelta().y() / 240.f);
+    mCamera.Zoom(static_cast<float>(pEvent->angleDelta().y()) / 240.f);
 }
 
 void CBasicViewport::keyPressEvent(QKeyEvent *pEvent)
@@ -273,11 +279,13 @@ CRay CBasicViewport::CastRay() const
 
 CVector2f CBasicViewport::MouseDeviceCoordinates() const
 {
-    QPoint MousePos = mapFromGlobal(QCursor::pos());
+    const auto MousePos = mapFromGlobal(QCursor::pos()).toPointF();
+    const auto WidthF = static_cast<float>(width());
+    const auto HeightF = static_cast<float>(height());
 
     CVector2f Device(
-        (((2.f * MousePos.x()) / width()) - 1.f),
-        (1.f - ((2.f * MousePos.y()) / height()))
+        (((2.f * MousePos.x()) / WidthF) - 1.f),
+        (1.f - ((2.f * MousePos.y()) / HeightF))
     );
     return Device;
 }
@@ -310,8 +318,11 @@ void CBasicViewport::ProcessInput()
         else
 #endif
         {
-            XMovement = (QCursor::pos().x() - mLastMousePos.x()) * 0.01f;
-            YMovement = (QCursor::pos().y() - mLastMousePos.y()) * 0.01f;
+            const auto CursorPos = QCursor::pos().toPointF();
+            const auto LastMousePos = mLastMousePos.toPointF();
+
+            XMovement = (CursorPos.x() - LastMousePos.x()) * 0.01f;
+            YMovement = (CursorPos.y() - LastMousePos.y()) * 0.01f;
         }
 
         if ((XMovement != 0) || (YMovement != 0))

@@ -7,7 +7,7 @@
 CModelEditorViewport::CModelEditorViewport(QWidget *pParent)
     : CBasicViewport(pParent), mpRenderer{std::make_unique<CRenderer>()}
 {
-    const qreal pixelRatio = devicePixelRatioF();
+    const auto pixelRatio = devicePixelRatio();
     mpRenderer->SetViewportSize(width() * pixelRatio, height() * pixelRatio);
     mpRenderer->SetClearColor(CColor::Black());
     mpRenderer->ToggleGrid(true);
@@ -108,6 +108,6 @@ void CModelEditorViewport::Paint()
 
 void CModelEditorViewport::OnResize()
 {
-    qreal pixelRatio = devicePixelRatioF();
+    const auto pixelRatio = devicePixelRatio();
     mpRenderer->SetViewportSize(width() * pixelRatio, height() * pixelRatio);
 }

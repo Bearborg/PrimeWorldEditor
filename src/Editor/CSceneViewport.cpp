@@ -18,7 +18,7 @@ CSceneViewport::CSceneViewport(QWidget *pParent)
 
     mpRenderer = std::make_unique<CRenderer>();
     mpRenderer->SetClearColor(CColor::Black());
-    const qreal pixelRatio = devicePixelRatioF();
+    const auto pixelRatio = devicePixelRatio();
     mpRenderer->SetViewportSize(width() * pixelRatio, height() * pixelRatio);
 
     mViewInfo.pScene = mpScene;
@@ -401,7 +401,7 @@ void CSceneViewport::ContextMenu(QContextMenuEvent *pEvent)
 
 void CSceneViewport::OnResize()
 {
-    qreal pixelRatio = devicePixelRatioF();
+    const auto pixelRatio = devicePixelRatio();
     mpRenderer->SetViewportSize(width() * pixelRatio, height() * pixelRatio);
 }
 
