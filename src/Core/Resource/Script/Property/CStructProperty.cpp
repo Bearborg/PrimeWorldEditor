@@ -34,7 +34,7 @@ uint32 CStructProperty::DataAlignment() const
     return (mChildren.empty() ? 1 : mChildren[0]->DataAlignment());
 }
 
-void CStructProperty::Construct(void* pData) const
+void CStructProperty::Construct(void* pData)
 {
     for (auto* child : mChildren)
     {
@@ -42,7 +42,7 @@ void CStructProperty::Construct(void* pData) const
     }
 }
 
-void CStructProperty::Destruct(void* pData) const
+void CStructProperty::Destruct(void* pData)
 {
     for (auto* child : mChildren)
     {
@@ -50,13 +50,13 @@ void CStructProperty::Destruct(void* pData) const
     }
 }
 
-bool CStructProperty::MatchesDefault(void* pData) const
+bool CStructProperty::MatchesDefault(const void* pData) const
 {
     return std::any_of(mChildren.cbegin(), mChildren.cend(),
                        [pData](const auto* child) { return child->MatchesDefault(pData); });
 }
 
-void CStructProperty::RevertToDefault(void* pData) const
+void CStructProperty::RevertToDefault(void* pData)
 {
     for (auto* child : mChildren)
     {
@@ -159,7 +159,7 @@ void CStructProperty::Serialize(IArchive& rArc)
     }
 }
 
-void CStructProperty::SerializeValue(void* pData, IArchive& Arc) const
+void CStructProperty::SerializeValue(void* pData, IArchive& Arc)
 {
     for (auto* child : mChildren)
     {

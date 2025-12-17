@@ -12,7 +12,7 @@ protected:
         : TTypedProperty(Game)
     {}
 
-    void SerializeValue(void* pData, IArchive& rArc) const override
+    void SerializeValue(void*, IArchive&) override
     {}
 };
 

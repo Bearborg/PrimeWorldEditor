@@ -30,7 +30,7 @@ int CPropertyModel::RecursiveBuildArrays(IProperty* pProperty, int ParentID)
     else
     {
         MyID = mProperties.size();
-        mProperties.push_back(SProperty());
+        mProperties.emplace_back();
     }
 
     mProperties[MyID].pProperty = pProperty;
@@ -169,7 +169,7 @@ void* CPropertyModel::DataPointerForIndex(const QModelIndex& rkIndex) const
 
     for (int i = MaxIndex; i >= 0; i--)
     {
-        const CArrayProperty* pArray = ArrayProperties[i];
+        CArrayProperty* pArray = ArrayProperties[i];
         const int ArrayIndex = ArrayIndices[i];
         pOutData = pArray->ItemPointer(pOutData, ArrayIndex);
     }
@@ -571,8 +571,8 @@ void CPropertyModel::ArrayAboutToBeResized(const QModelIndex& rkIndex, uint32 Ne
 void CPropertyModel::ArrayResized(const QModelIndex& rkIndex, uint32 OldSize)
 {
     const QModelIndex Index = rkIndex.sibling(rkIndex.row(), 0);
-    IProperty* pProperty = PropertyForIndex(Index, false);
-    const CArrayProperty* pArray = TPropCast<CArrayProperty>(pProperty);
+    auto* pProperty = PropertyForIndex(Index, false);
+    auto* pArray = TPropCast<CArrayProperty>(pProperty);
     ASSERT(pArray);
 
     void* pArrayData = DataPointerForIndex(Index);

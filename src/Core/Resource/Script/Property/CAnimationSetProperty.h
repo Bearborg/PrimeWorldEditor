@@ -16,7 +16,7 @@ protected:
     }
 
 public:
-    void SerializeValue(void* pData, IArchive& Arc) const override
+    void SerializeValue(void* pData, IArchive& Arc) override
     {
         ValueRef(pData).Serialize(Arc);
     }

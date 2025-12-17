@@ -169,11 +169,11 @@ public:
     virtual EPropertyType Type() const = 0;
     virtual uint32_t DataSize() const = 0;
     virtual uint32_t DataAlignment() const = 0;
-    virtual void Construct(void* pData) const = 0;
-    virtual void Destruct(void* pData) const = 0;
-    virtual bool MatchesDefault(void* pData) const = 0;
-    virtual void RevertToDefault(void* pData) const = 0;
-    virtual void SerializeValue(void* pData, IArchive& Arc) const = 0;
+    virtual void Construct(void* pData) = 0;
+    virtual void Destruct(void* pData) = 0;
+    virtual bool MatchesDefault(const void* pData) const = 0;
+    virtual void RevertToDefault(void* pData) = 0;
+    virtual void SerializeValue(void* pData, IArchive& Arc) = 0;
 
     virtual void PostInitialize() {}
     virtual void PropertyValueChanged(void* pPropertyData)      {}
@@ -181,16 +181,18 @@ public:
     virtual void SetDefaultFromData(void* pData)                {}
     virtual bool IsNumericalType() const                    { return false; }
     virtual bool IsPointerType() const                      { return false; }
-    virtual TString ValueAsString(void* pData) const        { return ""; }
+    virtual TString ValueAsString(const void* pData) const  { return ""; }
     virtual const char* HashableTypeName() const;
-    virtual void* GetChildDataPointer(void* pPropertyData) const;
+    virtual void* GetChildDataPointer(void* pPropertyData);
+    virtual const void* GetChildDataPointer(const void* pPropertyData) const;
     virtual void Serialize(IArchive& rArc);
     virtual void InitFromArchetype(IProperty* pOther);
     virtual bool ShouldSerialize() const;
-    
+
     /** Utility methods */
     void Initialize(IProperty* pInParent, CScriptTemplate* pInTemplate, uint32_t InOffset);
-    void* RawValuePtr(void* pData) const;
+    void* RawValuePtr(void* pData);
+    const void* RawValuePtr(const void* pData) const;
     IProperty* ChildByID(uint32_t ID) const;
     IProperty* ChildByIDString(const TIDString& rkIdString);
     void GatherAllSubInstances(std::list<IProperty*>& OutList, bool Recursive);
@@ -304,13 +306,13 @@ protected:
     explicit TTypedProperty(EGame Game) : IProperty(Game) {}
 
 public:
-    EPropertyType Type() const override              { return PropEnum; }
-    uint32_t DataSize() const override               { return sizeof(PropType); }
-    uint32_t DataAlignment() const override          { return alignof(PropType); }
-    void Construct(void* pData) const override       { new (ValuePtr(pData)) PropType(mDefaultValue); }
-    void Destruct(void* pData) const override        { ValueRef(pData).~PropType(); }
-    bool MatchesDefault(void* pData) const override  { return ValueRef(pData) == mDefaultValue; }
-    void RevertToDefault(void* pData) const override { ValueRef(pData) = mDefaultValue; }
+    EPropertyType Type() const override                   { return PropEnum; }
+    uint32_t DataSize() const override                    { return sizeof(PropType); }
+    uint32_t DataAlignment() const override               { return alignof(PropType); }
+    void Construct(void* pData) override                  { new (ValuePtr(pData)) PropType(mDefaultValue); }
+    void Destruct(void* pData) override                   { ValueRef(pData).~PropType(); }
+    bool MatchesDefault(const void* pData) const override { return ValueRef(pData) == mDefaultValue; }
+    void RevertToDefault(void* pData) override            { ValueRef(pData) = mDefaultValue; }
     void SetDefaultFromData(void* pData) override
     {
         mDefaultValue = ValueRef(pData);
@@ -335,17 +337,29 @@ public:
         pTypedOther->mDefaultValue = mDefaultValue;
     }
 
-    PropType* ValuePtr(void* pData) const
+    PropType* ValuePtr(void* pData)
     {
-        return (PropType*) RawValuePtr(pData);
+        return static_cast<PropType*>(RawValuePtr(pData));
+    }
+    const PropType* ValuePtr(const void* pData) const
+    {
+        return static_cast<const PropType*>(RawValuePtr(pData));
     }
 
-    PropType& ValueRef(void* pData) const
+    PropType& ValueRef(void* pData)
+    {
+        return *ValuePtr(pData);
+    }
+    const PropType& ValueRef(const void* pData) const
     {
         return *ValuePtr(pData);
     }
 
-    PropType Value(void* pData) const
+    PropType Value(void* pData)
+    {
+        return *ValuePtr(pData);
+    }
+    PropType Value(const void* pData) const
     {
         return *ValuePtr(pData);
     }

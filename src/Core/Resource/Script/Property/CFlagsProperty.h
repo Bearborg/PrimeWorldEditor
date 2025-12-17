@@ -52,15 +52,15 @@ public:
 
     void Serialize(IArchive& rArc) override;
     void PostInitialize() override;
-    void SerializeValue(void* pData, IArchive& rArc) const override;
+    void SerializeValue(void* pData, IArchive& rArc) override;
     void InitFromArchetype(IProperty* pOther) override;
-    TString ValueAsString(void* pData) const override;
+    TString ValueAsString(const void* pData) const override;
 
     /**
      * Checks whether there are any unrecognized bits toggled on in the property value.
      * Returns the mask of any invalid bits. If all bits are valid, returns 0.
      */
-    uint32_t HasValidValue(void* pPropertyData) const;
+    uint32_t HasValidValue(const void* pPropertyData) const;
 };
 
 #endif // CFLAGSPROPERTY_H

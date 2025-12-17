@@ -17,12 +17,16 @@ public:
         return true;
     }
 
-    void* GetChildDataPointer(void* pPropertyData) const override
+    void* GetChildDataPointer(void* pPropertyData) override
+    {
+        return ValueRef(pPropertyData);
+    }
+    const void* GetChildDataPointer(const void* pPropertyData) const override
     {
         return ValueRef(pPropertyData);
     }
 
-    void SerializeValue(void* pData, IArchive& rArc) const override
+    void SerializeValue(void*, IArchive&)  override
     {
         // pointers are not serializable, this shouldn't happen
         ASSERT(false);

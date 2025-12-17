@@ -62,7 +62,12 @@ const char* IProperty::HashableTypeName() const
     return PropEnumToHashableTypeName( Type() );
 }
 
-void* IProperty::GetChildDataPointer(void* pPropertyData) const
+void* IProperty::GetChildDataPointer(void* pPropertyData)
+{
+    return pPropertyData;
+}
+
+const void* IProperty::GetChildDataPointer(const void* pPropertyData) const
 {
     return pPropertyData;
 }
@@ -218,12 +223,21 @@ void IProperty::Initialize(IProperty* pInParent, CScriptTemplate* pInTemplate, u
     mFlags |= EPropertyFlag::IsInitialized;
 }
 
-void* IProperty::RawValuePtr(void* pData) const
+void* IProperty::RawValuePtr(void* pData)
 {
     // For array archetypes, the caller needs to provide the pointer to the correct array item
     // Array archetypes can't store their index in the array so it's impossible to determine the correct pointer.
     void* pBasePtr = (mpPointerParent && !IsArrayArchetype() ? mpPointerParent->GetChildDataPointer(pData) : pData);
-    void* pValuePtr = ((char*)pBasePtr + mOffset);
+    void* pValuePtr = (static_cast<char*>(pBasePtr) + mOffset);
+    return pValuePtr;
+}
+
+const void* IProperty::RawValuePtr(const void* pData) const
+{
+    // For array archetypes, the caller needs to provide the pointer to the correct array item
+    // Array archetypes can't store their index in the array so it's impossible to determine the correct pointer.
+    const void* pBasePtr = (mpPointerParent && !IsArrayArchetype() ? mpPointerParent->GetChildDataPointer(pData) : pData);
+    const void* pValuePtr = (static_cast<const char*>(pBasePtr) + mOffset);
     return pValuePtr;
 }
 

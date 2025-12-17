@@ -24,9 +24,9 @@ void CFlagsProperty::PostInitialize()
         mAllFlags |= flag.Mask;
 }
 
-void CFlagsProperty::SerializeValue(void* pData, IArchive& rArc) const
+void CFlagsProperty::SerializeValue(void* pData, IArchive& rArc)
 {
-    rArc.SerializePrimitive((uint32_t&)ValueRef(pData), SH_HexDisplay);
+    rArc.SerializePrimitive(ValueRef(pData), SH_HexDisplay);
 }
 
 void CFlagsProperty::InitFromArchetype(IProperty* pOther)
@@ -37,7 +37,7 @@ void CFlagsProperty::InitFromArchetype(IProperty* pOther)
     mAllFlags = pOtherFlags->mAllFlags;
 }
 
-TString CFlagsProperty::ValueAsString(void* pData) const
+TString CFlagsProperty::ValueAsString(const void* pData) const
 {
     return TString::FromInt32(Value(pData), 0, 10);
 }
@@ -46,7 +46,7 @@ TString CFlagsProperty::ValueAsString(void* pData) const
  * Checks whether there are any unrecognized bits toggled on in the property value.
  * Returns the mask of any invalid bits. If all bits are valid, returns 0.
  */
-uint32 CFlagsProperty::HasValidValue(void* pPropertyData) const
+uint32 CFlagsProperty::HasValidValue(const void* pPropertyData) const
 {
     if (!mAllFlags)
         return 0;

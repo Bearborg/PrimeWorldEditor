@@ -13,14 +13,14 @@ protected:
     {}
 
 public:
-    void SerializeValue(void* pData, IArchive& rArc) const override
+    void SerializeValue(void* pData, IArchive& rArc) override
     {
-        rArc.SerializePrimitive((uint32_t&)ValueRef(pData), SH_HexDisplay);
+        rArc.SerializePrimitive(ValueRef(pData), SH_HexDisplay);
     }
 
-    TString ValueAsString(void* pData) const override
+    TString ValueAsString(const void* pData) const override
     {
-        return TString::HexString(static_cast<uint32_t>(Value(pData)));
+        return TString::HexString(Value(pData));
     }
 };
 

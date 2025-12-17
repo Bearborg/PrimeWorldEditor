@@ -21,14 +21,14 @@ public:
     void PostInitialize() override;
     uint32_t DataSize() const override;
     uint32_t DataAlignment() const override;
-    void Construct(void* pData) const override;
-    void Destruct(void* pData) const override;
-    bool MatchesDefault(void* pData) const override;
-    void RevertToDefault(void* pData) const override;
+    void Construct(void* pData) override;
+    void Destruct(void* pData) override;
+    bool MatchesDefault(const void* pData) const override;
+    void RevertToDefault(void* pData) override;
     void SetDefaultFromData(void* pData) override;
     const char* HashableTypeName() const override;
     void Serialize(IArchive& rArc) override;
-    void SerializeValue(void* pData, IArchive& Arc) const override;
+    void SerializeValue(void* pData, IArchive& Arc) override;
     void InitFromArchetype(IProperty* pOther) override;
     bool ShouldSerialize() const override;
 

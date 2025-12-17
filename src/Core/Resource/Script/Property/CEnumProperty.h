@@ -82,9 +82,9 @@ public:
         }
     }
 
-    void SerializeValue(void* pData, IArchive& Arc) const override
+    void SerializeValue(void* pData, IArchive& Arc) override
     {
-        Arc.SerializePrimitive((uint32_t&)base::ValueRef(pData), 0);
+        Arc.SerializePrimitive(static_cast<int32_t&>(base::ValueRef(pData)), 0);
     }
 
     void InitFromArchetype(IProperty* pOther) override
@@ -94,7 +94,7 @@ public:
         mValues = pOtherEnum->mValues;
     }
 
-    TString ValueAsString(void* pData) const override
+    TString ValueAsString(const void* pData) const override
     {
         return TString::FromInt32(base::Value(pData), 0, 10);
     }
@@ -130,7 +130,7 @@ public:
         return mValues[Index].Name;
     }
 
-    bool HasValidValue(void* pPropertyData)
+    bool HasValidValue(const void* pPropertyData)
     {
         if (mValues.empty())
             return true;

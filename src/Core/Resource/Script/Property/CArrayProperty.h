@@ -29,14 +29,23 @@ class CArrayProperty : public TTypedProperty<uint32_t, EPropertyType::Array>
     IProperty* mpItemArchetype = nullptr;
 
     /** Internal functions */
-    SScriptArray& _GetInternalArray(void* pData) const
+    SScriptArray& _GetInternalArray(void* pData)
     {
-        return *((SScriptArray*)RawValuePtr(pData));
+        return *static_cast<SScriptArray*>(RawValuePtr(pData));
+    }
+    const SScriptArray& _GetInternalArray(const void* pData) const
+    {
+        return *static_cast<const SScriptArray*>(RawValuePtr(pData));
     }
 
-    uint32_t _InternalArrayCount(void* pPropertyData) const
+    uint32_t _InternalArrayCount(void* pPropertyData)
     {
-        std::vector<char>& rArray = _GetInternalArray(pPropertyData).Array;
+        const auto& rArray = _GetInternalArray(pPropertyData).Array;
+        return rArray.size() / ItemSize();
+    }
+    uint32_t _InternalArrayCount(const void* pPropertyData) const
+    {
+        const auto& rArray = _GetInternalArray(pPropertyData).Array;
         return rArray.size() / ItemSize();
     }
 
@@ -58,23 +67,23 @@ public:
         return alignof(SScriptArray);
     }
 
-    void Construct(void* pData) const override
+    void Construct(void* pData) override
     {
         new(ValuePtr(pData)) SScriptArray;
     }
 
-    void Destruct(void* pData) const override
+    void Destruct(void* pData) override
     {
         RevertToDefault(pData);
         _GetInternalArray(pData).~SScriptArray();
     }
 
-    bool MatchesDefault(void* pData) const override
+    bool MatchesDefault(const void* pData) const override
     {
         return ArrayCount(pData) == 0;
     }
 
-    void RevertToDefault(void* pData) const override
+    void RevertToDefault(void* pData) override
     {
         Resize(pData, 0);
         ValueRef(pData) = 0;
@@ -90,7 +99,12 @@ public:
         return true;
     }
 
-    void* GetChildDataPointer(void* pPropertyData) const override
+    void* GetChildDataPointer(void* pPropertyData) override
+    {
+        return _GetInternalArray(pPropertyData).Array.data();
+    }
+
+    const void* GetChildDataPointer(const void* pPropertyData) const override
     {
         return _GetInternalArray(pPropertyData).Array.data();
     }
@@ -108,7 +122,7 @@ public:
         rArc << SerialParameter("ItemArchetype", mpItemArchetype);
     }
 
-    void SerializeValue(void* pData, IArchive& Arc) const override
+    void SerializeValue(void* pData, IArchive& Arc) override
     {
         uint32_t Count = ArrayCount(pData);
         Arc.SerializeArraySize(Count);
@@ -140,12 +154,12 @@ public:
         mpItemArchetype->Initialize(this, mpScriptTemplate, 0);
     }
 
-    uint32_t ArrayCount(void* pPropertyData) const
+    uint32_t ArrayCount(const void* pPropertyData) const
     {
         return ValueRef(pPropertyData);
     }
 
-    void Resize(void* pPropertyData, uint32_t NewCount) const
+    void Resize(void* pPropertyData, uint32_t NewCount)
     {
         const uint32_t OldCount = _InternalArrayCount(pPropertyData);
         if (OldCount == NewCount)
@@ -178,12 +192,20 @@ public:
         }
     }
 
-    void* ItemPointer(void* pPropertyData, uint32_t ItemIndex) const
+    void* ItemPointer(void* pPropertyData, uint32_t ItemIndex)
     {
         ASSERT(_InternalArrayCount(pPropertyData) > ItemIndex);
-        std::vector<char>& rArray = _GetInternalArray(pPropertyData).Array;
+        auto& rArray = _GetInternalArray(pPropertyData).Array;
         const uint32_t MyItemSize = ItemSize();
         ASSERT(rArray.size() >= (MyItemSize * (ItemIndex+1)));
+        return rArray.data() + (MyItemSize * ItemIndex);
+    }
+    const void* ItemPointer(const void* pPropertyData, uint32_t ItemIndex) const
+    {
+        ASSERT(_InternalArrayCount(pPropertyData) > ItemIndex);
+        const auto& rArray = _GetInternalArray(pPropertyData).Array;
+        const uint32_t MyItemSize = ItemSize();
+        ASSERT(rArray.size() >= (MyItemSize * (ItemIndex + 1)));
         return rArray.data() + (MyItemSize * ItemIndex);
     }
 

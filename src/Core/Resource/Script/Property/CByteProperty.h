@@ -13,14 +13,14 @@ protected:
     {}
 
 public:
-    void SerializeValue(void* pData, IArchive& Arc) const override
+    void SerializeValue(void* pData, IArchive& Arc) override
     {
-        Arc.SerializePrimitive((int8_t&)ValueRef(pData), 0);
+        Arc.SerializePrimitive(ValueRef(pData), 0);
     }
 
-    TString ValueAsString(void* pData) const override
+    TString ValueAsString(const void* pData) const override
     {
-        return TString::FromInt32((int32_t)Value(pData), 0, 10);
+        return TString::FromInt32(Value(pData), 0, 10);
     }
 };
 
