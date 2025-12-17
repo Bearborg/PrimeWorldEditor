@@ -1,7 +1,7 @@
 #ifndef CSOFTVALIDATORLINEEDIT_H
 #define CSOFTVALIDATORLINEEDIT_H
 
-#include "CTimedLineEdit.h"
+#include "Editor/Widgets/CTimedLineEdit.h"
 #include <QValidator>
 
 /**

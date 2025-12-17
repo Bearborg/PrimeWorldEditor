@@ -14,6 +14,7 @@
 #include "Core/Resource/Script/CScriptTemplate.h"
 
 #include <Common/CFourCC.h>
+#include <Common/FileIO/CMemoryInStream.h>
 
 #include <algorithm>
 #include <cfloat>
@@ -327,20 +328,20 @@ void CAreaLoader::ReadHeaderCorruption()
         CFourCC Type(*mpMREA);
         uint32 Num = mpMREA->ReadLong();
 
-        if      (Type == "AABB") mBoundingBoxesBlockNum = Num;
-        else if (Type == "APTL") mPTLABlockNum = Num;
-        else if (Type == "COLI") mCollisionBlockNum = Num;
-        else if (Type == "DEPS") mDependenciesBlockNum = Num;
-        else if (Type == "EGMC") mEGMCBlockNum = Num;
-        else if (Type == "GPUD") mGPUBlockNum = Num;
-        else if (Type == "LITE") mLightsBlockNum = Num;
-        else if (Type == "PFL2") mPathBlockNum = Num;
-        else if (Type == "PVS!") mVisiBlockNum = Num;
-        else if (Type == "ROCT") mOctreeBlockNum = Num;
-        else if (Type == "RSOS") mRSOBlockNum = Num;
-        else if (Type == "SOBJ") mScriptLayerBlockNum = Num;
-        else if (Type == "SGEN") mScriptGeneratorBlockNum = Num;
-        else if (Type == "WOBJ") mGeometryBlockNum = Num; // note WOBJ can show up multiple times, but is always 0
+        if      (Type == CFourCC("AABB")) mBoundingBoxesBlockNum = Num;
+        else if (Type == CFourCC("APTL")) mPTLABlockNum = Num;
+        else if (Type == CFourCC("COLI")) mCollisionBlockNum = Num;
+        else if (Type == CFourCC("DEPS")) mDependenciesBlockNum = Num;
+        else if (Type == CFourCC("EGMC")) mEGMCBlockNum = Num;
+        else if (Type == CFourCC("GPUD")) mGPUBlockNum = Num;
+        else if (Type == CFourCC("LITE")) mLightsBlockNum = Num;
+        else if (Type == CFourCC("PFL2")) mPathBlockNum = Num;
+        else if (Type == CFourCC("PVS!")) mVisiBlockNum = Num;
+        else if (Type == CFourCC("ROCT")) mOctreeBlockNum = Num;
+        else if (Type == CFourCC("RSOS")) mRSOBlockNum = Num;
+        else if (Type == CFourCC("SOBJ")) mScriptLayerBlockNum = Num;
+        else if (Type == CFourCC("SGEN")) mScriptGeneratorBlockNum = Num;
+        else if (Type == CFourCC("WOBJ")) mGeometryBlockNum = Num; // note WOBJ can show up multiple times, but is always 0
 
         const CGameArea::SSectionNumber SecNum{Type, Num};
         mpArea->mSectionNumbers.push_back(SecNum);

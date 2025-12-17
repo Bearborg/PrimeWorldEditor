@@ -331,7 +331,7 @@ void CGameExporter::LoadPaks()
                         mResourceMap.insert_or_assign(ResID, SResourceInstance{PakPath, ResID, ResType, ResOffset, ResSize, Compressed, false});
 
                     // Check for duplicate resources
-                    if (ResType == "MREA")
+                    if (ResType == CFourCC("MREA"))
                     {
                         mAreaDuplicateMap[ResID] = AreaHasDuplicates;
                         AreaHasDuplicates = false;
@@ -376,7 +376,7 @@ void CGameExporter::LoadPaks()
                 const uint32 Next = Pak.Tell() + PakSections[iSec].Size;
 
                 // Named Resources
-                if (PakSections[iSec].Type == "STRG")
+                if (PakSections[iSec].Type == CFourCC("STRG"))
                 {
                     const uint32 NumNamedResources = Pak.ReadULong();
 
@@ -388,7 +388,7 @@ void CGameExporter::LoadPaks()
                         pPackage->AddResource(Name, ResID, ResType);
                     }
                 }
-                else if (PakSections[iSec].Type == "RSHD")
+                else if (PakSections[iSec].Type == CFourCC("RSHD"))
                 {
                     ASSERT(PakSections[iSec + 1].Type == "DATA");
                     const uint32 DataStart = Next;
@@ -412,7 +412,7 @@ void CGameExporter::LoadPaks()
                         // Check for duplicate resources (unnecessary for DKCR)
                         if (mGame != EGame::DKCReturns)
                         {
-                            if (Type == "MREA")
+                            if (Type == CFourCC("MREA"))
                             {
                                 mAreaDuplicateMap.insert_or_assign(ResID, AreaHasDuplicates);
                                 AreaHasDuplicates = false;

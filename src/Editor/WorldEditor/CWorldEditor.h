@@ -88,7 +88,7 @@ public:
 
     CWorld* ActiveWorld() const      { return mpWorld; }
     CGameArea* ActiveArea() const    { return mpArea; }
-    EGame CurrentGame() const        { return gpEdApp->CurrentGame(); }
+    EGame CurrentGame() const;
     CLinkDialog* LinkDialog() const  { return mpLinkDialog; }
     CGeneratePropertyNamesDialog* NameGeneratorDialog() const    { return mpGeneratePropertyNamesDialog; }
     CTweakEditor* TweakEditor()      { return mpTweakEditor; }

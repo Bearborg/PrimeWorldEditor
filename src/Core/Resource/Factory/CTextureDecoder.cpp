@@ -4,6 +4,7 @@
 #include <Common/CColor.h>
 #include <Common/Macros.h>
 #include <Common/FileIO/IOutputStream.h>
+#include <Common/FileIO/CMemoryOutStream.h>
 #include <array>
 
 // A cleanup is warranted at some point. Trying to support both partial + full decode ended up really messy.
@@ -290,11 +291,11 @@ void CTextureDecoder::ReadDDS(IInputStream& rDDS)
     mDDSInfo.Flags = rDDS.ReadULong();
     const CFourCC Format(rDDS);
 
-    if (Format == "DXT1")      mDDSInfo.Format = SDDSInfo::DXT1;
-    else if (Format == "DXT2") mDDSInfo.Format = SDDSInfo::DXT2;
-    else if (Format == "DXT3") mDDSInfo.Format = SDDSInfo::DXT3;
-    else if (Format == "DXT4") mDDSInfo.Format = SDDSInfo::DXT4;
-    else if (Format == "DXT5") mDDSInfo.Format = SDDSInfo::DXT5;
+    if (Format == CFourCC("DXT1"))      mDDSInfo.Format = SDDSInfo::DXT1;
+    else if (Format == CFourCC("DXT2")) mDDSInfo.Format = SDDSInfo::DXT2;
+    else if (Format == CFourCC("DXT3")) mDDSInfo.Format = SDDSInfo::DXT3;
+    else if (Format == CFourCC("DXT4")) mDDSInfo.Format = SDDSInfo::DXT4;
+    else if (Format == CFourCC("DXT5")) mDDSInfo.Format = SDDSInfo::DXT5;
     else
     {
         mDDSInfo.Format = SDDSInfo::RGBA;

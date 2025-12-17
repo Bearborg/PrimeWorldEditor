@@ -2,6 +2,7 @@
 
 #include <Common/Log.h>
 #include <Common/Macros.h>
+#include <Common/FileIO/CBitStreamInWrapper.h>
 #include <Common/Math/CQuaternion.h>
 #include <Common/Math/MathUtil.h>
 #include "Core/Resource/Animation/CAnimation.h"

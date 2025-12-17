@@ -349,6 +349,11 @@ bool CWorldEditor::IsQuickplayEnabled() const
     return mpQuickplayAction->isVisible() && mpQuickplayAction->isEnabled();
 }
 
+EGame CWorldEditor::CurrentGame() const
+{
+    return gpEdApp->CurrentGame();
+}
+
 CSceneViewport* CWorldEditor::Viewport() const
 {
     return ui->MainViewport;

@@ -2,6 +2,8 @@
 #define CEDITORGLWIDGET_H
 
 #include <Common/CTimer.h>
+#include <Common/EKeyInputs.h>
+#include <Common/EMouseInputs.h>
 #include <Common/Math/CRay.h>
 #include <Common/Math/CVector2f.h>
 #include <Core/OpenGL/GL/glew.h>

@@ -328,20 +328,20 @@ void CMaterialPass::SetEnabled(bool Enabled)
 // ************ STATIC ************
 TString CMaterialPass::PassTypeName(CFourCC Type)
 {
-    if (Type == "CUST") return "Custom";
-    if (Type == "DIFF") return "Light";
-    if (Type == "RIML") return "Rim Light";
-    if (Type == "BLOL") return "Bloom Light";
+    if (Type == CFourCC("CUST")) return "Custom";
+    if (Type == CFourCC("DIFF")) return "Light";
+    if (Type == CFourCC("RIML")) return "Rim Light";
+    if (Type == CFourCC("BLOL")) return "Bloom Light";
     // BLOD
-    if (Type == "CLR ") return "Diffuse";
-    if (Type == "TRAN") return "Opacity";
-    if (Type == "INCA") return "Emissive";
-    if (Type == "RFLV") return "Specular";
-    if (Type == "RFLD") return "Reflection";
+    if (Type == CFourCC("CLR ")) return "Diffuse";
+    if (Type == CFourCC("TRAN")) return "Opacity";
+    if (Type == CFourCC("INCA")) return "Emissive";
+    if (Type == CFourCC("RFLV")) return "Specular";
+    if (Type == CFourCC("RFLD")) return "Reflection";
     // LRLD
     // LURD
-    if (Type == "BLOI") return "Bloom Diffuse";
-    if (Type == "XRAY") return "X-Ray";
+    if (Type == CFourCC("BLOI")) return "Bloom Diffuse";
+    if (Type == CFourCC("XRAY")) return "X-Ray";
     // TOON
     return Type.ToString();
 }

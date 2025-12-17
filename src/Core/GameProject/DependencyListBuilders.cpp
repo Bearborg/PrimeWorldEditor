@@ -193,7 +193,7 @@ void CPackageDependencyListBuilder::BuildDependencyList(bool AllowDuplicates, st
         if (!pEntry)
             continue;
 
-        if (rkRes.Name.EndsWith("NODEPEND") || rkRes.Type == "CSNG")
+        if (rkRes.Name.EndsWith("NODEPEND") || rkRes.Type == CFourCC("CSNG"))
         {
             rOut.push_back(rkRes.ID);
             continue;
@@ -201,7 +201,7 @@ void CPackageDependencyListBuilder::BuildDependencyList(bool AllowDuplicates, st
 
         mIsUniversalAreaAsset = mUniversalAreaAssets.contains(rkRes.ID);
 
-        if (rkRes.Type == "MLVL")
+        if (rkRes.Type == CFourCC("MLVL"))
         {
             mpWorld = static_cast<CWorld*>(pEntry->Load());
             ASSERT(mpWorld);
@@ -361,7 +361,7 @@ void CPackageDependencyListBuilder::FindUniversalAreaAssets()
                 mUniversalAreaAssets.insert(rkRes.ID);
 
                 // For the universal area world, load it into memory to make sure we can exclude the area/map IDs
-                if (rkRes.Type == "MLVL")
+                if (rkRes.Type == CFourCC("MLVL"))
                 {
                     CWorld *pUniverseWorld = gpResourceStore->LoadResource<CWorld>(rkRes.ID);
 

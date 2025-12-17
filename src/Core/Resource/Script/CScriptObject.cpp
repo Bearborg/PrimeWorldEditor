@@ -1,5 +1,6 @@
 #include "Core/Resource/Script/CScriptObject.h"
 
+#include <Common/FileIO/CVectorOutStream.h>
 #include <Common/Serialization/CBasicBinaryReader.h>
 #include <Common/Serialization/CBasicBinaryWriter.h>
 #include "Core/Resource/Animation/CAnimSet.h"

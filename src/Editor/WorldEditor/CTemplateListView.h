@@ -1,8 +1,9 @@
 #ifndef CTEMPLATELISTVIEW
 #define CTEMPLATELISTVIEW
 
-#include "CTemplateMimeData.h"
 #include "Editor/UICommon.h"
+#include "Editor/WorldEditor/CTemplateMimeData.h"
+
 #include <Core/Resource/Script/CGameTemplate.h>
 #include <QAbstractListModel>
 #include <QDrag>

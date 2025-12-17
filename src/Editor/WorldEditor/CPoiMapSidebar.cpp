@@ -336,7 +336,7 @@ void CPoiMapSidebar::StopPicking()
 void CPoiMapSidebar::OnInstanceListButtonClicked()
 {
     const EGame Game = Editor()->CurrentGame();
-    CScriptTemplate *pPoiTemplate = NGameList::GetGameTemplate(Game)->TemplateByID("POIN");
+    CScriptTemplate *pPoiTemplate = NGameList::GetGameTemplate(Game)->TemplateByID(CFourCC("POIN"));
 
     CPoiListDialog Dialog(pPoiTemplate, &mSourceModel, Editor()->Scene(), this);
     Dialog.exec();

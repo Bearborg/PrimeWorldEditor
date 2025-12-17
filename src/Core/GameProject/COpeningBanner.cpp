@@ -1,4 +1,9 @@
 #include "Core/GameProject/COpeningBanner.h"
+
+#include <Common/FileIO/CFileInStream.h>
+#include <Common/FileIO/CFileOutStream.h>
+#include <Common/FileIO/CMemoryInStream.h>
+#include <Common/FileIO/CMemoryOutStream.h>
 #include "Core/GameProject/CGameProject.h"
 
 COpeningBanner::COpeningBanner(CGameProject *pProj)

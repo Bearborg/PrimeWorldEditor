@@ -139,7 +139,7 @@ CResourceEntry* CVirtualDirectory::FindChildResource(const TString& rkPath)
     else if (!Name.IsEmpty())
     {
         const TString Ext = Name.GetFileExtension();
-        const EResourceType Type = CResTypeInfo::TypeForCookedExtension(mpStore->Game(), Ext)->Type();
+        const EResourceType Type = CResTypeInfo::TypeForCookedExtension(mpStore->Game(), CFourCC(Ext))->Type();
         return FindChildResource(Name.GetFileName(false), Type);
     }
 

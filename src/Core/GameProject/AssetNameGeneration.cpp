@@ -254,9 +254,9 @@ void GenerateAssetNames(CGameProject *pProj)
                 {
                     CMaterialPass *pPass = pMat->Pass(iPass);
 
-                    bool IsLightmap = ( (pArea->Game() <= EGame::Echoes && pMat->Options().HasFlag(EMaterialOption::Lightmap) && iPass == 0) ||
-                                        (pArea->Game() >= EGame::CorruptionProto && pPass->Type() == "DIFF") );
-                    bool IsBloomLightmap = (pArea->Game() >= EGame::CorruptionProto && pPass->Type() == "BLOL");
+                    bool IsLightmap = ((pArea->Game() <= EGame::Echoes && pMat->Options().HasFlag(EMaterialOption::Lightmap) && iPass == 0) ||
+                                       (pArea->Game() >= EGame::CorruptionProto && pPass->Type() == CFourCC("DIFF")));
+                    bool IsBloomLightmap = (pArea->Game() >= EGame::CorruptionProto && pPass->Type() == CFourCC("BLOL"));
 
                     TString TexName;
 
@@ -430,7 +430,7 @@ void GenerateAssetNames(CGameProject *pProj)
                     CMaterialPass *pPass = pMat->Pass(iPass);
 
                     const bool IsLightmap = (pMat->Version() <= EGame::Echoes && pMat->Options().HasFlag(EMaterialOption::Lightmap) && iPass == 0) ||
-                                            (pMat->Version() >= EGame::CorruptionProto && pPass->Type() == "DIFF");
+                                            (pMat->Version() >= EGame::CorruptionProto && pPass->Type() == CFourCC("DIFF"));
 
                     if (IsLightmap)
                     {

@@ -6,7 +6,7 @@
 #include <QList>
 #include <QUndoStack>
 
-#include "CEditorApplication.h"
+class CBasicViewport;
 
 /** Base class of all editor windows */
 class IEditor : public QMainWindow
@@ -20,6 +20,7 @@ protected:
 
 public:
     explicit IEditor(QWidget* pParent);
+    ~IEditor() override;
 
     QUndoStack& UndoStack();
     void AddUndoActions(QToolBar* pToolBar, QAction* pBefore = nullptr);
@@ -35,13 +36,7 @@ public:
 
 public slots:
     /** Virtual slots */
-    virtual bool Save()
-    {
-        // Default implementation for editor windows that do not support resaving assets.
-        // This should not be called.
-        errorf("Base IEditor::Save() implementation called. Changes will not be saved.");
-        return true;
-    }
+    virtual bool Save();
 
     /** Non-virtual slots */
     bool SaveAndRepack();

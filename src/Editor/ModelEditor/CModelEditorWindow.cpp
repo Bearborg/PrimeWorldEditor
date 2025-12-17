@@ -5,6 +5,8 @@
 #include "Editor/Widgets/WColorPicker.h"
 
 #include <Common/TString.h>
+#include <Common/FileIO/CFileInStream.h>
+#include <Common/FileIO/CFileOutStream.h>
 #include <Core/GameProject/CResourceStore.h>
 #include <Core/Resource/CFont.h>
 #include <Core/Resource/Cooker/CTextureEncoder.h>

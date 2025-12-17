@@ -147,7 +147,7 @@ void CGameProject::GetWorldList(std::list<CAssetID>& rOut) const
         {
             const SNamedResource& rkRes = pPkg->NamedResourceByIndex(iRes);
 
-            if (rkRes.Type == "MLVL" && !rkRes.Name.EndsWith("NODEPEND"))
+            if (rkRes.Type == CFourCC("MLVL") && !rkRes.Name.EndsWith("NODEPEND"))
                 PackageWorlds.push_back(&rkRes);
         }
 

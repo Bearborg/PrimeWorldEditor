@@ -1734,8 +1734,10 @@ void CUnsupportedParticleLoader::ParseAssetFunction(IInputStream& rFile)
 void CUnsupportedParticleLoader::ParseSpawnSystemKeyframeData(IInputStream& rFile)
 {
     CFourCC Func = rFile.ReadLong();
-    if (Func == "NONE") return;
-    ASSERT(Func == "CNST");
+    if (Func == CFourCC("NONE"))
+        return;
+
+    ASSERT(Func == CFourCC("CNST"));
 
     rFile.Seek(0x10, SEEK_CUR); // Skip unneeded values
     uint32 Count = rFile.ReadLong();
@@ -1747,7 +1749,7 @@ void CUnsupportedParticleLoader::ParseSpawnSystemKeyframeData(IInputStream& rFil
 
         for (uint32 iInfo = 0; iInfo < InfoCount; iInfo++)
         {
-            mpGroup->AddDependency( CAssetID(rFile, mpGroup->Game()) );
+            mpGroup->AddDependency(CAssetID(rFile, mpGroup->Game()));
             rFile.Seek(0xC, SEEK_CUR); // Skip unknown/unneeded values
         }
     }
@@ -1756,15 +1758,15 @@ void CUnsupportedParticleLoader::ParseSpawnSystemKeyframeData(IInputStream& rFil
 void CUnsupportedParticleLoader::ParseKeyframeEmitterData(IInputStream& rFile, const CFourCC& rkFunc, uint32 ElemSize)
 {
     // Skip unneeded values
-    if (rkFunc == "KEYE" || rkFunc == "KEYP")
+    if (rkFunc == CFourCC("KEYE") || rkFunc == CFourCC("KEYP"))
         rFile.Seek(0x12, SEEK_CUR);
-    else if (rkFunc == "KEYF")
+    else if (rkFunc == CFourCC("KEYF"))
         rFile.Seek(0x1A, SEEK_CUR);
 
     uint32 KeyCount = rFile.ReadLong();
     rFile.Seek(KeyCount * ElemSize, SEEK_CUR);
 
-    if (rkFunc == "KEYF")
+    if (rkFunc == CFourCC("KEYF"))
         ParseFloatFunction(rFile);
 }
 

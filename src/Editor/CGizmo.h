@@ -4,6 +4,7 @@
 #include <Common/Flags.h>
 #include <Common/Math/CPlane.h>
 #include <Common/Math/CQuaternion.h>
+#include <Common/Math/CTransform4f.h>
 #include <Common/Math/CVector3f.h>
 #include <Common/Math/EAxis.h>
 #include <Common/Math/ETransformSpace.h>

@@ -74,13 +74,13 @@ void CAreaCooker::DetermineSectionNumbersCorruption()
     // are present in every file), we don't care about any of these except SCLY and SCGN.
     for (const auto& num : mpArea->mSectionNumbers)
     {
-        if (num.SectionID == "SOBJ")
+        if (num.SectionID == CFourCC("SOBJ"))
             mSCLYSecNum = num.Index;
-        else if (num.SectionID == "SGEN")
+        else if (num.SectionID == CFourCC("SGEN"))
             mSCGNSecNum = num.Index;
-        else if (num.SectionID == "DEPS")
+        else if (num.SectionID == CFourCC("DEPS"))
             mDepsSecNum = num.Index;
-        else if (num.SectionID == "RSOS")
+        else if (num.SectionID == CFourCC("RSOS"))
             mModulesSecNum = num.Index;
     }
 }

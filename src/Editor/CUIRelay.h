@@ -2,9 +2,9 @@
 #define CUIRELAY_H
 
 #include <Core/IUIRelay.h>
-#include "CEditorApplication.h"
-#include "WorldEditor/CWorldEditor.h"
-#include "UICommon.h"
+#include "Editor/CEditorApplication.h"
+#include "Editor/UICommon.h"
+#include "Editor/WorldEditor/CWorldEditor.h"
 
 #include <QThread>
 

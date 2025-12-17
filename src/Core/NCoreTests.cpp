@@ -6,6 +6,8 @@
 #include "Core/GameProject/CResourceIterator.h"
 #include "Core/Resource/Cooker/CResourceCooker.h"
 #include <Common/FileUtil.h>
+#include <Common/FileIO/CFileInStream.h>
+#include <Common/FileIO/CFileOutStream.h>
 
 #include <algorithm>
 

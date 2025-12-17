@@ -1,6 +1,7 @@
 #ifndef CPASTENODESCOMMAND
 #define CPASTENODESCOMMAND
 
+#include <Common/Math/CVector3f.h>
 #include "Editor/Undo/IUndoCommand.h"
 #include "Editor/Undo/ObjReferences.h"
 

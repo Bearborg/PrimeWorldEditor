@@ -272,33 +272,33 @@ void CMaterialLoader::ReadCorruptionMatSet()
 // Represent passes as contiguous integers for random-access storage in a fixed array.
 static EPASS PassFourCCToEnum(CFourCC fcc)
 {
-    if (fcc == "DIFF")
+    if (fcc == CFourCC("DIFF"))
         return EPASS::DIFF;
-    if (fcc == "RIML")
+    if (fcc == CFourCC("RIML"))
         return EPASS::RIML;
-    if (fcc == "BLOL")
+    if (fcc == CFourCC("BLOL"))
         return EPASS::BLOL;
-    if (fcc == "CLR ")
+    if (fcc == CFourCC("CLR "))
         return EPASS::CLR;
-    if (fcc == "TRAN")
+    if (fcc == CFourCC("TRAN"))
         return EPASS::TRAN;
-    if (fcc == "INCA")
+    if (fcc == CFourCC("INCA"))
         return EPASS::INCA;
-    if (fcc == "RFLV")
+    if (fcc == CFourCC("RFLV"))
         return EPASS::RFLV;
-    if (fcc == "RFLD")
+    if (fcc == CFourCC("RFLD"))
         return EPASS::RFLD;
-    if (fcc == "LRLD")
+    if (fcc == CFourCC("LRLD"))
         return EPASS::LRLD;
-    if (fcc == "LURD")
+    if (fcc == CFourCC("LURD"))
         return EPASS::LURD;
-    if (fcc == "BLOD")
+    if (fcc == CFourCC("BLOD"))
         return EPASS::BLOD;
-    if (fcc == "BLOI")
+    if (fcc == CFourCC("BLOI"))
         return EPASS::BLOI;
-    if (fcc == "XRAY")
+    if (fcc == CFourCC("XRAY"))
         return EPASS::XRAY;
-    if (fcc == "TOON")
+    if (fcc == CFourCC("TOON"))
         return EPASS::TOON;
 
     return EPASS::DIFF;
@@ -306,15 +306,15 @@ static EPASS PassFourCCToEnum(CFourCC fcc)
 
 static EINT IntFourCCToEnum(CFourCC fcc)
 {
-    if (fcc == "OPAC")
+    if (fcc == CFourCC("OPAC"))
         return EINT::OPAC;
-    if (fcc == "BLOD")
+    if (fcc == CFourCC("BLOD"))
         return EINT::BLOD;
-    if (fcc == "BLOI")
+    if (fcc == CFourCC("BLOI"))
         return EINT::BLOI;
-    if (fcc == "BNIF")
+    if (fcc == CFourCC("BNIF"))
         return EINT::BNIF;
-    if (fcc == "XRBR")
+    if (fcc == CFourCC("XRBR"))
         return EINT::XRBR;
 
     return EINT::OPAC;
@@ -322,9 +322,9 @@ static EINT IntFourCCToEnum(CFourCC fcc)
 
 static ECLR ClrFourCCToEnum(CFourCC fcc)
 {
-    if (fcc == "CLR ")
+    if (fcc == CFourCC("CLR "))
         return ECLR::CLR;
-    if (fcc == "DIFB")
+    if (fcc == CFourCC("DIFB"))
         return ECLR::DIFB;
 
     return ECLR::CLR;
@@ -346,11 +346,11 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadCorruptionMaterial()
         CFourCC Type = mpFile->ReadULong();
 
         // END
-        if (Type == "END ")
+        if (Type == CFourCC("END "))
             break;
 
         // INT
-        if (Type == "INT ")
+        if (Type == CFourCC("INT "))
         {
             const CFourCC IntType = mpFile->ReadULong();
             const auto IntVal = static_cast<uint8>(mpFile->ReadULong());
@@ -358,7 +358,7 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadCorruptionMaterial()
         }
 
         // CLR
-        if (Type == "CLR ")
+        if (Type == CFourCC("CLR "))
         {
             const CFourCC ClrType = mpFile->ReadULong();
             const CColor ClrVal(*mpFile, true);
@@ -366,7 +366,7 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadCorruptionMaterial()
         }
 
         // PASS
-        if (Type == "PASS")
+        if (Type == CFourCC("PASS"))
         {
             const uint32 Size = mpFile->ReadULong();
             const uint32 Next = Size + mpFile->Tell();
@@ -642,7 +642,7 @@ bool CMaterialLoader::SetupStaticDiffuseLightingStage(STevTracker& Tracker, CMat
     }
     else
     {
-        pPass->mPassType = "DIFF";
+        pPass->mPassType = CFourCC("DIFF");
         pPass->SetColorOutput(kColor0Reg);
         pPass->SetAlphaOutput(kPrevReg);
         pPass->SetColorInputs(kZeroRGB, kColor1RGB, kKonstRGB, kRasRGB);
@@ -766,7 +766,7 @@ void CMaterialLoader::SetupColorKColorStage(STevTracker& Tracker, CMaterial* pMa
                                             bool useStageAlpha, uint8 Alpha, bool StaticLighting)
 {
     auto pPass = std::make_unique<CMaterialPass>(pMat);
-    pPass->mPassType = "CLR ";
+    pPass->mPassType = CFourCC("CLR ");
 
     bool useDynamicLightingAlpha = false;
     CColor col = Intermediate.GetCLR(ECLR::CLR);

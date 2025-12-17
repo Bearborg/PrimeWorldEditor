@@ -1,7 +1,7 @@
 #ifndef CSELECTIONITERATOR
 #define CSELECTIONITERATOR
 
-#include "CNodeSelection.h"
+#include "Editor/CNodeSelection.h"
 
 class CSelectionIterator
 {

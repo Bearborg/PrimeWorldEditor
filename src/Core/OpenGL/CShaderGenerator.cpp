@@ -451,7 +451,8 @@ bool CShaderGenerator::CreatePixelShader(const CMaterial& rkMat)
         CFourCC PassType = pPass->Type();
 
         ShaderCode << "    // TEV Stage " << iPass << " - " << PassType.ToString() << "\n";
-        if (pPass->Type() == "DIFF") Lightmap = true;
+        if (pPass->Type() == CFourCC("DIFF"))
+            Lightmap = true;
 
         if (!pPass->IsEnabled())
         {
@@ -466,8 +467,8 @@ bool CShaderGenerator::CreatePixelShader(const CMaterial& rkMat)
             ShaderCode << "    Tex = texture(Texture" << iPass << ", TevCoord)";
 
         // Apply lightmap multiplier
-        bool UseLightmapMultiplier = (PassType == "DIFF") ||
-                                     (PassType == "CUST" && (rkMat.Options() & EMaterialOption::Lightmap) && iPass == 0);
+        bool UseLightmapMultiplier = (PassType == CFourCC("DIFF")) ||
+                                     (PassType == CFourCC("CUST") && (rkMat.Options() & EMaterialOption::Lightmap) && iPass == 0);
         if (UseLightmapMultiplier && pPass->Texture())
             ShaderCode << " * LightmapMultiplier";
 

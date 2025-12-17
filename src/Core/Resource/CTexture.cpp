@@ -1,5 +1,6 @@
 #include "Core/Resource/CTexture.h"
 
+#include <Common/FileIO/CMemoryInStream.h>
 #include <Common/Math/CVector2f.h>
 
 #include <cmath>

@@ -1,11 +1,12 @@
 #include "IEditor.h"
 
+#include "Editor/CEditorApplication.h"
 #include "Editor/Undo/IUndoCommand.h"
 
+#include <QCloseEvent>
 #include <QMenu>
 #include <QMessageBox>
 #include <QToolBar>
-#include <QCloseEvent>
 
 IEditor::IEditor(QWidget* pParent)
     : QMainWindow(pParent)
@@ -25,6 +26,8 @@ IEditor::IEditor(QWidget* pParent)
 
     connect(&mUndoStack, &QUndoStack::indexChanged, this, &IEditor::OnUndoStackIndexChanged);
 }
+
+IEditor::~IEditor() = default;
 
 QUndoStack& IEditor::UndoStack()
 {
@@ -83,6 +86,14 @@ void IEditor::closeEvent(QCloseEvent* pEvent)
     }
 }
 
+bool IEditor::Save()
+{
+    // Default implementation for editor windows that do not support resaving assets.
+    // This should not be called.
+    errorf("Base IEditor::Save() implementation called. Changes will not be saved.");
+    return true;
+}
+
 /** Non-virtual slots */
 bool IEditor::SaveAndRepack()
 {
@@ -91,7 +102,8 @@ bool IEditor::SaveAndRepack()
         gpEdApp->CookAllDirtyPackages();
         return true;
     }
-    else return false;
+
+    return false;
 }
 
 
