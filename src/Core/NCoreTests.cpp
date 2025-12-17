@@ -15,7 +15,7 @@ namespace NCoreTests
 {
 
 /** Checks for a parameter in the commandline stream */
-const char* ParseParameter(const char* pkParmName, int argc, char* argv[])
+static const char* ParseParameter(const char* pkParmName, int argc, char* argv[])
 {
     const uint kParmLen = strlen(pkParmName);
 
@@ -38,7 +38,7 @@ const char* ParseParameter(const char* pkParmName, int argc, char* argv[])
 }
 
 /** Checks for the existence of a token in the commandline stream */
-bool ParseToken(const char* pkToken, int argc, char* argv[])
+static bool ParseToken(const char* pkToken, int argc, char* argv[])
 {
     for (int i = 0; i < argc; i++)
     {

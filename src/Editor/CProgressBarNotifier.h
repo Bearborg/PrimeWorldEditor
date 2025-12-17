@@ -36,13 +36,12 @@ public:
 protected:
     void UpdateProgress(const TString &, const TString &, float ProgressPercent) override
     {
-        if (mpProgressBar)
-        {
-            int Alpha = Math::Lerp(mpProgressBar->minimum(), mpProgressBar->maximum(), ProgressPercent);
+        if (!mpProgressBar)
+            return;
 
-            // Defer setValue call so it runs on the correct thread
-            QMetaObject::invokeMethod(mpProgressBar, "setValue", Qt::AutoConnection, Q_ARG(int, Alpha));
-        }
+        // Defer setValue call so it runs on the correct thread
+        const int Alpha = Math::Lerp(mpProgressBar->minimum(), mpProgressBar->maximum(), ProgressPercent);
+        QMetaObject::invokeMethod(mpProgressBar, &QProgressBar::setValue, Qt::AutoConnection, Alpha);
     }
 };
 

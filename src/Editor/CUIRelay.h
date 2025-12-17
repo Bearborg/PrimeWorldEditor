@@ -12,7 +12,7 @@ class CUIRelay : public QObject, public IUIRelay
 {
     Q_OBJECT
 
-    Qt::ConnectionType GetConnectionType() const
+    static Qt::ConnectionType GetConnectionType()
     {
         const bool IsUIThread = (QThread::currentThread() == gpEdApp->thread());
         return IsUIThread ? Qt::DirectConnection : Qt::BlockingQueuedConnection;
@@ -27,34 +27,29 @@ public:
     // that they run on the UI thread instead of whatever thread we happen to be on.
     void ShowMessageBox(const TString& rkInfoBoxTitle, const TString& rkMessage) override
     {
-        QMetaObject::invokeMethod(this, "MessageBoxSlot", GetConnectionType(),
-                                  Q_ARG(QString, TO_QSTRING(rkInfoBoxTitle)),
-                                  Q_ARG(QString, TO_QSTRING(rkMessage)) );
+        QMetaObject::invokeMethod(this, &CUIRelay::MessageBoxSlot, GetConnectionType(),
+                                  TO_QSTRING(rkInfoBoxTitle), TO_QSTRING(rkMessage));
     }
 
     void ShowMessageBoxAsync(const TString& rkInfoBoxTitle, const TString& rkMessage) override
     {
-        QMetaObject::invokeMethod(this, "MessageBoxSlot", Qt::QueuedConnection,
-                                  Q_ARG(QString, TO_QSTRING(rkInfoBoxTitle)),
-                                  Q_ARG(QString, TO_QSTRING(rkMessage)) );
+        QMetaObject::invokeMethod(this, &CUIRelay::MessageBoxSlot, Qt::QueuedConnection,
+                                  TO_QSTRING(rkInfoBoxTitle), TO_QSTRING(rkMessage));
     }
 
     bool AskYesNoQuestion(const TString& rkInfoBoxTitle, const TString& rkQuestion) override
     {
         bool RetVal;
-        QMetaObject::invokeMethod(this, "AskYesNoQuestionSlot", GetConnectionType(),
-                                  Q_RETURN_ARG(bool, RetVal),
-                                  Q_ARG(QString, TO_QSTRING(rkInfoBoxTitle)),
-                                  Q_ARG(QString, TO_QSTRING(rkQuestion)) );
+        QMetaObject::invokeMethod(this, &CUIRelay::AskYesNoQuestionSlot, GetConnectionType(), qReturnArg(RetVal),
+                                  TO_QSTRING(rkInfoBoxTitle), TO_QSTRING(rkQuestion));
         return RetVal;
     }
 
     bool OpenProject(const TString& kPath = "") override
     {
         bool RetVal;
-        QMetaObject::invokeMethod(this, "OpenProjectSlot", GetConnectionType(),
-                                  Q_RETURN_ARG(bool, RetVal),
-                                  Q_ARG(QString, TO_QSTRING(kPath)) );
+        QMetaObject::invokeMethod(this, &CUIRelay::OpenProjectSlot, GetConnectionType(), qReturnArg(RetVal),
+                                  TO_QSTRING(kPath));
         return RetVal;
     }
 

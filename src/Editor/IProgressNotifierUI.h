@@ -20,10 +20,8 @@ private:
     void UpdateProgress(const TString& rkTaskDesc, const TString& rkStepDesc, float ProgressPercent) final
     {
         // Defer the function call to make sure UI updates are done on the main thread
-        QMetaObject::invokeMethod(this, "UpdateUI", Qt::AutoConnection,
-                                  Q_ARG(QString, TO_QSTRING(rkTaskDesc)),
-                                  Q_ARG(QString, TO_QSTRING(rkStepDesc)),
-                                  Q_ARG(float, ProgressPercent) );
+        QMetaObject::invokeMethod(this, &IProgressNotifierUI::UpdateUI, Qt::AutoConnection,
+                                  TO_QSTRING(rkTaskDesc), TO_QSTRING(rkStepDesc), ProgressPercent);
     }
 };
 
