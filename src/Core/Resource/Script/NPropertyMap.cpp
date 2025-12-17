@@ -291,21 +291,16 @@ bool IsValidPropertyID(uint32 ID, const char* pkTypeName, bool* pOutIsValid /*= 
 }
 
 /** Retrieves a list of all properties that match the requested property ID. */
-void RetrievePropertiesWithID(uint32 ID, const char* pkTypeName, std::vector<IProperty*>& OutList)
+std::vector<IProperty*> RetrievePropertiesWithID(uint32 ID, const char* pkTypeName)
 {
     const SNameKey Key = CreateKey(ID, pkTypeName);
     const auto MapFind = gNameMap.find(Key);
 
     if (MapFind == gNameMap.cend())
-        return;
+        return {};
 
-    SNameValue& Value = MapFind->second;
-    OutList.reserve(Value.PropertyList.size());
-
-    for (auto* property : Value.PropertyList)
-    {
-        OutList.push_back(property);
-    }
+    const SNameValue& Value = MapFind->second;
+    return std::vector(Value.PropertyList.begin(), Value.PropertyList.end());
 }
 
 /** Retrieves a list of all XML templates that contain a given property ID. */
