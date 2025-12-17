@@ -49,8 +49,8 @@ public:
     ~WInstancesTab() override;
 
 private slots:
-    void OnTreeClick(QModelIndex Index);
-    void OnTreeDoubleClick(QModelIndex Index);
+    void OnTreeClick(const QModelIndex& Index);
+    void OnTreeDoubleClick(const QModelIndex& Index);
 
     void OnTreeContextMenu(QPoint Pos);
     void OnHideInstanceAction();

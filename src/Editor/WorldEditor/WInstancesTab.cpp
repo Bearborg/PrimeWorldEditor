@@ -84,10 +84,10 @@ WInstancesTab::WInstancesTab(CWorldEditor *pEditor, QWidget *parent) :
 WInstancesTab::~WInstancesTab() = default;
 
 // ************ PRIVATE SLOTS ************
-void WInstancesTab::OnTreeClick(QModelIndex Index)
+void WInstancesTab::OnTreeClick(const QModelIndex& Index)
 {
     // Single click is used to process show/hide events
-    QModelIndex SourceIndex = (ui->TabWidget->currentIndex() == 0 ? mLayersProxyModel.mapToSource(Index) : mTypesProxyModel.mapToSource(Index));
+    const QModelIndex SourceIndex = (ui->TabWidget->currentIndex() == 0 ? mLayersProxyModel.mapToSource(Index) : mTypesProxyModel.mapToSource(Index));
 
     if (SourceIndex.column() == 2)
     {
@@ -101,7 +101,6 @@ void WInstancesTab::OnTreeClick(QModelIndex Index)
             }
 
         }
-
         // Show/Hide Object Type
         else if (mpTypesModel->IndexType(SourceIndex) == CInstancesModel::EIndexType::ObjectType)
         {
@@ -122,14 +121,14 @@ void WInstancesTab::OnTreeClick(QModelIndex Index)
     }
 }
 
-void WInstancesTab::OnTreeDoubleClick(QModelIndex Index)
+void WInstancesTab::OnTreeDoubleClick(const QModelIndex& Index)
 {
-    QModelIndex SourceIndex = (ui->TabWidget->currentIndex() == 0 ? mLayersProxyModel.mapToSource(Index) : mTypesProxyModel.mapToSource(Index));;
-    CInstancesModel::EIndexType IndexType = mpTypesModel->IndexType(SourceIndex);
+    const QModelIndex SourceIndex = (ui->TabWidget->currentIndex() == 0 ? mLayersProxyModel.mapToSource(Index) : mTypesProxyModel.mapToSource(Index));;
+    const auto IndexType = mpTypesModel->IndexType(SourceIndex);
 
-    if ((mpEditor) && (IndexType == CInstancesModel::EIndexType::Instance))
+    if (mpEditor && IndexType == CInstancesModel::EIndexType::Instance)
     {
-        ENodeType NodeType = mpTypesModel->IndexNodeType(SourceIndex);
+        const auto NodeType = mpTypesModel->IndexNodeType(SourceIndex);
 
         if (NodeType == ENodeType::Script)
         {
@@ -164,7 +163,6 @@ void WInstancesTab::OnTreeContextMenu(QPoint Pos)
         else
             mpMenuTemplate = mpTypesModel->IndexTemplate(mMenuIndex);
     }
-
     else if (mMenuIndexType == CInstancesModel::EIndexType::Instance)
     {
         pObject = ( IsLayers ? mpLayersModel->IndexObject(mMenuIndex) : mpTypesModel->IndexObject(mMenuIndex) );
@@ -183,7 +181,6 @@ void WInstancesTab::OnTreeContextMenu(QPoint Pos)
         mpHideInstance->setText(tr("%1 instance").arg(Hide));
         mpHideInstance->setVisible(true);
     }
-
     else
     {
         mpHideInstance->setVisible(false);
@@ -198,7 +195,6 @@ void WInstancesTab::OnTreeContextMenu(QPoint Pos)
         mpHideAllExceptType->setText(tr("Hide all layers but %1").arg(TO_QSTRING(mpMenuLayer->Name())));
         mpHideAllExceptType->setVisible(true);
     }
-
     else if (mpMenuTemplate)
     {
         QString Hide = mpMenuTemplate->IsVisible() ? tr("Hide") : tr("Unhide");
@@ -208,7 +204,6 @@ void WInstancesTab::OnTreeContextMenu(QPoint Pos)
         mpHideAllExceptType->setText(tr("Hide all types but %1").arg(TO_QSTRING(mpMenuTemplate->Name())));
         mpHideAllExceptType->setVisible(true);
     }
-
     else
     {
         mpHideType->setVisible(false);
@@ -224,8 +219,8 @@ void WInstancesTab::OnTreeContextMenu(QPoint Pos)
 
 void WInstancesTab::OnHideInstanceAction()
 {
-    bool IsLayers = (ui->TabWidget->currentIndex() == 0);
-    mpMenuObject->SetVisible(mpMenuObject->MarkedVisible() ? false : true);
+    const bool IsLayers = (ui->TabWidget->currentIndex() == 0);
+    mpMenuObject->SetVisible(!mpMenuObject->MarkedVisible());
 
     if (IsLayers)
         mpLayersModel->dataChanged(mMenuIndex, mMenuIndex);
@@ -235,18 +230,17 @@ void WInstancesTab::OnHideInstanceAction()
 
 void WInstancesTab::OnHideTypeAction()
 {
-    bool IsLayers = (ui->TabWidget->currentIndex() == 0);
-    QModelIndex TypeIndex = (mMenuIndexType == CInstancesModel::EIndexType::Instance ? mMenuIndex.parent() : mMenuIndex);
+    const bool IsLayers = (ui->TabWidget->currentIndex() == 0);
+    const QModelIndex TypeIndex = (mMenuIndexType == CInstancesModel::EIndexType::Instance ? mMenuIndex.parent() : mMenuIndex);
 
     if (IsLayers)
     {
-        mpMenuLayer->SetVisible(mpMenuLayer->IsVisible() ? false : true);
+        mpMenuLayer->SetVisible(!mpMenuLayer->IsVisible());
         mpLayersModel->dataChanged(TypeIndex, TypeIndex);
     }
-
     else
     {
-        mpMenuTemplate->SetVisible(mpMenuTemplate->IsVisible() ? false : true);
+        mpMenuTemplate->SetVisible(!mpMenuTemplate->IsVisible());
         mpTypesModel->dataChanged(TypeIndex, TypeIndex);
     }
 }
@@ -280,9 +274,9 @@ void WInstancesTab::OnHideAllTypesAction()
 
 void WInstancesTab::OnHideAllExceptTypeAction()
 {
-    bool IsLayers = (ui->TabWidget->currentIndex() == 0);
-    QModelIndex TypeIndex = (mMenuIndexType == CInstancesModel::EIndexType::Instance ? mMenuIndex.parent() : mMenuIndex);
-    QModelIndex TypeParent = TypeIndex.parent();
+    const bool IsLayers = (ui->TabWidget->currentIndex() == 0);
+    const QModelIndex TypeIndex = (mMenuIndexType == CInstancesModel::EIndexType::Instance ? mMenuIndex.parent() : mMenuIndex);
+    const QModelIndex TypeParent = TypeIndex.parent();
 
     if (IsLayers)
     {
@@ -296,16 +290,15 @@ void WInstancesTab::OnHideAllExceptTypeAction()
 
         mpLayersModel->dataChanged( mpLayersModel->index(0, 2, TypeParent), mpLayersModel->index(mpLayersModel->rowCount(TypeParent) - 1, 2, TypeParent) );
     }
-
     else
     {
-        EGame Game = mpEditor->CurrentGame();
+        const EGame Game = mpEditor->CurrentGame();
         CGameTemplate *pGame = NGameList::GetGameTemplate(Game);
 
         for (uint32 iTemp = 0; iTemp < pGame->NumScriptTemplates(); iTemp++)
         {
             CScriptTemplate *pTemplate = pGame->TemplateByIndex(iTemp);
-            pTemplate->SetVisible( pTemplate == mpMenuTemplate ? true : false );
+            pTemplate->SetVisible(pTemplate == mpMenuTemplate);
         }
 
         mpTypesModel->dataChanged( mpTypesModel->index(0, 2, TypeParent), mpTypesModel->index(mpTypesModel->rowCount(TypeParent) - 1, 2, TypeParent) );
@@ -314,9 +307,9 @@ void WInstancesTab::OnHideAllExceptTypeAction()
 
 void WInstancesTab::OnUnhideAllTypes()
 {
-    bool IsLayers = (ui->TabWidget->currentIndex() == 0);
-    QModelIndex TypeIndex = (mMenuIndexType == CInstancesModel::EIndexType::Instance ? mMenuIndex.parent() : mMenuIndex);
-    QModelIndex TypeParent = TypeIndex.parent();
+    const bool IsLayers = (ui->TabWidget->currentIndex() == 0);
+    const QModelIndex TypeIndex = (mMenuIndexType == CInstancesModel::EIndexType::Instance ? mMenuIndex.parent() : mMenuIndex);
+    const QModelIndex TypeParent = TypeIndex.parent();
 
     if (IsLayers)
     {
@@ -329,7 +322,7 @@ void WInstancesTab::OnUnhideAllTypes()
     }
     else
     {
-        EGame Game = mpEditor->CurrentGame();
+        const EGame Game = mpEditor->CurrentGame();
         CGameTemplate *pGame = NGameList::GetGameTemplate(Game);
 
         for (uint32 iTemp = 0; iTemp < pGame->NumScriptTemplates(); iTemp++)
@@ -369,21 +362,21 @@ void WInstancesTab::OnUnhideAll()
         for (uint32 iTemp = 0; iTemp < pGame->NumScriptTemplates(); iTemp++)
             pGame->TemplateByIndex(iTemp)->SetVisible(true);
 
-        mpTypesModel->dataChanged( mpTypesModel->index(0, 2, TypesRoot), mpTypesModel->index(mpTypesModel->rowCount(TypesRoot) - 1, 2, TypesRoot) );
+        mpTypesModel->dataChanged(mpTypesModel->index(0, 2, TypesRoot), mpTypesModel->index(mpTypesModel->rowCount(TypesRoot) - 1, 2, TypesRoot));
     }
 
     // Emit data changed on all instances
-    for (uint32 iModel = 0; iModel < 2; iModel++)
+    for (int iModel = 0; iModel < 2; iModel++)
     {
         CInstancesModel *pModel = (iModel == 0 ? mpLayersModel : mpTypesModel);
 
-        QModelIndex Base = pModel->index(0, 0);
-        uint32 NumRows = pModel->rowCount(Base);
+        const QModelIndex Base = pModel->index(0, 0);
+        const int NumRows = pModel->rowCount(Base);
 
-        for (uint32 iRow = 0; iRow < NumRows; iRow++)
+        for (int iRow = 0; iRow < NumRows; iRow++)
         {
-            QModelIndex RowIndex = pModel->index(iRow, 2, Base);
-            pModel->dataChanged( pModel->index(0, 2, RowIndex), pModel->index(pModel->rowCount(RowIndex) - 1, 2, RowIndex) );
+            const QModelIndex RowIndex = pModel->index(iRow, 2, Base);
+            pModel->dataChanged(pModel->index(0, 2, RowIndex), pModel->index(pModel->rowCount(RowIndex) - 1, 2, RowIndex));
         }
     }
 
@@ -392,9 +385,9 @@ void WInstancesTab::OnUnhideAll()
 
 void WInstancesTab::ExpandTopLevelItems()
 {
-    for (uint32 iModel = 0; iModel < 2; iModel++)
+    for (int iModel = 0; iModel < 2; iModel++)
     {
-        QAbstractItemModel *pModel = (iModel == 0 ? &mLayersProxyModel : &mTypesProxyModel);
+        const QAbstractItemModel* pModel = (iModel == 0 ? &mLayersProxyModel : &mTypesProxyModel);
         QTreeView *pView = (iModel == 0 ? ui->LayersTreeView : ui->TypesTreeView);
         QModelIndex Index = pModel->index(0,0);
 
