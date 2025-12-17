@@ -6,6 +6,7 @@
 #include "Core/Render/CBoneTransformData.h"
 #include "Core/Resource/CMaterial.h"
 
+#include <Common/Math/CVector3f.h>
 #include <Common/Math/CTransform4f.h>
 
 // ************ MEMBER INITIALIZATION ************

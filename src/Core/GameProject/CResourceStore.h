@@ -7,7 +7,6 @@
 #include <Common/TString.h>
 #include <map>
 #include <memory>
-#include <set>
 
 class CGameExporter;
 class CGameProject;

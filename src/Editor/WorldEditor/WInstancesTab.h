@@ -1,17 +1,16 @@
 #ifndef WINSTANCESTAB_H
 #define WINSTANCESTAB_H
 
-#include "CInstancesProxyModel.h"
-#include "CInstancesModel.h"
+#include "Editor/WorldEditor/CInstancesProxyModel.h"
+#include "Editor/WorldEditor/CInstancesModel.h"
 
 #include <QWidget>
-#include <QAction>
-#include <QMenu>
-
 #include <memory>
 
 class CWorldEditor;
 class CScene;
+class QAction;
+class QMenu;
 
 namespace Ui {
 class WInstancesTab;

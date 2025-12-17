@@ -6,7 +6,9 @@
 
 #include <QList>
 
+class CQuaternion;
 class CSceneNode;
+class CVector3f;
 class INodeEditor;
 
 class CRotateNodeCommand : public IUndoCommand

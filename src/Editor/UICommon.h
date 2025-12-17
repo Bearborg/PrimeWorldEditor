@@ -1,12 +1,10 @@
 #ifndef UICOMMON
 #define UICOMMON
 
-#include "CEditorApplication.h"
+#include "Editor/CEditorApplication.h"
 #include <Common/TString.h>
 #include <QCoreApplication>
-#include <QDialogButtonBox>
 #include <QFileDialog>
-#include <QMap>
 #include <QMessageBox>
 #include <QString>
 

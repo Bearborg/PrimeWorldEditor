@@ -7,6 +7,7 @@
 #include <memory>
 
 class CCollisionNode;
+class CRenderer;
 
 /** Preview viewport for the collision editor */
 class CCollisionEditorViewport : public CBasicViewport
@@ -28,8 +29,8 @@ public:
     void OnResize() override;
 
     /** Accessors */
-    void SetNode(CCollisionNode* pNode)      { mpCollisionNode = pNode; }
-    void SetGridEnabled(bool Enabled)        { mGridEnabled = Enabled; }
+    void SetNode(CCollisionNode* pNode) { mpCollisionNode = pNode; }
+    void SetGridEnabled(bool Enabled)   { mGridEnabled = Enabled; }
     void SetOBBTreeDepth(int Depth)
     {
         mViewInfo.CollisionSettings.DrawBoundingHierarchy = (Depth > 0);

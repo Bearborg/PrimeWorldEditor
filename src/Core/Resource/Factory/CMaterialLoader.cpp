@@ -1,9 +1,12 @@
-#include "CMaterialLoader.h"
+#include "Core/Resource/Factory/CMaterialLoader.h"
+
 #include "Core/GameProject/CResourceStore.h"
 #include "Core/OpenGL/GLCommon.h"
+#include "Core/Resource/CMaterialSet.h"
 #include <Common/Log.h>
-#include <iostream>
-#include <iomanip>
+#include <Common/FileIO/IInputStream.h>
+
+#include <assimp/scene.h>
 
 CMaterialLoader::CMaterialLoader() = default;
 

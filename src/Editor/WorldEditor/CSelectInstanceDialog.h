@@ -1,10 +1,9 @@
 #ifndef CSELECTINSTANCEDIALOG_H
 #define CSELECTINSTANCEDIALOG_H
 
-#include "CInstancesModel.h"
-#include "CInstancesProxyModel.h"
+#include "Editor/WorldEditor/CInstancesModel.h"
+#include "Editor/WorldEditor/CInstancesProxyModel.h"
 #include <QDialog>
-#include <QSortFilterProxyModel>
 
 #include <memory>
 

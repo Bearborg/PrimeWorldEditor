@@ -12,7 +12,6 @@
 #include <Core/ScriptExtra/CPointOfInterestExtra.h>
 
 #include <QMouseEvent>
-#include <QMessageBox>
 
 constexpr CColor skNormalColor(0.137255f, 0.184314f, 0.776471f, 0.5f);
 constexpr CColor skImportantColor(0.721569f, 0.066667f, 0.066667f, 0.5f);

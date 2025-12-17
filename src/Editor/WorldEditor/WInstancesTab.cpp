@@ -9,6 +9,9 @@
 #include <Core/Scene/CScene.h>
 #include <Core/Scene/CSceneIterator.h>
 
+#include <QAction>
+#include <QMenu>
+
 WInstancesTab::WInstancesTab(CWorldEditor *pEditor, QWidget *parent) :
     QWidget(parent),
     ui(std::make_unique<Ui::WInstancesTab>())

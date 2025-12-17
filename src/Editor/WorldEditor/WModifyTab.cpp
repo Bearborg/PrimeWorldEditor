@@ -1,14 +1,16 @@
-#include "WModifyTab.h"
+#include "Editor/WorldEditor/WModifyTab.h"
 #include "ui_WModifyTab.h"
 
-#include "CLinkDialog.h"
-#include "CSelectInstanceDialog.h"
-#include "CWorldEditor.h"
+#include "Editor/PropertyEdit/CPropertyView.h"
 #include "Editor/Undo/UndoCommands.h"
+#include "Editor/WorldEditor/CLinkDialog.h"
+#include "Editor/WorldEditor/CLinkModel.h"
+#include "Editor/WorldEditor/CSelectInstanceDialog.h"
+#include "Editor/WorldEditor/CWorldEditor.h"
+#include <Core/Scene/CSceneNode.h>
 #include <Core/Scene/CScriptNode.h>
 
-#include <QScrollArea>
-#include <QScrollBar>
+#include <QMenu>
 
 WModifyTab::WModifyTab(CWorldEditor *pEditor, QWidget *pParent)
     : QWidget(pParent)

@@ -1,9 +1,14 @@
-#include "WVectorEditor.h"
+#include "Editor/Widgets/WVectorEditor.h"
+
+#include <Common/Math/CVector3f.h>
+#include "Editor/Widgets/WDraggableSpinBox.h"
+
+#include <QHBoxLayout>
+#include <QLabel>
 
 WVectorEditor::WVectorEditor(QWidget *pParent)
     : QWidget(pParent)
     , mValue(CVector3f::Zero())
-    , mEditing(false)
 {
     SetupUI();
     mpSpinBoxX->setValue(0.0);
@@ -14,7 +19,6 @@ WVectorEditor::WVectorEditor(QWidget *pParent)
 WVectorEditor::WVectorEditor(const CVector3f& rkValue, QWidget *pParent)
     : QWidget(pParent)
     , mValue(rkValue)
-    , mEditing(false)
 {
     SetupUI();
     mValue = rkValue;

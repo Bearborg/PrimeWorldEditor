@@ -1,13 +1,18 @@
 #include "Core/Resource/Factory/CModelLoader.h"
 
 #include <Common/Log.h>
-#include "Core/GameProject/CResourceStore.h"
+#include <Common/FileIO/IInputStream.h>
+#include <Common/Math/CVector2f.h>
+#include <Common/Math/CVector3f.h>
+
+#include "Core/Resource/CMaterialSet.h"
 #include "Core/Resource/Factory/CMaterialLoader.h"
 #include "Core/Resource/Factory/CSectionMgrIn.h"
 #include "Core/Resource/Model/CBasicModel.h"
 #include "Core/Resource/Model/CModel.h"
 #include "Core/Resource/Model/SSurface.h"
 
+#include <assimp/scene.h>
 #include <map>
 
 CModelLoader::CModelLoader() = default;

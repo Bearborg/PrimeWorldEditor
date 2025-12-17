@@ -2,9 +2,10 @@
 #define SRENDERABLEPTR_H
 
 #include "Core/Render/ERenderCommand.h"
-#include "Core/Render/IRenderable.h"
 #include <Common/Math/CAABox.h>
 #include <cstdint>
+
+class IRenderable;
 
 struct SRenderablePtr
 {

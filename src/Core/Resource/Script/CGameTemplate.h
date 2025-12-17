@@ -3,7 +3,7 @@
 
 #include "Core/Resource/Script/CLink.h"
 #include "Core/Resource/Script/CScriptTemplate.h"
-#include "Core/Resource/Script/Property/Properties.h"
+#include "Core/Resource/Script/Property/IProperty.h"
 #include <Common/CFourCC.h>
 #include <Common/EGame.h>
 #include <Common/TString.h>

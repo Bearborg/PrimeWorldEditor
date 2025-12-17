@@ -5,6 +5,7 @@
 #include "Core/GameProject/CResourceIterator.h"
 #include "Core/Resource/CAudioGroup.h"
 #include "Core/Resource/CAudioMacro.h"
+#include "Core/Resource/CDependencyGroup.h"
 #include "Core/Resource/CFont.h"
 #include "Core/Resource/CWorld.h"
 #include "Core/Resource/Animation/CAnimSet.h"

@@ -4,14 +4,13 @@
 #include <Common/CTimer.h>
 #include <Common/Math/CRay.h>
 #include <Common/Math/CVector2f.h>
+#include <Core/OpenGL/GL/glew.h>
 #include <Core/Render/CCamera.h>
-#include <Core/Render/CRenderer.h>
 #include <Core/Render/SViewInfo.h>
 
 #include <QOpenGLWidget>
 #include <QMouseEvent>
 #include <QPoint>
-#include <QTimer>
 
 class CBasicViewport : public QOpenGLWidget
 {

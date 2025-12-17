@@ -1,11 +1,11 @@
 #ifndef CSELECTALLCOMMAND_H
 #define CSELECTALLCOMMAND_H
 
-#include "IUndoCommand.h"
-#include "ObjReferences.h"
 #include "Editor/CSelectionIterator.h"
-#include "Editor/INodeEditor.h"
-#include <Core/Scene/CSceneNode.h>
+#include "Editor/Undo/IUndoCommand.h"
+#include "Editor/Undo/ObjReferences.h"
+#include <Core/Scene/CSceneIterator.h>
+#include <Core/Scene/ENodeType.h>
 
 #include <QCoreApplication>
 

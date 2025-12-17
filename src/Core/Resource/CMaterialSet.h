@@ -3,7 +3,6 @@
 
 #include "Core/Resource/CMaterial.h"
 #include "Core/Resource/CTexture.h"
-#include <Common/EGame.h>
 
 #include <algorithm>
 #include <memory>

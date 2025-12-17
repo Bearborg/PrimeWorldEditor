@@ -4,6 +4,7 @@
 #include "Editor/UICommon.h"
 #include "Editor/Undo/UndoCommands.h"
 #include "Editor/WorldEditor/CWorldEditor.h"
+#include <Core/Render/CRenderer.h>
 #include <Core/Render/SViewInfo.h>
 #include <Core/Resource/Script/CScriptLayer.h>
 #include <Core/Scene/CSceneIterator.h>

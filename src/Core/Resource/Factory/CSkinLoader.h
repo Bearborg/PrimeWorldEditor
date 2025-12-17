@@ -1,10 +1,11 @@
 #ifndef CSKINLOADER_H
 #define CSKINLOADER_H
 
-#include "Core/Resource/TResPtr.h"
 #include <memory>
 
+class CResourceEntry;
 class CSkin;
+class IInputStream;
 
 class CSkinLoader
 {

@@ -1,15 +1,16 @@
 #ifndef WCREATETAB_H
 #define WCREATETAB_H
 
-#include "CWorldEditor.h"
-#include <Core/Resource/Script/CGameTemplate.h>
 #include <QWidget>
-
 #include <memory>
 
 namespace Ui {
 class WCreateTab;
 }
+
+class CGameProject;
+class CScriptLayer;
+class CWorldEditor;
 
 class WCreateTab : public QWidget
 {

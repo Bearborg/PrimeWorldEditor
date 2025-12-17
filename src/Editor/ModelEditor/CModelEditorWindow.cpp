@@ -6,7 +6,6 @@
 
 #include <Common/TString.h>
 #include <Core/GameProject/CResourceStore.h>
-#include <Core/Render/CRenderer.h>
 #include <Core/Resource/CFont.h>
 #include <Core/Resource/Cooker/CTextureEncoder.h>
 #include <Core/Resource/Factory/CModelLoader.h>

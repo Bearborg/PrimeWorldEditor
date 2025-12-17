@@ -1,6 +1,5 @@
 #include "Editor/NDolphinIntegration.h"
 
-#include "Editor/MacOSExtras.h"
 #include "Editor/UICommon.h"
 #include "Editor/SDolHeader.h"
 #include <Common/FileUtil.h>
@@ -11,6 +10,10 @@
 #include <QObject>
 #include <QOverload>
 #include <QSettings>
+
+#ifdef __APPLE__
+#include "Editor/MacOSExtras.h"
+#endif
 
 #undef CopyFile
 #undef MoveFile

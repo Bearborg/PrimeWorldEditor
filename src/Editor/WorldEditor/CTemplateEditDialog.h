@@ -1,16 +1,19 @@
 #ifndef CTEMPLATEEDITDIALOG_H
 #define CTEMPLATEEDITDIALOG_H
 
-#include "Editor/CPropertyNameValidator.h"
-#include <Core/Resource/Script/Property/Properties.h>
-#include <Core/Resource/Script/CGameTemplate.h>
-#include <QDialog>
+#include <Common/EGame.h>
+#include <Common/TString.h>
+#include <Core/Resource/Script/Property/IProperty.h>
 
+#include <QDialog>
 #include <memory>
 
 namespace Ui {
 class CTemplateEditDialog;
 }
+
+class CPropertyNameValidator;
+class IProperty;
 
 class CTemplateEditDialog : public QDialog
 {

@@ -1,12 +1,16 @@
 #ifndef CPROPERTYMODEL_H
 #define CPROPERTYMODEL_H
 
-#include <Core/Resource/Script/Property/Properties.h>
+#include <Core/Resource/Script/Property/IProperty.h>
 #include <QAbstractItemModel>
 #include <QFont>
 #include <QList>
 #include <QMap>
 #include <vector>
+
+class CGameProject;
+class CScriptObject;
+class IProperty;
 
 class CPropertyModel : public QAbstractItemModel
 {
@@ -36,6 +40,7 @@ class CPropertyModel : public QAbstractItemModel
 
 public:
     explicit CPropertyModel(QObject *pParent = nullptr);
+    ~CPropertyModel() override;
 
     void ConfigureIntrinsic(CGameProject* pProject, IProperty* pRootProperty, void* pPropertyData);
     void ConfigureScript(CGameProject* pProject, IProperty* pRootProperty, CScriptObject* pObject);
@@ -51,8 +56,8 @@ public:
     QModelIndex parent(const QModelIndex& rkChild) const override;
     Qt::ItemFlags flags(const QModelIndex& rkIndex) const override;
 
-    void ArrayAboutToBeResized(const QModelIndex& rkIndex, uint32 NewSize);
-    void ArrayResized(const QModelIndex& rkIndex, uint32 OldSize);
+    void ArrayAboutToBeResized(const QModelIndex& rkIndex, uint32_t NewSize);
+    void ArrayResized(const QModelIndex& rkIndex, uint32_t OldSize);
     void ClearSlot(int ID);
 
     EPropertyType GetEffectiveFieldType(IProperty* pProperty) const;

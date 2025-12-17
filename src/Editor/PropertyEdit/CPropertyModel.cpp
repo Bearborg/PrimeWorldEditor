@@ -17,6 +17,8 @@ CPropertyModel::CPropertyModel(QObject *pParent)
 {
 }
 
+CPropertyModel::~CPropertyModel() = default;
+
 int CPropertyModel::RecursiveBuildArrays(IProperty* pProperty, int ParentID)
 {
     // Insert into an unused slot if one exists. Otherwise, append to the end of the array.

@@ -6,7 +6,10 @@
 #include <Core/Render/CDrawUtil.h>
 #include <Core/Render/CGraphics.h>
 #include <Core/Resource/CMaterial.h>
+
+#ifdef __APPLE__
 #include <Editor/MacOSExtras.h>
+#endif
 
 #include <QCursor>
 
@@ -86,7 +89,7 @@ void CBasicViewport::mousePressEvent(QMouseEvent *pEvent)
 
     if (IsMouseInputActive())
     {
-#if __APPLE__
+#ifdef __APPLE__
         // This will zero out the drag accumulators
         gpMouseDragCocoaEventFilter->claimX();
         gpMouseDragCocoaEventFilter->claimY();

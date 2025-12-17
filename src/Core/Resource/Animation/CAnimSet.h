@@ -1,7 +1,6 @@
 #ifndef CANIMSET_H
 #define CANIMSET_H
 
-#include "Core/Resource/CDependencyGroup.h"
 #include "Core/Resource/CResource.h"
 #include "Core/Resource/TResPtr.h"
 #include "Core/Resource/Animation/CAnimation.h"

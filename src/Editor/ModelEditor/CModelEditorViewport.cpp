@@ -2,6 +2,7 @@
 
 #include <Core/Render/CDrawUtil.h>
 #include <Core/Render/CGraphics.h>
+#include <Core/Render/CRenderer.h>
 #include <Core/Scene/CModelNode.h>
 
 CModelEditorViewport::CModelEditorViewport(QWidget *pParent)

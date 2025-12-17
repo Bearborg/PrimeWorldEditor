@@ -2,7 +2,6 @@
 #define CVIRTUALDIRECTORYMODEL
 
 #include <QAbstractItemModel>
-#include <QIcon>
 
 #include <optional>
 #include <utility>

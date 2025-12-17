@@ -1,7 +1,7 @@
 #ifndef CNODESELECTION_H
 #define CNODESELECTION_H
 
-#include <Core/Scene/CSceneIterator.h>
+#include <Common/Math/CAABox.h>
 #include <Core/Scene/CSceneNode.h>
 #include <Core/Scene/CScriptNode.h>
 #include <QList>

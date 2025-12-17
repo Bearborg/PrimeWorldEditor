@@ -1,4 +1,6 @@
-#include "DependencyListBuilders.h"
+#include "Core/GameProject/DependencyListBuilders.h"
+
+#include "Core/Resource/CDependencyGroup.h"
 
 // ************ CCharacterUsageMap ************
 bool CCharacterUsageMap::IsCharacterUsed(const CAssetID& rkID, size_t CharacterIndex) const

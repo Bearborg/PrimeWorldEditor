@@ -1,11 +1,23 @@
 #include "Core/Resource/Cooker/CScriptCooker.h"
 
 #include "Core/Resource/Script/CLink.h"
+#include "Core/Resource/Script/CScriptLayer.h"
+#include "Core/Resource/Script/CScriptObject.h"
 #include "Core/Resource/Script/CScriptTemplate.h"
 #include <Core/Resource/Script/Property/CArrayProperty.h>
 #include <Core/Resource/Script/Property/CAssetProperty.h>
 #include <Core/Resource/Script/Property/CEnumProperty.h>
 #include <Core/Resource/Script/Property/CFlagsProperty.h>
+
+#include <Common/FileIO/IOutputStream.h>
+
+CScriptCooker::CScriptCooker(EGame Game, bool WriteGeneratedObjectsSeparately)
+    : mGame(Game)
+    , mWriteGeneratedSeparately(WriteGeneratedObjectsSeparately && mGame >= EGame::EchoesDemo)
+{
+}
+
+CScriptCooker::~CScriptCooker() = default;
 
 void CScriptCooker::WriteProperty(IOutputStream& rOut, IProperty* pProperty, void* pData, bool InAtomicStruct)
 {

@@ -2,14 +2,18 @@
 #define WEDITORPROPERTIES_H
 
 #include <QWidget>
-#include "CWorldEditor.h"
 
-#include <QCheckBox>
-#include <QComboBox>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QLineEdit>
-#include <QVBoxLayout>
+class CSceneNode;
+class CScriptNode;
+class CScriptObject;
+class CWorldEditor;
+class QCheckBox;
+class QComboBox;
+class QHBoxLayout;
+class QLabel;
+class QLineEdit;
+class QVBoxLayout;
+class IProperty;
 
 class WEditorProperties : public QWidget
 {
@@ -34,6 +38,7 @@ class WEditorProperties : public QWidget
 
 public:
     explicit WEditorProperties(QWidget* pParent = nullptr);
+    ~WEditorProperties() override;
 
     void SyncToEditor(CWorldEditor* pEditor);
     void SetLayerComboBox();

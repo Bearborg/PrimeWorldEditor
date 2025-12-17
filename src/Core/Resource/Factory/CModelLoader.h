@@ -4,11 +4,7 @@
 #include <Common/EGame.h>
 #include <Common/Flags.h>
 #include <Common/Math/CAABox.h>
-#include <Common/Math/CVector2f.h>
-#include <Common/Math/CVector3f.h>
 #include <Core/Resource/TResPtr.h>
-
-#include <assimp/scene.h>
 
 #include <memory>
 #include <vector>
@@ -18,7 +14,13 @@ class CMaterialSet;
 class CModel;
 class CResourceEntry;
 class CSectionMgrIn;
+class CVector2f;
+class CVector3f;
 class IInputStream;
+
+struct aiMesh;
+struct aiNode;
+struct aiScene;
 struct SSurface;
 
 enum class EModelLoaderFlag

@@ -30,7 +30,7 @@ class CResTypeInfo
 
     // Private Methods
     CResTypeInfo(EResourceType type, TString typeName, TString retroExtension);
-    ~CResTypeInfo() = default;
+    ~CResTypeInfo();
     friend struct std::default_delete<CResTypeInfo>;
 
     // Public Methods

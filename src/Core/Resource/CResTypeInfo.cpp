@@ -1,6 +1,11 @@
-#include "CResTypeInfo.h"
+#include "Core/Resource/CResTypeInfo.h"
+
 #include <Common/Macros.h>
+#include <Common/Serialization/IArchive.h>
+
 #include <algorithm>
+#include <memory>
+#include <Unordered_map>
 
 std::unordered_map<EResourceType, std::unique_ptr<CResTypeInfo>> CResTypeInfo::smTypeMap;
 
@@ -14,6 +19,8 @@ CResTypeInfo::CResTypeInfo(EResourceType type, TString typeName, TString retroEx
 #endif
     smTypeMap.insert_or_assign(type, std::unique_ptr<CResTypeInfo>(this));
 }
+
+CResTypeInfo::~CResTypeInfo() = default;
 
 bool CResTypeInfo::IsInGame(EGame Game) const
 {

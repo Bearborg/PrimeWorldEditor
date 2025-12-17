@@ -7,7 +7,6 @@
 #include <Common/Math/ETransformSpace.h>
 #include <Core/Scene/CScene.h>
 
-#include <QMainWindow>
 #include <QAction>
 #include <QActionGroup>
 #include <QComboBox>

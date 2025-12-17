@@ -1,8 +1,9 @@
 #ifndef CTEMPLATEMIMEDATA_H
 #define CTEMPLATEMIMEDATA_H
 
-#include <Core/Resource/Script/CScriptTemplate.h>
 #include <QMimeData>
+
+class CScriptTemplate;
 
 class CTemplateMimeData : public QMimeData
 {

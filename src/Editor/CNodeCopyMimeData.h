@@ -1,15 +1,21 @@
 #ifndef CNODECOPYMIMEDATA
 #define CNODECOPYMIMEDATA
 
+#include <Common/CAssetID.h>
 #include <Common/TString.h>
+#include <Common/FileIO/CVectorOutStream.h>
+#include <Common/Math/CQuaternion.h>
 #include <Common/Math/CVector3f.h>
 #include <Core/Resource/Cooker/CScriptCooker.h>
-#include <Core/Resource/Factory/CScriptLoader.h>
+#include <Core/Resource/Script/CScriptObject.h>
 #include <Core/Scene/CSceneNode.h>
 #include "Editor/CSelectionIterator.h"
 #include "Editor/WorldEditor/CWorldEditor.h"
 
+#include <QList>
 #include <QMimeData>
+
+#include <vector>
 
 class CNodeCopyMimeData : public QMimeData
 {

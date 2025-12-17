@@ -1,15 +1,18 @@
 #ifndef CMATERIALLOADER_H
 #define CMATERIALLOADER_H
 
-#include "Core/GameProject/CResourceStore.h"
-#include "Core/Resource/CMaterialSet.h"
+#include "Core/Resource/CMaterial.h"
+#include "Core/Resource/TResPtr.h"
 #include <Common/EGame.h>
 
-#include <Common/FileIO.h>
-#include <assimp/scene.h>
-
 #include <array>
+#include <memory>
 #include <optional>
+
+class CMaterialSet;
+class IInputStream;
+struct aiMaterial;
+struct aiScene;
 
 enum class EMP3RenderConfig
 {

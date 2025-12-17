@@ -4,6 +4,7 @@
 #include "Core/Render/CDrawUtil.h"
 #include "Core/Render/CGraphics.h"
 #include "Core/Render/CRenderer.h"
+#include "Core/Render/IRenderable.h"
 #include "Core/Render/SRenderablePtr.h"
 #include "Core/Render/SViewInfo.h"
 

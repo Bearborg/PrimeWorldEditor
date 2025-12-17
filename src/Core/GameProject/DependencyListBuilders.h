@@ -5,8 +5,10 @@
 #include "Core/GameProject/CGameProject.h"
 #include "Core/GameProject/CPackage.h"
 #include "Core/GameProject/CResourceEntry.h"
-#include "Core/Resource/CDependencyGroup.h"
+#include "Core/Resource/TResPtr.h"
 #include "Core/Resource/CWorld.h"
+
+#include <Common/CAssetID.h>
 
 #include <list>
 #include <map>

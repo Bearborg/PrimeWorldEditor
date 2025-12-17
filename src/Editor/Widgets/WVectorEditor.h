@@ -1,21 +1,19 @@
 #ifndef WVECTOREDITOR_H
 #define WVECTOREDITOR_H
 
-#include "WDraggableSpinBox.h"
 #include <Common/Math/CVector3f.h>
-
-#include <QFormLayout>
-#include <QGroupBox>
-#include <QHBoxLayout>
-#include <QLabel>
 #include <QWidget>
+
+class QHBoxLayout;
+class QLabel;
+class WDraggableSpinBox;
 
 class WVectorEditor : public QWidget
 {
     Q_OBJECT
 
     CVector3f mValue;
-    bool mEditing;
+    bool mEditing = false;
 
     Qt::Orientation mOrientation;
     QLayout *mpLayout;

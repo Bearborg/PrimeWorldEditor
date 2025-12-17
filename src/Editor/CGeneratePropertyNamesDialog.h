@@ -5,12 +5,10 @@
 #include "Editor/Widgets/TEnumComboBox.h"
 #include <Core/Resource/Script/Property/CPropertyNameGenerator.h>
 #include <Core/Resource/Script/Property/IProperty.h>
-#include <Core/Resource/Script/Property/CEnumProperty.h>
 
 #include <QDialog>
 #include <QFuture>
 #include <QFutureWatcher>
-#include <QScopedPointer>
 #include <QTimer>
 #include <QTreeWidgetItem>
 #include <memory>
@@ -63,9 +61,6 @@ public:
 
     /** Populate the ID pool with the children of the given property */
     void AddChildrenToIDPool(IProperty* pProperty, bool Recursive);
-
-    /** Populate the ID pool with enum values */
-    void AddEnumValuesToIDPool(CEnumProperty* pEnum);
 
 public slots:
     /** Show event override */

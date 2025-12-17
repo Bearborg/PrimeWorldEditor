@@ -4,6 +4,7 @@
 #include "Editor/Undo/IUndoCommand.h"
 #include "Editor/Undo/ObjReferences.h"
 
+#include "Editor/CNodeSelection.h"
 #include <Core/Scene/CSceneNode.h>
 
 #include <QCoreApplication>

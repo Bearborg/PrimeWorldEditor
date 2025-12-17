@@ -1,6 +1,7 @@
 #include "Core/Resource/Factory/CSkinLoader.h"
 
-#include <Common/Macros.h>
+#include <Common/CFourCC.h>
+#include <Common/FileIO/IInputStream.h>
 #include "Core/Resource/Animation/CSkin.h"
 
 // ************ STATIC ************

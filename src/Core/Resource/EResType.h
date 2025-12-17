@@ -1,8 +1,7 @@
 #ifndef ERESOURCETYPE
 #define ERESOURCETYPE
 
-#include <Common/EGame.h>
-#include <Common/TString.h>
+class IArchive;
 
 enum class EResourceType
 {

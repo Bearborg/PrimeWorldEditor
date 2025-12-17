@@ -7,6 +7,7 @@
 #include <QList>
 
 class CSceneNode;
+class CVector3f;
 class INodeEditor;
 
 class CTranslateNodeCommand : public IUndoCommand

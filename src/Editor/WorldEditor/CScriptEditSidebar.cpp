@@ -1,9 +1,13 @@
-#include "CScriptEditSidebar.h"
-#include "WEditorProperties.h"
-#include "WCreateTab.h"
-#include "WModifyTab.h"
-#include "WInstancesTab.h"
-#include "CWorldEditor.h"
+#include "Editor/WorldEditor/CScriptEditSidebar.h"
+
+#include "Editor/WorldEditor/WCreateTab.h"
+#include "Editor/WorldEditor/WEditorProperties.h"
+#include "Editor/WorldEditor/WModifyTab.h"
+#include "Editor/WorldEditor/WInstancesTab.h"
+
+#include <QIcon>
+#include <QTabWidget>
+#include <QVBoxLayout>
 
 CScriptEditSidebar::CScriptEditSidebar(CWorldEditor *pEditor)
     : CWorldEditorSidebar(pEditor)

@@ -1,10 +1,10 @@
 #ifndef CSCRIPTEDITSIDEBAR_H
 #define CSCRIPTEDITSIDEBAR_H
 
-#include "CWorldEditorSidebar.h"
-#include <QTabWidget>
+#include "Editor/WorldEditor/CWorldEditorSidebar.h"
 
 class CWorldEditor;
+class QTabWidget;
 class WEditorProperties;
 class WCreateTab;
 class WModifyTab;
@@ -21,12 +21,12 @@ class CScriptEditSidebar : public CWorldEditorSidebar
     WInstancesTab *mpInstancesTab;
 
 public:
-    CScriptEditSidebar(CWorldEditor *pEditor);
+    explicit CScriptEditSidebar(CWorldEditor *pEditor);
 
     // Accessors
-    inline WCreateTab* CreateTab() const        { return mpCreateTab; }
-    inline WModifyTab* ModifyTab() const        { return mpModifyTab; }
-    inline WInstancesTab* InstancesTab() const  { return mpInstancesTab; }
+    WCreateTab* CreateTab() const        { return mpCreateTab; }
+    WModifyTab* ModifyTab() const        { return mpModifyTab; }
+    WInstancesTab* InstancesTab() const  { return mpInstancesTab; }
 };
 
 #endif // CSCRIPTEDITSIDEBAR_H

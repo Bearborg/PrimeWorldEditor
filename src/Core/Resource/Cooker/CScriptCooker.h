@@ -1,12 +1,13 @@
 #ifndef CSCRIPTCOOKER_H
 #define CSCRIPTCOOKER_H
 
-#include "Core/Resource/Script/CScriptLayer.h"
-#include "Core/Resource/Script/CScriptObject.h"
 #include <Common/EGame.h>
-#include <Common/FileIO.h>
-
 #include <vector>
+
+class CScriptLayer;
+class CScriptObject;
+class IOutputStream;
+class IProperty;
 
 class CScriptCooker
 {
@@ -15,10 +16,8 @@ class CScriptCooker
     bool mWriteGeneratedSeparately;
 
 public:
-    explicit CScriptCooker(EGame Game, bool WriteGeneratedObjectsSeparately = true)
-        : mGame(Game)
-        , mWriteGeneratedSeparately(WriteGeneratedObjectsSeparately && mGame >= EGame::EchoesDemo)
-    {}
+    explicit CScriptCooker(EGame Game, bool WriteGeneratedObjectsSeparately = true);
+    ~CScriptCooker();
 
     void WriteProperty(IOutputStream& rOut, IProperty* pProperty, void* pData, bool InAtomicStruct);
     void WriteInstance(IOutputStream& rOut, CScriptObject *pInstance);

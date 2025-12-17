@@ -2,6 +2,8 @@
 
 #include "Editor/CNodeCopyMimeData.h"
 #include "Editor/WorldEditor/CWorldEditor.h"
+#include <Core/Resource/Factory/CScriptLoader.h>
+#include <Core/Resource/Script/CScriptLayer.h>
 
 #include <QCoreApplication>
 #include <QClipboard>

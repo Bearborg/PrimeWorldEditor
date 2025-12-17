@@ -7,6 +7,8 @@
 #include "Editor/CLineRenderable.h"
 #include "Editor/INodeEditor.h"
 
+class CRenderer;
+
 class CSceneViewport : public CBasicViewport
 {
     Q_OBJECT

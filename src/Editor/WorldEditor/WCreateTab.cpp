@@ -4,6 +4,7 @@
 #include "Editor/Undo/UndoCommands.h"
 #include "Editor/WorldEditor/CTemplateMimeData.h"
 #include "Editor/WorldEditor/CWorldEditor.h"
+#include <Core/GameProject/CGameProject.h>
 #include <Core/Resource/Script/CScriptLayer.h>
 #include <Core/Resource/Script/NGameList.h>
 

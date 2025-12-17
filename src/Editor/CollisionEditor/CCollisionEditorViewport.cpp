@@ -1,5 +1,6 @@
 #include "Editor/CollisionEditor/CCollisionEditorViewport.h"
 
+#include <Core/Render/CRenderer.h>
 #include <Core/Scene/CCollisionNode.h>
 
 /** Constructor */

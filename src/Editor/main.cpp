@@ -1,6 +1,5 @@
 #include "Editor/CEditorApplication.h"
 #include "Editor/CUIRelay.h"
-#include "Editor/MacOSExtras.h"
 #include "Editor/UICommon.h"
 #include <Common/FileUtil.h>
 #include <Common/Log.h>
@@ -13,6 +12,10 @@
 #include <QIcon>
 #include <QStyleFactory>
 #include <QtGlobal>
+
+#ifdef __APPLE__
+#include "Editor/MacOSExtras.h"
+#endif
 
 // Redirect qDebug output to the log file
 static void QtLogRedirect(QtMsgType Type, const QMessageLogContext& /*rkContext*/, const QString& rkMessage)

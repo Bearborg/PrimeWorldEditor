@@ -1,24 +1,25 @@
 #ifndef WMODIFYTAB_H
 #define WMODIFYTAB_H
 
-#include "CLinkDialog.h"
-#include "CLinkModel.h"
-#include "Editor/CNodeSelection.h"
-#include "Editor/PropertyEdit/CPropertyView.h"
-#include <Core/Scene/CSceneNode.h>
-#include <Core/Scene/CScriptNode.h>
+#include <Core/Resource/Script/CScriptObject.h>
 
 #include <QList>
-#include <QMenu>
 #include <QWidget>
 
 #include <memory>
 
-class CWorldEditor;
-
 namespace Ui {
 class WModifyTab;
 }
+
+class CLinkModel;
+class CPropertyView;
+class CSceneNode;
+class CScriptObject;
+class CWorldEditor;
+class QAction;
+class QMenu;
+struct SRayIntersection;
 
 class WModifyTab : public QWidget
 {

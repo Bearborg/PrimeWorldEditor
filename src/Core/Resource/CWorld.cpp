@@ -1,5 +1,6 @@
-#include "CWorld.h"
-#include "Core/GameProject/CResourceStore.h"
+#include "Core/Resource/CWorld.h"
+
+#include "Core/GameProject/CDependencyTree.h"
 #include "Core/Resource/Script/CScriptLayer.h"
 
 CWorld::CWorld(CResourceEntry *pEntry)

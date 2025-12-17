@@ -1,8 +1,15 @@
 #include "Editor/WorldEditor/WEditorProperties.h"
 
 #include "Editor/UICommon.h"
-#include "Editor/Undo/CEditScriptPropertyCommand.h"
+#include "Editor/WorldEditor/CWorldEditor.h"
 #include <Core/Resource/Script/CScriptLayer.h>
+
+#include <QCheckBox>
+#include <QComboBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QVBoxLayout>
 
 WEditorProperties::WEditorProperties(QWidget *pParent)
     : QWidget(pParent)
@@ -55,6 +62,8 @@ WEditorProperties::WEditorProperties(QWidget *pParent)
     connect(mpInstanceNameLineEdit, &QLineEdit::editingFinished, this, &WEditorProperties::OnInstanceNameEditFinished);
     connect(mpLayersComboBox, &QComboBox::currentIndexChanged, this, &WEditorProperties::OnLayerChanged);
 }
+
+WEditorProperties::~WEditorProperties() = default;
 
 void WEditorProperties::SyncToEditor(CWorldEditor *pEditor)
 {

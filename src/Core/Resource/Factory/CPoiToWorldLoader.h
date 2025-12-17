@@ -1,10 +1,11 @@
 #ifndef CPOITOWORLDLOADER_H
 #define CPOITOWORLDLOADER_H
 
-#include "Core/Resource/TResPtr.h"
 #include <memory>
 
 class CPoiToWorld;
+class CResourceEntry;
+class IInputStream;
 
 class CPoiToWorldLoader
 {

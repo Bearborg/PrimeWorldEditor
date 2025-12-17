@@ -5,6 +5,8 @@
 #include "Editor/ResourceBrowser/CResourceMimeData.h"
 #include <Core/GameProject/CVirtualDirectory.h>
 
+#include <QIcon>
+
 CVirtualDirectoryModel::CVirtualDirectoryModel(CResourceBrowser *pBrowser, QObject *pParent)
     : QAbstractItemModel(pParent)
 {

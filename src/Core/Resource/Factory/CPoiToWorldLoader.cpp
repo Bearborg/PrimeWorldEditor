@@ -1,6 +1,7 @@
 #include "Core/Resource/Factory/CPoiToWorldLoader.h"
 
 #include "Core/Resource/CPoiToWorld.h"
+#include <Common/FileIO/IInputStream.h>
 
 std::unique_ptr<CPoiToWorld> CPoiToWorldLoader::LoadEGMC(IInputStream& rEGMC, CResourceEntry *pEntry)
 {
