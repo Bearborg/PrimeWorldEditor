@@ -257,7 +257,7 @@ void CStringTable::Serialize(IArchive& Arc)
 }
 
 /** Build the dependency tree for this resource */
-std::unique_ptr<CDependencyTree> CStringTable::BuildDependencyTree() const
+std::unique_ptr<CDependencyTree> CStringTable::BuildDependencyTree()
 {
     // STRGs can reference FONTs with the &font=; formatting tag and TXTRs with the &image=; tag
     auto pTree = std::make_unique<CDependencyTree>();

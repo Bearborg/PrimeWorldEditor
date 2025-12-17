@@ -15,7 +15,7 @@ CGameArea::~CGameArea()
     ClearTerrain();
 }
 
-std::unique_ptr<CDependencyTree> CGameArea::BuildDependencyTree() const
+std::unique_ptr<CDependencyTree> CGameArea::BuildDependencyTree()
 {
     // Base dependencies
     auto pTree = std::make_unique<CAreaDependencyTree>();

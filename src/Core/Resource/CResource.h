@@ -39,10 +39,10 @@ public:
     explicit CResource(CResourceEntry *pEntry = nullptr)
         : mpEntry(pEntry)
     {
-    }
+    }   
 
     virtual ~CResource() = default;
-    virtual std::unique_ptr<CDependencyTree> BuildDependencyTree() const { return std::make_unique<CDependencyTree>(); }
+    virtual std::unique_ptr<CDependencyTree> BuildDependencyTree() { return std::make_unique<CDependencyTree>(); }
     virtual void Serialize(IArchive& /*rArc*/) {}
     virtual void InitializeNewResource()       {}
 

@@ -45,7 +45,7 @@ public:
                            [&rkID](const auto& entry) { return entry == rkID; });
     }
 
-    std::unique_ptr<CDependencyTree> BuildDependencyTree() const override
+    std::unique_ptr<CDependencyTree> BuildDependencyTree() override
     {
         auto pTree = std::make_unique<CDependencyTree>();
 

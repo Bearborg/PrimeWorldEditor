@@ -68,7 +68,7 @@ class CGameArea : public CResource
 public:
     explicit CGameArea(CResourceEntry *pEntry = nullptr);
     ~CGameArea() override;
-    std::unique_ptr<CDependencyTree> BuildDependencyTree() const override;
+    std::unique_ptr<CDependencyTree> BuildDependencyTree() override;
 
     void AddWorldModel(std::unique_ptr<CModel>&& pModel);
     void MergeTerrain();

@@ -26,14 +26,14 @@ public:
     explicit CScan(CResourceEntry* pEntry = nullptr);
     ~CScan() override;
 
-    CStructRef ScanData() const;
+    CStructRef ScanData();
 
     /** Convenience property accessors */
-    CAssetRef ScanStringPropertyRef() const;
-    CBoolRef IsCriticalPropertyRef() const;
+    CAssetRef ScanStringPropertyRef();
+    CBoolRef IsCriticalPropertyRef();
 
     /** CResource interface */
-    std::unique_ptr<CDependencyTree> BuildDependencyTree() const override;
+    std::unique_ptr<CDependencyTree> BuildDependencyTree() override;
 };
 
 #endif // CSCAN_H

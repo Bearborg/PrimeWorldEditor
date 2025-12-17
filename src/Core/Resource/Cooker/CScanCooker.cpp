@@ -7,7 +7,7 @@
 
 #include <vector>
 
-bool CScanCooker::CookSCAN(const CScan* pScan, IOutputStream& SCAN)
+bool CScanCooker::CookSCAN(CScan* pScan, IOutputStream& SCAN)
 {
     // File header
     if (pScan->Game() <= EGame::Prime)

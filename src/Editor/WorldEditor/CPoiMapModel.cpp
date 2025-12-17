@@ -59,7 +59,7 @@ QVariant CPoiMapModel::data(const QModelIndex& rkIndex, int Role) const
             if (const CScriptNode* pNode = mpEditor->Scene()->NodeForInstance(pPOI))
             {
                 // Get scan
-                if (const CScan* pScan = static_cast<CPointOfInterestExtra*>(pNode->Extra())->GetScan())
+                if (CScan* pScan = static_cast<CPointOfInterestExtra*>(pNode->Extra())->GetScan())
                     IsImportant = pScan->IsCriticalPropertyRef();
             }
 

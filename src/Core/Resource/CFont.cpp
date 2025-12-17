@@ -22,7 +22,7 @@ static constexpr float PtsToFloat(int32 Pt)
     return 0.00208333f * Pt;
 }
 
-std::unique_ptr<CDependencyTree> CFont::BuildDependencyTree() const
+std::unique_ptr<CDependencyTree> CFont::BuildDependencyTree()
 {
     auto pOut = std::make_unique<CDependencyTree>();
     pOut->AddDependency(mpFontTexture);

@@ -43,7 +43,7 @@ public:
     explicit CAnimation(CResourceEntry *pEntry = nullptr);
     ~CAnimation() override;
 
-    std::unique_ptr<CDependencyTree> BuildDependencyTree() const override;
+    std::unique_ptr<CDependencyTree> BuildDependencyTree() override;
     void EvaluateTransform(float Time, uint32_t BoneID, CVector3f *pOutTranslation, CQuaternion *pOutRotation, CVector3f *pOutScale) const;
     bool HasTranslation(uint32_t BoneID) const;
 

@@ -36,7 +36,7 @@ CModel::~CModel()
 }
 
 
-std::unique_ptr<CDependencyTree> CModel::BuildDependencyTree() const
+std::unique_ptr<CDependencyTree> CModel::BuildDependencyTree()
 {
     auto pTree = std::make_unique<CDependencyTree>();
     std::set<CAssetID> TextureIDs;

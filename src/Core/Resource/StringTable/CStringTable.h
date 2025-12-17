@@ -89,7 +89,7 @@ public:
     void Serialize(IArchive& Arc) override;
 
     /** Build the dependency tree for this resource */
-    std::unique_ptr<CDependencyTree> BuildDependencyTree() const override;
+    std::unique_ptr<CDependencyTree> BuildDependencyTree() override;
 
     /** Static - Strip all formatting tags for a given string */
     static TString StripFormatting(const TString& kInString);

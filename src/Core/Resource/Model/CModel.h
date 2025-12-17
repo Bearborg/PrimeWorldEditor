@@ -30,7 +30,7 @@ public:
     CModel(CMaterialSet *pSet, bool OwnsMatSet);
     ~CModel() override;
 
-    std::unique_ptr<CDependencyTree> BuildDependencyTree() const override;
+    std::unique_ptr<CDependencyTree> BuildDependencyTree() override;
     void BufferGL();
     void GenerateMaterialShaders();
     void ClearGLBuffer() override;

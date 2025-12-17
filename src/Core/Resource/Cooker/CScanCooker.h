@@ -9,7 +9,7 @@ class CScanCooker
 {
 public:
     CScanCooker() = delete;
-    static bool CookSCAN(const CScan* pScan, IOutputStream& SCAN);
+    static bool CookSCAN(CScan* pScan, IOutputStream& SCAN);
 };
 
 #endif // CSCANCOOKER_H

@@ -10,7 +10,7 @@ CWorld::CWorld(CResourceEntry *pEntry)
 
 CWorld::~CWorld() = default;
 
-std::unique_ptr<CDependencyTree> CWorld::BuildDependencyTree() const
+std::unique_ptr<CDependencyTree> CWorld::BuildDependencyTree()
 {
     auto pTree = std::make_unique<CDependencyTree>();
 

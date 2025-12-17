@@ -55,9 +55,9 @@ public:
         return mTweakID;
     }
 
-    CStructRef TweakData() const
+    CStructRef TweakData()
     {
-        return CStructRef((void*) mTweakData.data(), mpTemplate->Properties());
+        return CStructRef(mTweakData.data(), mpTemplate->Properties());
     }
 };
 

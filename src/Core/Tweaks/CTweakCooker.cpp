@@ -5,7 +5,7 @@
 #include "Core/Tweaks/CTweakData.h"
 
 /** Cooker entry point */
-bool CTweakCooker::CookCTWK(const CTweakData* pTweakData, IOutputStream& CTWK)
+bool CTweakCooker::CookCTWK(CTweakData* pTweakData, IOutputStream& CTWK)
 {
     CStructRef TweakProperties = pTweakData->TweakData();
     CScriptCooker ScriptCooker(pTweakData->Game());
@@ -21,7 +21,7 @@ bool CTweakCooker::CookNTWK(const std::vector<CTweakData*>& kTweaks, IOutputStre
 
     for (uint32_t TweakIdx = 0; TweakIdx < kTweaks.size(); TweakIdx++)
     {
-        const CTweakData* pTweakData = kTweaks[TweakIdx];
+        CTweakData* pTweakData = kTweaks[TweakIdx];
 
         // Tweaks in MP2+ are saved with the script object data format
         // Write a dummy script object header here

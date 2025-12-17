@@ -17,13 +17,13 @@ CScan::CScan(CResourceEntry* pEntry)
 
 CScan::~CScan() = default;
 
-CStructRef CScan::ScanData() const
+CStructRef CScan::ScanData()
 {
-    return CStructRef((void*)mPropertyData.data(), mpTemplate->Properties());
+    return CStructRef(mPropertyData.data(), mpTemplate->Properties());
 }
 
 /** Convenience property accessors */
-CAssetRef CScan::ScanStringPropertyRef() const
+CAssetRef CScan::ScanStringPropertyRef()
 {
     constexpr uint32_t kStringIdMP1 = 0x1;
     constexpr uint32_t kStringIdMP2 = 0x2F5B6423;
@@ -32,10 +32,10 @@ CAssetRef CScan::ScanStringPropertyRef() const
         Game() <= EGame::Prime ? kStringIdMP1 : kStringIdMP2
     );
 
-    return CAssetRef((void*)mPropertyData.data(), pProperty);
+    return CAssetRef(mPropertyData.data(), pProperty);
 }
 
-CBoolRef CScan::IsCriticalPropertyRef() const
+CBoolRef CScan::IsCriticalPropertyRef()
 {
     constexpr uint32_t kIsCriticalIdMP1 = 0x4;
     constexpr uint32_t kIsCriticalIdMP2 = 0x7B714814;
@@ -44,11 +44,11 @@ CBoolRef CScan::IsCriticalPropertyRef() const
         Game() <= EGame::Prime ? kIsCriticalIdMP1 : kIsCriticalIdMP2
     );
 
-    return CBoolRef((void*)mPropertyData.data(), pProperty);
+    return CBoolRef(mPropertyData.data(), pProperty);
 }
 
 /** CResource interface */
-std::unique_ptr<CDependencyTree> CScan::BuildDependencyTree() const
+std::unique_ptr<CDependencyTree> CScan::BuildDependencyTree()
 {
     auto pTree = std::make_unique<CDependencyTree>();
     pTree->ParseProperties(Entry(), ScanData().Property(), ScanData().DataPointer());

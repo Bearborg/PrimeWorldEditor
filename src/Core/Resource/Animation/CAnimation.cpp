@@ -14,7 +14,7 @@ CAnimation::CAnimation(CResourceEntry *pEntry /*= 0*/)
 
 CAnimation::~CAnimation() = default;
 
-std::unique_ptr<CDependencyTree> CAnimation::BuildDependencyTree() const
+std::unique_ptr<CDependencyTree> CAnimation::BuildDependencyTree()
 {
     auto pTree = std::make_unique<CDependencyTree>();
     pTree->AddDependency(mpEventData);
@@ -24,14 +24,20 @@ std::unique_ptr<CDependencyTree> CAnimation::BuildDependencyTree() const
 void CAnimation::EvaluateTransform(float Time, uint32_t BoneID, CVector3f *pOutTranslation, CQuaternion *pOutRotation, CVector3f *pOutScale) const
 {
     const bool kInterpolate = true;
-    if (!pOutTranslation && !pOutRotation && !pOutScale) return;
-    if (mDuration == 0.f) return;
+    if (!pOutTranslation && !pOutRotation && !pOutScale)
+        return;
+    if (mDuration == 0.f)
+        return;
 
-    if (Time >= mDuration) Time = mDuration;
-    if (Time >= FLT_EPSILON) Time -= FLT_EPSILON;
+    if (Time >= mDuration)
+        Time = mDuration;
+    if (Time >= FLT_EPSILON)
+        Time -= FLT_EPSILON;
+
     float t = fmodf(Time, mTickInterval) / mTickInterval;
     uint32 LowKey = (uint32) (Time / mTickInterval);
-    if (LowKey == (mNumKeys - 1)) LowKey = mNumKeys - 2;
+    if (LowKey == (mNumKeys - 1))
+        LowKey = mNumKeys - 2;
 
     uint8 ScaleChannel = mBoneInfo[BoneID].ScaleChannelIdx;
     uint8 RotChannel = mBoneInfo[BoneID].RotationChannelIdx;

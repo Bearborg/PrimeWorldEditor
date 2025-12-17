@@ -84,7 +84,7 @@ public:
 
     void SerializeValue(void* pData, IArchive& Arc) override
     {
-        Arc.SerializePrimitive(static_cast<int32_t&>(base::ValueRef(pData)), 0);
+        Arc.SerializePrimitive(base::ValueRef(pData), 0);
     }
 
     void InitFromArchetype(IProperty* pOther) override

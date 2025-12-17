@@ -46,7 +46,7 @@ QVariant CPoiListModel::data(const QModelIndex& rkIndex, int Role) const
     if (Role == Qt::DecorationRole)
     {
         const CScriptNode* pNode = mObjList[rkIndex.row()];
-        const CScan* pScan = static_cast<CPointOfInterestExtra*>(pNode->Extra())->GetScan();
+        CScan* pScan = static_cast<CPointOfInterestExtra*>(pNode->Extra())->GetScan();
         const bool IsImportant = (pScan ? pScan->IsCriticalPropertyRef() : false);
 
         if (IsImportant)

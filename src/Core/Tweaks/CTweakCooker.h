@@ -13,7 +13,7 @@ public:
     CTweakCooker() = delete;
 
     /** Cooker entry point */
-    static bool CookCTWK(const CTweakData* pTweakData, IOutputStream& CTWK);
+    static bool CookCTWK(CTweakData* pTweakData, IOutputStream& CTWK);
     static bool CookNTWK(const std::vector<CTweakData*>& kTweaks, IOutputStream& NTWK);
 };
 

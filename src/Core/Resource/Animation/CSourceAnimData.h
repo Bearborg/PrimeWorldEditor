@@ -37,7 +37,7 @@ public:
 
     ~CSourceAnimData() override = default;
 
-    std::unique_ptr<CDependencyTree> BuildDependencyTree() const override
+    std::unique_ptr<CDependencyTree> BuildDependencyTree() override
     {
         // SAND normally has dependencies from meta-transitions and events
         // However, all of these can be character-specific. To simplify things, all SAND
