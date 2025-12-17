@@ -269,9 +269,7 @@ void CGeneratePropertyNamesDialog::ApplyChanges()
 {
     // make sure the user really wants to do this
     const QString WarningText =
-        tr("Are you sure you want to rename %1 %2? This operation cannot be undone.")
-            .arg(mCheckedItems.size())
-            .arg(mCheckedItems.size() == 1 ? tr("property") : tr("properties"));
+        tr("Are you sure you want to rename %n properties? This operation cannot be undone.", "", int(mCheckedItems.size()));
 
     const bool ReallyRename = UICommon::YesNoQuestion(this, tr("Warning"), WarningText);
 

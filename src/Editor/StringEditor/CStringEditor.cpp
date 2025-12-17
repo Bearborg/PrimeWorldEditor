@@ -157,9 +157,8 @@ void CStringEditor::InitUI()
 void CStringEditor::UpdateStatusBar()
 {
     // Update status bar
-    QString StatusText = tr("%1 languages, %2 strings")
-            .arg(mpStringTable->NumLanguages())
-            .arg(mpStringTable->NumStrings());
+    const auto LangString = tr("%n language(s)", "", int(mpStringTable->NumLanguages()));
+    QString StatusText = tr("%1, %n string(s)", "", int(mpStringTable->NumStrings())).arg(LangString);
 
     if (mCurrentStringIndex >= 0)
     {

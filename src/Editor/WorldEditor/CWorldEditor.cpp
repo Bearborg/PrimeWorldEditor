@@ -889,7 +889,7 @@ void CWorldEditor::UpdateSelectionUI()
     if (mpSelection->Size() == 1)
         SelectionText = TO_QSTRING(mpSelection->Front()->Name());
     else if (mpSelection->Size() > 1)
-        SelectionText = tr("%1 objects selected").arg(mpSelection->Size());
+        SelectionText = tr("%n objects selected", "", int(mpSelection->Size()));
 
     QFontMetrics Metrics(ui->SelectionInfoLabel->font());
     SelectionText = Metrics.elidedText(SelectionText, Qt::ElideRight, ui->SelectionInfoFrame->width() - 10);

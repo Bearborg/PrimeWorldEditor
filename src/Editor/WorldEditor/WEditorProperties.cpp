@@ -121,7 +121,7 @@ void WEditorProperties::OnSelectionModified()
         }
         else
         {
-            mpInstanceInfoLabel->setText(tr("<i>[%1 objects selected]</i>").arg(pSelection->Size()));
+            mpInstanceInfoLabel->setText(tr("<i>[%n objects selected]</i>", "", int(pSelection->Size())));
             mpInstanceNameLineEdit->clear();
         }
 

@@ -716,7 +716,7 @@ bool CResourceBrowser::Delete(QList<CResourceEntry*> Resources, QList<CVirtualDi
     // This is kind of a hack but there's no good way to clear out these references right now.
     QString ErrorPaths;
 
-    for (int DirIdx = 0; DirIdx < Directories.size(); DirIdx++)
+    for (qsizetype DirIdx = 0; DirIdx < Directories.size(); DirIdx++)
     {
         if (!Directories[DirIdx]->IsSafeToDelete())
         {
@@ -726,7 +726,7 @@ bool CResourceBrowser::Delete(QList<CResourceEntry*> Resources, QList<CVirtualDi
         }
     }
 
-    for (int ResIdx = 0; ResIdx < Resources.size(); ResIdx++)
+    for (qsizetype ResIdx = 0; ResIdx < Resources.size(); ResIdx++)
     {
         if (Resources[ResIdx]->IsLoaded() && Resources[ResIdx]->Resource()->IsReferenced())
         {
@@ -745,11 +745,11 @@ bool CResourceBrowser::Delete(QList<CResourceEntry*> Resources, QList<CVirtualDi
     }
 
     // Gather a complete list of resources in subdirectories
-    for (int DirIdx = 0; DirIdx < Directories.size(); DirIdx++)
+    for (qsizetype DirIdx = 0; DirIdx < Directories.size(); DirIdx++)
     {
         CVirtualDirectory* pDir = Directories[DirIdx];
-        Resources.reserve(Resources.size() + static_cast<int>(pDir->NumResources()));
-        Directories.reserve(Directories.size() + static_cast<int>(pDir->NumSubdirectories()));
+        Resources.reserve(Resources.size() + static_cast<qsizetype>(pDir->NumResources()));
+        Directories.reserve(Directories.size() + static_cast<qsizetype>(pDir->NumSubdirectories()));
 
         for (size_t ResourceIdx = 0; ResourceIdx < pDir->NumResources(); ResourceIdx++)
             Resources.push_back(pDir->ResourceByIndex(ResourceIdx));
@@ -763,22 +763,12 @@ bool CResourceBrowser::Delete(QList<CResourceEntry*> Resources, QList<CVirtualDi
         return false;
 
     // Allow the user to confirm before proceeding.
-    QString ConfirmMsg = tr("Are you sure you want to permanently delete ");
+    QString ConfirmMsg = tr("Are you sure you want to permanently delete the following?\n");
 
     if (Resources.size() > 0)
-    {
-        ConfirmMsg += tr("%1 resource%2").arg(Resources.size()).arg(Resources.size() == 1 ? "" : "s");
-
-        if (Directories.size() > 0)
-        {
-            ConfirmMsg += tr(" and ");
-        }
-    }
+        ConfirmMsg += tr("\n%n resource(s)", "", int(Resources.size()));
     if (Directories.size() > 0)
-    {
-        ConfirmMsg += tr("%1 %2").arg(Directories.size()).arg(Directories.size() == 1 ? tr("directory") : tr("directories"));
-    }
-    ConfirmMsg += tr("?");
+        ConfirmMsg += tr("\n%n directories", "", int(Directories.size()));
 
     if (UICommon::YesNoQuestion(this, tr("Warning"), ConfirmMsg))
     {
@@ -793,9 +783,9 @@ bool CResourceBrowser::Delete(QList<CResourceEntry*> Resources, QList<CVirtualDi
             mUndoStack.push(new CDeleteResourceCommand(pEntry));
 
         // Now delete directories in reverse order (so subdirectories delete first)
-        for (int DirIdx = Directories.size()-1; DirIdx >= 0; DirIdx--)
+        for (qsizetype DirIdx = Directories.size() - 1; DirIdx >= 0; DirIdx--)
         {
-            CVirtualDirectory* pDir = Directories[DirIdx];
+            const CVirtualDirectory* pDir = Directories[DirIdx];
             mUndoStack.push(new CDeleteDirectoryCommand(mpStore, pDir->Parent()->FullPath(), pDir->Name()));
         }
 
@@ -834,9 +824,9 @@ void CResourceBrowser::OnDirectorySelectionChanged(const QModelIndex& rkNewIndex
     SetActiveDirectory(pDir);
 }
 
-void CResourceBrowser::OnDoubleClickTable(QModelIndex Index)
+void CResourceBrowser::OnDoubleClickTable(const QModelIndex& Index)
 {
-    QModelIndex SourceIndex = mpProxyModel->mapToSource(Index);
+    const QModelIndex SourceIndex = mpProxyModel->mapToSource(Index);
 
     // Directory - switch to the selected directory
     if (mpModel->IsIndexDirectory(SourceIndex))
@@ -848,9 +838,7 @@ void CResourceBrowser::OnDoubleClickTable(QModelIndex Index)
         if (pOldDir->Parent() == pDir)
             SelectDirectory(pOldDir);
     }
-
-    // Resource - open resource for editing
-    else
+    else // Resource - open resource for editing
     {
         CResourceEntry *pEntry = mpModel->IndexEntry(SourceIndex);
         gpEdApp->EditResource(pEntry);
@@ -859,7 +847,7 @@ void CResourceBrowser::OnDoubleClickTable(QModelIndex Index)
 
 void CResourceBrowser::OnResourceSelectionChanged(const QModelIndex& rkNewIndex)
 {
-    QModelIndex SourceIndex = mpProxyModel->mapToSource(rkNewIndex);
+    const QModelIndex SourceIndex = mpProxyModel->mapToSource(rkNewIndex);
     mpSelectedEntry = mpModel->IndexEntry(SourceIndex);
     emit SelectedResourceChanged(mpSelectedEntry);
 }

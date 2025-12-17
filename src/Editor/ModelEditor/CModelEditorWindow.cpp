@@ -169,18 +169,25 @@ void CModelEditorWindow::SetActiveModel(CModel *pModel)
     mpCurrentModel = pModel;
     ui->Viewport->Camera().SetOrbit(pModel->AABox());
 
-    const uint32 NumVertices = (pModel ? pModel->GetVertexCount() : 0);
-    const uint32 NumTriangles = (pModel ? pModel->GetTriangleCount() : 0);
-    const uint32 NumMats = (pModel ? pModel->GetMatCount() : 0);
-    const uint32 NumMatSets = (pModel ? pModel->GetMatSetCount() : 0);
-    ui->MeshInfoLabel->setText(tr("%1 vertices, %2 triangles").arg(NumVertices).arg(NumTriangles));
-    ui->MatInfoLabel->setText(tr("%1 materials, %2 set%3").arg(NumMats).arg(NumMatSets).arg(NumMatSets == 1 ? QString{} : tr("s")));
+    const auto NumVertices = (pModel ? pModel->GetVertexCount() : 0);
+    const auto NumTriangles = (pModel ? pModel->GetTriangleCount() : 0);
+    const auto NumMats = (pModel ? pModel->GetMatCount() : 0);
+    const auto NumMatSets = (pModel ? pModel->GetMatSetCount() : 0);
+
+    // Bleh, Qt can't do multiple plural handling in a single string, so we need to break the string up
+    {
+        const auto MatString = tr("%n material(s)", "", int(NumMats));
+        const auto VertString = tr("%n vertices", "", int(NumVertices));
+
+        ui->MeshInfoLabel->setText(tr("%1, %n triangle(s)", "", int(NumTriangles)).arg(VertString));
+        ui->MatInfoLabel->setText(tr("%1, %n set(s)", "", int(NumMatSets)).arg(MatString));
+    }
 
     // Set items in matset combo box
     ui->SetSelectionComboBox->blockSignals(true);
     ui->SetSelectionComboBox->clear();
 
-    for (uint32 iSet = 0; iSet < NumMatSets; iSet++)
+    for (size_t iSet = 0; iSet < NumMatSets; iSet++)
         ui->SetSelectionComboBox->addItem(tr("Set #%1").arg(iSet + 1));
 
     ui->SetSelectionComboBox->setCurrentIndex(0);
@@ -197,15 +204,15 @@ void CModelEditorWindow::SetActiveModel(CModel *pModel)
     }
 
     ui->MatSelectionComboBox->setCurrentIndex(0);
-    ui->MatSelectionComboBox->setEnabled( NumMats > 1 );
+    ui->MatSelectionComboBox->setEnabled(NumMats > 1);
     ui->MatSelectionComboBox->blockSignals(false);
 
     // Emit signals to set up UI
     ui->SetSelectionComboBox->currentIndexChanged(0);
 
     // Gray out set selection for models with one set
-    ui->SetSelectionComboBox->setEnabled( NumMatSets > 1 );
-    ui->MatSelectionComboBox->setEnabled( NumMats > 1 );
+    ui->SetSelectionComboBox->setEnabled(NumMatSets > 1);
+    ui->MatSelectionComboBox->setEnabled(NumMats > 1);
 }
 
 void CModelEditorWindow::SetActiveMaterial(int MatIndex)

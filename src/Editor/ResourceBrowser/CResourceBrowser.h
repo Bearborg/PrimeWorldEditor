@@ -110,7 +110,7 @@ public slots:
     bool Delete(QList<CResourceEntry*> Resources, QList<CVirtualDirectory*> Directories);
     void OnSearchStringChanged(const QString& SearchString);
     void OnDirectorySelectionChanged(const QModelIndex& rkNewIndex);
-    void OnDoubleClickTable(QModelIndex Index);
+    void OnDoubleClickTable(const QModelIndex& Index);
     void OnResourceSelectionChanged(const QModelIndex& rkNewIndex);
     void FindAssetByID();
     void SetAssetIDDisplayEnabled(bool Enable);

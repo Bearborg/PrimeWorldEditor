@@ -226,24 +226,25 @@ bool CEditorApplication::CookAllDirtyPackages()
             PackageList.push_back(pPackage);
     }
 
-    return CookPackageList(std::move(PackageList));
+    return CookPackageList(PackageList);
 }
 
-bool CEditorApplication::CookPackageList(QList<CPackage*> PackageList)
+bool CEditorApplication::CookPackageList(const QList<CPackage*>& PackageList)
 {
     if (PackageList.isEmpty())
         return true;
 
-    CProgressDialog Dialog(tr("Cooking package%1").arg(PackageList.size() > 1  ? tr("s") : QString{}), false, true, mpWorldEditor);
+    const auto NumPackages = static_cast<int>(PackageList.size());
+    CProgressDialog Dialog(tr("Cooking package(s)", "", NumPackages), false, true, mpWorldEditor);
 
     QFuture<void> Future = QtConcurrent::run([&]()
     {
-        Dialog.SetNumTasks(PackageList.size());
+        Dialog.SetNumTasks(NumPackages);
 
-        for (int PkgIdx = 0; PkgIdx < PackageList.size() && !Dialog.ShouldCancel(); PkgIdx++)
+        for (int PkgIdx = 0; PkgIdx < NumPackages && !Dialog.ShouldCancel(); PkgIdx++)
         {
             CPackage *pPkg = PackageList[PkgIdx];
-            Dialog.SetTask(PkgIdx, "Cooking " + pPkg->Name() + ".pak...");
+            Dialog.SetTask(PkgIdx, TO_TSTRING(tr("Cooking %1.pak...").arg(TO_QSTRING(pPkg->Name()))));
             pPkg->Cook(&Dialog);
         }
     });

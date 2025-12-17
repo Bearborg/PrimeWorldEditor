@@ -383,7 +383,7 @@ QVariant CPropertyModel::data(const QModelIndex& rkIndex, int Role) const
                 case EPropertyType::Array:
                 {
                     const uint32 Count = TPropCast<CArrayProperty>(pProp)->Value(pData);
-                    return tr("%1 element%2").arg(Count).arg(Count != 1 ? tr("s") : QString{});
+                    return tr("%n element(s)", "", int(Count));
                 }
 
                 // Display "[spline]" for splines (todo: proper support)
