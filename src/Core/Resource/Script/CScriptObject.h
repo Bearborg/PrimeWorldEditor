@@ -88,16 +88,17 @@ public:
     void BreakAllLinks();
 
     // Accessors
-    CScriptTemplate* Template() const                               { return mpTemplate; }
+    CScriptTemplate* Template() const               { return mpTemplate; }
     CGameTemplate* GameTemplate() const;
-    CGameArea* Area() const                                         { return mpArea; }
-    CScriptLayer* Layer() const                                     { return mpLayer; }
-    uint32_t Version() const                                        { return mVersion; }
+    CGameArea* Area() const                         { return mpArea; }
+    CScriptLayer* Layer() const                     { return mpLayer; }
+    uint32_t Version() const                        { return mVersion; }
     uint32_t ObjectTypeID() const;
-    CInstanceID InstanceID() const                                  { return mInstanceID; }
-    size_t NumLinks(ELinkType Type) const                           { return (Type == ELinkType::Incoming ? mInLinks.size() : mOutLinks.size()); }
-    CLink* Link(ELinkType Type, size_t Index) const                 { return (Type == ELinkType::Incoming ? mInLinks[Index] : mOutLinks[Index]); }
-    void* PropertyData() const                                      { return (void*) mPropertyData.data(); }
+    CInstanceID InstanceID() const                  { return mInstanceID; }
+    size_t NumLinks(ELinkType Type) const           { return (Type == ELinkType::Incoming ? mInLinks.size() : mOutLinks.size()); }
+    CLink* Link(ELinkType Type, size_t Index) const { return (Type == ELinkType::Incoming ? mInLinks[Index] : mOutLinks[Index]); }
+    void* PropertyData()                            { return mPropertyData.data(); }
+    const void* PropertyData() const                { return mPropertyData.data(); }
 
     CVector3f Position() const                  { return mPosition.IsValid() ? mPosition.Get() : CVector3f::Zero(); }
     CVector3f Rotation() const                  { return mRotation.IsValid() ? mRotation.Get() : CVector3f::Zero(); }
