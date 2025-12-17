@@ -137,7 +137,7 @@ std::map<SNameKey, SNameValue> gNameMap;
 std::map<uint32, TString> gLegacyNameMap;
 
 /** Internal: Creates a name key for the given property. */
-SNameKey CreateKey(IProperty* pProperty)
+SNameKey CreateKey(const IProperty* pProperty)
 {
     SNameKey Key;
     Key.ID = pProperty->ID();
@@ -238,7 +238,7 @@ void SaveMap(bool Force)
 }
 
 /** Given a property ID and type, returns the name of the property */
-const char* GetPropertyName(IProperty* pInProperty)
+const char* GetPropertyName(const IProperty* pInProperty)
 {
     ConditionalLoadMap();
 
