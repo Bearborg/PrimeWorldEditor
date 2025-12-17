@@ -6,6 +6,15 @@
 
 #include <QCoreApplication>
 
+struct CScaleNodeCommand::SNodeScale
+{
+    CNodePtr pNode;
+    CVector3f InitialPos;
+    CVector3f InitialScale;
+    CVector3f NewPos;
+    CVector3f NewScale;
+};
+
 CScaleNodeCommand::CScaleNodeCommand()
     : IUndoCommand(QCoreApplication::translate("CScaleNodeCommand", "Scale"))
 {
@@ -38,9 +47,7 @@ CScaleNodeCommand::CScaleNodeCommand(INodeEditor *pEditor, const QList<CSceneNod
     mpEditor->NotifySelectionTransformed();
 }
 
-CScaleNodeCommand::~CScaleNodeCommand()
-{
-}
+CScaleNodeCommand::~CScaleNodeCommand() = default;
 
 int CScaleNodeCommand::id() const
 {
@@ -53,7 +60,7 @@ bool CScaleNodeCommand::mergeWith(const QUndoCommand *pkOther)
 
     if (pkOther->id() == (int) EUndoCommand::ScaleNodeCmd)
     {
-        const CScaleNodeCommand *pkCmd = static_cast<const CScaleNodeCommand*>(pkOther);
+        const auto* pkCmd = static_cast<const CScaleNodeCommand*>(pkOther);
 
         if (pkCmd->mCommandEnded)
         {
@@ -63,7 +70,7 @@ bool CScaleNodeCommand::mergeWith(const QUndoCommand *pkOther)
 
         if ((mpEditor == pkCmd->mpEditor) && (mNodeList.size() == pkCmd->mNodeList.size()))
         {
-            for (int iNode = 0; iNode < mNodeList.size(); iNode++)
+            for (qsizetype iNode = 0; iNode < mNodeList.size(); iNode++)
             {
                 mNodeList[iNode].NewPos = pkCmd->mNodeList[iNode].NewPos;
                 mNodeList[iNode].NewScale = pkCmd->mNodeList[iNode].NewScale;

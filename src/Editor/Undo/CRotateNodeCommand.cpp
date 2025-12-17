@@ -6,6 +6,15 @@
 
 #include <QCoreApplication>
 
+struct CRotateNodeCommand::SNodeRotate
+{
+    CNodePtr pNode;
+    CVector3f InitialPos;
+    CQuaternion InitialRot;
+    CVector3f NewPos;
+    CQuaternion NewRot;
+};
+
 CRotateNodeCommand::CRotateNodeCommand()
     : IUndoCommand(QCoreApplication::translate("CRotateNodeCommand", "Rotate"))
 {
@@ -58,7 +67,7 @@ bool CRotateNodeCommand::mergeWith(const QUndoCommand *pkOther)
 
     if (pkOther->id() == (int) EUndoCommand::RotateNodeCmd)
     {
-        const CRotateNodeCommand *pkCmd = static_cast<const CRotateNodeCommand*>(pkOther);
+        const auto* pkCmd = static_cast<const CRotateNodeCommand*>(pkOther);
 
         if (pkCmd->mCommandEnded)
         {
@@ -68,7 +77,7 @@ bool CRotateNodeCommand::mergeWith(const QUndoCommand *pkOther)
 
         if ((mpEditor == pkCmd->mpEditor) && (mNodeList.size() == pkCmd->mNodeList.size()))
         {
-            for (int iNode = 0; iNode < mNodeList.size(); iNode++)
+            for (qsizetype iNode = 0; iNode < mNodeList.size(); iNode++)
             {
                 mNodeList[iNode].NewPos = pkCmd->mNodeList[iNode].NewPos;
                 mNodeList[iNode].NewRot = pkCmd->mNodeList[iNode].NewRot;

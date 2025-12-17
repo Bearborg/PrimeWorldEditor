@@ -6,6 +6,13 @@
 
 #include <QCoreApplication>
 
+struct CTranslateNodeCommand::SNodeTranslate
+{
+    CNodePtr pNode;
+    CVector3f InitialPos;
+    CVector3f NewPos;
+};
+
 CTranslateNodeCommand::CTranslateNodeCommand()
     : IUndoCommand(QCoreApplication::translate("CTranslateNodeCommand", "Translate"))
 {
@@ -30,6 +37,8 @@ CTranslateNodeCommand::CTranslateNodeCommand(INodeEditor *pEditor, const QList<C
     mpEditor->NotifySelectionTransformed();
 }
 
+CTranslateNodeCommand::~CTranslateNodeCommand() = default;
+
 int CTranslateNodeCommand::id() const
 {
     return (int) EUndoCommand::TranslateNodeCmd;
@@ -37,11 +46,12 @@ int CTranslateNodeCommand::id() const
 
 bool CTranslateNodeCommand::mergeWith(const QUndoCommand *pkOther)
 {
-    if (mCommandEnded) return false;
+    if (mCommandEnded)
+        return false;
 
     if (pkOther->id() == (int) EUndoCommand::TranslateNodeCmd)
     {
-        const CTranslateNodeCommand *pkCmd = static_cast<const CTranslateNodeCommand*>(pkOther);
+        const auto* pkCmd = static_cast<const CTranslateNodeCommand*>(pkOther);
 
         if (pkCmd->mCommandEnded)
         {
@@ -51,7 +61,7 @@ bool CTranslateNodeCommand::mergeWith(const QUndoCommand *pkOther)
 
         if ((mpEditor == pkCmd->mpEditor) && (mNodeList.size() == pkCmd->mNodeList.size()))
         {
-            for (int iNode = 0; iNode < mNodeList.size(); iNode++)
+            for (qsizetype iNode = 0; iNode < mNodeList.size(); iNode++)
                 mNodeList[iNode].NewPos = pkCmd->mNodeList[iNode].NewPos;
 
             return true;

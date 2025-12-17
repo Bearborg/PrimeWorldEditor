@@ -11,14 +11,8 @@ class INodeEditor;
 
 class CScaleNodeCommand : public IUndoCommand
 {
-    struct SNodeScale
-    {
-        CNodePtr pNode;
-        CVector3f InitialPos;
-        CVector3f InitialScale;
-        CVector3f NewPos;
-        CVector3f NewScale;
-    };
+    struct SNodeScale;
+
     QList<SNodeScale> mNodeList;
     INodeEditor *mpEditor = nullptr;
     bool mCommandEnded = false;

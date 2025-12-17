@@ -11,12 +11,8 @@ class INodeEditor;
 
 class CTranslateNodeCommand : public IUndoCommand
 {
-    struct SNodeTranslate
-    {
-        CNodePtr pNode;
-        CVector3f InitialPos;
-        CVector3f NewPos;
-    };
+    struct SNodeTranslate;
+
     QList<SNodeTranslate> mNodeList;
     INodeEditor *mpEditor = nullptr;
     bool mCommandEnded = false;
@@ -24,6 +20,7 @@ class CTranslateNodeCommand : public IUndoCommand
 public:
     CTranslateNodeCommand();
     CTranslateNodeCommand(INodeEditor *pEditor, const QList<CSceneNode*>& rkNodes, const CVector3f& rkDelta, ETransformSpace TransformSpace);
+    ~CTranslateNodeCommand() override;
 
     int id() const override;
     bool mergeWith(const QUndoCommand *pkOther) override;

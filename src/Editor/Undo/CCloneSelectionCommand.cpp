@@ -84,10 +84,10 @@ void CCloneSelectionCommand::redo()
     }
 
     // Clone outgoing links from source object; incoming ones are discarded
-    for (int iNode = 0; iNode < ClonedNodes.size(); iNode++)
+    for (qsizetype iNode = 0; iNode < ClonedNodes.size(); iNode++)
     {
-        CScriptObject *pSrc = static_cast<CScriptNode*>(ToClone[iNode])->Instance();
-        CScriptObject *pClone = static_cast<CScriptNode*>(ClonedNodes[iNode])->Instance();
+        auto* pSrc = static_cast<CScriptNode*>(ToClone[iNode])->Instance();
+        auto* pClone = static_cast<CScriptNode*>(ClonedNodes[iNode])->Instance();
 
         for (size_t iLink = 0; iLink < pSrc->NumLinks(ELinkType::Outgoing); iLink++)
         {

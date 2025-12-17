@@ -11,14 +11,8 @@ class INodeEditor;
 
 class CRotateNodeCommand : public IUndoCommand
 {
-    struct SNodeRotate
-    {
-        CNodePtr pNode;
-        CVector3f InitialPos;
-        CQuaternion InitialRot;
-        CVector3f NewPos;
-        CQuaternion NewRot;
-    };
+    struct SNodeRotate;
+
     QList<SNodeRotate> mNodeList;
     INodeEditor *mpEditor = nullptr;
     bool mCommandEnded = false;

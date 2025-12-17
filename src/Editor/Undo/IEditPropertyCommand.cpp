@@ -97,31 +97,31 @@ int IEditPropertyCommand::id() const
 
 bool IEditPropertyCommand::mergeWith(const QUndoCommand *pkOther)
 {
-    if (!mCommandEnded)
+    if (mCommandEnded)
+        return false;
+
+    const auto* pkCmd = dynamic_cast<const IEditPropertyCommand*>(pkOther);
+
+    if (pkCmd && pkCmd->mpProperty == mpProperty)
     {
-        const IEditPropertyCommand* pkCmd = dynamic_cast<const IEditPropertyCommand*>(pkOther);
+        QList<void*> MyPointers;
+        GetObjectDataPointers(MyPointers);
 
-        if (pkCmd && pkCmd->mpProperty == mpProperty)
+        QList<void*> TheirPointers;
+        pkCmd->GetObjectDataPointers(TheirPointers);
+
+        if (TheirPointers.size() == MyPointers.size())
         {
-            QList<void*> MyPointers;
-            GetObjectDataPointers(MyPointers);
-
-            QList<void*> TheirPointers;
-            pkCmd->GetObjectDataPointers(TheirPointers);
-
-            if (TheirPointers.size() == MyPointers.size())
+            for (qsizetype PtrIdx = 0; PtrIdx < MyPointers.size(); PtrIdx++)
             {
-                for (int PtrIdx = 0; PtrIdx < MyPointers.size(); PtrIdx++)
-                {
-                    if (MyPointers[PtrIdx] != TheirPointers[PtrIdx])
-                        return false;
-                }
-
-                // Match
-                mNewData = pkCmd->mNewData;
-                mCommandEnded = pkCmd->mCommandEnded;
-                return true;
+                if (MyPointers[PtrIdx] != TheirPointers[PtrIdx])
+                    return false;
             }
+
+            // Match
+            mNewData = pkCmd->mNewData;
+            mCommandEnded = pkCmd->mCommandEnded;
+            return true;
         }
     }
 
