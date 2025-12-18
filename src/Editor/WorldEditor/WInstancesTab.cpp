@@ -31,18 +31,16 @@ WInstancesTab::WInstancesTab(CWorldEditor *pEditor, QWidget *parent) :
     connect(mpLayersModel, &CInstancesModel::modelReset, this, &WInstancesTab::ExpandTopLevelItems);
     connect(mpTypesModel, &CInstancesModel::modelReset, this, &WInstancesTab::ExpandTopLevelItems);
 
-    int ColWidth = ui->LayersTreeView->width() * 0.29;
+    int ColWidth = ui->LayersTreeView->width() * 0.29f;
 
     ui->LayersTreeView->setModel(&mLayersProxyModel);
     ui->LayersTreeView->resizeColumnToContents(2);
-    ui->LayersTreeView->header()->setSectionResizeMode(2, QHeaderView::Fixed);
     ui->LayersTreeView->header()->resizeSection(0, ColWidth);
     ui->LayersTreeView->header()->resizeSection(1, ColWidth);
     ui->LayersTreeView->header()->setSortIndicator(0, Qt::AscendingOrder);
 
     ui->TypesTreeView->setModel(&mTypesProxyModel);
     ui->TypesTreeView->resizeColumnToContents(2);
-    ui->TypesTreeView->header()->setSectionResizeMode(2, QHeaderView::Fixed);
     ui->TypesTreeView->header()->resizeSection(0, ColWidth);
     ui->TypesTreeView->header()->resizeSection(1, ColWidth);
     ui->TypesTreeView->header()->setSortIndicator(0, Qt::AscendingOrder);
