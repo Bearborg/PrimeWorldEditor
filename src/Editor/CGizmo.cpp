@@ -5,10 +5,73 @@
 #include <Core/Render/CDrawUtil.h>
 #include <Core/Render/CGraphics.h>
 #include <Core/Render/CRenderer.h>
+#include <Core/Resource/Model/CModel.h>
 #include <Core/Resource/Model/SSurface.h>
 
 #include <QApplication>
 #include <QScreen>
+
+struct SGizmoModelPart
+{
+    FAxes ModelAxes;
+    bool EnableRayCast = false;
+    bool IsBillboard = false;
+    TResPtr<CModel> pModel;
+
+    SGizmoModelPart() : ModelAxes(EAxis::None) {};
+    SGizmoModelPart(FAxes Axes, bool RayCastOn, bool Billboard, TResPtr<CModel> _pModel)
+        : ModelAxes(Axes)
+        , EnableRayCast(RayCastOn)
+        , IsBillboard(Billboard)
+        , pModel(std::move(_pModel))
+    {
+    }
+};
+
+namespace
+{
+constinit bool smModelsLoaded = false;
+std::array<SGizmoModelPart, CGIZMO_TRANSLATE_NUM> smTranslateModels;
+std::array<SGizmoModelPart, CGIZMO_ROTATE_NUM> smRotateModels;
+std::array<SGizmoModelPart, CGIZMO_SCALE_NUM> smScaleModels;
+ }
+
+static void LoadModels()
+ {
+     if (!smModelsLoaded)
+     {
+         debugf("Loading transform gizmo models");
+
+         smTranslateModels[CGIZMO_TRANSLATE_X]        = SGizmoModelPart(EAxis::X, true, false, gpEditorStore->LoadResource("editor/TranslateX.CMDL"));
+         smTranslateModels[CGIZMO_TRANSLATE_Y]        = SGizmoModelPart(EAxis::Y, true, false, gpEditorStore->LoadResource("editor/TranslateY.CMDL"));
+         smTranslateModels[CGIZMO_TRANSLATE_Z]        = SGizmoModelPart(EAxis::Z, true, false, gpEditorStore->LoadResource("editor/TranslateZ.CMDL"));
+         smTranslateModels[CGIZMO_TRANSLATE_LINES_XY] = SGizmoModelPart(EAxis::XY, true, false, gpEditorStore->LoadResource("editor/TranslateLinesXY.CMDL"));
+         smTranslateModels[CGIZMO_TRANSLATE_LINES_XZ] = SGizmoModelPart(EAxis::XZ, true, false, gpEditorStore->LoadResource("editor/TranslateLinesXZ.CMDL"));
+         smTranslateModels[CGIZMO_TRANSLATE_LINES_YZ] = SGizmoModelPart(EAxis::YZ, true, false, gpEditorStore->LoadResource("editor/TranslateLinesYZ.CMDL"));
+         smTranslateModels[CGIZMO_TRANSLATE_POLY_XY]  = SGizmoModelPart(EAxis::XY, false, false, gpEditorStore->LoadResource("editor/TranslatePolyXY.CMDL"));
+         smTranslateModels[CGIZMO_TRANSLATE_POLY_XZ]  = SGizmoModelPart(EAxis::XZ, false, false, gpEditorStore->LoadResource("editor/TranslatePolyXZ.CMDL"));
+         smTranslateModels[CGIZMO_TRANSLATE_POLY_YZ]  = SGizmoModelPart(EAxis::YZ, false, false, gpEditorStore->LoadResource("editor/TranslatePolyYZ.CMDL"));
+
+         smRotateModels[CGIZMO_ROTATE_OUTLINE] = SGizmoModelPart(EAxis::None, true, true, gpEditorStore->LoadResource("editor/RotateClipOutline.CMDL"));
+         smRotateModels[CGIZMO_ROTATE_X]       = SGizmoModelPart(EAxis::X, true, false, gpEditorStore->LoadResource("editor/RotateX.CMDL"));
+         smRotateModels[CGIZMO_ROTATE_Y]       = SGizmoModelPart(EAxis::Y, true, false, gpEditorStore->LoadResource("editor/RotateY.CMDL"));
+         smRotateModels[CGIZMO_ROTATE_Z]       = SGizmoModelPart(EAxis::Z, true, false, gpEditorStore->LoadResource("editor/RotateZ.CMDL"));
+         smRotateModels[CGIZMO_ROTATE_XYZ]     = SGizmoModelPart(EAxis::XYZ, false, false, gpEditorStore->LoadResource("editor/RotateXYZ.CMDL"));
+
+         smScaleModels[CGIZMO_SCALE_X]        = SGizmoModelPart(EAxis::X, true, false, gpEditorStore->LoadResource("editor/ScaleX.CMDL"));
+         smScaleModels[CGIZMO_SCALE_Y]        = SGizmoModelPart(EAxis::Y, true, false, gpEditorStore->LoadResource("editor/ScaleY.CMDL"));
+         smScaleModels[CGIZMO_SCALE_Z]        = SGizmoModelPart(EAxis::Z, true, false, gpEditorStore->LoadResource("editor/ScaleZ.CMDL"));
+         smScaleModels[CGIZMO_SCALE_LINES_XY] = SGizmoModelPart(EAxis::XY, true, false, gpEditorStore->LoadResource("editor/ScaleLinesXY.CMDL"));
+         smScaleModels[CGIZMO_SCALE_LINES_XZ] = SGizmoModelPart(EAxis::XZ, true, false, gpEditorStore->LoadResource("editor/ScaleLinesXZ.CMDL"));
+         smScaleModels[CGIZMO_SCALE_LINES_YZ] = SGizmoModelPart(EAxis::YZ, true, false, gpEditorStore->LoadResource("editor/ScaleLinesYZ.CMDL"));
+         smScaleModels[CGIZMO_SCALE_POLY_XY]  = SGizmoModelPart(EAxis::XY, true, false, gpEditorStore->LoadResource("editor/ScalePolyXY.CMDL"));
+         smScaleModels[CGIZMO_SCALE_POLY_XZ]  = SGizmoModelPart(EAxis::XZ, true, false, gpEditorStore->LoadResource("editor/ScalePolyXZ.CMDL"));
+         smScaleModels[CGIZMO_SCALE_POLY_YZ]  = SGizmoModelPart(EAxis::YZ, true, false, gpEditorStore->LoadResource("editor/ScalePolyYZ.CMDL"));
+         smScaleModels[CGIZMO_SCALE_XYZ]      = SGizmoModelPart(EAxis::XYZ, true, false, gpEditorStore->LoadResource("editor/ScaleXYZ.CMDL"));
+
+         smModelsLoaded = true;
+     }
+ }
 
 CGizmo::CGizmo()
 {
@@ -23,7 +86,7 @@ void CGizmo::AddToRenderer(CRenderer *pRenderer, const SViewInfo&)
     // Transform is updated every frame even if the user doesn't modify the gizmo
     // in order to account for scale changes based on camera distance
     UpdateTransform();
-    const SModelPart* pPart = mpCurrentParts;
+    const auto* pPart = mpCurrentParts;
 
     // Add all parts to renderer
     for (uint32 iPart = 0; iPart < mNumCurrentParts; iPart++)
@@ -43,9 +106,11 @@ void CGizmo::AddToRenderer(CRenderer *pRenderer, const SViewInfo&)
 
 void CGizmo::Draw(FRenderOptions /*Options*/, int ComponentIndex, ERenderCommand /*Command*/, const SViewInfo& /*rkViewInfo*/)
 {
-    // Determine which SModelPart array to use
-    if (ComponentIndex >= (int) mNumCurrentParts) return;
-    SModelPart *pPart = mpCurrentParts;
+    // Determine which SGizmoModelPart array to use
+    if (ComponentIndex >= (int) mNumCurrentParts)
+        return;
+
+    auto* pPart = mpCurrentParts;
 
     // Set model matrix
     if (pPart[ComponentIndex].IsBillboard)
@@ -114,10 +179,10 @@ bool CGizmo::CheckSelectedAxes(const CRay& rkRay)
     const CRay BillRay = rkRay.Transformed(mBillboardTransform.Inverse());
 
     // Do raycast on each model
-    const SModelPart* pPart = mpCurrentParts;
+    const auto* pPart = mpCurrentParts;
 
     struct SResult {
-        const SModelPart *pPart;
+        const SGizmoModelPart* pPart;
         float Dist;
 
         static bool DistanceLessThan(const SResult& left, const SResult& right)
@@ -544,44 +609,6 @@ void CGizmo::SetLocalRotation(const CQuaternion& rkOrientation)
 
     if (mTransformSpace == ETransformSpace::Local)
         mRotation = rkOrientation;
-}
-
-// ************ PRIVATE STATIC ************
-void CGizmo::LoadModels()
-{
-    if (!smModelsLoaded)
-    {
-        debugf("Loading transform gizmo models");
-
-        smTranslateModels[CGIZMO_TRANSLATE_X]        = SModelPart(EAxis::X,  true,  false, gpEditorStore->LoadResource("editor/TranslateX.CMDL"));
-        smTranslateModels[CGIZMO_TRANSLATE_Y]        = SModelPart(EAxis::Y,  true,  false, gpEditorStore->LoadResource("editor/TranslateY.CMDL"));
-        smTranslateModels[CGIZMO_TRANSLATE_Z]        = SModelPart(EAxis::Z,  true,  false, gpEditorStore->LoadResource("editor/TranslateZ.CMDL"));
-        smTranslateModels[CGIZMO_TRANSLATE_LINES_XY] = SModelPart(EAxis::XY, true,  false, gpEditorStore->LoadResource("editor/TranslateLinesXY.CMDL"));
-        smTranslateModels[CGIZMO_TRANSLATE_LINES_XZ] = SModelPart(EAxis::XZ, true,  false, gpEditorStore->LoadResource("editor/TranslateLinesXZ.CMDL"));
-        smTranslateModels[CGIZMO_TRANSLATE_LINES_YZ] = SModelPart(EAxis::YZ, true,  false, gpEditorStore->LoadResource("editor/TranslateLinesYZ.CMDL"));
-        smTranslateModels[CGIZMO_TRANSLATE_POLY_XY]  = SModelPart(EAxis::XY, false, false, gpEditorStore->LoadResource("editor/TranslatePolyXY.CMDL"));
-        smTranslateModels[CGIZMO_TRANSLATE_POLY_XZ]  = SModelPart(EAxis::XZ, false, false, gpEditorStore->LoadResource("editor/TranslatePolyXZ.CMDL"));
-        smTranslateModels[CGIZMO_TRANSLATE_POLY_YZ]  = SModelPart(EAxis::YZ, false, false, gpEditorStore->LoadResource("editor/TranslatePolyYZ.CMDL"));
-
-        smRotateModels[CGIZMO_ROTATE_OUTLINE] = SModelPart(EAxis::None, true,  true,  gpEditorStore->LoadResource("editor/RotateClipOutline.CMDL"));
-        smRotateModels[CGIZMO_ROTATE_X]       = SModelPart(EAxis::X,    true,  false, gpEditorStore->LoadResource("editor/RotateX.CMDL"));
-        smRotateModels[CGIZMO_ROTATE_Y]       = SModelPart(EAxis::Y,    true,  false, gpEditorStore->LoadResource("editor/RotateY.CMDL"));
-        smRotateModels[CGIZMO_ROTATE_Z]       = SModelPart(EAxis::Z,    true,  false, gpEditorStore->LoadResource("editor/RotateZ.CMDL"));
-        smRotateModels[CGIZMO_ROTATE_XYZ]     = SModelPart(EAxis::XYZ,  false, false, gpEditorStore->LoadResource("editor/RotateXYZ.CMDL"));
-
-        smScaleModels[CGIZMO_SCALE_X]         = SModelPart(EAxis::X,   true,  false, gpEditorStore->LoadResource("editor/ScaleX.CMDL"));
-        smScaleModels[CGIZMO_SCALE_Y]         = SModelPart(EAxis::Y,   true,  false, gpEditorStore->LoadResource("editor/ScaleY.CMDL"));
-        smScaleModels[CGIZMO_SCALE_Z]         = SModelPart(EAxis::Z,   true,  false, gpEditorStore->LoadResource("editor/ScaleZ.CMDL"));
-        smScaleModels[CGIZMO_SCALE_LINES_XY]  = SModelPart(EAxis::XY,  true,  false, gpEditorStore->LoadResource("editor/ScaleLinesXY.CMDL"));
-        smScaleModels[CGIZMO_SCALE_LINES_XZ]  = SModelPart(EAxis::XZ,  true,  false, gpEditorStore->LoadResource("editor/ScaleLinesXZ.CMDL"));
-        smScaleModels[CGIZMO_SCALE_LINES_YZ]  = SModelPart(EAxis::YZ,  true,  false, gpEditorStore->LoadResource("editor/ScaleLinesYZ.CMDL"));
-        smScaleModels[CGIZMO_SCALE_POLY_XY]   = SModelPart(EAxis::XY,  true,  false, gpEditorStore->LoadResource("editor/ScalePolyXY.CMDL"));
-        smScaleModels[CGIZMO_SCALE_POLY_XZ]   = SModelPart(EAxis::XZ,  true,  false, gpEditorStore->LoadResource("editor/ScalePolyXZ.CMDL"));
-        smScaleModels[CGIZMO_SCALE_POLY_YZ]   = SModelPart(EAxis::YZ,  true,  false, gpEditorStore->LoadResource("editor/ScalePolyYZ.CMDL"));
-        smScaleModels[CGIZMO_SCALE_XYZ]       = SModelPart(EAxis::XYZ, true,  false, gpEditorStore->LoadResource("editor/ScaleXYZ.CMDL"));
-
-        smModelsLoaded = true;
-    }
 }
 
 // ************ PROTECTED ************

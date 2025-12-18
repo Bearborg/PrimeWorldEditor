@@ -10,9 +10,6 @@
 #include <Common/Math/ETransformSpace.h>
 #include <Core/Render/CCamera.h>
 #include <Core/Render/IRenderable.h>
-#include <Core/Resource/Model/CModel.h>
-#include <Core/Resource/TResPtr.h>
-#include <array>
 
 #define CGIZMO_TRANSLATE_X 0
 #define CGIZMO_TRANSLATE_Y 1
@@ -42,6 +39,8 @@
 #define CGIZMO_SCALE_XYZ 9
 #define CGIZMO_SCALE_NUM 10
 
+
+struct SGizmoModelPart;
 class CGizmo : public IRenderable
 {
 public:
@@ -93,30 +92,8 @@ private:
     CVector3f mMoveDir;
 
     // Model parts
-    struct SModelPart
-    {
-        FAxes ModelAxes;
-        bool EnableRayCast = false;
-        bool IsBillboard = false;
-        TResPtr<CModel> pModel;
-
-        SModelPart() :
-                ModelAxes(EAxis::None)
-        {};
-
-        SModelPart(FAxes Axes, bool RayCastOn, bool Billboard, TResPtr<CModel> _pModel) :
-                ModelAxes(Axes), EnableRayCast(RayCastOn), IsBillboard(Billboard), pModel(_pModel)
-        {}
-    };
-
-    SModelPart* mpCurrentParts = nullptr;
+    SGizmoModelPart* mpCurrentParts = nullptr;
     uint32 mNumCurrentParts = 0;
-
-    // Static
-    static inline bool smModelsLoaded = false;
-    static inline std::array<SModelPart, CGIZMO_TRANSLATE_NUM> smTranslateModels;
-    static inline std::array<SModelPart, CGIZMO_ROTATE_NUM> smRotateModels;
-    static inline std::array<SModelPart, CGIZMO_SCALE_NUM> smScaleModels;
 
 public:
     CGizmo();
@@ -189,10 +166,6 @@ public:
 protected:
     void UpdateTransform();
     void WrapCursor();
-
-    // Private Static
-private:
-    static void LoadModels();
 };
 
 #endif // CGIZMO_H
