@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
+#include <type_traits>
 
 /** Forward declares */
 class CGameTemplate;
@@ -504,9 +505,15 @@ public:
     }
 };
 
+template <typename Type>
+concept IsProperty = std::derived_from<Type, IProperty>;
+
+template <typename Type>
+concept IsIPropertyPtr = std::is_same_v<Type, IProperty*> || std::is_same_v<Type, const IProperty*>;
+
 /** Property casting with dynamic type checking */
-template<class PropertyClass>
-PropertyClass* TPropCast(IProperty* pProperty)
+template<IsProperty PropertyClass, IsIPropertyPtr Ptr>
+PropertyClass* TPropCast(Ptr pProperty)
 {
     if (pProperty && pProperty->Type() == PropertyClass::StaticType())
     {
