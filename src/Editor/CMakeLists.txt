@@ -129,6 +129,12 @@ target_compile_definitions(
 
         # Disable deprecated Qt snprintf functions
         QT_NO_QSNPRINTF
+
+        # No need for this anymore since C++11
+        QT_NO_FOREACH
+
+        # Ensure deprecated facilities are caught up to Qt 6.8
+        QT_DISABLE_DEPRECATED_UP_TO=0x060800
 )
 
 gather_include_directories(pwe_editor_include_directories pwe_editor)
