@@ -40,22 +40,22 @@ class CExportGameDialog : public QDialog
     bool mExportSuccess = false;
     QString mNewProjectPath;
 
-public:
-    explicit CExportGameDialog(const QString& rkIsoPath, const QString& rkExportDir, QWidget *pParent = nullptr);
-    ~CExportGameDialog() override;
-
     void InitUI(QString ExportDir);
     bool ValidateGame();
     bool RequestWiiPortGame();
     float FindBuildVersion() const;
 
     // Disc Tree
-    void RecursiveAddToTree(const nod::Node *pkNode, class QTreeWidgetItem *pParent);
+    void RecursiveAddToTree(const nod::Node* pkNode, class QTreeWidgetItem* pParent);
+
+public:
+    explicit CExportGameDialog(const QString& rkIsoPath, const QString& rkExportDir, QWidget *pParent = nullptr);
+    ~CExportGameDialog() override;
 
     // Accessors
     bool HasValidDisc() const    { return mpDisc != nullptr; }
     bool ExportSucceeded() const { return mExportSuccess; }
-    QString ProjectPath() const  { return mNewProjectPath; }
+    const QString& ProjectPath() const  { return mNewProjectPath; }
 
 public slots:
     void BrowseOutputDirectory();
