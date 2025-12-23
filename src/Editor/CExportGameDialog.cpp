@@ -309,7 +309,7 @@ float CExportGameDialog::FindBuildVersion() const
         {
             // Found the build info string; extract version number
             TString BuildInfo = (char*) &pDolData[SearchIdx + SearchTextSize];
-            int BuildVerStart = BuildInfo.IndexOfPhrase("Build v") + 7;
+            auto BuildVerStart = BuildInfo.IndexOfPhrase("Build v") + 7;
             ASSERT(BuildVerStart != 6);
 
             return BuildInfo.SubString(BuildVerStart, 5).ToFloat();

@@ -659,13 +659,13 @@ void CResourceEntry::MarkDeleted(bool InDeleted)
         if (!InDeleted)
         {
             // Our directory path is stored in the Name field - see below for explanation
-            int NameEnd = mName.IndexOf('|');
-            ASSERT( NameEnd != -1 );
+            const auto NameEnd = mName.IndexOf('|');
+            ASSERT(NameEnd != -1);
 
             TString DirPath = mName.ChopFront(NameEnd + 1);
-            mName = mName.ChopBack( mName.Size() - NameEnd);
-            mpDirectory = mpStore->GetVirtualDirectory( DirPath, true );
-            ASSERT( mpDirectory != nullptr );
+            mName = mName.ChopBack(mName.Size() - NameEnd);
+            mpDirectory = mpStore->GetVirtualDirectory(DirPath, true);
+            ASSERT(mpDirectory != nullptr);
             mpDirectory->AddChild("", this);
         }
 

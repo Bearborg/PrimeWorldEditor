@@ -269,7 +269,7 @@ std::unique_ptr<CDependencyTree> CStringTable::BuildDependencyTree()
         {
             const TString& kString = stringData.String;
 
-            for (int TagIdx = kString.IndexOf('&'); TagIdx != -1; TagIdx = kString.IndexOf('&', TagIdx + 1))
+            for (auto TagIdx = kString.IndexOf('&'); TagIdx != -1; TagIdx = kString.IndexOf('&', TagIdx + 1))
             {
                 // Check for double ampersand (escape character in DKCR, not sure about other games)
                 if (kString.At(TagIdx + 1) == '&')
@@ -279,8 +279,8 @@ std::unique_ptr<CDependencyTree> CStringTable::BuildDependencyTree()
                 }
 
                 // Get tag name and parameters
-                const int NameEnd = kString.IndexOf('=', TagIdx);
-                const int TagEnd = kString.IndexOf(';', TagIdx);
+                const auto NameEnd = kString.IndexOf('=', TagIdx);
+                const auto TagEnd = kString.IndexOf(';', TagIdx);
                 if (NameEnd == -1 || TagEnd == -1)
                     continue;
 
@@ -307,8 +307,8 @@ std::unique_ptr<CDependencyTree> CStringTable::BuildDependencyTree()
                 {
                     // Determine which params are textures based on image type
                     TStringList Params = ParamString.Split(",");
-                    TString ImageType = Params.front();
-                    uint TexturesStart = 0;
+                    const TString& ImageType = Params.front();
+                    size_t TexturesStart = 0;
 
                     if (ImageType == "A")
                     {
@@ -337,9 +337,9 @@ std::unique_ptr<CDependencyTree> CStringTable::BuildDependencyTree()
                     }
 
                     // Load texture IDs
-                    TStringList::iterator Iter = Params.begin();
+                    auto Iter = Params.begin();
 
-                    for (uint ParamIdx = 0; ParamIdx < Params.size(); ParamIdx++, ++Iter)
+                    for (size_t ParamIdx = 0; ParamIdx < Params.size(); ParamIdx++, ++Iter)
                     {
                         if (ParamIdx >= TexturesStart)
                         {
@@ -352,7 +352,7 @@ std::unique_ptr<CDependencyTree> CStringTable::BuildDependencyTree()
                             }
 
                             ASSERT(Param.Size() == IDLength * 2);
-                            pTree->AddDependency( CAssetID::FromString(Param) );
+                            pTree->AddDependency(CAssetID::FromString(Param));
                         }
                     }
                 }
@@ -367,9 +367,9 @@ std::unique_ptr<CDependencyTree> CStringTable::BuildDependencyTree()
 TString CStringTable::StripFormatting(const TString& kInString)
 {
     TString Out = kInString;
-    int TagStart = -1;
+    int64_t TagStart = -1;
 
-    for (uint CharIdx = 0; CharIdx < Out.Size(); CharIdx++)
+    for (size_t CharIdx = 0; CharIdx < Out.Size(); CharIdx++)
     {
         if (Out[CharIdx] == '&')
         {
@@ -386,8 +386,8 @@ TString CStringTable::StripFormatting(const TString& kInString)
         }
         else if (TagStart != -1 && Out[CharIdx] == ';')
         {
-            const int TagEnd = CharIdx + 1;
-            const int TagLen = TagEnd - TagStart;
+            const int64_t TagEnd = CharIdx + 1;
+            const int64_t TagLen = TagEnd - TagStart;
             Out.Remove(TagStart, TagLen);
             CharIdx = TagStart - 1;
             TagStart = -1;

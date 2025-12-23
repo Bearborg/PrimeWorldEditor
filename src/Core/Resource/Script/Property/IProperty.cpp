@@ -260,15 +260,15 @@ IProperty* IProperty::ChildByIDString(const TIDString& rkIdString)
     // some ID strings are formatted with 8 characters and some with 2 (plus the beginning "0x")
     ASSERT(rkIdString.Size() >= 4);
 
-    const uint32 IDEndPos = rkIdString.IndexOf(':');
-    uint32 NextChildID = UINT32_MAX;
+    const auto IDEndPos = rkIdString.IndexOf(':');
+    auto NextChildID = -1;
 
-    if (IDEndPos == UINT32_MAX)
+    if (IDEndPos == -1)
         NextChildID = rkIdString.ToInt32(16);
     else
         NextChildID = rkIdString.SubString(2, IDEndPos - 2).ToInt32(16);
 
-    if (NextChildID == UINT32_MAX)
+    if (NextChildID == -1)
     {
         return nullptr;
     }
@@ -276,7 +276,7 @@ IProperty* IProperty::ChildByIDString(const TIDString& rkIdString)
     IProperty* pNextChild = ChildByID(NextChildID);
 
     // Check if we need to recurse
-    if (IDEndPos != UINT32_MAX)
+    if (IDEndPos != -1)
     {
         return pNextChild->ChildByIDString(rkIdString.ChopFront(IDEndPos + 1));
     }

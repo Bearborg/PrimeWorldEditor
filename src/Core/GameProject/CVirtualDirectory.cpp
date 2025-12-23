@@ -93,14 +93,14 @@ CVirtualDirectory* CVirtualDirectory::GetRoot()
 
 CVirtualDirectory* CVirtualDirectory::FindChildDirectory(const TString& rkName, bool AllowCreate)
 {
-    const uint32 SlashIdx = rkName.IndexOf("\\/");
-    const TString DirName = (SlashIdx == UINT32_MAX ? static_cast<TString::BaseClass>(rkName) : rkName.SubString(0, SlashIdx));
+    const auto SlashIdx = rkName.IndexOf("\\/");
+    const TString DirName = (SlashIdx == -1 ? static_cast<TString::BaseClass>(rkName) : rkName.SubString(0, SlashIdx));
 
     for (auto* child : mSubdirectories)
     {
         if (child->Name().CaseInsensitiveCompare(DirName))
         {
-            if (SlashIdx == UINT32_MAX)
+            if (SlashIdx == -1)
                 return child;
 
             const TString Remaining = rkName.SubString(SlashIdx + 1, rkName.Size() - SlashIdx);
@@ -173,9 +173,9 @@ bool CVirtualDirectory::AddChild(const TString &rkPath, CResourceEntry *pEntry)
 
     if (IsValidDirectoryPath(rkPath))
     {
-        const uint32 SlashIdx = rkPath.IndexOf("\\/");
-        const TString DirName = (SlashIdx == UINT32_MAX ? static_cast<TString::BaseClass>(rkPath) : rkPath.SubString(0, SlashIdx));
-        const TString Remaining = (SlashIdx == UINT32_MAX ? "" : rkPath.SubString(SlashIdx + 1, rkPath.Size() - SlashIdx));
+        const auto SlashIdx = rkPath.IndexOf("\\/");
+        const TString DirName = (SlashIdx == -1 ? static_cast<TString::BaseClass>(rkPath) : rkPath.SubString(0, SlashIdx));
+        const TString Remaining = (SlashIdx == -1 ? "" : rkPath.SubString(SlashIdx + 1, rkPath.Size() - SlashIdx));
 
         // Check if this subdirectory already exists
         CVirtualDirectory* pSubdir = nullptr;

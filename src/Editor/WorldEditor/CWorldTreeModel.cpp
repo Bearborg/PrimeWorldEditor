@@ -280,7 +280,7 @@ void CWorldTreeModel::OnProjectChanged(CGameProject *pProj)
 
                 CAssetID WorldID;
                 TString WorldName;
-                uint32 IDSplit = Line.IndexOf(' ');
+                const auto IDSplit = Line.IndexOf(' ');
 
                 if (IDSplit != -1)
                 {
@@ -290,8 +290,8 @@ void CWorldTreeModel::OnProjectChanged(CGameProject *pProj)
 
                     // Get world name
                     const TString WorldPath = (IDSplit == -1 ? "" : Line.SubString(IDSplit + 1, Line.Size() - IDSplit - 1));
-                    const uint32 UnderscoreIdx = WorldPath.IndexOf('_');
-                    const uint32 WorldDirEnd = WorldPath.IndexOf("\\/", UnderscoreIdx);
+                    const auto UnderscoreIdx = WorldPath.IndexOf('_');
+                    const auto WorldDirEnd = WorldPath.IndexOf("\\/", UnderscoreIdx);
 
                     if (UnderscoreIdx != -1 && WorldDirEnd != -1)
                         WorldName = WorldPath.SubString(UnderscoreIdx + 1, WorldDirEnd - UnderscoreIdx - 1);

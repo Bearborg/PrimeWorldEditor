@@ -733,19 +733,19 @@ TString CGameExporter::MakeWorldName(const CAssetID& WorldID)
         // MP2 demo - Use text between the first and second underscores
         else if (mGame == EGame::EchoesDemo)
         {
-            const uint32 UnderscoreA = WorldName.IndexOf('_');
-            const uint32 UnderscoreB = WorldName.IndexOf('_', UnderscoreA + 1);
+            const auto UnderscoreA = WorldName.IndexOf('_');
+            const auto UnderscoreB = WorldName.IndexOf('_', UnderscoreA + 1);
 
-            if (UnderscoreA != UnderscoreB && UnderscoreA != UINT32_MAX && UnderscoreB != UINT32_MAX)
+            if (UnderscoreA != UnderscoreB && UnderscoreA != -1 && UnderscoreB != -1)
                 WorldName = WorldName.SubString(UnderscoreA + 1, UnderscoreB - UnderscoreA - 1);
         }
         // MP2 - Remove text before first underscore and after last underscore, strip remaining underscores (except multiplayer maps, which have one underscore)
         else if (mGame == EGame::Echoes)
         {
-            const uint32 FirstUnderscore = WorldName.IndexOf('_');
-            const uint32 LastUnderscore = WorldName.LastIndexOf('_');
+            const auto FirstUnderscore = WorldName.IndexOf('_');
+            const auto LastUnderscore = WorldName.LastIndexOf('_');
 
-            if (FirstUnderscore != LastUnderscore && FirstUnderscore != UINT32_MAX && LastUnderscore != UINT32_MAX)
+            if (FirstUnderscore != LastUnderscore && FirstUnderscore != -1 && LastUnderscore != -1)
             {
                 WorldName = WorldName.ChopBack(WorldName.Size() - LastUnderscore);
                 WorldName = WorldName.ChopFront(FirstUnderscore + 1);
@@ -758,21 +758,21 @@ TString CGameExporter::MakeWorldName(const CAssetID& WorldID)
             if (WorldName.StartsWith('!'))
                 WorldName = WorldName.ChopFront(1);
 
-            const uint32 LastUnderscore = WorldName.LastIndexOf('_');
+            const uint64_t LastUnderscore = WorldName.LastIndexOf('_');
             WorldName = WorldName.ChopBack(WorldName.Size() - LastUnderscore);
         }
         // MP3 - Remove text after last underscore
         else if (mGame == EGame::Corruption)
         {
-            const uint32 LastUnderscore = WorldName.LastIndexOf('_');
+            const uint64_t LastUnderscore = WorldName.LastIndexOf('_');
 
-            if (LastUnderscore != UINT32_MAX && !WorldName.StartsWith("front_end_"))
+            if (LastUnderscore != UINT64_MAX && !WorldName.StartsWith("front_end_"))
                 WorldName = WorldName.ChopBack(WorldName.Size() - LastUnderscore);
         }
         // DKCR - Remove text prior to first underscore
         else if (mGame == EGame::DKCReturns)
         {
-            const uint32 Underscore = WorldName.IndexOf('_');
+            const uint64_t Underscore = WorldName.IndexOf('_');
             WorldName = WorldName.ChopFront(Underscore + 1);
         }
     }

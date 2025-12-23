@@ -636,17 +636,19 @@ void CResourceStore::ImportNamesFromPakContentsTxt(const TString& rkTxtPath, boo
     {
         // Get new line, parse to extract the ID/path
         char LineBuffer[512];
-        fgets(LineBuffer, 512, pContentsFile);
+        std::fgets(LineBuffer, 512, pContentsFile);
 
         TString Line(LineBuffer);
-        if (Line.IsEmpty()) break;
+        if (Line.IsEmpty())
+            break;
 
-        uint32 IDStart = Line.IndexOfPhrase("0x") + 2;
-        if (IDStart == 1) continue;
+        const uint64_t IDStart = Line.IndexOfPhrase("0x") + 2;
+        if (IDStart == 1)
+            continue;
 
-        uint32 IDEnd = Line.IndexOf(" \t", IDStart);
-        uint32 PathStart = IDEnd + 1;
-        uint32 PathEnd = Line.Size() - 5;
+        uint64_t IDEnd = Line.IndexOf(" \t", IDStart);
+        uint64_t PathStart = IDEnd + 1;
+        uint64_t PathEnd = Line.Size() - 5;
 
         TString IDStr = Line.SubString(IDStart, IDEnd - IDStart);
         TString Path = Line.SubString(PathStart, PathEnd - PathStart);
@@ -658,9 +660,9 @@ void CResourceStore::ImportNamesFromPakContentsTxt(const TString& rkTxtPath, boo
         if (pEntry)
         {
             // Chop name to just after "x_rep"
-            uint32 RepStart = Path.IndexOfPhrase("_rep");
+            const auto RepStart = Path.IndexOfPhrase("_rep");
 
-            if (RepStart != UINT32_MAX)
+            if (RepStart != -1)
                 Path = Path.ChopFront(RepStart + 5);
 
             // If the "x_rep" folder doesn't exist in this path for some reason, but this is still a path, then just chop off the drive letter.
@@ -672,7 +674,7 @@ void CResourceStore::ImportNamesFromPakContentsTxt(const TString& rkTxtPath, boo
         }
     }
 
-    fclose(pContentsFile);
+    std::fclose(pContentsFile);
 
     // Assign names
     for (auto& [entry, path] : PathMap)

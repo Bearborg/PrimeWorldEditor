@@ -259,8 +259,8 @@ std::optional<std::pair<QModelIndex, int>> CVirtualDirectoryModel::GetProposedIn
     if (FullPath.EndsWith('/') || FullPath.EndsWith('\\'))
         FullPath = FullPath.ChopBack(1);
 
-    const uint32 LastSlash = FullPath.LastIndexOf("\\/");
-    const TString ParentPath = FullPath.ChopBack( FullPath.Size() - LastSlash );
+    const uint64_t LastSlash = FullPath.LastIndexOf("\\/");
+    const TString ParentPath = FullPath.ChopBack(FullPath.Size() - LastSlash);
 
     // Find parent index
     const CVirtualDirectory* pParent = (ParentPath.IsEmpty() ? mpRoot : mpRoot->FindChildDirectory(ParentPath, false));
@@ -272,7 +272,7 @@ std::optional<std::pair<QModelIndex, int>> CVirtualDirectoryModel::GetProposedIn
         return std::nullopt;
 
     // Determine the row number that the new directory will be inserted at
-    const QString DirName = TO_QSTRING(FullPath.ChopFront( LastSlash + 1 ));
+    const QString DirName = TO_QSTRING(FullPath.ChopFront(LastSlash + 1));
     const int NumRows = rowCount(ParentIndex);
     int RowIdx = 0;
 
