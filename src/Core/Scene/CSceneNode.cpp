@@ -84,14 +84,13 @@ void CSceneNode::Unparent()
 
 void CSceneNode::RemoveChild(CSceneNode *pChild)
 {
-    for (auto it = mChildren.begin(); it != mChildren.end(); ++it)
-    {
-        if (*it == pChild)
-        {
-            mChildren.erase(it);
-            break;
-        }
-    }
+    const auto iter = std::ranges::find_if(mChildren,
+                                           [&](const auto& child) { return child == pChild; });
+
+    if (iter == mChildren.end())
+        return;
+
+    mChildren.erase(iter);
 }
 
 void CSceneNode::DeleteChildren()
