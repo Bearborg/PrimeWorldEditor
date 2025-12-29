@@ -237,7 +237,7 @@ void CCamera::UpdateTransform() const
         // Update position
         if (mMode == ECameraMoveMode::Orbit)
         {
-            if (mOrbitDistance < 1.f) mOrbitDistance = 1.f;
+            mOrbitDistance = std::max(mOrbitDistance, 1.f);
             mPosition = mOrbitTarget + (mDirection * -mOrbitDistance);
         }
 
