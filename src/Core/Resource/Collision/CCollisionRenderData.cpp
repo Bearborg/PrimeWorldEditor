@@ -139,13 +139,13 @@ void CCollisionRenderData::BuildBoundingHierarchyRenderData(const SOBBTreeNode* 
     // subset of the bounding hierarchy based on a max depth level.
     std::vector<const SOBBTreeNode*> TreeNodes;
     TreeNodes.push_back(pOBBTree);
-    uint NodeIdx = 0;
+    size_t NodeIdx = 0;
 
     while (NodeIdx < TreeNodes.size())
     {
         // Keep track of the current depth level and iterate through it
         mBoundingDepthOffsets.push_back(mBoundingIndexBuffer.GetSize());
-        uint DepthLevel = TreeNodes.size();
+        const size_t DepthLevel = TreeNodes.size();
 
         mBoundingVertexBuffer.Reserve(8 * (DepthLevel - NodeIdx));
         mBoundingIndexBuffer.Reserve(24 * (DepthLevel - NodeIdx));
@@ -157,14 +157,14 @@ void CCollisionRenderData::BuildBoundingHierarchyRenderData(const SOBBTreeNode* 
             // Append children
             if (pkNode->NodeType == EOBBTreeNodeType::Branch)
             {
-                const SOBBTreeBranch* pkBranch = static_cast<const SOBBTreeBranch*>(pkNode);
+                const auto* pkBranch = static_cast<const SOBBTreeBranch*>(pkNode);
                 TreeNodes.push_back(pkBranch->pLeft.get());
                 TreeNodes.push_back(pkBranch->pRight.get());
             }
 
             // Create a new transform with the radii combined in as a scale matrie
-            CTransform4f CombinedTransform =
-                    pkNode->Transform * CTransform4f::ScaleMatrix(pkNode->Radii);
+            const auto CombinedTransform =
+                pkNode->Transform * CTransform4f::ScaleMatrix(pkNode->Radii);
 
             // Transform a 1x1x1 unit cube using the transform...
             static constexpr std::array skUnitCubeVertices{
@@ -185,7 +185,7 @@ void CCollisionRenderData::BuildBoundingHierarchyRenderData(const SOBBTreeNode* 
             }
 
             // Add corresponding indices
-            static constexpr std::array<uint16, 24> skUnitCubeWireIndices{
+            static constexpr std::array<uint16_t, 24> skUnitCubeWireIndices{
                 0, 1,
                 1, 3,
                 3, 2,
@@ -201,9 +201,9 @@ void CCollisionRenderData::BuildBoundingHierarchyRenderData(const SOBBTreeNode* 
             };
 
             const size_t FirstIndex = mBoundingVertexBuffer.Size() - 8;
-            for (const uint16 index : skUnitCubeWireIndices)
+            for (const auto index : skUnitCubeWireIndices)
             {
-                mBoundingIndexBuffer.AddIndex(static_cast<uint16>(index + FirstIndex));
+                mBoundingIndexBuffer.AddIndex(static_cast<uint16_t>(index + FirstIndex));
             }
         }
     }
