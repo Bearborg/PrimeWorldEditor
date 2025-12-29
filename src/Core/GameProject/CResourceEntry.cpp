@@ -336,12 +336,10 @@ bool CResourceEntry::Save(bool SkipCacheSave /*= false*/, bool FlagForRecook /*=
     // Flag dirty any packages that contain this resource.
     if (FlagForRecook)
     {
-        for (size_t iPkg = 0; iPkg < mpStore->Project()->NumPackages(); iPkg++)
+        for (const auto& pkg : mpStore->Project()->Packages())
         {
-            CPackage *pPkg = mpStore->Project()->PackageByIndex(iPkg);
-
-            if (!pPkg->NeedsRecook() && pPkg->ContainsAsset(ID()))
-                pPkg->MarkDirty();
+            if (!pkg->NeedsRecook() && pkg->ContainsAsset(ID()))
+                pkg->MarkDirty();
         }
     }
 

@@ -86,28 +86,27 @@ void CProjectSettingsDialog::ActiveProjectChanged(CGameProject *pProj)
 
 void CProjectSettingsDialog::GameNameChanged()
 {
-    if (mpProject)
-    {
-        QString NewName = mpUI->GameNameLineEdit->text();
+    if (!mpProject)
+        return;
 
-        COpeningBanner Banner(mpProject);
-        Banner.SetEnglishGameName( TO_TSTRING(NewName) );
-        Banner.Save();
-    }
+    const QString NewName = mpUI->GameNameLineEdit->text();
+    COpeningBanner Banner(mpProject);
+    Banner.SetEnglishGameName(TO_TSTRING(NewName));
+    Banner.Save();
 }
 
 void CProjectSettingsDialog::SetupPackagesList()
 {
     mpUI->PackagesList->clear();
-    if (!mpProject) return;
+    if (!mpProject)
+        return;
 
-    for (size_t iPkg = 0; iPkg < mpProject->NumPackages(); iPkg++)
+    for (const auto& pkg : mpProject->Packages())
     {
-        CPackage *pPackage = mpProject->PackageByIndex(iPkg);
-        ASSERT(pPackage != nullptr);
+        ASSERT(pkg != nullptr);
 
-        QString PackageName = TO_QSTRING(pPackage->Name());
-        if (pPackage->NeedsRecook())
+        QString PackageName = TO_QSTRING(pkg->Name());
+        if (pkg->NeedsRecook())
             PackageName += QLatin1Char{'*'};
         mpUI->PackagesList->addItem(PackageName);
     }
@@ -115,13 +114,12 @@ void CProjectSettingsDialog::SetupPackagesList()
 
 void CProjectSettingsDialog::CookPackage()
 {
-    const auto PackageIdx = static_cast<uint32>(mpUI->PackagesList->currentRow());
-
+    const auto PackageIdx = static_cast<uint32_t>(mpUI->PackagesList->currentRow());
     if (PackageIdx == UINT32_MAX)
         return;
 
-    CPackage *pPackage = mpProject->PackageByIndex(PackageIdx);
-    gpEdApp->CookPackage(pPackage);
+    auto* pkg = mpProject->Packages()[PackageIdx].get();
+    gpEdApp->CookPackage(pkg);
 }
 
 void CProjectSettingsDialog::CookAllDirtyPackages()

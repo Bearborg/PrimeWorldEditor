@@ -25,6 +25,8 @@
 #include <QFuture>
 #include <QtConcurrentRun>
 
+#include <algorithm>
+
 CEditorApplication::CEditorApplication(int& rArgc, char **ppArgv)
     : QApplication(rArgc, ppArgv)
     , mLastUpdate{CTimer::GlobalTime()}
@@ -218,12 +220,10 @@ bool CEditorApplication::CookAllDirtyPackages()
     ASSERT(mpActiveProject != nullptr);
     QList<CPackage*> PackageList;
 
-    for (size_t iPkg = 0; iPkg < mpActiveProject->NumPackages(); iPkg++)
+    for (const auto& pkg : mpActiveProject->Packages())
     {
-        CPackage *pPackage = mpActiveProject->PackageByIndex(iPkg);
-
-        if (pPackage->NeedsRecook())
-            PackageList.push_back(pPackage);
+        if (pkg->NeedsRecook())
+            PackageList.push_back(pkg.get());
     }
 
     return CookPackageList(PackageList);
@@ -255,20 +255,12 @@ bool CEditorApplication::CookPackageList(const QList<CPackage*>& PackageList)
     return !Dialog.ShouldCancel();
 }
 
-bool CEditorApplication::HasAnyDirtyPackages()
+bool CEditorApplication::HasAnyDirtyPackages() const
 {
     if (!mpActiveProject)
         return false;
 
-    for (size_t PkgIdx = 0; PkgIdx < mpActiveProject->NumPackages(); PkgIdx++)
-    {
-        CPackage *pPackage = mpActiveProject->PackageByIndex(PkgIdx);
-
-        if (pPackage->NeedsRecook())
-            return true;
-    }
-
-    return false;
+    return std::ranges::any_of(mpActiveProject->Packages(), &CPackage::NeedsRecook);
 }
 
 bool CEditorApplication::RebuildResourceDatabase()

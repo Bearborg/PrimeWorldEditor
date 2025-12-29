@@ -45,7 +45,7 @@ public:
     bool CookPackage(CPackage *pPackage);
     bool CookAllDirtyPackages();
     bool CookPackageList(const QList<CPackage*>& PackageList);
-    bool HasAnyDirtyPackages();
+    bool HasAnyDirtyPackages() const;
 
     bool RebuildResourceDatabase();
 

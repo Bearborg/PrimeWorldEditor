@@ -8,6 +8,7 @@
 
 #include <list>
 #include <memory>
+#include <span>
 #include <string_view>
 #include <vector>
 
@@ -88,9 +89,8 @@ public:
     // Accessors
     void SetProjectName(TString name) { mProjectName = std::move(name); }
 
-    const TString& Name() const                          { return mProjectName; }
-    size_t NumPackages() const                           { return mPackages.size(); }
-    CPackage* PackageByIndex(size_t Index) const         { return mPackages[Index].get(); }
+    const TString& Name() const                           { return mProjectName; }
+    std::span<const std::unique_ptr<CPackage>> Packages() { return mPackages; }
     void AddPackage(std::unique_ptr<CPackage>&& package);
     CResourceStore* ResourceStore() const                { return mpResourceStore.get(); }
     CGameInfo* GameInfo() const                          { return mpGameInfo.get(); }
