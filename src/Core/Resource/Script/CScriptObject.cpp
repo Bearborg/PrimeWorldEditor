@@ -188,32 +188,29 @@ bool CScriptObject::HasNearVisibleActivation() const
 
 void CScriptObject::AddLink(ELinkType Type, CLink *pLink, uint32_t Index)
 {
-    std::vector<CLink*> *pLinkVec = (Type == ELinkType::Incoming ? &mInLinks : &mOutLinks);
+    auto& LinkVec = (Type == ELinkType::Incoming ? mInLinks : mOutLinks);
 
-    if (Index == UINT32_MAX || Index == pLinkVec->size())
+    if (Index == UINT32_MAX || Index == LinkVec.size())
     {
-        pLinkVec->push_back(pLink);
+        LinkVec.push_back(pLink);
     }
     else
     {
-        auto it = pLinkVec->begin();
+        auto it = LinkVec.begin();
         std::advance(it, Index);
-        pLinkVec->insert(it, pLink);
+        LinkVec.insert(it, pLink);
     }
 }
 
 void CScriptObject::RemoveLink(ELinkType Type, CLink *pLink)
 {
-    std::vector<CLink*> *pLinkVec = (Type == ELinkType::Incoming ? &mInLinks : &mOutLinks);
+    auto& LinkVec = (Type == ELinkType::Incoming ? mInLinks : mOutLinks);
 
-    for (auto it = pLinkVec->begin(); it != pLinkVec->end(); ++it)
-    {
-        if (*it == pLink)
-        {
-            pLinkVec->erase(it);
-            break;
-        }
-    }
+    const auto it = std::ranges::find_if(LinkVec, [&](const auto& link) { return link == pLink; });
+    if (it == LinkVec.end())
+        return;
+
+    LinkVec.erase(it);
 }
 
 void CScriptObject::BreakAllLinks()
