@@ -10,6 +10,8 @@
 #include "Core/Resource/Script/CScriptLayer.h"
 #include "Core/Resource/Script/CScriptTemplate.h"
 
+#include <algorithm>
+
 CScriptObject::CScriptObject(uint32_t InstanceID, CGameArea *pArea, CScriptLayer *pLayer, CScriptTemplate *pTemplate)
     : mpTemplate(pTemplate)
     , mpArea(pArea)
@@ -174,9 +176,7 @@ bool CScriptObject::HasNearVisibleActivation() const
     }
 
     // Check whether any of the relays have a near visible activation
-    const bool nearVisible = std::any_of(Relays.cbegin(), Relays.cend(),
-                                         [](const auto* relay) { return relay->HasNearVisibleActivation(); });
-    if (nearVisible)
+    if (std::ranges::any_of(Relays, &CScriptObject::HasNearVisibleActivation))
     {
         mIsCheckingNearVisibleActivation = false;
         return true;
