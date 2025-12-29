@@ -2,6 +2,7 @@
 #define CAUDIOMACRO_H
 
 #include "Core/Resource/CResource.h"
+#include <span>
 #include <vector>
 
 class CAudioMacro : public CResource
@@ -28,9 +29,9 @@ public:
     }
 
     // Accessors
-    const TString& MacroName() const                  { return mMacroName; }
-    size_t NumSamples() const                         { return mSamples.size(); }
-    const CAssetID& SampleByIndex(size_t Index) const { return mSamples[Index]; }
+    const TString& MacroName() const          { return mMacroName; }
+    std::span<const CAssetID> Samples() const { return mSamples; }
+    size_t NumSamples() const                 { return mSamples.size(); }
 };
 
 #endif // CAUDIOMACRO_H

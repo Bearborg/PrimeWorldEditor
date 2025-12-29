@@ -16,6 +16,8 @@
 #include <Common/FileUtil.h>
 #include <Common/Math/MathUtil.h>
 
+#include <ranges>
+
 #define REVERT_AUTO_NAMES 1
 #define PROCESS_PACKAGES 1
 #define PROCESS_WORLDS 1
@@ -472,22 +474,19 @@ void GenerateAssetNames(CGameProject *pProj)
         const TString& MacroName = pMacro->MacroName();
         ApplyGeneratedName(*It, kSfxDir, MacroName);
 
-        for (size_t iSamp = 0; iSamp < pMacro->NumSamples(); iSamp++)
+        for (const auto [idx, SampleID] : std::views::enumerate(pMacro->Samples()))
         {
-            const CAssetID& SampleID = pMacro->SampleByIndex(iSamp);
-            CResourceEntry* pSample = pStore->FindEntry(SampleID);
+            auto* pSample = pStore->FindEntry(SampleID);
+            if (pSample == nullptr || pSample->IsNamed())
+                continue;
 
-            if (pSample != nullptr && !pSample->IsNamed())
-            {
-                TString SampleName;
+            TString SampleName;
+            if (pMacro->NumSamples() == 1)
+                SampleName = MacroName;
+            else
+                SampleName = TString::Format("%s_%zu", *MacroName, idx);
 
-                if (pMacro->NumSamples() == 1)
-                    SampleName = MacroName;
-                else
-                    SampleName = TString::Format("%s_%zu", *MacroName, iSamp);
-
-                ApplyGeneratedName(pSample, kSfxDir, SampleName);
-            }
+            ApplyGeneratedName(pSample, kSfxDir, SampleName);
         }
     }
 #endif
