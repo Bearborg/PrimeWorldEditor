@@ -117,18 +117,16 @@ void GenerateAssetNames(CGameProject *pProj)
 
     for (size_t iPkg = 0; iPkg < pProj->NumPackages(); iPkg++)
     {
-        CPackage *pPkg = pProj->PackageByIndex(iPkg);
+        const CPackage* pPkg = pProj->PackageByIndex(iPkg);
 
-        for (size_t iRes = 0; iRes < pPkg->NumNamedResources(); iRes++)
+        for (const auto& res : pPkg->NamedResources())
         {
-            const SNamedResource& rkRes = pPkg->NamedResourceByIndex(iRes);
-            if (rkRes.Name.EndsWith("NODEPEND")) continue;
+            if (res.Name.EndsWith("NODEPEND"))
+                continue;
 
             // Some of Retro's paks reference assets that don't exist, so we need this check here.
-            CResourceEntry *pRes = pStore->FindEntry(rkRes.ID);
-
-            if (pRes)
-                ApplyGeneratedName(pRes, pPkg->Name(), rkRes.Name);
+            if (CResourceEntry* pRes = pStore->FindEntry(res.ID))
+                ApplyGeneratedName(pRes, pPkg->Name(), res.Name);
         }
     }
 #endif

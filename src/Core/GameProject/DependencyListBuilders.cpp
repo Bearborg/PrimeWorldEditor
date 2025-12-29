@@ -186,22 +186,21 @@ void CPackageDependencyListBuilder::BuildDependencyList(bool AllowDuplicates, st
     FindUniversalAreaAssets();
 
     // Iterate over all resources and parse their dependencies
-    for (size_t iRes = 0; iRes < mpkPackage->NumNamedResources(); iRes++)
+    for (const auto& res : mpkPackage->NamedResources())
     {
-        const SNamedResource& rkRes = mpkPackage->NamedResourceByIndex(iRes);
-        CResourceEntry *pEntry = mpStore->FindEntry(rkRes.ID);
+        auto* pEntry = mpStore->FindEntry(res.ID);
         if (!pEntry)
             continue;
 
-        if (rkRes.Name.EndsWith("NODEPEND") || rkRes.Type == CFourCC("CSNG"))
+        if (res.Name.EndsWith("NODEPEND") || res.Type == CFourCC("CSNG"))
         {
-            rOut.push_back(rkRes.ID);
+            rOut.push_back(res.ID);
             continue;
         }
 
-        mIsUniversalAreaAsset = mUniversalAreaAssets.contains(rkRes.ID);
+        mIsUniversalAreaAsset = mUniversalAreaAssets.contains(res.ID);
 
-        if (rkRes.Type == CFourCC("MLVL"))
+        if (res.Type == CFourCC("MLVL"))
         {
             mpWorld = static_cast<CWorld*>(pEntry->Load());
             ASSERT(mpWorld);
@@ -211,7 +210,7 @@ void CPackageDependencyListBuilder::BuildDependencyList(bool AllowDuplicates, st
             mCharacterUsageMap.FindUsagesForAsset(pEntry);
         }
 
-        AddDependency(nullptr, rkRes.ID, rOut);
+        AddDependency(nullptr, res.ID, rOut);
         mpWorld = nullptr;
     }
 }
@@ -346,52 +345,48 @@ void CPackageDependencyListBuilder::EvaluateDependencyNode(CResourceEntry *pCurE
 
 void CPackageDependencyListBuilder::FindUniversalAreaAssets()
 {
-    CGameProject *pProject = mpStore->Project();
-    CPackage *pPackage = pProject->FindPackage("UniverseArea");
+    CGameProject* pProject = mpStore->Project();
+    CPackage* pPackage = pProject->FindPackage("UniverseArea");
 
-    if (pPackage)
+    if (!pPackage)
+        return;
+
+    // Iterate over all the package contents, keep track of all universal area assets
+    for (const auto& res : pPackage->NamedResources())
     {
-        // Iterate over all the package contents, keep track of all universal area assets
-        for (size_t ResIdx = 0; ResIdx < pPackage->NumNamedResources(); ResIdx++)
+        if (!res.ID.IsValid())
+            continue;
+
+        mUniversalAreaAssets.insert(res.ID);
+
+        // For the universal area world, load it into memory to make sure we can exclude the area/map IDs
+        if (res.Type != CFourCC("MLVL"))
+            continue;
+
+        auto* pUniverseWorld = gpResourceStore->LoadResource<CWorld>(res.ID);
+        if (!pUniverseWorld)
+            continue;
+
+        // Area IDs
+        for (size_t AreaIdx = 0; AreaIdx < pUniverseWorld->NumAreas(); AreaIdx++)
         {
-            const SNamedResource& rkRes = pPackage->NamedResourceByIndex(ResIdx);
+            const CAssetID& AreaID = pUniverseWorld->AreaResourceID(AreaIdx);
 
-            if (rkRes.ID.IsValid())
-            {
-                mUniversalAreaAssets.insert(rkRes.ID);
+            if (AreaID.IsValid())
+                mUniversalAreaAssets.insert(AreaID);
+        }
 
-                // For the universal area world, load it into memory to make sure we can exclude the area/map IDs
-                if (rkRes.Type == CFourCC("MLVL"))
-                {
-                    CWorld *pUniverseWorld = gpResourceStore->LoadResource<CWorld>(rkRes.ID);
+        // Map IDs
+        auto* pMapWorld = static_cast<CDependencyGroup*>(pUniverseWorld->MapWorld());
+        if (!pMapWorld)
+            continue;
 
-                    if (pUniverseWorld)
-                    {
-                        // Area IDs
-                        for (size_t AreaIdx = 0; AreaIdx < pUniverseWorld->NumAreas(); AreaIdx++)
-                        {
-                            const CAssetID& AreaID = pUniverseWorld->AreaResourceID(AreaIdx);
+        for (size_t DepIdx = 0; DepIdx < pMapWorld->NumDependencies(); DepIdx++)
+        {
+            const CAssetID& DepID = pMapWorld->DependencyByIndex(DepIdx);
 
-                            if (AreaID.IsValid())
-                                mUniversalAreaAssets.insert(AreaID);
-                        }
-
-                        // Map IDs
-                        auto *pMapWorld = static_cast<CDependencyGroup*>(pUniverseWorld->MapWorld());
-
-                        if (pMapWorld)
-                        {
-                            for (size_t DepIdx = 0; DepIdx < pMapWorld->NumDependencies(); DepIdx++)
-                            {
-                                const CAssetID& DepID = pMapWorld->DependencyByIndex(DepIdx);
-
-                                if (DepID.IsValid())
-                                    mUniversalAreaAssets.insert(DepID);
-                            }
-                        }
-                    }
-                }
-            }
+            if (DepID.IsValid())
+                mUniversalAreaAssets.insert(DepID);
         }
     }
 }

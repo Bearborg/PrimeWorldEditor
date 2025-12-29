@@ -9,10 +9,13 @@
 #include "Core/GameProject/CResourceStore.h"
 #include "Core/Resource/Script/CGameTemplate.h"
 #include "Core/Tweaks/CTweakManager.h"
+
 #include <Common/FileUtil.h>
 #include <Common/Serialization/XML.h>
 #include <nod/DiscGCN.hpp>
 #include <nod/DiscWii.hpp>
+
+#include <algorithm>
 
 #if NOD_UCS2
 #define TStringToNodString(string) ToWChar(string)
@@ -143,12 +146,10 @@ void CGameProject::GetWorldList(std::list<CAssetID>& rOut) const
         // Construct a sorted list of worlds in this package
         std::list<const SNamedResource*> PackageWorlds;
 
-        for (size_t iRes = 0; iRes < pPkg->NumNamedResources(); iRes++)
+        for (const auto& res : pPkg->NamedResources())
         {
-            const SNamedResource& rkRes = pPkg->NamedResourceByIndex(iRes);
-
-            if (rkRes.Type == CFourCC("MLVL") && !rkRes.Name.EndsWith("NODEPEND"))
-                PackageWorlds.push_back(&rkRes);
+            if (res.Type == CFourCC("MLVL") && !res.Name.EndsWith("NODEPEND"))
+                PackageWorlds.push_back(&res);
         }
 
         PackageWorlds.sort([](const SNamedResource *pkLeft, const SNamedResource *pkRight) -> bool {
@@ -167,13 +168,12 @@ CAssetID CGameProject::FindNamedResource(std::string_view name) const
 {
     for (const auto& pkg : mPackages)
     {
-        for (size_t iRes = 0; iRes < pkg->NumNamedResources(); iRes++)
-        {
-            const SNamedResource& rkRes = pkg->NamedResourceByIndex(iRes);
+        const auto NamedResources = pkg->NamedResources();
+        const auto iter = std::ranges::find_if(NamedResources,
+                                               [&](const auto& res) { return res.Name == name; });
 
-            if (rkRes.Name == name)
-                return rkRes.ID;
-        }
+        if (iter != NamedResources.end())
+            return iter->ID;
     }
 
     return CAssetID::InvalidID(mGame);
@@ -181,8 +181,8 @@ CAssetID CGameProject::FindNamedResource(std::string_view name) const
 
 CPackage* CGameProject::FindPackage(std::string_view name) const
 {
-    const auto iter = std::find_if(mPackages.begin(), mPackages.end(),
-                                   [name](const auto& package) { return package->Name() == name; });
+    const auto iter = std::ranges::find_if(mPackages,
+                                           [&](const auto& package) { return package->Name() == name; });
 
     if (iter == mPackages.cend())
         return nullptr;

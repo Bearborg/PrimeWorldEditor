@@ -100,7 +100,7 @@ protected:
     void ExportCookedResources();
     void ExportResourceEditorData();
     void ExportResource(SResourceInstance& rRes);
-    TString MakeWorldName(const CAssetID& WorldID);
+    TString MakeWorldName(const CAssetID& WorldID) const;
 
     // Convenience Functions
     SResourceInstance* FindResourceInstance(const CAssetID& rkID)

@@ -16,6 +16,7 @@
 #include <Common/FileIO.h>
 #include <Common/FileUtil.h>
 
+#include <algorithm>
 #include <nod/nod.hpp>
 #include <nod/DiscBase.hpp>
 #include <tinyxml2.h>
@@ -671,7 +672,7 @@ void CGameExporter::ExportResource(SResourceInstance& rRes)
     }
 }
 
-TString CGameExporter::MakeWorldName(const CAssetID& WorldID)
+TString CGameExporter::MakeWorldName(const CAssetID& WorldID) const
 {
     [[maybe_unused]] const CResourceEntry *pWorldEntry = mpStore->FindEntry(WorldID);
     ASSERT(pWorldEntry && pWorldEntry->ResourceType() == EResourceType::World);
@@ -681,21 +682,18 @@ TString CGameExporter::MakeWorldName(const CAssetID& WorldID)
 
     for (size_t iPkg = 0; iPkg < mpProject->NumPackages(); iPkg++)
     {
-        CPackage *pPkg = mpProject->PackageByIndex(iPkg);
+        const auto* pPkg = mpProject->PackageByIndex(iPkg);
+        const auto NamedResources = pPkg->NamedResources();
 
-        for (size_t iRes = 0; iRes < pPkg->NumNamedResources(); iRes++)
+        const auto ResIter = std::ranges::find_if(NamedResources, [&](const auto& res) {
+            return res.ID == WorldID;
+        });
+        if (ResIter != NamedResources.cend())
         {
-            const SNamedResource& rkRes = pPkg->NamedResourceByIndex(iRes);
-
-            if (rkRes.ID == WorldID)
-            {
-                WorldName = rkRes.Name;
-
-                if (WorldName.EndsWith("_NODEPEND"))
-                    WorldName = WorldName.ChopBack(9);
-
-                break;
-            }
+            if (ResIter->Name.EndsWith("_NODEPEND"))
+                WorldName = ResIter->Name.ChopBack(9);
+            else
+                WorldName = ResIter->Name;
         }
 
         if (!WorldName.IsEmpty())

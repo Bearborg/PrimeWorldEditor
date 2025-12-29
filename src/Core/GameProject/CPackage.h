@@ -8,6 +8,7 @@
 
 #include <list>
 #include <set>
+#include <span>
 #include <vector>
 
 class CGameProject;
@@ -68,12 +69,11 @@ public:
     TString CookedPackagePath(bool Relative) const;
 
     // Accessors
-    const TString& Name() const                                  { return mPakName; }
-    const TString& Path() const                                  { return mPakPath; }
-    CGameProject* Project() const                                { return mpProject; }
-    size_t NumNamedResources() const                             { return mResources.size(); }
-    const SNamedResource& NamedResourceByIndex(size_t Idx) const { return mResources[Idx]; }
-    bool NeedsRecook() const                                     { return mNeedsRecook; }
+    const TString& Name() const                            { return mPakName; }
+    const TString& Path() const                            { return mPakPath; }
+    CGameProject* Project() const                          { return mpProject; }
+    std::span<const SNamedResource> NamedResources() const { return mResources; }
+    bool NeedsRecook() const                               { return mNeedsRecook; }
 
     void SetPakName(TString NewName) { mPakName = std::move(NewName); }
 };
