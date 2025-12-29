@@ -2,6 +2,7 @@
 #define CAUDIOGROUP
 
 #include "Core/Resource/CResource.h"
+#include <span>
 #include <vector>
 
 // Very limited functionality - mostly just intended to find the AGSC that a sound ID belongs to
@@ -20,10 +21,9 @@ public:
     {}
 
     // Accessors
-    const TString& GroupName() const                   { return mGroupName; }
-    uint32_t GroupID() const                           { return mGroupID; }
-    size_t NumSoundDefineIDs() const                   { return mDefineIDs.size(); }
-    uint16_t SoundDefineIDByIndex(size_t Index) const  { return mDefineIDs[Index]; }
+    const TString& GroupName() const               { return mGroupName; }
+    uint32_t GroupID() const                       { return mGroupID; }
+    std::span<const uint16_t> SoundDefines() const { return mDefineIDs; }
 };
 
 #endif // CAUDIOGROUP

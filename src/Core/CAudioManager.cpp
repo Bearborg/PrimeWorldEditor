@@ -38,9 +38,8 @@ void CAudioManager::LoadAssets()
     // Create SFX Define ID -> AGSC map
     for (CAudioGroup* group : mAudioGroups)
     {
-        for (size_t iSnd = 0; iSnd < group->NumSoundDefineIDs(); iSnd++)
+        for (const auto DefineID : group->SoundDefines())
         {
-            const uint16_t DefineID = group->SoundDefineIDByIndex(iSnd);
             ASSERT(mSfxIdMap.find(DefineID) == mSfxIdMap.cend());
             mSfxIdMap.insert_or_assign(DefineID, group);
         }
