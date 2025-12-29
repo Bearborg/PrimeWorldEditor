@@ -145,15 +145,8 @@ uint32 CGameArea::FindUnusedInstanceID() const
 {
     uint32 InstanceID = (mWorldIndex << 16) | 1;
 
-    while (true)
-    {
-        auto it = mObjectMap.find(InstanceID);
-
-        if (it == mObjectMap.end())
-            break;
-        else
-            InstanceID++;
-    }
+    while (mObjectMap.contains(InstanceID))
+        InstanceID++;
 
     return InstanceID;
 }
