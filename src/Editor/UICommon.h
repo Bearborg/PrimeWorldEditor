@@ -37,8 +37,6 @@
 //@todo This name isn't ideal, too similar to ToWChar and so might cause confusion
 #define TO_WCHAR(Str)       ToWChar( UICommon::ToT16String(Str) )
 
-#include <nod/Util.hpp>
-
 #if NOD_UCS2
 #define QStringToNodString(string) TO_WCHAR(string)
 #else

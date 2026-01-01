@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.24)
 
 # TODO: These should be drive by CI if CI ever becomes a thing for PWE.
 set(PWE_APP_NAME "Prime World Editor")
@@ -137,14 +137,12 @@ target_compile_definitions(
         QT_DISABLE_DEPRECATED_UP_TO=0x060800
 )
 
-gather_include_directories(pwe_editor_include_directories pwe_editor)
-
 add_codegen_targets(
     "${source_files}"
     codegen_generated_files
     "${PROJECT_SOURCE_DIR}"
     "${PROJECT_BINARY_DIR}"
-    "${pwe_editor_include_directories}"
+    "${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_SOURCE_DIR}/../../externals/LibCommon/Source"
 )
 add_custom_target(pwe_editor_codegen DEPENDS ${codegen_generated_files} SOURCES ${source_files})
 
@@ -178,10 +176,6 @@ if (WIN32)
     # run windeployqt to gather necessary qt libraries and plugins
     add_custom_command(TARGET pwe_editor POST_BUILD COMMAND ${WINDEPLOYQT_PROGRAM} ARGS
                        $<TARGET_FILE:pwe_editor>)
-
-    # copy bin directory of dew prefix
-    add_custom_command(TARGET pwe_editor POST_BUILD COMMAND ${CMAKE_COMMAND} ARGS -E copy_directory
-                       "${DEW_CMAKE_PREFIX_PATH}/bin" $<TARGET_FILE_DIR:pwe_editor>)
 
     # Install targets for CPack distribution
     install(DIRECTORY $<TARGET_FILE_DIR:pwe_editor> DESTINATION ".")

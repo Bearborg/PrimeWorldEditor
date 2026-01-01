@@ -11,8 +11,8 @@
 
 namespace nod {
 class DiscBase;
-class ExtractionContext;
 class Node;
+struct ExtractionContext;
 }
 
 class CAssetNameMap;

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.24)
 set(MACOSX_DEPLOYMENT_TARGET 10.10)
 
 # Use release build type as default (assimp complains if this is unset)
@@ -20,12 +20,74 @@ if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/externals/LibCommon/CMakeLists.txt)
     message(FATAL_ERROR "Please run 'git submodule update --init --recursive' to fetch submodules.")
 endif()
 
-include(./dew.cmake)
-integrate_dew()
-
 include(cmake/generate_product_version.cmake)
 
+set(CMAKE_CXX_STANDARD 23)
+
+# Dependencies
+include(FetchContent)
+set(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
+set(ASSIMP_BUILD_MINIZIP ON)
+set(ASSIMP_BUILD_TESTS OFF)
+set(ASSIMP_BUILD_ZLIB OFF)
+set(tinyxml2_BUILD_TESTING OFF)
+
+set(ZLIB_BUILD_EXAMPLES OFF)
+set(ZLIB_LIBRARY zlibstatic)
+FetchContent_Declare(
+  zlib
+  GIT_REPOSITORY https://github.com/madler/zlib.git
+  GIT_TAG        v1.3.1
+  OVERRIDE_FIND_PACKAGE
+  EXCLUDE_FROM_ALL
+)
+FetchContent_MakeAvailable(zlib)
+set(ZLIB_INCLUDE_DIR ${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
+
+FetchContent_Declare(
+  spdlog
+  GIT_REPOSITORY https://github.com/gabime/spdlog.git
+  GIT_TAG        v1.16.0
+  OVERRIDE_FIND_PACKAGE
+  EXCLUDE_FROM_ALL
+)
+FetchContent_Declare(
+  assimp
+  GIT_REPOSITORY https://github.com/assimp/assimp.git
+  GIT_TAG        v6.0.2
+  OVERRIDE_FIND_PACKAGE
+  EXCLUDE_FROM_ALL
+)
+FetchContent_Declare(
+  nod
+  GIT_REPOSITORY https://github.com/AxioDL/nod.git
+  GIT_TAG        6febcc2c79c54a964a43ed462312091197d75bb2
+  OVERRIDE_FIND_PACKAGE
+  EXCLUDE_FROM_ALL
+)
+FetchContent_Declare(
+  lzokay
+  GIT_REPOSITORY https://github.com/AxioDL/lzokay.git
+  GIT_TAG        546a9695271e8a8b4711383f828172754fd825f2
+  OVERRIDE_FIND_PACKAGE
+  EXCLUDE_FROM_ALL
+)
+FetchContent_Declare(
+  tinyxml2
+  GIT_REPOSITORY https://github.com/leethomason/tinyxml2.git
+  GIT_TAG        11.0.0
+  OVERRIDE_FIND_PACKAGE
+  EXCLUDE_FROM_ALL
+)
+FetchContent_MakeAvailable(spdlog assimp nod lzokay tinyxml2)
+
 if(MSVC)
+    # I hate hate hate microsoft compiler devs for not just letting /utf-8 and /source-charset:utf-8 be present
+    # alongside one another without errors (assimp requires this).
+    get_target_property(EXTLIB_COMPILE_FLAGS assimp COMPILE_OPTIONS)
+    list(REMOVE_ITEM EXTLIB_COMPILE_FLAGS /source-charset:utf-8)
+    set_target_properties(assimp PROPERTIES COMPILE_OPTIONS "${EXTLIB_COMPILE_FLAGS}")
+
     add_compile_options(
         /WX     # Warnings as errors
         /wd4267 # 'var' : conversion from 'size_t' to 'type', possible loss of data
