@@ -122,7 +122,7 @@ void CPoiMapSidebar::RevertModelOverlay(CModelNode *pModel)
         }
         else // If it's not mapped to the selected POI, then check whether it's mapped to any others.
         {
-            for (int iRow = 0; iRow < mSourceModel.rowCount(QModelIndex()); iRow++)
+            for (int iRow = 0; iRow < mSourceModel.rowCount(); iRow++)
             {
                 const QModelIndex Index = mSourceModel.index(iRow, 0);
 
@@ -187,7 +187,7 @@ void CPoiMapSidebar::UpdateModelHighlights()
     QList<QModelIndex> SelectedIndices;
     QList<QModelIndex> UnselectedIndices;
 
-    for (int iRow = 0; iRow < mModel.rowCount(QModelIndex()); iRow++)
+    for (int iRow = 0; iRow < mModel.rowCount(); iRow++)
     {
         const QModelIndex Index = mModel.index(iRow, 0);
 

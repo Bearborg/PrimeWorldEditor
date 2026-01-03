@@ -28,7 +28,7 @@ public:
     ~CPoiMapModel() override;
 
     QVariant headerData(int Section, Qt::Orientation Orientation, int Role) const override;
-    int rowCount(const QModelIndex& rkParent) const override;
+    int rowCount(const QModelIndex& rkParent = QModelIndex()) const override;
     QVariant data(const QModelIndex& rkIndex, int Role) const override;
 
     void AddPOI(const CScriptNode* pPOI);
