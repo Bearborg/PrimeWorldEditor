@@ -65,7 +65,7 @@ void CPropertyView::setModel(QAbstractItemModel *pModel)
     if (pPropModel == nullptr)
         return;
 
-    const QModelIndex Root = pPropModel->index(0, 0, QModelIndex());
+    const QModelIndex Root = pPropModel->index(0, 0);
     SetPersistentEditors(Root);
     setExpanded(Root, true);
 }
@@ -141,7 +141,7 @@ void CPropertyView::SetInstance(CScriptObject *pObj)
     SetPersistentEditors(QModelIndex());
 
     // Auto-expand EditorProperties
-    const QModelIndex Index = mpModel->index(0, 0, QModelIndex());
+    const QModelIndex Index = mpModel->index(0, 0);
     const IProperty *pProp = mpModel->PropertyForIndex(Index, false);
     if (pProp != nullptr && pProp->ID() == 0x255A4580)
         expand(Index);

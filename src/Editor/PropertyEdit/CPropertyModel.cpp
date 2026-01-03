@@ -188,7 +188,7 @@ void* CPropertyModel::DataPointerForIndex(const QModelIndex& rkIndex) const
     return pOutData;
 }
 
-int CPropertyModel::columnCount(const QModelIndex& /*rkParent*/) const
+int CPropertyModel::columnCount(const QModelIndex&) const
 {
     return 2;
 }
@@ -685,7 +685,7 @@ void CPropertyModel::SetShowPropertyNameValidity(bool Enable)
 
     // Emit data changed so that name colors are updated;
     const QList<int> Roles{static_cast<int>(Qt::ForegroundRole)};
-    const QModelIndex TopLeft = index(0, 0, QModelIndex());
-    const QModelIndex BottomRight = index(rowCount(QModelIndex()) - 1, 0, QModelIndex());
+    const QModelIndex TopLeft = index(0, 0);
+    const QModelIndex BottomRight = index(rowCount() - 1, 0);
     emit dataChanged(TopLeft, BottomRight, Roles);
 }
