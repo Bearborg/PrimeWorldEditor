@@ -104,14 +104,6 @@ if(MSVC)
         /Zc:templateScope
         /Zc:throwingNew
     )
-
-    # TODO: EXT Deprecation warnings can be removed when nod gets updated.
-    #       the current tracked branch uses an older version of fmt that causes
-    #       these warnings.
-    add_compile_definitions(
-        _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS
-        _CRT_SECURE_NO_DEPRECATE
-    )
 else()
     add_compile_options(-Wno-multichar -Wno-undefined-var-template)
 endif()
