@@ -574,7 +574,7 @@ void CResourceBrowser::RefreshDirectories()
     mpDirectoryModel->SetRoot(mpStore->RootDirectory());
 
     // Clear selection. This function is called when directories are created/deleted and our current selection might not be valid anymore
-    QModelIndex RootIndex = mpDirectoryModel->index(0, 0, QModelIndex());
+    QModelIndex RootIndex = mpDirectoryModel->index(0, 0);
     mpUI->DirectoryTreeView->selectionModel()->setCurrentIndex(RootIndex, QItemSelectionModel::ClearAndSelect);
     mpUI->DirectoryTreeView->setExpanded(RootIndex, true);
 }
@@ -928,7 +928,7 @@ void CResourceBrowser::UpdateStore()
 
         // Refresh directory tree
         mpDirectoryModel->SetRoot(mpStore ? mpStore->RootDirectory() : nullptr);
-        QModelIndex RootIndex = mpDirectoryModel->index(0, 0, QModelIndex());
+        QModelIndex RootIndex = mpDirectoryModel->index(0, 0);
         mpUI->DirectoryTreeView->expand(RootIndex);
         mpUI->DirectoryTreeView->clearSelection();
         OnDirectorySelectionChanged(QModelIndex());

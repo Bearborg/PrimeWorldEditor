@@ -227,7 +227,7 @@ QModelIndex CVirtualDirectoryModel::GetIndexForDirectory(const CVirtualDirectory
     }
 
     // Traverse hierarchy
-    QModelIndex Out = index(0, 0, QModelIndex());
+    QModelIndex Out = index(0, 0);
 
     for (const int Idx : Indices)
         Out = index(Idx, 0, Out);

@@ -22,10 +22,10 @@ public:
     explicit CVirtualDirectoryModel(CResourceBrowser *pBrowser, QObject *pParent = nullptr);
     ~CVirtualDirectoryModel() override;
 
-    QModelIndex index(int Row, int Column, const QModelIndex& rkParent) const override;
+    QModelIndex index(int Row, int Column, const QModelIndex& rkParent = QModelIndex()) const override;
     QModelIndex parent(const QModelIndex& rkChild) const override;
-    int rowCount(const QModelIndex& rkParent) const override;
-    int columnCount(const QModelIndex& /*rkParent*/) const override;
+    int rowCount(const QModelIndex& rkParent = QModelIndex()) const override;
+    int columnCount(const QModelIndex& = QModelIndex()) const override;
     QVariant data(const QModelIndex& rkIndex, int Role) const override;
     bool setData(const QModelIndex& rkIndex, const QVariant& rkValue, int Role) override;
     Qt::ItemFlags flags(const QModelIndex& rkIndex) const override;
