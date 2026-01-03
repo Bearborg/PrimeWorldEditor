@@ -61,7 +61,7 @@ FetchContent_Declare(
 FetchContent_Declare(
   nod
   GIT_REPOSITORY https://github.com/AxioDL/nod.git
-  GIT_TAG        6febcc2c79c54a964a43ed462312091197d75bb2
+  GIT_TAG        1ef848c6b2a231a8be631889aac7b41c2b4eaa10
   OVERRIDE_FIND_PACKAGE
   EXCLUDE_FROM_ALL
 )
