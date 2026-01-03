@@ -13,7 +13,7 @@
 
 namespace CompressionUtil
 {
-    const char* ErrorText_zlib(int32_t Error)
+    static const char* ErrorText_zlib(int32_t Error)
     {
         switch (Error)
         {
@@ -31,7 +31,7 @@ namespace CompressionUtil
     }
 
 #if USE_LZOKAY
-    const char* ErrorText_LZO(lzokay::EResult Result)
+    static const char* ErrorText_LZO(lzokay::EResult Result)
     {
         switch (Result)
         {
@@ -45,7 +45,7 @@ namespace CompressionUtil
         }
     }
 #else
-    const char* ErrorText_LZO(int32_t Error)
+    static const char* ErrorText_LZO(int32_t Error)
     {
         switch (Error)
         {
