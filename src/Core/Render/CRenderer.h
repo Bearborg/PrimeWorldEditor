@@ -103,6 +103,4 @@ private:
     void InitFramebuffer();
 };
 
-extern uint32_t gDrawCount;
-
 #endif // RENDERMANAGER_H

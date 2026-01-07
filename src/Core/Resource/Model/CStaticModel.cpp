@@ -121,7 +121,6 @@ void CStaticModel::Draw(FRenderOptions Options)
             ibo.Bind();
             glDrawElements(ibo.GetPrimitiveType(), ibo.GetSize(), GL_UNSIGNED_SHORT, nullptr);
             ibo.Unbind();
-            gDrawCount++;
         }
     };
 
@@ -167,7 +166,6 @@ void CStaticModel::DrawSurface(FRenderOptions Options, uint32_t Surface)
 
             // Now we have both, so we can draw
             mIBOs[iIBO].DrawElements(Offset, Size);
-            gDrawCount++;
         }
     };
 

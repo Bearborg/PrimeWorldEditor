@@ -352,7 +352,6 @@ void CRenderer::EndFrame()
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mDefaultFramebuffer);
     glViewport(0, 0, mViewportWidth, mViewportHeight);
     glBlitFramebuffer(0, 0, mViewportWidth, mViewportHeight, 0, 0, mViewportWidth, mViewportHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-    gDrawCount = 0;
 }
 
 void CRenderer::ClearDepthBuffer()
@@ -369,5 +368,3 @@ void CRenderer::InitFramebuffer()
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
-
-uint32_t gDrawCount;
