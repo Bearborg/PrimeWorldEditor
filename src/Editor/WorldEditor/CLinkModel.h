@@ -17,7 +17,7 @@ public:
     void SetObject(CScriptObject *pObj);
     void SetConnectionType(ELinkType Type);
     int rowCount(const QModelIndex& rkParent = QModelIndex()) const override;
-    int columnCount(const QModelIndex& rkParent) const override;
+    int columnCount(const QModelIndex& rkParent = QModelIndex()) const override;
     QVariant data(const QModelIndex& rkIndex, int Role) const override;
     QVariant headerData(int Section, Qt::Orientation Orientation, int Role) const override;
 };
