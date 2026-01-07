@@ -6,6 +6,8 @@
 #include "Core/Render/CRenderer.h"
 #include <Common/Log.h>
 
+#include <algorithm>
+
 CGameArea::CGameArea(CResourceEntry *pEntry)
     : CResource(pEntry)
 {
@@ -62,7 +64,8 @@ void CGameArea::AddWorldModel(std::unique_ptr<CModel>&& pModel)
 
 void CGameArea::MergeTerrain()
 {
-    if (mTerrainMerged) return;
+    if (mTerrainMerged)
+        return;
 
     // Nothing really complicated here - iterate through every terrain submesh, add each to a static model
     for (auto& pMdl : mWorldModels)
@@ -84,10 +87,8 @@ void CGameArea::MergeTerrain()
                     // (particularly with multi-layered transparent meshes)
                     // so we need to at least try to maintain it.
                     // This is maybe not the most efficient way to do this, but it works.
-                    auto pStatic = std::move(*it);
-                    pStatic->AddSurface(pSurf);
-                    mStaticWorldModels.erase(it);
-                    mStaticWorldModels.push_back(std::move(pStatic));
+                    std::rotate(it, it + 1, mStaticWorldModels.end());
+                    mStaticWorldModels.back()->AddSurface(pSurf);
                     NewMat = false;
                     break;
                 }
