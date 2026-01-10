@@ -4,6 +4,7 @@
 #include "Core/Resource/CMaterial.h"
 #include "Core/Resource/CTexture.h"
 #include <Common/CTimer.h>
+#include <Common/Hash/CFNV1A.h>
 #include <Common/Math/CTransform4f.h>
 
 CMaterialPass::CMaterialPass(CMaterial *pParent)
@@ -43,22 +44,22 @@ void CMaterialPass::HashParameters(CFNV1A& rHash)
     if (!mEnabled)
         return;
 
-    rHash.HashLong(mPassType.ToLong());
-    rHash.HashLong(mSettings);
+    rHash.HashData(mPassType.ToLong());
+    rHash.HashData(mSettings);
     rHash.HashData(mColorInputs.data(), sizeof(mColorInputs));
     rHash.HashData(mAlphaInputs.data(), sizeof(mAlphaInputs));
-    rHash.HashLong(mColorOutput);
-    rHash.HashLong(mAlphaOutput);
-    rHash.HashLong(mKColorSel);
-    rHash.HashLong(mKAlphaSel);
-    rHash.HashLong(mRasSel);
-    rHash.HashFloat(mTevColorScale);
-    rHash.HashFloat(mTevAlphaScale);
-    rHash.HashLong(mTexCoordSource);
-    rHash.HashLong(static_cast<uint>(mAnimMode));
+    rHash.HashData(mColorOutput);
+    rHash.HashData(mAlphaOutput);
+    rHash.HashData(mKColorSel);
+    rHash.HashData(mKAlphaSel);
+    rHash.HashData(mRasSel);
+    rHash.HashData(mTevColorScale);
+    rHash.HashData(mTevAlphaScale);
+    rHash.HashData(mTexCoordSource);
+    rHash.HashData(mAnimMode);
     rHash.HashData(mAnimParams.data(), sizeof(mAnimParams));
     rHash.HashData(mTexSwapComps.data(), sizeof(mTexSwapComps));
-    rHash.HashByte(mEnabled);
+    rHash.HashData(mEnabled);
 }
 
 void CMaterialPass::LoadTexture(uint32 PassIndex)

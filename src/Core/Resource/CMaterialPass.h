@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <memory>
 
+class CFNV1A;
 class CMaterial;
 class CTexture;
 

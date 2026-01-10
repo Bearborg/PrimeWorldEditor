@@ -216,16 +216,16 @@ uint64 CMaterial::HashParameters()
     {
         CFNV1A Hash(CFNV1A::EHashLength::k64Bit);
 
-        Hash.HashLong(static_cast<int>(mVersion));
-        Hash.HashLong(mOptions);
-        Hash.HashLong(mVtxDesc);
+        Hash.HashData(mVersion);
+        Hash.HashData(mOptions);
+        Hash.HashData(mVtxDesc);
         Hash.HashData(mKonstColors.data(), sizeof(mKonstColors));
         Hash.HashData(mTevColors.data(), sizeof(mTevColors));
-        Hash.HashLong(mBlendSrcFac);
-        Hash.HashLong(mBlendDstFac);
-        Hash.HashByte(mLightingEnabled);
-        Hash.HashLong(mEchoesUnknownA);
-        Hash.HashLong(mEchoesUnknownB);
+        Hash.HashData(mBlendSrcFac);
+        Hash.HashData(mBlendDstFac);
+        Hash.HashData(mLightingEnabled);
+        Hash.HashData(mEchoesUnknownA);
+        Hash.HashData(mEchoesUnknownB);
 
         for (auto& pass : mPasses)
             pass->HashParameters(Hash);
