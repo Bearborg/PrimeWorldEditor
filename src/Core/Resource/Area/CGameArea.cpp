@@ -234,7 +234,7 @@ void CGameArea::DeleteInstance(CScriptObject *pInstance)
 
 void CGameArea::ClearExtraDependencies()
 {
-    if (mExtraAreaDeps.empty() || !mExtraLayerDeps.empty())
+    if (!mExtraAreaDeps.empty() || !mExtraLayerDeps.empty())
     {
         mExtraAreaDeps.clear();
         mExtraLayerDeps.clear();
