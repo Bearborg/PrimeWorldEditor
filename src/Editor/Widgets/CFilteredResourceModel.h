@@ -66,11 +66,13 @@ public:
             {
                 return TO_QSTRING(pEntry->Name() + '.' + pEntry->CookedExtension());
             }
-            else if (Role == Qt::ToolTipRole)
+
+            if (Role == Qt::ToolTipRole)
             {
-                return TO_QSTRING( pEntry->CookedAssetPath(true) );
+                return TO_QSTRING(pEntry->CookedAssetPath(true));
             }
-            else if (Role == Qt::DecorationRole)
+
+            if (Role == Qt::DecorationRole)
             {
                 return QIcon(QStringLiteral(":/icons/Sphere Preview.svg"));
             }
@@ -79,11 +81,11 @@ public:
         {
             if (Role == Qt::DisplayRole || Role == Qt::ToolTipRole)
             {
-                return TO_QSTRING( pEntry->TypeInfo()->TypeName() );
+                return TO_QSTRING(pEntry->TypeInfo()->TypeName());
             }
         }
 
-        return QVariant();
+        return {};
     }
 
     // Accessors
@@ -113,10 +115,10 @@ public:
         if (mSearchString.IsEmpty())
             return true;
 
-        CFilteredResourceModel *pModel = qobject_cast<CFilteredResourceModel*>(sourceModel());
+        auto* pModel = qobject_cast<CFilteredResourceModel*>(sourceModel());
         ASSERT(pModel);
 
-        QModelIndex SrcIndex = pModel->index(SourceRow, 0);
+        const QModelIndex SrcIndex = pModel->index(SourceRow, 0);
         return pModel->EntryForIndex(SrcIndex)->UppercaseName().Contains(mSearchString);
     }
 
