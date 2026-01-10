@@ -56,11 +56,9 @@ CVector2f CFont::RenderString(const TString& rkString, CRenderer* /*pRenderer*/,
     if (FontSize != s_font_default_size)
         Scale = static_cast<float>(FontSize) / (mDefaultSize != 0 ? mDefaultSize : 18);
 
-    for (uint32 iChar = 0; iChar < rkString.Length(); iChar++)
+    for (const auto Char : rkString)
     {
-        // Get character, check for newline
-        const char Char = rkString[iChar];
-
+        // Check for newline
         if (Char == '\n')
         {
             pPrevGlyph = nullptr;
@@ -82,10 +80,12 @@ CVector2f CFont::RenderString(const TString& rkString, CRenderer* /*pRenderer*/,
         {
             if (pPrevGlyph->KerningIndex != UINT32_MAX)
             {
-                for (uint32 iKern = pPrevGlyph->KerningIndex; iKern < mKerningTable.size(); iKern++)
+                for (size_t iKern = pPrevGlyph->KerningIndex; iKern < mKerningTable.size(); iKern++)
                 {
-                    if (mKerningTable[iKern].CharacterA != pPrevGlyph->Character) break;
-                    if (mKerningTable[iKern].CharacterB == rkString[iChar])
+                    if (mKerningTable[iKern].CharacterA != pPrevGlyph->Character)
+                        break;
+
+                    if (mKerningTable[iKern].CharacterB == Char)
                     {
                         PrintHead.X += PtsToFloat(mKerningTable[iKern].Adjust) * Scale;
                         break;
@@ -100,7 +100,8 @@ CVector2f CFont::RenderString(const TString& rkString, CRenderer* /*pRenderer*/,
             PrintHead.X = -1;
             PrintHead.Y -= (PtsToFloat(mLineHeight) + PtsToFloat(mLineMargin) + PtsToFloat(mUnknown)) * Scale;
 
-            if (Char == ' ') continue;
+            if (Char == ' ')
+                continue;
         }
 
         const float XTrans = PrintHead.X;
