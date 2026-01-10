@@ -3,8 +3,8 @@
 
 #include "Editor/IEditor.h"
 
-#include <QList>
 #include <memory>
+#include <vector>
 
 namespace Ui {
 class CTweakEditor;
@@ -20,8 +20,8 @@ class CTweakEditor : public IEditor
     /** Qt UI */
     std::unique_ptr<Ui::CTweakEditor> mpUI;
 
-    /** List of editable tweak assets */
-    QList<CTweakData*> mTweakAssets;
+    /** Editable tweak assets */
+    std::vector<CTweakData*> mTweakAssets;
 
     /** Whether the editor window has been shown before */
     bool mHasBeenShown = false;

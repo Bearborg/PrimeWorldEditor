@@ -6,13 +6,16 @@
 #include <Core/Tweaks/CTweakData.h>
 #include <Core/Tweaks/CTweakManager.h>
 
+#include <algorithm>
+#include <iterator>
 #include <QCoreApplication>
 
 /** Internal undo command for changing tabs */
 class CSetTweakIndexCommand : public IUndoCommand
 {
-    CTweakEditor* mpEditor;
-    int mOldIndex, mNewIndex;
+    CTweakEditor* mpEditor{};
+    int mOldIndex{};
+    int mNewIndex{};
 
 public:
     CSetTweakIndexCommand(CTweakEditor* pEditor, int OldIndex, int NewIndex)
@@ -47,7 +50,7 @@ CTweakEditor::~CTweakEditor() = default;
 
 bool CTweakEditor::HasTweaks() const
 {
-    return !mTweakAssets.isEmpty();
+    return !mTweakAssets.empty();
 }
 
 bool CTweakEditor::Save()
@@ -67,15 +70,13 @@ bool CTweakEditor::Save()
 
 void CTweakEditor::SetActiveTweakData(CTweakData* pTweakData)
 {
-    for (int TweakIdx = 0; TweakIdx < mTweakAssets.size(); TweakIdx++)
-    {
-        if (mTweakAssets[TweakIdx] != pTweakData)
-            continue;
+    const auto iter = std::ranges::find_if(mTweakAssets, [&](const auto* asset) { return asset == pTweakData; });
+    if (iter == mTweakAssets.end())
+        return;
 
-        auto* pCommand = new CSetTweakIndexCommand(this, mCurrentTweakIndex, TweakIdx);
-        UndoStack().push(pCommand);
-        break;
-    }
+    const auto tweakIdx = int(std::distance(mTweakAssets.begin(), iter));
+    auto* command = new CSetTweakIndexCommand(this, mCurrentTweakIndex, tweakIdx);
+    UndoStack().push(command);
 }
 
 void CTweakEditor::SetActiveTweakIndex(int Index)
@@ -121,15 +122,12 @@ void CTweakEditor::OnProjectChanged(CGameProject* pNewProject)
 
     // Create tweak list
     if (pNewProject != nullptr)
-    {
-        const auto& tweakObjects = pNewProject->TweakManager()->TweakObjects();
-        mTweakAssets.assign(tweakObjects.begin(), tweakObjects.end());
-    }
+        mTweakAssets = pNewProject->TweakManager()->TweakObjects();
 
     // Sort in alphabetical order and create tabs
-    if (!mTweakAssets.isEmpty())
+    if (!mTweakAssets.empty())
     {
-        std::sort(mTweakAssets.begin(), mTweakAssets.end(), [](CTweakData* pLeft, CTweakData* pRight) -> bool {
+        std::ranges::sort(mTweakAssets, [](CTweakData* pLeft, CTweakData* pRight) {
             return pLeft->TweakName().ToUpper() < pRight->TweakName().ToUpper();
         });
 
