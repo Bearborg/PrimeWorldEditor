@@ -139,11 +139,6 @@ void CGameTemplate::SaveGameTemplates(bool ForceAll)
     }
 }
 
-uint32 CGameTemplate::GameVersion(const TString& VersionName)
-{
-    return UINT32_MAX;
-}
-
 CScriptTemplate* CGameTemplate::TemplateByID(uint32 ObjectID)
 {
     const auto it = mScriptTemplates.find(ObjectID);
@@ -209,9 +204,9 @@ SMessage CGameTemplate::MessageByIndex(uint32 Index) const
     return SMessage(Iter->first, Iter->second);
 }
 
-IProperty* CGameTemplate::FindPropertyArchetype(const TString& kTypeName)
+IProperty* CGameTemplate::FindPropertyArchetype(std::string_view typeName)
 {
-    const auto Iter = mPropertyTemplates.find(kTypeName);
+    const auto Iter = mPropertyTemplates.find(typeName);
 
     if (Iter == mPropertyTemplates.end())
     {
@@ -231,9 +226,9 @@ IProperty* CGameTemplate::FindPropertyArchetype(const TString& kTypeName)
     return Path.pTemplate.get();
 }
 
-TString CGameTemplate::GetPropertyArchetypeFilePath(const TString& kTypeName) const
+TString CGameTemplate::GetPropertyArchetypeFilePath(std::string_view typeName) const
 {
-    const auto it = mPropertyTemplates.find(kTypeName);
+    const auto it = mPropertyTemplates.find(typeName);
     ASSERT(it != mPropertyTemplates.cend());
     return GetGameDirectory() + it->second.Path;
 }
@@ -303,9 +298,9 @@ bool CGameTemplate::RenamePropertyArchetype(const TString& kTypeName, const TStr
     return false;
 }
 
-CScriptTemplate* CGameTemplate::FindMiscTemplate(const TString& kTemplateName)
+CScriptTemplate* CGameTemplate::FindMiscTemplate(std::string_view templateName)
 {
-    const auto Iter = mMiscTemplates.find(kTemplateName);
+    const auto Iter = mMiscTemplates.find(templateName);
 
     if (Iter == mMiscTemplates.cend())
     {

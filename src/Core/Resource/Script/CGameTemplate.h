@@ -75,9 +75,9 @@ class CGameTemplate
     bool mDirty = false;
 
     /** Template arrays */
-    std::map<SObjId,  SScriptTemplatePath>    mScriptTemplates;
-    std::map<TString, SPropertyTemplatePath>  mPropertyTemplates;
-    std::map<TString, SScriptTemplatePath>    mMiscTemplates;
+    std::map<SObjId,  SScriptTemplatePath>                mScriptTemplates;
+    std::map<TString, SPropertyTemplatePath, std::less<>> mPropertyTemplates;
+    std::map<TString, SScriptTemplatePath, std::less<>>   mMiscTemplates;
 
     std::map<SObjId, TString> mStates;
     std::map<SObjId, TString> mMessages;
@@ -94,7 +94,6 @@ public:
     void Save();
     void SaveGameTemplates(bool ForceAll = false);
 
-    uint32_t GameVersion(const TString& VersionName);
     CScriptTemplate* TemplateByID(uint32_t ObjectID);
     CScriptTemplate* TemplateByID(const CFourCC& ObjectID);
     CScriptTemplate* TemplateByIndex(uint32_t Index);
@@ -104,10 +103,10 @@ public:
     SMessage MessageByID(uint32_t MessageID) const;
     SMessage MessageByID(const CFourCC& MessageID) const;
     SMessage MessageByIndex(uint32_t Index) const;
-    IProperty* FindPropertyArchetype(const TString& kTypeName);
-    TString GetPropertyArchetypeFilePath(const TString& kTypeName) const;
+    IProperty* FindPropertyArchetype(std::string_view typeName);
+    TString GetPropertyArchetypeFilePath(std::string_view typeName) const;
     bool RenamePropertyArchetype(const TString& kTypeName, const TString& kNewTypeName);
-    CScriptTemplate* FindMiscTemplate(const TString& kTemplateName);
+    CScriptTemplate* FindMiscTemplate(std::string_view templateName);
     TString GetGameDirectory() const;
 
     // Accessors
