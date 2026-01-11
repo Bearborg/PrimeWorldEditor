@@ -6,19 +6,17 @@
 
 CFramebuffer::CFramebuffer() = default;
 
-CFramebuffer::CFramebuffer(uint32 Width, uint32 Height)
+CFramebuffer::CFramebuffer(uint32_t Width, uint32_t Height)
 {
     Resize(Width, Height);
 }
 
 CFramebuffer::~CFramebuffer()
 {
-    if (mInitialized)
-    {
-        glDeleteFramebuffers(1, &mFramebuffer);
-        delete mpRenderbuffer;
-        delete mpTexture;
-    }
+    if (!mInitialized)
+        return;
+
+    glDeleteFramebuffers(1, &mFramebuffer);
 }
 
 void CFramebuffer::Init()
@@ -29,54 +27,56 @@ void CFramebuffer::Init()
         smStaticsInitialized = true;
     }
 
-    if (!mInitialized)
-    {
-        glGenFramebuffers(1, &mFramebuffer);
-        glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+    if (mInitialized)
+        return;
 
-        mpRenderbuffer = new CRenderbuffer(mWidth, mHeight);
-        mpTexture = new CTexture(mWidth, mHeight);
-        mpRenderbuffer->SetMultisamplingEnabled(mEnableMultisampling);
-        mpTexture->SetMultisamplingEnabled(mEnableMultisampling);
-        InitBuffers();
-        mInitialized = true;
-    }
+    glGenFramebuffers(1, &mFramebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+
+    mpRenderbuffer = std::make_unique<CRenderbuffer>(mWidth, mHeight);
+    mpTexture = std::make_unique<CTexture>(mWidth, mHeight);
+    mpRenderbuffer->SetMultisamplingEnabled(mEnableMultisampling);
+    mpTexture->SetMultisamplingEnabled(mEnableMultisampling);
+    InitBuffers();
+    mInitialized = true;
 }
 
 void CFramebuffer::Bind(GLenum Target /*= GL_FRAMEBUFFER*/)
 {
-    if (!mInitialized) Init();
+    if (!mInitialized)
+        Init();
+
     glBindFramebuffer(Target, mFramebuffer);
 }
 
-void CFramebuffer::Resize(uint32 Width, uint32 Height)
+void CFramebuffer::Resize(uint32_t Width, uint32_t Height)
 {
-    if ((mWidth != Width) || (mHeight != Height))
-    {
-        mWidth = Width;
-        mHeight = Height;
+    if (mWidth == Width && mHeight == Height)
+        return;
 
-        if (mInitialized)
-        {
-            mpRenderbuffer->Resize(Width, Height);
-            mpTexture->Resize(Width, Height);
-            InitBuffers();
-        }
+    mWidth = Width;
+    mHeight = Height;
+
+    if (mInitialized)
+    {
+        mpRenderbuffer->Resize(Width, Height);
+        mpTexture->Resize(Width, Height);
+        InitBuffers();
     }
 }
 
 void CFramebuffer::SetMultisamplingEnabled(bool Enable)
 {
-    if (mEnableMultisampling != Enable)
-    {
-        mEnableMultisampling = Enable;
+    if (mEnableMultisampling == Enable)
+        return;
 
-        if (mInitialized)
-        {
-            mpRenderbuffer->SetMultisamplingEnabled(Enable);
-            mpTexture->SetMultisamplingEnabled(Enable);
-            InitBuffers();
-        }
+    mEnableMultisampling = Enable;
+
+    if (mInitialized)
+    {
+        mpRenderbuffer->SetMultisamplingEnabled(Enable);
+        mpTexture->SetMultisamplingEnabled(Enable);
+        InitBuffers();
     }
 }
 

@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 #include <cstdint>
+#include <memory>
 
 class CRenderbuffer;
 class CTexture;
@@ -10,8 +11,8 @@ class CTexture;
 class CFramebuffer
 {
     GLuint mFramebuffer = 0;
-    CRenderbuffer *mpRenderbuffer = nullptr;
-    CTexture *mpTexture = nullptr;
+    std::unique_ptr<CRenderbuffer> mpRenderbuffer;
+    std::unique_ptr<CTexture> mpTexture;
     uint32_t mWidth = 0;
     uint32_t mHeight = 0;
     bool mEnableMultisampling = false;
@@ -32,7 +33,7 @@ public:
     void SetMultisamplingEnabled(bool Enable);
 
     // Accessors
-    CTexture* Texture() const { return mpTexture; }
+    CTexture* Texture() const { return mpTexture.get(); }
 
     // Static
     static void BindDefaultFramebuffer(GLenum Target = GL_FRAMEBUFFER);
