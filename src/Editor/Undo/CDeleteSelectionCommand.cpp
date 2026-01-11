@@ -51,11 +51,9 @@ CDeleteSelectionCommand::CDeleteSelectionCommand(CWorldEditor *pEditor, const QS
 
         if (It->NodeType() == ENodeType::Script)
         {
-            CScriptNode *pScript = static_cast<CScriptNode*>(*It);
-            CScriptObject *pInst = pScript->Instance();
-
-            mDeletedNodes.push_back(SDeletedNode());
-            SDeletedNode& rNode = mDeletedNodes.back();
+            auto* pScript = static_cast<CScriptNode*>(*It);
+            auto* pInst = pScript->Instance();
+            auto& rNode = mDeletedNodes.emplace_back();
 
             rNode.NodePtr = CNodePtr(pScript);
             rNode.NodeID = pScript->ID();
@@ -67,13 +65,11 @@ CDeleteSelectionCommand::CDeleteSelectionCommand(CWorldEditor *pEditor, const QS
             rNode.pLayer = pInst->Layer();
             rNode.LayerIndex = pInst->LayerIndex();
 
-            for (size_t iType = 0; iType < 2; iType++)
+            for (const auto Type : {ELinkType::Outgoing, ELinkType::Incoming})
             {
-                ELinkType Type = (iType == 0 ? ELinkType::Outgoing : ELinkType::Incoming);
-
                 for (size_t iLink = 0; iLink < pInst->NumLinks(Type); iLink++)
                 {
-                    CLink *pLink = pInst->Link(Type, iLink);
+                    CLink* pLink = pInst->Link(Type, iLink);
 
                     if (!Links.contains(pLink))
                     {
