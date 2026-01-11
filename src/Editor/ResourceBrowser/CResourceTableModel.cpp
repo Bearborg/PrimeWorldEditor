@@ -136,7 +136,7 @@ QMimeData* CResourceTableModel::mimeData(const QModelIndexList& rkIndexes) const
     QList<CResourceEntry*> Resources;
     QList<CVirtualDirectory*> Dirs;
 
-    for (const QModelIndex Index : rkIndexes)
+    for (const QModelIndex& Index : rkIndexes)
     {
         CResourceEntry *pEntry = IndexEntry(Index);
         CVirtualDirectory *pDir = IndexDirectory(Index);
