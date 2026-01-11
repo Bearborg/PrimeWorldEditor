@@ -42,7 +42,7 @@ CResourceStore::~CResourceStore()
     DestroyUnreferencedResources();
 }
 
-void RecursiveGetListOfEmptyDirectories(CVirtualDirectory *pDir, TStringList& rOutList)
+static void RecursiveGetListOfEmptyDirectories(CVirtualDirectory *pDir, TStringList& rOutList)
 {
     // Helper function for SerializeResourceDatabase
     if (pDir->IsEmpty(false))
