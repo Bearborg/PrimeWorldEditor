@@ -237,6 +237,5 @@ CIndexBuffer* CStaticModel::InternalGetIBO(EPrimitiveType Primitive)
             return &ibo;
     }
 
-    mIBOs.emplace_back(type);
-    return &mIBOs.back();
+    return &mIBOs.emplace_back(type);
 }
