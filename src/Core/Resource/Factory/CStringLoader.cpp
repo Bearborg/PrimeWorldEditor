@@ -268,7 +268,7 @@ std::unique_ptr<CStringTable> CStringLoader::LoadSTRG(IInputStream& STRG, CResou
     return ptr;
 }
 
-EGame CStringLoader::GetFormatVersion(uint32 Version)
+EGame CStringLoader::GetFormatVersion(uint32_t Version)
 {
     switch (Version)
     {

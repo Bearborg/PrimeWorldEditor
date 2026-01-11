@@ -477,14 +477,14 @@ void CTextureDecoder::FullDecodeGXTexture(IInputStream& rTXTR)
                         if (mTexelFormat == ETexelFormat::GX_I4)
                         {
                             const uint8 Byte = rTXTR.ReadUByte();
-                            Out.WriteULong(DecodePixelI4(Byte, 0).ToLongARGB());
-                            Out.WriteULong(DecodePixelI4(Byte, 1).ToLongARGB());
+                            Out.WriteULong(DecodePixelI4(Byte, 0).ToARGB());
+                            Out.WriteULong(DecodePixelI4(Byte, 1).ToARGB());
                         }
                         else if (mTexelFormat == ETexelFormat::GX_C4)
                         {
                             const uint8 Byte = rTXTR.ReadUByte();
-                            Out.WriteULong(DecodePixelC4(Byte, 0, mPaletteInput).ToLongARGB());
-                            Out.WriteULong(DecodePixelC4(Byte, 1, mPaletteInput).ToLongARGB());
+                            Out.WriteULong(DecodePixelC4(Byte, 0, mPaletteInput).ToARGB());
+                            Out.WriteULong(DecodePixelC4(Byte, 1, mPaletteInput).ToARGB());
                         }
                         else if (mTexelFormat == ETexelFormat::GX_CMPR)
                         {
@@ -502,7 +502,7 @@ void CTextureDecoder::FullDecodeGXTexture(IInputStream& rTXTR)
                             else if (mTexelFormat == ETexelFormat::GX_RGB5A3) Pixel = DecodePixelRGB5A3(rTXTR.ReadShort());
                             else if (mTexelFormat == ETexelFormat::GX_RGBA8)  Pixel = CColor(rTXTR, true);
 
-                            Out.WriteULong(Pixel.ToLongARGB());
+                            Out.WriteULong(Pixel.ToARGB());
                         }
                     }
                 }
@@ -610,7 +610,7 @@ void CTextureDecoder::DecodeDDS(IInputStream& rDDS)
                         Out.Seek(OutPos, SEEK_SET);
 
                         const CColor Pixel = DecodeDDSPixel(rDDS);
-                        Out.WriteULong(Pixel.ToLongARGB());
+                        Out.WriteULong(Pixel.ToARGB());
                     }
                     else
                     {
@@ -899,7 +899,7 @@ void CTextureDecoder::DecodeSubBlockCMPR(IInputStream& rSrc, IOutputStream& rDst
             const uint8 Shift = static_cast<uint8>(6 - (iBlockX * 2));
             const uint8 PaletteIndex = (Byte >> Shift) & 0x3;
             const CColor& Pixel = Palettes[PaletteIndex];
-            rDst.WriteULong(Pixel.ToLongARGB());
+            rDst.WriteULong(Pixel.ToARGB());
         }
 
         rDst.Seek((Width - 4) * 4, SEEK_CUR);
@@ -938,7 +938,7 @@ void CTextureDecoder::DecodeBlockBC1(IInputStream& rSrc, IOutputStream& rDst, ui
             const uint8 Shift = static_cast<uint8>(iBlockX * 2);
             const uint8 PaletteIndex = (Byte >> Shift) & 0x3;
             const CColor& Pixel = Palettes[PaletteIndex];
-            rDst.WriteULong(Pixel.ToLongARGB());
+            rDst.WriteULong(Pixel.ToARGB());
         }
 
         rDst.Seek((Width - 4) * 4, SEEK_CUR);
@@ -975,7 +975,7 @@ void CTextureDecoder::DecodeBlockBC2(IInputStream& rSrc, IOutputStream& rDst, ui
             const uint8 Shift = static_cast<uint8>(iBlockX * 2);
             const uint8 PaletteIndex = (Byte >> Shift) & 0x3;
             const CColor& Pixel = CPalettes[PaletteIndex];
-            rDst.WriteULong(Pixel.ToLongARGB());
+            rDst.WriteULong(Pixel.ToARGB());
         }
 
         rDst.Seek((Width - 4) * 4, SEEK_CUR);
@@ -1012,7 +1012,7 @@ void CTextureDecoder::DecodeBlockBC3(IInputStream& rSrc, IOutputStream& rDst, ui
             const uint8 Shift = static_cast<uint8>(iBlockX * 2);
             const uint8 PaletteIndex = (Byte >> Shift) & 0x3;
             const CColor& Pixel = Palettes[PaletteIndex];
-            rDst.WriteULong(Pixel.ToLongARGB());
+            rDst.WriteULong(Pixel.ToARGB());
         }
 
         rDst.Seek((Width - 4) * 4, SEEK_CUR);

@@ -21,7 +21,7 @@ class CStringLoader
 
 public:
     static std::unique_ptr<CStringTable> LoadSTRG(IInputStream& STRG, CResourceEntry* pEntry);
-    static EGame GetFormatVersion(uint Version);
+    static EGame GetFormatVersion(uint32_t Version);
 };
 
 #endif // CSTRINGLOADER_H
