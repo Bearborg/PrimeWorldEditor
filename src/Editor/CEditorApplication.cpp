@@ -249,7 +249,7 @@ bool CEditorApplication::CookPackageList(const QList<CPackage*>& PackageList)
         for (int PkgIdx = 0; PkgIdx < NumPackages && !Dialog.ShouldCancel(); PkgIdx++)
         {
             CPackage *pPkg = PackageList[PkgIdx];
-            Dialog.SetTask(PkgIdx, TO_TSTRING(tr("Cooking %1.pak...").arg(TO_QSTRING(pPkg->Name()))));
+            Dialog.SetTask(PkgIdx, (tr("Cooking %1.pak...").arg(TO_QSTRING(pPkg->Name())).toStdString()));
             pPkg->Cook(&Dialog);
         }
     });

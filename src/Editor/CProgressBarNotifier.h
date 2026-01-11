@@ -34,7 +34,7 @@ public:
     }
 
 protected:
-    void UpdateProgress(const TString &, const TString &, float ProgressPercent) override
+    void UpdateProgress(const std::string&, const std::string&, float ProgressPercent) override
     {
         if (!mpProgressBar)
             return;

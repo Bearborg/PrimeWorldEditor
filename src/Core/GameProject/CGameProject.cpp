@@ -12,6 +12,7 @@
 
 #include <Common/FileUtil.h>
 #include <Common/Serialization/XML.h>
+#include <fmt/format.h>
 #include <nod/DiscGCN.hpp>
 #include <nod/DiscWii.hpp>
 
@@ -101,10 +102,10 @@ bool CGameProject::BuildISO(const TString& rkIsoPath, IProgressNotifier *pProgre
 
     const auto ProgressCallback = [&](float ProgressPercent, std::string_view rkInfoString, size_t)
     {
-        pProgress->Report(static_cast<int>(ProgressPercent * 10000), 10000, TString(rkInfoString));
+        pProgress->Report(static_cast<int>(ProgressPercent * 10000), 10000, std::string(rkInfoString));
     };
 
-    pProgress->SetTask(0, "Building " + rkIsoPath.GetFileName());
+    pProgress->SetTask(0, fmt::format("Building {}", *rkIsoPath.GetFileName()));
     const TString DiscRoot = DiscDir(false);
 
     if (!IsWiiBuild())
@@ -127,10 +128,10 @@ bool CGameProject::MergeISO(const TString& rkIsoPath, nod::DiscWii *pOriginalIso
 
     const auto ProgressCallback = [&](float ProgressPercent, std::string_view rkInfoString, size_t)
     {
-        pProgress->Report(static_cast<int>(ProgressPercent * 10000), 10000, TString(rkInfoString));
+        pProgress->Report(static_cast<int>(ProgressPercent * 10000), 10000, std::string(rkInfoString));
     };
 
-    pProgress->SetTask(0, "Building " + rkIsoPath.GetFileName());
+    pProgress->SetTask(0, fmt::format("Building {}", *rkIsoPath.GetFileName()));
 
     const TString DiscRoot = DiscFilesystemRoot(false);
 
@@ -219,7 +220,7 @@ std::unique_ptr<CGameProject> CGameProject::LoadProject(const TString& rkProjPat
     pProj->mProjectRoot.Replace("\\", "/");
 
     // Init progress
-    pProgress->SetTask(0, "Loading project: " + rkProjPath.GetFileName());
+    pProgress->SetTask(0, fmt::format("Loading project: {}", *rkProjPath.GetFileName()));
 
     // Load main project file
     pProgress->Report("Loading project settings");

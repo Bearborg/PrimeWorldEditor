@@ -1,14 +1,14 @@
 #ifndef IPROGRESSNOTIFIER_H
 #define IPROGRESSNOTIFIER_H
 
-#include <Common/Macros.h>
-#include <Common/TString.h>
 #include <algorithm>
+#include <cassert>
 #include <cstdint>
+#include <string>
 
 class IProgressNotifier
 {
-    TString mTaskName;
+    std::string mTaskName;
     int mTaskIndex = 0;
     int mTaskCount = 1;
 
@@ -23,16 +23,16 @@ public:
         mTaskCount = NumTasks;
     }
 
-    void SetTask(int TaskIndex, TString TaskName)
+    void SetTask(int TaskIndex, std::string TaskName)
     {
         mTaskName = std::move(TaskName);
         mTaskIndex = TaskIndex;
         mTaskCount = std::max(mTaskCount, TaskIndex + 1);
     }
 
-    void Report(uint64_t StepIndex, uint64_t StepCount, const TString& rkStepDesc = "")
+    void Report(uint64_t StepIndex, uint64_t StepCount, const std::string& rkStepDesc = "")
     {
-        ASSERT(mTaskCount >= 1);
+        assert(mTaskCount >= 1);
 
         // Make sure TaskCount and StepCount are at least 1 so we don't have divide-by-zero errors
         int TaskCount = std::max(mTaskCount, 1);
@@ -45,12 +45,12 @@ public:
         UpdateProgress(mTaskName, rkStepDesc, (float) ProgressPercent);
     }
 
-    void Report(const TString& rkStepDesc)
+    void Report(const std::string& rkStepDesc)
     {
         Report(0, 0, rkStepDesc);
     }
 
-    void SetOneShotTask(const TString& rkTaskDesc)
+    void SetOneShotTask(const std::string& rkTaskDesc)
     {
         SetNumTasks(1);
         SetTask(0, rkTaskDesc);
@@ -60,16 +60,16 @@ public:
     virtual bool ShouldCancel() const = 0;
 
 protected:
-    virtual void UpdateProgress(const TString& rkTaskName, const TString& rkStepDesc, float ProgressPercent) = 0;
+    virtual void UpdateProgress(const std::string& rkTaskName, const std::string& rkStepDesc, float ProgressPercent) = 0;
 };
 
 // Null progress notifier can be passed to functions that require a progress notifier if you don't want to use one.
-class CNullProgressNotifier : public IProgressNotifier
+class CNullProgressNotifier final : public IProgressNotifier
 {
 public:
     bool ShouldCancel() const override{ return false; }
 protected:
-    void UpdateProgress(const TString&, const TString&, float) override {}
+    void UpdateProgress(const std::string&, const std::string&, float) override {}
 };
 extern CNullProgressNotifier *gpNullProgress;
 

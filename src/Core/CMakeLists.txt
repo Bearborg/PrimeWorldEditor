@@ -30,6 +30,7 @@ target_link_libraries(
     lzokay
     OpenGL::GL
     assimp::assimp
+    fmt::fmt
     spdlog::spdlog
     Threads::Threads
     ${ZLIB_LIBRARY}

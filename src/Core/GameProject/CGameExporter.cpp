@@ -17,6 +17,7 @@
 #include <Common/FileUtil.h>
 
 #include <algorithm>
+#include <fmt/format.h>
 #include <nod/nod.hpp>
 #include <nod/DiscBase.hpp>
 #include <tinyxml2.h>
@@ -196,7 +197,7 @@ bool CGameExporter::ExtractDiscData()
     nod::ExtractionContext Context;
     Context.force = false;
     Context.progressCB = [&](const std::string_view rkDesc, float ProgressPercent) {
-        mpProgress->Report((int) (ProgressPercent * 10000), 10000, TString(rkDesc));
+        mpProgress->Report((int) (ProgressPercent * 10000), 10000, std::string(rkDesc));
     };
 
     TString FilesDir = AbsDiscDir + "files/";
@@ -555,7 +556,7 @@ void CGameExporter::ExportCookedResources()
 
         // Update progress
         if ((ResIndex & 0x3) == 0)
-            mpProgress->Report(ResIndex, mResourceMap.size(), TString::Format("Unpacking asset %d/%d", ResIndex, mResourceMap.size()) );
+            mpProgress->Report(ResIndex, mResourceMap.size(), fmt::format("Unpacking asset {}/{}", ResIndex, mResourceMap.size()));
 
         // Export resource
         ExportResource(rRes);
@@ -581,7 +582,7 @@ void CGameExporter::ExportResourceEditorData()
             // Update progress
             if ((ResIndex & 0x3) == 0 || It->ResourceType() == EResourceType::Area)
             {
-                mpProgress->Report(ResIndex, mpStore->NumTotalResources(), TString::Format("Processing asset %u/%u: %s", ResIndex, mpStore->NumTotalResources(), *It->CookedAssetPath(true).GetFileName()));
+                mpProgress->Report(ResIndex, mpStore->NumTotalResources(), fmt::format("Processing asset {}/{}: {}", ResIndex, mpStore->NumTotalResources(), *It->CookedAssetPath(true).GetFileName()));
             }
 
             // Worlds need some info we can only get from the pak at export time; namely, which areas can

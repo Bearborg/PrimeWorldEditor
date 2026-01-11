@@ -17,7 +17,7 @@ public slots:
     virtual void UpdateUI(const QString& rkTaskDesc, const QString& rkStepDesc, float ProgressPercent) = 0;
 
 private:
-    void UpdateProgress(const TString& rkTaskDesc, const TString& rkStepDesc, float ProgressPercent) final
+    void UpdateProgress(const std::string& rkTaskDesc, const std::string& rkStepDesc, float ProgressPercent) final
     {
         // Defer the function call to make sure UI updates are done on the main thread
         QMetaObject::invokeMethod(this, &IProgressNotifierUI::UpdateUI, Qt::AutoConnection,
