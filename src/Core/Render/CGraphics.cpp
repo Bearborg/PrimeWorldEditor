@@ -131,15 +131,15 @@ uint32 CGraphics::GetContextIndex()
 {
     for (uint32 iCon = 0; iCon < 32; iCon++)
     {
-        uint32 Mask = (1 << iCon);
+        uint32 Mask = (1U << iCon);
         if ((mContextIndices & Mask) == 0)
         {
             mContextIndices |= Mask;
 
-            CVertexArrayManager *pVAM = new CVertexArrayManager;
-            if (mVAMs.size() >= iCon) mVAMs.resize(iCon + 1);
-            mVAMs[iCon] = pVAM;
+            if (mVAMs.size() >= iCon)
+                mVAMs.resize(iCon + 1);
 
+            mVAMs[iCon] = new CVertexArrayManager();
             return iCon;
         }
     }
@@ -154,9 +154,14 @@ uint32 CGraphics::GetActiveContext()
 
 void CGraphics::ReleaseContext(uint32 Index)
 {
-    if (Index < 32) mContextIndices &= ~(1 << Index);
-    if (mActiveContext == Index) mActiveContext = -1;
+    if (Index < 32)
+        mContextIndices &= ~(1U << Index);
+
+    if (mActiveContext == Index)
+        mActiveContext = -1;
+
     delete mVAMs[Index];
+    mVAMs[Index] = nullptr;
 }
 
 void CGraphics::SetActiveContext(uint32 Index)
