@@ -77,9 +77,9 @@ bool CVirtualDirectory::IsSafeToDelete() const
 TString CVirtualDirectory::FullPath() const
 {
     if (IsRoot())
-        return "";
+        return {};
 
-    return (mpParent != nullptr ? mpParent->FullPath() + mName : static_cast<TString::BaseClass>(mName)) + '/';
+    return (mpParent != nullptr ? TString(mpParent->FullPath() + mName) : mName) + '/';
 }
 
 TString CVirtualDirectory::AbsolutePath() const
@@ -95,7 +95,7 @@ CVirtualDirectory* CVirtualDirectory::GetRoot()
 CVirtualDirectory* CVirtualDirectory::FindChildDirectory(const TString& rkName, bool AllowCreate)
 {
     const auto SlashIdx = rkName.IndexOf("\\/");
-    const TString DirName = (SlashIdx == -1 ? static_cast<TString::BaseClass>(rkName) : rkName.SubString(0, SlashIdx));
+    const TString DirName = (SlashIdx == -1 ? rkName : TString(rkName.SubString(0, SlashIdx)));
 
     for (auto* child : mSubdirectories)
     {
@@ -175,7 +175,7 @@ bool CVirtualDirectory::AddChild(const TString &rkPath, CResourceEntry *pEntry)
     if (IsValidDirectoryPath(rkPath))
     {
         const auto SlashIdx = rkPath.IndexOf("\\/");
-        const TString DirName = (SlashIdx == -1 ? static_cast<TString::BaseClass>(rkPath) : rkPath.SubString(0, SlashIdx));
+        const TString DirName = (SlashIdx == -1 ? rkPath : TString(rkPath.SubString(0, SlashIdx)));
         const TString Remaining = (SlashIdx == -1 ? "" : rkPath.SubString(SlashIdx + 1, rkPath.Size() - SlashIdx));
 
         // Check if this subdirectory already exists
