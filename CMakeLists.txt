@@ -57,7 +57,7 @@ set(SPDLOG_FMT_EXTERNAL ON)
 FetchContent_Declare(
   spdlog
   GIT_REPOSITORY https://github.com/gabime/spdlog.git
-  GIT_TAG        v1.16.0
+  GIT_TAG        v1.17.0
   OVERRIDE_FIND_PACKAGE
   EXCLUDE_FROM_ALL
 )
