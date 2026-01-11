@@ -18,11 +18,14 @@ void CIndexBuffer::AddIndex(uint16_t index)
     mIndices.push_back(index);
 }
 
-void CIndexBuffer::AddIndices(const uint16_t *indices, size_t count)
+void CIndexBuffer::AddIndices(const uint16_t* indices, size_t count)
 {
-    Reserve(count);
-    for (size_t i = 0; i < count; i++)
-        mIndices.push_back(*indices++);
+    mIndices.insert(mIndices.end(), indices, indices + count);
+}
+
+void CIndexBuffer::AddIndices(std::initializer_list<uint16_t> indices)
+{
+    mIndices.append_range(indices);
 }
 
 void CIndexBuffer::Reserve(size_t size)

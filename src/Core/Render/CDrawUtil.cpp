@@ -454,10 +454,7 @@ void CDrawUtil::InitSquare()
 
     mSquareIndices.Reserve(4);
     mSquareIndices.SetPrimitiveType(GL_TRIANGLE_STRIP);
-    mSquareIndices.AddIndex(3);
-    mSquareIndices.AddIndex(2);
-    mSquareIndices.AddIndex(0);
-    mSquareIndices.AddIndex(1);
+    mSquareIndices.AddIndices({3, 2, 0, 1});
 }
 
 void CDrawUtil::InitLine()
@@ -469,8 +466,7 @@ void CDrawUtil::InitLine()
 
     mLineIndices.Reserve(2);
     mLineIndices.SetPrimitiveType(GL_LINES);
-    mLineIndices.AddIndex(0);
-    mLineIndices.AddIndex(1);
+    mLineIndices.AddIndices({0, 1});
 }
 
 void CDrawUtil::InitCube()

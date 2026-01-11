@@ -176,11 +176,7 @@ void CFont::InitBuffers()
     };
     smGlyphVertices->BufferAttrib(EVertexAttribute::Tex0, TexCoords.data());
 
-    smGlyphIndices.Reserve(4);
-    smGlyphIndices.AddIndex(0);
-    smGlyphIndices.AddIndex(2);
-    smGlyphIndices.AddIndex(1);
-    smGlyphIndices.AddIndex(3);
+    smGlyphIndices.AddIndices({0, 2, 1, 3});
     smGlyphIndices.SetPrimitiveType(GL_TRIANGLE_STRIP);
 
     smBuffersInitialized = true;

@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 #include <cstdint>
+#include <initializer_list>
 #include <vector>
 
 class CIndexBuffer
@@ -16,8 +17,11 @@ public:
     CIndexBuffer();
     explicit CIndexBuffer(GLenum type);
     ~CIndexBuffer();
+
     void AddIndex(uint16_t index);
-    void AddIndices(const uint16_t *indices, size_t count);
+    void AddIndices(const uint16_t* indices, size_t count);
+    void AddIndices(std::initializer_list<uint16_t> indices);
+
     void Reserve(size_t size);
     void Clear();
     void Buffer();

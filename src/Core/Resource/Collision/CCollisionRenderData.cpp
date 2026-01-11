@@ -93,16 +93,9 @@ void CCollisionRenderData::BuildRenderData(const SCollisionIndexData& kIndexData
         Vtx.Position = kVert2;
         mVertexBuffer.AddVertex(Vtx);
 
-        mIndexBuffer.AddIndex(Index0);
-        mIndexBuffer.AddIndex(Index1);
-        mIndexBuffer.AddIndex(Index2);
+        mIndexBuffer.AddIndices({Index0, Index1, Index2});
 
-        mWireframeIndexBuffer.AddIndex(Index0);
-        mWireframeIndexBuffer.AddIndex(Index1);
-        mWireframeIndexBuffer.AddIndex(Index1);
-        mWireframeIndexBuffer.AddIndex(Index2);
-        mWireframeIndexBuffer.AddIndex(Index2);
-        mWireframeIndexBuffer.AddIndex(Index0);
+        mWireframeIndexBuffer.AddIndices({Index0, Index1, Index1, Index2, Index2, Index0});
     }
 
     // Fill the rest of the material offsets, adding an extra index at the end
