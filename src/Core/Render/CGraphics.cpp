@@ -11,15 +11,15 @@
 #include <Common/Math/CTransform4f.h>
 
 // ************ MEMBER INITIALIZATION ************
-CUniformBuffer* CGraphics::mpMVPBlockBuffer;
-CUniformBuffer* CGraphics::mpVertexBlockBuffer;
-CUniformBuffer* CGraphics::mpPixelBlockBuffer;
-CUniformBuffer* CGraphics::mpLightBlockBuffer;
-CUniformBuffer* CGraphics::mpBoneTransformBuffer;
+std::unique_ptr<CUniformBuffer> CGraphics::mpMVPBlockBuffer;
+std::unique_ptr<CUniformBuffer> CGraphics::mpVertexBlockBuffer;
+std::unique_ptr<CUniformBuffer> CGraphics::mpPixelBlockBuffer;
+std::unique_ptr<CUniformBuffer> CGraphics::mpLightBlockBuffer;
+std::unique_ptr<CUniformBuffer> CGraphics::mpBoneTransformBuffer;
 uint32 CGraphics::mContextIndices = 0;
 uint32 CGraphics::mActiveContext = -1;
 bool CGraphics::mInitialized = false;
-std::vector<CVertexArrayManager*> CGraphics::mVAMs;
+std::vector<std::unique_ptr<CVertexArrayManager>> CGraphics::mVAMs;
 bool CGraphics::mIdentityBoneTransforms = false;
 
 CGraphics::SMVPBlock    CGraphics::sMVPBlock;
@@ -27,10 +27,10 @@ CGraphics::SVertexBlock CGraphics::sVertexBlock;
 CGraphics::SPixelBlock  CGraphics::sPixelBlock;
 CGraphics::SLightBlock  CGraphics::sLightBlock;
 
-CGraphics::ELightingMode CGraphics::sLightMode;
-uint32 CGraphics::sNumLights;
+CGraphics::ELightingMode CGraphics::sLightMode = CGraphics::ELightingMode::World;
+uint32 CGraphics::sNumLights = 0;
 CColor CGraphics::sAreaAmbientColor = CColor::TransparentBlack();
-float CGraphics::sWorldLightMultiplier;
+float CGraphics::sWorldLightMultiplier = 1.0f;
 std::array<CLight, 3> CGraphics::sDefaultDirectionalLights{{
     CLight::BuildDirectional(CVector3f(0), CVector3f(0.f, -0.866025f, -0.5f), CColor(0.3f, 0.3f, 0.3f, 0.3f)),
     CLight::BuildDirectional(CVector3f(0), CVector3f(-0.75f, 0.433013f, -0.5f), CColor(0.3f, 0.3f, 0.3f, 0.3f)),
@@ -48,15 +48,11 @@ void CGraphics::Initialize()
         glGetError(); // This is to work around a glew bug - error is always set after initializing
 
         NLog::Debug("Creating uniform buffers");
-        mpMVPBlockBuffer = new CUniformBuffer(sizeof(sMVPBlock));
-        mpVertexBlockBuffer = new CUniformBuffer(sizeof(sVertexBlock));
-        mpPixelBlockBuffer = new CUniformBuffer(sizeof(sPixelBlock));
-        mpLightBlockBuffer = new CUniformBuffer(sizeof(sLightBlock));
-        mpBoneTransformBuffer = new CUniformBuffer(sizeof(CTransform4f) * 100);
-
-        sLightMode = ELightingMode::World;
-        sNumLights = 0;
-        sWorldLightMultiplier = 1.f;
+        mpMVPBlockBuffer = std::make_unique<CUniformBuffer>(sizeof(sMVPBlock));
+        mpVertexBlockBuffer = std::make_unique<CUniformBuffer>(sizeof(sVertexBlock));
+        mpPixelBlockBuffer = std::make_unique<CUniformBuffer>(sizeof(sPixelBlock));
+        mpLightBlockBuffer = std::make_unique<CUniformBuffer>(sizeof(sLightBlock));
+        mpBoneTransformBuffer = std::make_unique<CUniformBuffer>(sizeof(CTransform4f) * 100);
 
         mInitialized = true;
     }
@@ -70,16 +66,16 @@ void CGraphics::Initialize()
 
 void CGraphics::Shutdown()
 {
-    if (mInitialized)
-    {
-        NLog::Debug("Shutting down CGraphics");
-        delete mpMVPBlockBuffer;
-        delete mpVertexBlockBuffer;
-        delete mpPixelBlockBuffer;
-        delete mpLightBlockBuffer;
-        delete mpBoneTransformBuffer;
-        mInitialized = false;
-    }
+    if (!mInitialized)
+        return;
+
+    NLog::Debug("Shutting down CGraphics");
+    mpMVPBlockBuffer.reset();
+    mpVertexBlockBuffer.reset();
+    mpPixelBlockBuffer.reset();
+    mpLightBlockBuffer.reset();
+    mpBoneTransformBuffer.reset();
+    mInitialized = false;
 }
 
 void CGraphics::UpdateMVPBlock()
@@ -129,9 +125,9 @@ GLuint CGraphics::BoneTransformBlockBindingPoint()
 
 uint32 CGraphics::GetContextIndex()
 {
-    for (uint32 iCon = 0; iCon < 32; iCon++)
+    for (uint32_t iCon = 0; iCon < 32; iCon++)
     {
-        uint32 Mask = (1U << iCon);
+        const auto Mask = (1U << iCon);
         if ((mContextIndices & Mask) == 0)
         {
             mContextIndices |= Mask;
@@ -139,7 +135,7 @@ uint32 CGraphics::GetContextIndex()
             if (mVAMs.size() >= iCon)
                 mVAMs.resize(iCon + 1);
 
-            mVAMs[iCon] = new CVertexArrayManager();
+            mVAMs[iCon] = std::make_unique<CVertexArrayManager>();
             return iCon;
         }
     }
@@ -160,8 +156,7 @@ void CGraphics::ReleaseContext(uint32 Index)
     if (mActiveContext == Index)
         mActiveContext = -1;
 
-    delete mVAMs[Index];
-    mVAMs[Index] = nullptr;
+    mVAMs[Index].reset();
 }
 
 void CGraphics::SetActiveContext(uint32 Index)

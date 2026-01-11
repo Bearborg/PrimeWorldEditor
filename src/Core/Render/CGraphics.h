@@ -10,6 +10,7 @@
 
 #include <array>
 #include <cstdint>
+#include <memory>
 #include <vector>
 
 class CBoneTransformData;
@@ -25,15 +26,15 @@ class CVertexArrayManager;
  */
 class CGraphics
 {
-    static CUniformBuffer *mpMVPBlockBuffer;
-    static CUniformBuffer *mpVertexBlockBuffer;
-    static CUniformBuffer *mpPixelBlockBuffer;
-    static CUniformBuffer *mpLightBlockBuffer;
-    static CUniformBuffer *mpBoneTransformBuffer;
+    static std::unique_ptr<CUniformBuffer> mpMVPBlockBuffer;
+    static std::unique_ptr<CUniformBuffer> mpVertexBlockBuffer;
+    static std::unique_ptr<CUniformBuffer> mpPixelBlockBuffer;
+    static std::unique_ptr<CUniformBuffer> mpLightBlockBuffer;
+    static std::unique_ptr<CUniformBuffer> mpBoneTransformBuffer;
     static uint32_t mContextIndices;
     static uint32_t mActiveContext;
     static bool mInitialized;
-    static std::vector<CVertexArrayManager*> mVAMs;
+    static std::vector<std::unique_ptr<CVertexArrayManager>> mVAMs;
     static bool mIdentityBoneTransforms;
 
 public:
