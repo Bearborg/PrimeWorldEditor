@@ -5,6 +5,7 @@
 #include "Editor/ResourceBrowser/CResourceMimeData.h"
 #include <Core/GameProject/CVirtualDirectory.h>
 
+#include <algorithm>
 #include <QIcon>
 
 CVirtualDirectoryModel::CVirtualDirectoryModel(CResourceBrowser *pBrowser, QObject *pParent)
@@ -139,24 +140,17 @@ bool CVirtualDirectoryModel::canDropMimeData(const QMimeData *pkData, Qt::DropAc
 
     if (Action == Qt::MoveAction)
     {
-        CVirtualDirectory *pDir = IndexDirectory(rkParent);
+        const auto* pDir = IndexDirectory(rkParent);
+        if (!pDir)
+            return false;
 
-        if (pDir)
-        {
-            const CResourceMimeData *pkMimeData = qobject_cast<const CResourceMimeData*>(pkData);
+        const auto* pkMimeData = qobject_cast<const CResourceMimeData*>(pkData);
+        if (!pkMimeData)
+            return false;
 
-            if (pkMimeData)
-            {
-                // Don't allow moving a directory into one of its children
-                for (CVirtualDirectory *pMoveDir : pkMimeData->Directories())
-                {
-                    if (pDir->IsDescendantOf(pMoveDir))
-                        return false;
-                }
-
-                return true;
-            }
-        }
+        // Don't allow moving a directory into one of its children
+        const auto& dirs = pkMimeData->Directories();
+        return std::ranges::none_of(dirs, [pDir](const auto* moveDir) { return pDir->IsDescendantOf(moveDir); });
     }
 
     return false;
@@ -165,7 +159,7 @@ bool CVirtualDirectoryModel::canDropMimeData(const QMimeData *pkData, Qt::DropAc
 bool CVirtualDirectoryModel::dropMimeData(const QMimeData *pkData, Qt::DropAction Action, int Row, int Column, const QModelIndex& rkParent)
 {
     // Perform move!
-    const CResourceMimeData *pkMimeData = qobject_cast<const CResourceMimeData*>(pkData);
+    const auto* pkMimeData = qobject_cast<const CResourceMimeData*>(pkData);
 
     if (canDropMimeData(pkData, Action, Row, Column, rkParent))
     {
@@ -174,7 +168,8 @@ bool CVirtualDirectoryModel::dropMimeData(const QMimeData *pkData, Qt::DropActio
 
         return gpEdApp->ResourceBrowser()->MoveResources(pkMimeData->Resources(), pkMimeData->Directories(), pDir);
     }
-    else return false;
+
+    return false;
 }
 
 QMimeData* CVirtualDirectoryModel::mimeData(const QModelIndexList& rkIndexes) const
