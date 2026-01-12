@@ -14,9 +14,9 @@ public:
 
     struct Section
     {
-        uint32 Offset;
-        uint32 BaseAddress;
-        uint32 Size;
+        uint32_t Offset;
+        uint32_t BaseAddress;
+        uint32_t Size;
 
         bool IsEmpty() const {
             return Size == 0;
@@ -24,49 +24,49 @@ public:
     };
 
     Section Sections[kNumSections];
-    uint32 BssAddress;
-    uint32 BssSize;
-    uint32 EntryPoint;
+    uint32_t BssAddress;
+    uint32_t BssSize;
+    uint32_t EntryPoint;
 
     explicit SDolHeader(IInputStream& rInput)
     {
         for (size_t i = 0; i < kNumSections; ++i)
         {
-            Sections[i].Offset = rInput.ReadLong();
+            Sections[i].Offset = rInput.ReadU32();
         }
         for (size_t i = 0; i < kNumSections; ++i)
         {
-            Sections[i].BaseAddress = rInput.ReadLong();
+            Sections[i].BaseAddress = rInput.ReadU32();
         }
         for (size_t i = 0; i < kNumSections; ++i)
         {
-            Sections[i].Size = rInput.ReadLong();
+            Sections[i].Size = rInput.ReadU32();
         }
-        BssAddress = rInput.ReadLong();
-        BssSize = rInput.ReadLong();
-        EntryPoint = rInput.ReadLong();
+        BssAddress = rInput.ReadU32();
+        BssSize = rInput.ReadU32();
+        EntryPoint = rInput.ReadU32();
     }
 
     void Write(IOutputStream& rOutput) const
     {
         for (size_t i = 0; i < kNumSections; ++i)
         {
-            rOutput.WriteLong(Sections[i].Offset);
+            rOutput.WriteULong(Sections[i].Offset);
         }
         for (size_t i = 0; i < kNumSections; ++i)
         {
-            rOutput.WriteLong(Sections[i].BaseAddress);
+            rOutput.WriteULong(Sections[i].BaseAddress);
         }
         for (size_t i = 0; i < kNumSections; ++i)
         {
-            rOutput.WriteLong(Sections[i].Size);
+            rOutput.WriteULong(Sections[i].Size);
         }
-        rOutput.WriteLong(BssAddress);
-        rOutput.WriteLong(BssSize);
-        rOutput.WriteLong(EntryPoint);
+        rOutput.WriteULong(BssAddress);
+        rOutput.WriteULong(BssSize);
+        rOutput.WriteULong(EntryPoint);
     }
 
-    bool AddTextSection(uint32 address, uint32 fileOffset, uint32 size)
+    bool AddTextSection(uint32_t address, uint32_t fileOffset, uint32_t size)
     {
         if ((size & 0x1f) != 0)
         {
@@ -89,11 +89,11 @@ public:
         return false;
     }
 
-    uint32 OffsetForAddress(uint32 address)
+    uint32_t OffsetForAddress(uint32_t address) const
     {
         for (size_t i = 0; i < kNumSections; ++i)
         {
-            auto& sec = Sections[i];
+            const auto& sec = Sections[i];
             if (address > sec.BaseAddress && address < sec.BaseAddress + sec.Size)
             {
                 return sec.Offset + (address - sec.BaseAddress);

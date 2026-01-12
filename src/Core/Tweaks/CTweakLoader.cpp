@@ -12,7 +12,7 @@
 std::unique_ptr<CTweakData> CTweakLoader::LoadCTWK(IInputStream& CTWK, CResourceEntry* pEntry)
 {
     // Find the correct template based on the asset ID.
-    static const std::unordered_map<uint32, const char*> skIdToTemplateName{
+    static const std::unordered_map<uint32_t, const char*> skIdToTemplateName{
         { 0x1D180D7C, "TweakParticle" },
         { 0x264A4972, "TweakPlayer" },
         { 0x33B3323A, "TweakGunRes" },
@@ -46,7 +46,7 @@ std::unique_ptr<CTweakData> CTweakLoader::LoadCTWK(IInputStream& CTWK, CResource
     CScriptLoader::LoadStructData(CTWK, pTweakData->TweakData());
 
     // Verify
-    if (!CTWK.EoF() && CTWK.PeekShort() != -1)
+    if (!CTWK.EoF() && CTWK.PeekS16() != -1)
     {
         NLog::Error("{}: unread property data, tweak template may be malformed ({} bytes left)", *CTWK.GetSourceString(), CTWK.Size() - CTWK.Tell());
         return nullptr;
@@ -59,8 +59,8 @@ void CTweakLoader::LoadNTWK(IInputStream& NTWK, EGame Game, std::vector<CTweakDa
 {
     // Validate file. NTWK basically embeds a bunch of tweak objects using the script layers
     // format, so it has the same version byte that script layers have.
-    const uint32 Magic = NTWK.ReadULong();
-    const uint8 LayerVersion = NTWK.ReadUByte();
+    const auto Magic = NTWK.ReadU32();
+    const auto LayerVersion = NTWK.ReadU8();
 
     if (Magic != FOURCC('NTWK'))
     {
@@ -78,12 +78,12 @@ void CTweakLoader::LoadNTWK(IInputStream& NTWK, EGame Game, std::vector<CTweakDa
     ASSERT(pGameTemplate != nullptr);
 
     // Start reading tweaks
-    const uint32 NumTweaks = NTWK.ReadULong();
+    const auto NumTweaks = NTWK.ReadU32();
 
-    for (uint32 TweakIdx = 0; TweakIdx < NumTweaks; TweakIdx++)
+    for (uint32_t TweakIdx = 0; TweakIdx < NumTweaks; TweakIdx++)
     {
         // Find the correct template based on the tweak ID.
-        static const std::unordered_map<uint32, const char*> skIdToTemplateName{
+        static const std::unordered_map<uint32_t, const char*> skIdToTemplateName{
             { FOURCC('TWAC'), "TweakAdvancedControls" },
             { FOURCC('TWAM'), "TweakAutoMapper" },
             { FOURCC('TWBL'), "TweakBall" },
@@ -108,9 +108,9 @@ void CTweakLoader::LoadNTWK(IInputStream& NTWK, EGame Game, std::vector<CTweakDa
             { FOURCC('TWTG'), "TweakTargeting" },
         };
 
-        const uint32 TweakID = NTWK.ReadULong();
-        const uint16 TweakSize = NTWK.ReadUShort();
-        const uint32 NextTweak = NTWK.Tell() + TweakSize;
+        const auto TweakID = NTWK.ReadU32();
+        const auto TweakSize = NTWK.ReadU16();
+        const auto NextTweak = NTWK.Tell() + TweakSize;
 
         auto Find = skIdToTemplateName.find(TweakID);
 

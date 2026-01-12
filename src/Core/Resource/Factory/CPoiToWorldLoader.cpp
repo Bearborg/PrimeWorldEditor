@@ -6,12 +6,12 @@
 std::unique_ptr<CPoiToWorld> CPoiToWorldLoader::LoadEGMC(IInputStream& rEGMC, CResourceEntry *pEntry)
 {
     auto pOut = std::make_unique<CPoiToWorld>(pEntry);
-    const uint32_t NumMappings = rEGMC.ReadULong();
+    const auto NumMappings = rEGMC.ReadU32();
 
     for (uint32_t iMap = 0; iMap < NumMappings; iMap++)
     {
-        const auto MeshID = rEGMC.ReadULong();
-        const auto InstanceID = CInstanceID(rEGMC.ReadULong() & 0x03FFFFFF);
+        const auto MeshID = rEGMC.ReadU32();
+        const auto InstanceID = CInstanceID(rEGMC.ReadU32() & 0x03FFFFFF);
         pOut->AddPoiMeshMap(InstanceID, MeshID);
     }
 

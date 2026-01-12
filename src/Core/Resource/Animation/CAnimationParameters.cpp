@@ -16,19 +16,17 @@ CAnimationParameters::CAnimationParameters(IInputStream& rSCLY, EGame Game)
     if (Game <= EGame::Echoes)
     {
         mCharacterID = CAssetID(rSCLY, Game);
-        mCharIndex = rSCLY.ReadLong();
-        mAnimIndex = rSCLY.ReadLong();
+        mCharIndex = rSCLY.ReadU32();
+        mAnimIndex = rSCLY.ReadU32();
     }
-
     else if (Game <= EGame::Corruption)
     {
         mCharacterID = CAssetID(rSCLY, Game);
-        mAnimIndex = rSCLY.ReadLong();
+        mAnimIndex = rSCLY.ReadU32();
     }
-
     else if (Game == EGame::DKCReturns)
     {
-        const uint8_t Flags = rSCLY.ReadByte();
+        const auto Flags = rSCLY.ReadU8();
 
         // 0x80 - CharacterAnimationSet is empty.
         if ((Flags & 0x80) != 0)
@@ -43,15 +41,15 @@ CAnimationParameters::CAnimationParameters(IInputStream& rSCLY, EGame Game)
 
         // 0x20 - Default Anim is present
         if ((Flags & 0x20) != 0)
-            mAnimIndex = rSCLY.ReadLong();
+            mAnimIndex = rSCLY.ReadU32();
         else
             mAnimIndex = -1;
 
         // 0x40 - Two-value struct is present
         if ((Flags & 0x40) != 0)
         {
-            mUnknown2 = rSCLY.ReadLong();
-            mUnknown3 = rSCLY.ReadLong();
+            mUnknown2 = rSCLY.ReadU32();
+            mUnknown3 = rSCLY.ReadU32();
         }
         else
         {

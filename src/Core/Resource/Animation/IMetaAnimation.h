@@ -45,7 +45,7 @@ public:
     CAnimPrimitive(IInputStream& rInput, EGame Game)
     {
         mpAnim = gpResourceStore->LoadResource(CAssetID(rInput, Game));
-        mID = rInput.ReadLong();
+        mID = rInput.ReadU32();
         mName = rInput.ReadString();
     }
 

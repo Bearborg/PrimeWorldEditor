@@ -156,8 +156,8 @@ float CTexture::ReadTexelAlpha(const CVector2f& rkTexCoord)
         const uint32 BufferPos = (8 * BlockIdxX) + (8 * BlockIdxY * BlocksPerRow);
         Buffer.Seek(BufferPos, SEEK_SET);
 
-        const uint16 PaletteA = Buffer.ReadUShort();
-        const uint16 PaletteB = Buffer.ReadUShort();
+        const uint16 PaletteA = Buffer.ReadU16();
+        const uint16 PaletteB = Buffer.ReadU16();
 
         if (PaletteA > PaletteB)
         {
@@ -171,7 +171,7 @@ float CTexture::ReadTexelAlpha(const CVector2f& rkTexCoord)
         const uint32 BlockRow = (TexelY & 0xF) / 4;
 
         Buffer.Seek(BlockRow, SEEK_CUR);
-        const uint8 Row = Buffer.ReadUByte();
+        const uint8 Row = Buffer.ReadU8();
         const uint8 Shift = static_cast<uint8>(6 - (BlockCol * 2));
         const uint8 PaletteIndex = (Row >> Shift) & 0x3;
         return (PaletteIndex == 3 ? 0.f : 1.f);

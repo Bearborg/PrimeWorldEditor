@@ -16,11 +16,11 @@ static std::unique_ptr<SOBBTreeNode> ParseOBBNode(IInputStream& DCLN)
     if (IsLeaf)
     {
         auto pLeaf = std::make_unique<SOBBTreeLeaf>();
-        const uint32 NumTris = DCLN.ReadULong();
+        const auto NumTris = DCLN.ReadU32();
         pLeaf->TriangleIndices.resize(NumTris);
 
         for (auto& index : pLeaf->TriangleIndices)
-            index = DCLN.ReadShort();
+            index = DCLN.ReadU16();
 
         pOut = std::move(pLeaf);
     }
@@ -41,7 +41,7 @@ CCollisionLoader::CCollisionLoader() = default;
 
 void CCollisionLoader::LoadCollisionMaterial(IInputStream& Src, CCollisionMaterial& OutMaterial)
 {
-    const uint64 RawFlags = mVersion <= EGame::Prime ? Src.ReadULong() : Src.ReadULongLong();
+    const uint64_t RawFlags = mVersion <= EGame::Prime ? Src.ReadU32() : Src.ReadU64();
     OutMaterial.mRawFlags = RawFlags;
 
     if (mVersion <= EGame::Prime)
@@ -114,7 +114,7 @@ void CCollisionLoader::LoadCollisionMaterial(IInputStream& Src, CCollisionMateri
 void CCollisionLoader::LoadCollisionIndices(IInputStream& File, SCollisionIndexData& OutData)
 {
     // Materials
-    const uint32 NumMaterials = File.ReadULong();
+    const auto NumMaterials = File.ReadU32();
     OutData.Materials.resize(NumMaterials);
 
     for (auto& material : OutData.Materials)
@@ -123,45 +123,45 @@ void CCollisionLoader::LoadCollisionIndices(IInputStream& File, SCollisionIndexD
     }
 
     // Property indices for vertices/edges/triangles
-    const uint32 VertexMaterialCount = File.ReadULong();
+    const auto VertexMaterialCount = File.ReadU32();
     OutData.VertexMaterialIndices.resize(VertexMaterialCount);
     File.ReadBytes(OutData.VertexMaterialIndices.data(), VertexMaterialCount);
 
-    const uint32 EdgeMaterialCount = File.ReadULong();
+    const auto EdgeMaterialCount = File.ReadU32();
     OutData.EdgeMaterialIndices.resize(EdgeMaterialCount);
     File.ReadBytes(OutData.EdgeMaterialIndices.data(), EdgeMaterialCount);
 
-    const uint32 TriMaterialCount = File.ReadULong();
+    const auto TriMaterialCount = File.ReadU32();
     OutData.TriangleMaterialIndices.resize(TriMaterialCount);
     File.ReadBytes(OutData.TriangleMaterialIndices.data(), TriMaterialCount);
 
     // Edges
-    const uint32 NumEdges = File.ReadULong();
+    const auto NumEdges = File.ReadU32();
     OutData.EdgeIndices.resize(NumEdges * 2);
 
     for (auto& edge : OutData.EdgeIndices)
     {
-        edge = File.ReadUShort();
+        edge = File.ReadU16();
     }
 
     // Triangles
-    const uint32 NumTris = File.ReadULong();
+    const auto NumTris = File.ReadU32();
     OutData.TriangleIndices.resize(NumTris);
 
     for (auto& triangle : OutData.TriangleIndices)
     {
-        triangle = File.ReadUShort();
+        triangle = File.ReadU16();
     }
 
     // Echoes introduces a new data chunk; don't know what it is yet, skipping for now
     if (mVersion >= EGame::Echoes)
     {
-        const uint32 UnknownCount = File.ReadULong();
+        const auto UnknownCount = File.ReadU32();
         File.Skip(UnknownCount * 2);
     }
 
     // Vertices
-    const uint32 NumVertices = File.ReadULong();
+    const auto NumVertices = File.ReadU32();
     OutData.Vertices.resize(NumVertices);
 
     for (auto& vert : OutData.Vertices)
@@ -179,7 +179,7 @@ std::unique_ptr<CCollisionMeshGroup> CCollisionLoader::LoadAreaCollision(IInputS
     rMREA.Skip(0x8); // Skipping unknown value + collion section size
 
     // Validate magic
-    const uint32 DeafBabe = rMREA.ReadULong();
+    const auto DeafBabe = rMREA.ReadU32();
     if (DeafBabe != 0xDEAFBABE)
     {
         NLog::Error("{} [0x{:X}]: Invalid collision magic: 0x{:08X}", *rMREA.GetSourceString(), rMREA.Tell() - 4, DeafBabe);
@@ -189,13 +189,13 @@ std::unique_ptr<CCollisionMeshGroup> CCollisionLoader::LoadAreaCollision(IInputS
     auto mesh = std::make_unique<CCollisionMesh>();
 
     CCollisionLoader Loader;
-    Loader.mVersion = GetFormatVersion(rMREA.ReadULong());
+    Loader.mVersion = GetFormatVersion(rMREA.ReadU32());
     Loader.mpMesh = mesh.get();
 
     // Octree - structure is known, but not coding this right now
     Loader.mpMesh->mAABox = CAABox(rMREA);
     rMREA.Skip(0x4);
-    const uint32 OctreeSize = rMREA.ReadULong();
+    const auto OctreeSize = rMREA.ReadU32();
     rMREA.Skip(OctreeSize); // Skipping the octree for now
 
     // Read collision indices and return
@@ -215,11 +215,11 @@ std::unique_ptr<CCollisionMeshGroup> CCollisionLoader::LoadDCLN(IInputStream& rD
     CCollisionLoader Loader;
     Loader.mpGroup = ptr.get();
 
-    const uint32 NumMeshes = rDCLN.ReadULong();
+    const auto NumMeshes = rDCLN.ReadU32();
 
-    for (uint32 MeshIdx = 0; MeshIdx < NumMeshes; MeshIdx++)
+    for (uint32_t MeshIdx = 0; MeshIdx < NumMeshes; MeshIdx++)
     {
-        const uint32 DeafBabe = rDCLN.ReadULong();
+        const auto DeafBabe = rDCLN.ReadU32();
 
         if (DeafBabe != 0xDEAFBABE)
         {
@@ -228,7 +228,7 @@ std::unique_ptr<CCollisionMeshGroup> CCollisionLoader::LoadDCLN(IInputStream& rD
         }
 
         auto mesh = std::make_unique<CCollidableOBBTree>();
-        Loader.mVersion = GetFormatVersion(rDCLN.ReadULong());
+        Loader.mVersion = GetFormatVersion(rDCLN.ReadU32());
         Loader.mpMesh = mesh.get();
 
         if (Loader.mVersion == EGame::DKCReturns)

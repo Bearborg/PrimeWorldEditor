@@ -18,7 +18,7 @@ public:
     {
     }
 
-    explicit CSavedStateID(IInputStream& rInput) : m{rInput.ReadULongLong(), rInput.ReadULongLong()}
+    explicit CSavedStateID(IInputStream& rInput) : m{rInput.ReadU64(), rInput.ReadU64()}
     {
     }
 

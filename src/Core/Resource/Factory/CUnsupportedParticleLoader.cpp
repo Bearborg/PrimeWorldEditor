@@ -12,7 +12,7 @@
 bool CUnsupportedParticleLoader::ParseParticleParameter(IInputStream& rPART)
 {
     const auto ParamOffset = rPART.Tell();
-    const CFourCC Param(rPART.ReadULong());
+    const CFourCC Param(rPART.ReadU32());
     if (Param == FOURCC('_END'))
         return false;
 
@@ -229,7 +229,7 @@ bool CUnsupportedParticleLoader::ParseParticleParameter(IInputStream& rPART)
 bool CUnsupportedParticleLoader::ParseElectricParameter(IInputStream& rELSC)
 {
     const auto ParamOffset = rELSC.Tell();
-    const CFourCC Param(rELSC.ReadULong());
+    const CFourCC Param(rELSC.ReadU32());
     if (Param == FOURCC('_END'))
         return false;
 
@@ -293,7 +293,7 @@ bool CUnsupportedParticleLoader::ParseElectricParameter(IInputStream& rELSC)
 bool CUnsupportedParticleLoader::ParseSortedParameter(IInputStream& rSRSC)
 {
     const auto ParamOffset = rSRSC.Tell();
-    const CFourCC Param(rSRSC.ReadULong());
+    const CFourCC Param(rSRSC.ReadU32());
     if (Param == FOURCC('_END'))
         return false;
 
@@ -313,7 +313,7 @@ bool CUnsupportedParticleLoader::ParseSortedParameter(IInputStream& rSRSC)
 bool CUnsupportedParticleLoader::ParseSpawnParameter(IInputStream& rSPSC)
 {
     const auto ParamOffset = rSPSC.Tell();
-    const CFourCC Param(rSPSC.ReadULong());
+    const CFourCC Param(rSPSC.ReadU32());
     if (Param == FOURCC('_END'))
         return false;
 
@@ -372,7 +372,7 @@ bool CUnsupportedParticleLoader::ParseSpawnParameter(IInputStream& rSPSC)
 bool CUnsupportedParticleLoader::ParseSwooshParameter(IInputStream& rSWHC)
 {
     const auto ParamOffset = rSWHC.Tell();
-    const CFourCC Param(rSWHC.ReadULong());
+    const CFourCC Param(rSWHC.ReadU32());
     if (Param == FOURCC('_END'))
         return false;
 
@@ -450,7 +450,7 @@ bool CUnsupportedParticleLoader::ParseSwooshParameter(IInputStream& rSWHC)
 bool CUnsupportedParticleLoader::ParseDecalParameter(IInputStream& rDPSC)
 {
     const auto ParamOffset = rDPSC.Tell();
-    const CFourCC Param(rDPSC.ReadULong());
+    const CFourCC Param(rDPSC.ReadU32());
     if (Param == FOURCC('_END'))
         return false;
 
@@ -510,7 +510,7 @@ bool CUnsupportedParticleLoader::ParseDecalParameter(IInputStream& rDPSC)
 bool CUnsupportedParticleLoader::ParseWeaponParameter(IInputStream& rWPSC)
 {
     const auto ParamOffset = rWPSC.Tell();
-    const CFourCC Param(rWPSC.ReadULong());
+    const CFourCC Param(rWPSC.ReadU32());
     if (Param == FOURCC('_END'))
         return false;
 
@@ -622,12 +622,12 @@ bool CUnsupportedParticleLoader::ParseWeaponParameter(IInputStream& rWPSC)
 bool CUnsupportedParticleLoader::ParseCollisionResponseParameter(IInputStream& rCRSC)
 {
     const auto ParamOffset = rCRSC.Tell();
-    const CFourCC Param(rCRSC.ReadULong());
+    const CFourCC Param(rCRSC.ReadU32());
     if (Param == FOURCC('_END'))
         return false;
 
     // CRSC has way too many useless extra parameters that are never used to bother typing out, so just skip past them
-    const auto FuncPeek = rCRSC.PeekULong();
+    const auto FuncPeek = rCRSC.PeekU32();
 
     if (FuncPeek == FOURCC('NONE'))
     {
@@ -750,7 +750,7 @@ bool CUnsupportedParticleLoader::ParseCollisionResponseParameter(IInputStream& r
 bool CUnsupportedParticleLoader::ParseBurstFireParameter(IInputStream& rBFRC)
 {
     const auto ParamOffset = rBFRC.Tell();
-    const CFourCC Param(rBFRC.ReadULong());
+    const CFourCC Param(rBFRC.ReadU32());
     if (Param == FOURCC('_END'))
         return false;
 
@@ -793,7 +793,7 @@ bool CUnsupportedParticleLoader::ParseBurstFireParameter(IInputStream& rBFRC)
 bool CUnsupportedParticleLoader::ParseUserEvaluatorParameter(IInputStream& rUSRC)
 {
     const auto ParamOffset = rUSRC.Tell();
-    const CFourCC Param(rUSRC.ReadULong());
+    const CFourCC Param(rUSRC.ReadU32());
     if (Param == FOURCC('_END'))
         return false;
 
@@ -855,7 +855,7 @@ bool CUnsupportedParticleLoader::ParseUserEvaluatorParameter(IInputStream& rUSRC
 bool CUnsupportedParticleLoader::ParseTransformParameter(IInputStream& rXFSC)
 {
     const auto ParamOffset = rXFSC.Tell();
-    const CFourCC Param(rXFSC.ReadULong());
+    const CFourCC Param(rXFSC.ReadU32());
     if (Param == FOURCC('_END'))
         return false;
 
@@ -908,7 +908,7 @@ bool CUnsupportedParticleLoader::ParseTransformParameter(IInputStream& rXFSC)
 void CUnsupportedParticleLoader::ParseBool(IInputStream& rFile)
 {
     const auto FuncOffset = rFile.Tell();
-    const CFourCC Func(rFile.ReadULong());
+    const CFourCC Func(rFile.ReadU32());
 
     switch (Func.ToU32())
     {
@@ -928,7 +928,7 @@ void CUnsupportedParticleLoader::ParseBool(IInputStream& rFile)
 void CUnsupportedParticleLoader::ParseBoolFunction(IInputStream& rFile)
 {
     const auto FuncOffset = rFile.Tell();
-    const CFourCC Func(rFile.ReadULong());
+    const CFourCC Func(rFile.ReadU32());
 
     switch (Func.ToU32())
     {
@@ -965,7 +965,7 @@ void CUnsupportedParticleLoader::ParseBitfieldFunction(IInputStream& rFile)
 void CUnsupportedParticleLoader::ParseIntFunction(IInputStream& rFile)
 {
     const auto FuncOffset = rFile.Tell();
-    const CFourCC Func(rFile.ReadULong());
+    const CFourCC Func(rFile.ReadU32());
 
     switch (Func.ToU32())
     {
@@ -1017,7 +1017,7 @@ void CUnsupportedParticleLoader::ParseIntFunction(IInputStream& rFile)
 
     case FOURCC('CNST'):
     {
-        [[maybe_unused]] const auto Value = rFile.ReadULong();
+        [[maybe_unused]] const auto Value = rFile.ReadU32();
         ASSERT(gpResourceStore->FindEntry(CAssetID(Value)) == nullptr);
         break;
     }
@@ -1052,7 +1052,7 @@ void CUnsupportedParticleLoader::ParseIntFunction(IInputStream& rFile)
 void CUnsupportedParticleLoader::ParseFloatFunction(IInputStream& rFile)
 {
     const auto FuncOffset = rFile.Tell();
-    const CFourCC Func(rFile.ReadULong());
+    const CFourCC Func(rFile.ReadU32());
 
     switch (Func.ToU32())
     {
@@ -1243,7 +1243,7 @@ void CUnsupportedParticleLoader::ParseFloatFunction(IInputStream& rFile)
 void CUnsupportedParticleLoader::ParseVectorFunction(IInputStream& rFile)
 {
     const auto FuncOffset = rFile.Tell();
-    const CFourCC Func(rFile.ReadULong());
+    const CFourCC Func(rFile.ReadU32());
 
     switch (Func.ToU32())
     {
@@ -1376,7 +1376,7 @@ void CUnsupportedParticleLoader::ParseVectorFunction(IInputStream& rFile)
 void CUnsupportedParticleLoader::ParseModVectorFunction(IInputStream& rFile)
 {
     const auto FuncOffset = rFile.Tell();
-    const CFourCC Func(rFile.ReadULong());
+    const CFourCC Func(rFile.ReadU32());
 
     switch (Func.ToU32())
     {
@@ -1464,7 +1464,7 @@ void CUnsupportedParticleLoader::ParseModVectorFunction(IInputStream& rFile)
 void CUnsupportedParticleLoader::ParseColorFunction(IInputStream& rFile)
 {
     const auto FuncOffset = rFile.Tell();
-    const CFourCC Func(rFile.ReadULong());
+    const CFourCC Func(rFile.ReadU32());
 
     switch (Func.ToU32())
     {
@@ -1545,7 +1545,7 @@ void CUnsupportedParticleLoader::ParseColorFunction(IInputStream& rFile)
 void CUnsupportedParticleLoader::ParseRotationFunction(IInputStream& rFile)
 {
     const auto FuncOffset = rFile.Tell();
-    const CFourCC Func(rFile.ReadULong());
+    const CFourCC Func(rFile.ReadU32());
 
     switch (Func.ToU32())
     {
@@ -1602,7 +1602,7 @@ void CUnsupportedParticleLoader::ParseRotationFunction(IInputStream& rFile)
 void CUnsupportedParticleLoader::ParseUVFunction(IInputStream& rFile)
 {
     const auto FuncOffset = rFile.Tell();
-    const CFourCC Func(rFile.ReadULong());
+    const CFourCC Func(rFile.ReadU32());
 
     switch (Func.ToU32())
     {
@@ -1639,7 +1639,7 @@ void CUnsupportedParticleLoader::ParseUVFunction(IInputStream& rFile)
 void CUnsupportedParticleLoader::ParseEmitterFunction(IInputStream& rFile)
 {
     const auto FuncOffset = rFile.Tell();
-    const CFourCC Func(rFile.ReadULong());
+    const CFourCC Func(rFile.ReadU32());
 
     switch (Func.ToU32())
     {
@@ -1698,7 +1698,7 @@ void CUnsupportedParticleLoader::ParseEmitterFunction(IInputStream& rFile)
 void CUnsupportedParticleLoader::ParseSoundFunction(IInputStream& rFile)
 {
     const auto FuncOffset = rFile.Tell();
-    const CFourCC Func(rFile.ReadULong());
+    const CFourCC Func(rFile.ReadU32());
     
     switch (Func.ToU32())
     {
@@ -1707,7 +1707,7 @@ void CUnsupportedParticleLoader::ParseSoundFunction(IInputStream& rFile)
         
     case FOURCC('CNST'):
     {
-        const auto SoundID = rFile.ReadULong() & 0xFFFF;
+        const auto SoundID = rFile.ReadU32() & 0xFFFF;
 
         if (SoundID != 0xFFFF)
         {
@@ -1727,7 +1727,7 @@ void CUnsupportedParticleLoader::ParseSoundFunction(IInputStream& rFile)
 void CUnsupportedParticleLoader::ParseAssetFunction(IInputStream& rFile)
 {
     const auto FuncOffset = rFile.Tell();
-    const CFourCC Func(rFile.ReadULong());
+    const CFourCC Func(rFile.ReadU32());
 
     switch (Func.ToU32())
     {
@@ -1746,19 +1746,19 @@ void CUnsupportedParticleLoader::ParseAssetFunction(IInputStream& rFile)
 
 void CUnsupportedParticleLoader::ParseSpawnSystemKeyframeData(IInputStream& rFile)
 {
-    const CFourCC Func(rFile.ReadULong());
+    const CFourCC Func(rFile.ReadU32());
     if (Func == CFourCC("NONE"))
         return;
 
     ASSERT(Func == CFourCC("CNST"));
 
     rFile.Seek(0x10, SEEK_CUR); // Skip unneeded values
-    const auto Count = rFile.ReadULong();
+    const auto Count = rFile.ReadU32();
 
     for (uint32_t iKey = 0; iKey < Count; iKey++)
     {
         rFile.Seek(0x4, SEEK_CUR); // Skip frame number
-        const auto InfoCount = rFile.ReadULong();
+        const auto InfoCount = rFile.ReadU32();
 
         for (uint32_t iInfo = 0; iInfo < InfoCount; iInfo++)
         {
@@ -1776,7 +1776,7 @@ void CUnsupportedParticleLoader::ParseKeyframeEmitterData(IInputStream& rFile, c
     else if (rkFunc == CFourCC("KEYF"))
         rFile.Seek(0x1A, SEEK_CUR);
 
-    const auto KeyCount = rFile.ReadULong();
+    const auto KeyCount = rFile.ReadU32();
     rFile.Seek(KeyCount * ElemSize, SEEK_CUR);
 
     if (rkFunc == CFourCC("KEYF"))
@@ -1792,7 +1792,7 @@ std::unique_ptr<CDependencyGroup> CUnsupportedParticleLoader::LoadParticle(IInpu
     // Validate DKCR asset header
     if (pEntry->Game() == EGame::DKCReturns)
     {
-        const auto AssetHeader = rFile.ReadULong();
+        const auto AssetHeader = rFile.ReadU32();
 
         if (AssetHeader != 0x6E190001)
         {
@@ -1801,7 +1801,7 @@ std::unique_ptr<CDependencyGroup> CUnsupportedParticleLoader::LoadParticle(IInpu
         }
     }
 
-    const CFourCC Magic(rFile.ReadULong());
+    const CFourCC Magic(rFile.ReadU32());
 
     // Loop through particle functions
     while (true)

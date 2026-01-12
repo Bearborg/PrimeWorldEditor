@@ -377,26 +377,26 @@ void CPackage::CompareOriginalAssetList(const std::list<CAssetID>& rkNewList)
     }
 
     // Determine pak version
-    const uint32 PakVersion = Pak.ReadULong();
+    const auto PakVersion = Pak.ReadU32();
     std::set<CAssetID> OldListSet;
 
     // Read MP1/2 pak
     if (PakVersion == 0x00030005)
     {
         Pak.Seek(0x4, SEEK_CUR);
-        const uint32 NumNamedResources = Pak.ReadULong();
+        const auto NumNamedResources = Pak.ReadU32();
 
-        for (uint32 iName = 0; iName < NumNamedResources; iName++)
+        for (uint32_t iName = 0; iName < NumNamedResources; iName++)
         {
             Pak.Seek(0x8, SEEK_CUR);
-            const uint32 NameLen = Pak.ReadULong();
+            const auto NameLen = Pak.ReadU32();
             Pak.Seek(NameLen, SEEK_CUR);
         }
 
         // Build a set out of the original pak resource list
-        const uint32 NumResources = Pak.ReadULong();
+        const auto NumResources = Pak.ReadU32();
 
-        for (uint32 iRes = 0; iRes < NumResources; iRes++)
+        for (uint32_t iRes = 0; iRes < NumResources; iRes++)
         {
             Pak.Seek(0x8, SEEK_CUR);
             OldListSet.insert(CAssetID(Pak, EIDLength::k32Bit));
@@ -409,16 +409,16 @@ void CPackage::CompareOriginalAssetList(const std::list<CAssetID>& rkNewList)
 
         // Skip named resources
         Pak.Seek(0x44, SEEK_SET);
-        [[maybe_unused]] const CFourCC StringSecType = Pak.ReadULong();
-        const uint32 StringSecSize = Pak.ReadULong();
+        [[maybe_unused]] const auto StringSecType = CFourCC(Pak.ReadU32());
+        const auto StringSecSize = Pak.ReadU32();
         ASSERT(StringSecType == "STRG");
 
         Pak.Seek(0x80 + StringSecSize, SEEK_SET);
 
         // Read resource table
-        const uint32 NumResources = Pak.ReadULong();
+        const auto NumResources = Pak.ReadU32();
 
-        for (uint32 iRes = 0; iRes < NumResources; iRes++)
+        for (uint32_t iRes = 0; iRes < NumResources; iRes++)
         {
             Pak.Seek(0x8, SEEK_CUR);
             OldListSet.insert(CAssetID(Pak, EIDLength::k64Bit));

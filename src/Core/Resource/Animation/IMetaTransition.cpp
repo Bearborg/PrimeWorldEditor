@@ -8,7 +8,7 @@ CMetaTransFactory gMetaTransFactory;
 
 std::unique_ptr<IMetaTransition> CMetaTransFactory::LoadFromStream(IInputStream& rInput, EGame Game) const
 {
-    const auto Type = static_cast<EMetaTransType>(rInput.ReadLong());
+    const auto Type = static_cast<EMetaTransType>(rInput.ReadU32());
 
     switch (Type)
     {
@@ -57,11 +57,11 @@ CMetaTransTrans::CMetaTransTrans(EMetaTransType Type, IInputStream& rInput, EGam
 
     if (Game <= EGame::Echoes)
     {
-        mTransDuration.SetTime(rInput.ReadFloat());
-        mTransDuration.SetType(static_cast<CCharAnimTime::EType>(rInput.ReadLong()));
+        mTransDuration.SetTime(rInput.ReadF32());
+        mTransDuration.SetType(static_cast<CCharAnimTime::EType>(rInput.ReadU32()));
         mUnknownC = rInput.ReadBool();
         mRunA = rInput.ReadBool();
-        mFlags = rInput.ReadLong();
+        mFlags = rInput.ReadU32();
     }
     else
     {

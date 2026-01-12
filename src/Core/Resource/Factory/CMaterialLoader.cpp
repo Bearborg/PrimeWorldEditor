@@ -41,24 +41,24 @@ FVertexDescription CMaterialLoader::ConvertToVertexDescription(uint32 VertexFlag
 void CMaterialLoader::ReadPrimeMatSet()
 {
     // Textures
-    const uint32 NumTextures = mpFile->ReadULong();
+    const auto NumTextures = mpFile->ReadU32();
     mTextures.resize(NumTextures);
 
     for (size_t iTex = 0; iTex < NumTextures; iTex++)
     {
-        const uint32 TextureID = mpFile->ReadULong();
+        const auto TextureID = mpFile->ReadU32();
         mTextures[iTex] = gpResourceStore->LoadResource<CTexture>(TextureID);
     }
 
     // Materials
-    const uint32 NumMats = mpFile->ReadULong();
-    std::vector<uint32> Offsets(NumMats);
+    const auto NumMats = mpFile->ReadU32();
+    std::vector<uint32_t> Offsets(NumMats);
     for (auto& offset : Offsets)
-        offset = mpFile->ReadULong();
+        offset = mpFile->ReadU32();
 
-    const uint32 MatsStart = mpFile->Tell();
+    const auto MatsStart = mpFile->Tell();
     mpSet->mMaterials.resize(NumMats);
-    for (uint32 iMat = 0; iMat < NumMats; iMat++)
+    for (uint32_t iMat = 0; iMat < NumMats; iMat++)
     {
         mpSet->mMaterials[iMat] = ReadPrimeMaterial();
         mpSet->mMaterials[iMat]->mVersion = mVersion;
@@ -72,33 +72,33 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadPrimeMaterial()
     auto pMat = std::make_unique<CMaterial>(mVersion, FVertexDescription{});
 
     // Flags
-    pMat->mOptions = (mpFile->ReadULong() & static_cast<uint>(EMaterialOption::AllMP1Settings));
+    pMat->mOptions = (mpFile->ReadU32() & static_cast<uint>(EMaterialOption::AllMP1Settings));
     pMat->mOptions.SetFlag(EMaterialOption::ColorWrite);
 
     // Textures
-    const uint32 NumTextures = mpFile->ReadULong();
-    std::vector<uint32> TextureIndices(NumTextures);
+    const auto NumTextures = mpFile->ReadU32();
+    std::vector<uint32_t> TextureIndices(NumTextures);
 
     for (auto& index : TextureIndices)
     {
-        index = mpFile->ReadULong();
+        index = mpFile->ReadU32();
     }
 
     // Vertex description
-    pMat->mVtxDesc = ConvertToVertexDescription(mpFile->ReadULong());
+    pMat->mVtxDesc = ConvertToVertexDescription(mpFile->ReadU32());
 
     // Unknowns
     if (mVersion >= EGame::EchoesDemo)
     {
-        pMat->mEchoesUnknownA = mpFile->ReadULong();
-        pMat->mEchoesUnknownB = mpFile->ReadULong();
+        pMat->mEchoesUnknownA = mpFile->ReadU32();
+        pMat->mEchoesUnknownB = mpFile->ReadU32();
     }
     mpFile->Seek(0x4, SEEK_CUR); // Skipping group index
 
     // Konst
     if ((pMat->mOptions & EMaterialOption::Konst) != 0)
     {
-        const uint32 KonstCount = mpFile->ReadULong();
+        const auto KonstCount = mpFile->ReadU32();
 
         for (size_t iKonst = 0; iKonst < KonstCount; iKonst++)
         {
@@ -113,37 +113,37 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadPrimeMaterial()
     }
 
     // Blend mode
-    pMat->mBlendDstFac = gBlendFactor[mpFile->ReadShort()];
-    pMat->mBlendSrcFac = gBlendFactor[mpFile->ReadShort()];
+    pMat->mBlendDstFac = gBlendFactor[mpFile->ReadU16()];
+    pMat->mBlendSrcFac = gBlendFactor[mpFile->ReadU16()];
 
     // Indirect texture
     if ((pMat->mOptions & EMaterialOption::IndStage) != 0)
     {
-        const uint32 IndTexIndex = mpFile->ReadULong();
+        const auto IndTexIndex = mpFile->ReadU32();
         pMat->mpIndirectTexture = mTextures[TextureIndices[IndTexIndex]];
     }
 
     // Color channels
-    const uint32 ChanCount = mpFile->ReadULong();
-    pMat->mLightingEnabled = (mpFile->ReadULong() & 1) == 1;
+    const auto ChanCount = mpFile->ReadU32();
+    pMat->mLightingEnabled = (mpFile->ReadU32() & 1) == 1;
     mpFile->Seek((4 * ChanCount) - 4, SEEK_CUR);
 
     // TEV
-    const uint32 TevCount = mpFile->ReadULong();
+    const auto TevCount = mpFile->ReadU32();
     pMat->mPasses.resize(TevCount);
 
     for (size_t iTev = 0; iTev < TevCount; iTev++)
     {
         auto pPass = std::make_unique<CMaterialPass>(pMat.get());
 
-        const uint32 ColorIn = mpFile->ReadULong();
-        const uint32 AlphaIn = mpFile->ReadULong();
-        pPass->mColorOutput = static_cast<ETevOutput>((mpFile->ReadULong() & 0x600) >> 9);
-        pPass->mAlphaOutput = static_cast<ETevOutput>((mpFile->ReadULong() & 0x600) >> 9);
+        const auto ColorIn = mpFile->ReadU32();
+        const auto AlphaIn = mpFile->ReadU32();
+        pPass->mColorOutput = static_cast<ETevOutput>((mpFile->ReadU32() & 0x600) >> 9);
+        pPass->mAlphaOutput = static_cast<ETevOutput>((mpFile->ReadU32() & 0x600) >> 9);
         mpFile->Seek(0x1, SEEK_CUR); // Padding byte
-        pPass->mKAlphaSel = static_cast<ETevKSel>(mpFile->ReadByte());
-        pPass->mKColorSel = static_cast<ETevKSel>(mpFile->ReadByte());
-        pPass->mRasSel = static_cast<ETevRasSel>(mpFile->ReadUByte());
+        pPass->mKAlphaSel = static_cast<ETevKSel>(mpFile->ReadU8());
+        pPass->mKColorSel = static_cast<ETevKSel>(mpFile->ReadU8());
+        pPass->mRasSel = static_cast<ETevRasSel>(mpFile->ReadU8());
 
         for (size_t iInput = 0; iInput < 4; iInput++)
         {
@@ -154,57 +154,57 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadPrimeMaterial()
         pMat->mPasses[iTev] = std::move(pPass);
     }
 
-    std::vector<uint8> TevCoordIndices(TevCount);
+    std::vector<uint8_t> TevCoordIndices(TevCount);
     for (size_t iTev = 0; iTev < TevCount; iTev++)
     {
         mpFile->Seek(0x2, SEEK_CUR);
         CMaterialPass *pPass = pMat->Pass(iTev);
 
-        const uint8 TexSel = mpFile->ReadUByte();
+        const auto TexSel = mpFile->ReadU8();
 
         if (TexSel == 0xFF || TexSel >= TextureIndices.size())
             pPass->mpTexture = nullptr;
         else
             pPass->mpTexture = mTextures[TextureIndices[TexSel]];
 
-        TevCoordIndices[iTev] = mpFile->ReadUByte();
+        TevCoordIndices[iTev] = mpFile->ReadU8();
     }
 
     // TexGens
-    const uint32 TexGenCount = mpFile->ReadULong();
-    std::vector<uint32> TexGens(TexGenCount);
+    const auto TexGenCount = mpFile->ReadU32();
+    std::vector<uint32_t> TexGens(TexGenCount);
 
     for (auto& texGen : TexGens)
-        texGen = mpFile->ReadULong();
+        texGen = mpFile->ReadU32();
 
     // UV animations
     mpFile->Seek(0x4, SEEK_CUR); // Skipping UV anims size
-    const uint32 NumAnims = mpFile->ReadULong();
+    const auto NumAnims = mpFile->ReadU32();
 
     struct SUVAnim {
-        int32 Mode;
+        int32_t Mode;
         std::array<float, 4> Params;
     };
     std::vector <SUVAnim> Anims(NumAnims);
 
     for (auto& Anim : Anims)
     {
-        Anim.Mode = mpFile->ReadLong();
+        Anim.Mode = mpFile->ReadS32();
 
         switch (Anim.Mode)
         {
         case 3: // Rotation
         case 7: // ???
-            Anim.Params[0] = mpFile->ReadFloat();
-            Anim.Params[1] = mpFile->ReadFloat();
+            Anim.Params[0] = mpFile->ReadF32();
+            Anim.Params[1] = mpFile->ReadF32();
             break;
         case 2: // UV Scroll
         case 4: // U Scroll
         case 5: // V Scroll
-            Anim.Params[0] = mpFile->ReadFloat();
-            Anim.Params[1] = mpFile->ReadFloat();
-            Anim.Params[2] = mpFile->ReadFloat();
-            Anim.Params[3] = mpFile->ReadFloat();
+            Anim.Params[0] = mpFile->ReadF32();
+            Anim.Params[1] = mpFile->ReadF32();
+            Anim.Params[2] = mpFile->ReadF32();
+            Anim.Params[3] = mpFile->ReadF32();
             break;
         case 0: // Inverse ModelView Matrix
         case 1: // Inverse ModelView Matrix Translated
@@ -220,7 +220,7 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadPrimeMaterial()
     for (size_t iPass = 0; iPass < pMat->mPasses.size(); iPass++)
     {
         CMaterialPass *pPass = pMat->mPasses[iPass].get();
-        const uint8 TexCoordIdx = TevCoordIndices[iPass];
+        const auto TexCoordIdx = TevCoordIndices[iPass];
 
         if (TexGens.empty() || TexCoordIdx == 0xFF)
         {
@@ -229,11 +229,11 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadPrimeMaterial()
         }
         else
         {
-            pPass->mTexCoordSource = static_cast<uint8>((TexGens[TexCoordIdx] & 0x1F0) >> 4);
+            pPass->mTexCoordSource = static_cast<uint8_t>((TexGens[TexCoordIdx] & 0x1F0) >> 4);
 
             // Next step - find which animation is used by this pass
             // Texture matrix is a reliable way to tell, because every UV anim mode generates a texture matrix
-            const uint32 TexMtxIdx = ((TexGens[TexCoordIdx] & 0x3E00) >> 9) / 3;
+            const uint32_t TexMtxIdx = ((TexGens[TexCoordIdx] & 0x3E00) >> 9) / 3;
 
             // 10 is identity matrix; indicates no UV anim for this pass
             if (TexMtxIdx == 10)
@@ -255,13 +255,13 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadPrimeMaterial()
 
 void CMaterialLoader::ReadCorruptionMatSet()
 {
-    const uint32 NumMats = mpFile->ReadULong();
+    const auto NumMats = mpFile->ReadU32();
     mpSet->mMaterials.resize(NumMats);
 
-    for (uint32 iMat = 0; iMat < NumMats; iMat++)
+    for (uint32_t iMat = 0; iMat < NumMats; iMat++)
     {
-        const uint32 Size = mpFile->ReadULong();
-        const uint32 Next = mpFile->Tell() + Size;
+        const auto Size = mpFile->ReadU32();
+        const auto Next = mpFile->Tell() + Size;
         mpSet->mMaterials[iMat] = ReadCorruptionMaterial();
         mpSet->mMaterials[iMat]->mVersion = mVersion;
         mpSet->mMaterials[iMat]->mName = TString("Material #") + std::to_string(iMat + 1);
@@ -333,17 +333,17 @@ static ECLR ClrFourCCToEnum(CFourCC fcc)
 std::unique_ptr<CMaterial> CMaterialLoader::ReadCorruptionMaterial()
 {
     // Flags
-    const FMP3MaterialOptions MP3Options = mpFile->ReadLong();
+    const FMP3MaterialOptions MP3Options(mpFile->ReadS32());
 
     mpFile->Seek(0x8, SEEK_CUR); // Don't know what any of this is
-    FVertexDescription VtxDesc = ConvertToVertexDescription(mpFile->ReadULong());
+    FVertexDescription VtxDesc = ConvertToVertexDescription(mpFile->ReadU32());
     mpFile->Seek(0xC, SEEK_CUR);
 
     SMP3IntermediateMaterial Intermediate;
     Intermediate.mOptions = MP3Options;
     while (true)
     {
-        CFourCC Type = mpFile->ReadULong();
+        const CFourCC Type(mpFile->ReadU32());
 
         // END
         if (Type == CFourCC("END "))
@@ -352,15 +352,15 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadCorruptionMaterial()
         // INT
         if (Type == CFourCC("INT "))
         {
-            const CFourCC IntType = mpFile->ReadULong();
-            const auto IntVal = static_cast<uint8>(mpFile->ReadULong());
+            const CFourCC IntType(mpFile->ReadU32());
+            const auto IntVal = static_cast<uint8>(mpFile->ReadU32());
             Intermediate.mINTs[static_cast<int>(IntFourCCToEnum(IntType))] = IntVal;
         }
 
         // CLR
         if (Type == CFourCC("CLR "))
         {
-            const CFourCC ClrType = mpFile->ReadULong();
+            const CFourCC ClrType(mpFile->ReadU32());
             const CColor ClrVal(*mpFile, true);
             Intermediate.mCLRs[static_cast<int>(ClrFourCCToEnum(ClrType))] = ClrVal;
         }
@@ -368,43 +368,43 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadCorruptionMaterial()
         // PASS
         if (Type == CFourCC("PASS"))
         {
-            const uint32 Size = mpFile->ReadULong();
-            const uint32 Next = Size + mpFile->Tell();
+            const auto Size = mpFile->ReadU32();
+            const auto Next = Size + mpFile->Tell();
 
-            const CFourCC PassType = mpFile->ReadULong();
+            const CFourCC PassType(mpFile->ReadU32());
             auto& Pass = Intermediate.mPASSes[static_cast<int>(PassFourCCToEnum(PassType))].emplace(SMP3IntermediateMaterial::PASS());
 
             Pass.mPassType = PassType;
-            Pass.mSettings = static_cast<EPassSettings>(mpFile->ReadULong());
+            Pass.mSettings = static_cast<EPassSettings>(mpFile->ReadU32());
 
-            const uint64 TextureID = mpFile->ReadULongLong();
+            const auto TextureID = mpFile->ReadU64();
             if (TextureID != UINT64_MAX)
                 Pass.mpTexture = gpResourceStore->LoadResource<CTexture>(TextureID);
 
-            Pass.mUvSrc = mpFile->ReadULong();
+            Pass.mUvSrc = mpFile->ReadU32();
 
-            const uint32 AnimSize = mpFile->ReadULong();
+            const uint32 AnimSize = mpFile->ReadU32();
             if (AnimSize > 0)
             {
-                Pass.mUvSource = static_cast<EUVAnimUVSource>(mpFile->ReadUShort());
-                Pass.mMtxConfig = static_cast<EUVAnimMatrixConfig>(mpFile->ReadUShort());
+                Pass.mUvSource = static_cast<EUVAnimUVSource>(mpFile->ReadU16());
+                Pass.mMtxConfig = static_cast<EUVAnimMatrixConfig>(mpFile->ReadU16());
 
-                Pass.mAnimMode = static_cast<EUVAnimMode>(mpFile->ReadULong());
+                Pass.mAnimMode = static_cast<EUVAnimMode>(mpFile->ReadU32());
 
                 switch (Pass.mAnimMode)
                 {
                     case EUVAnimMode::UVRotation: // Rotation
                     case EUVAnimMode::ConvolutedModeA: // ???
-                        Pass.mAnimParams[0] = mpFile->ReadFloat();
-                        Pass.mAnimParams[1] = mpFile->ReadFloat();
+                        Pass.mAnimParams[0] = mpFile->ReadF32();
+                        Pass.mAnimParams[1] = mpFile->ReadF32();
                         break;
                     case EUVAnimMode::UVScroll: // UV Scroll
                     case EUVAnimMode::HFilmstrip: // U Scroll
                     case EUVAnimMode::VFilmstrip: // V Scroll
-                        Pass.mAnimParams[0] = mpFile->ReadFloat();
-                        Pass.mAnimParams[1] = mpFile->ReadFloat();
-                        Pass.mAnimParams[2] = mpFile->ReadFloat();
-                        Pass.mAnimParams[3] = mpFile->ReadFloat();
+                        Pass.mAnimParams[0] = mpFile->ReadF32();
+                        Pass.mAnimParams[1] = mpFile->ReadF32();
+                        Pass.mAnimParams[2] = mpFile->ReadF32();
+                        Pass.mAnimParams[3] = mpFile->ReadF32();
                         break;
                     case EUVAnimMode::InverseMV: // Inverse ModelView Matrix
                     case EUVAnimMode::InverseMVTranslated: // Inverse ModelView Matrix Translated
@@ -414,15 +414,15 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadCorruptionMaterial()
 
                         // Unknown/unsupported animation type
                     case EUVAnimMode::ConvolutedModeB:
-                        Pass.mAnimConvolutedModeBType = EUVConvolutedModeBType(mpFile->ReadULong());
-                        Pass.mAnimParams[0] = mpFile->ReadFloat();
-                        Pass.mAnimParams[1] = mpFile->ReadFloat();
-                        Pass.mAnimParams[2] = mpFile->ReadFloat();
-                        Pass.mAnimParams[3] = mpFile->ReadFloat();
-                        Pass.mAnimParams[4] = mpFile->ReadFloat();
-                        Pass.mAnimParams[5] = mpFile->ReadFloat();
-                        Pass.mAnimParams[6] = mpFile->ReadFloat();
-                        Pass.mAnimParams[7] = mpFile->ReadFloat();
+                        Pass.mAnimConvolutedModeBType = EUVConvolutedModeBType(mpFile->ReadU32());
+                        Pass.mAnimParams[0] = mpFile->ReadF32();
+                        Pass.mAnimParams[1] = mpFile->ReadF32();
+                        Pass.mAnimParams[2] = mpFile->ReadF32();
+                        Pass.mAnimParams[3] = mpFile->ReadF32();
+                        Pass.mAnimParams[4] = mpFile->ReadF32();
+                        Pass.mAnimParams[5] = mpFile->ReadF32();
+                        Pass.mAnimParams[6] = mpFile->ReadF32();
+                        Pass.mAnimParams[7] = mpFile->ReadF32();
                         NLog::Debug("{}: UVMode8 Used with type {}",
                                     *mpFile->GetSourceString(), static_cast<int>(Pass.mAnimConvolutedModeBType));
                         break;

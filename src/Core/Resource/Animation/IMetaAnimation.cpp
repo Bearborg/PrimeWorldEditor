@@ -7,7 +7,7 @@ CMetaAnimFactory gMetaAnimFactory;
 
 std::unique_ptr<IMetaAnimation> CMetaAnimFactory::LoadFromStream(IInputStream& rInput, EGame Game) const
 {
-    const auto Type = static_cast<EMetaAnimType>(rInput.ReadLong());
+    const auto Type = static_cast<EMetaAnimType>(rInput.ReadU32());
 
     switch (Type)
     {
@@ -40,8 +40,8 @@ CMetaAnimPlay::CMetaAnimPlay(const CAnimPrimitive& rkPrimitive, float time, CCha
 CMetaAnimPlay::CMetaAnimPlay(IInputStream& rInput, EGame Game)
 {
     mPrimitive = CAnimPrimitive(rInput, Game);
-    mTime.SetTime(rInput.ReadFloat());
-    mTime.SetType(static_cast<CCharAnimTime::EType>(rInput.ReadLong()));
+    mTime.SetTime(rInput.ReadF32());
+    mTime.SetType(static_cast<CCharAnimTime::EType>(rInput.ReadU32()));
 }
 
 EMetaAnimType CMetaAnimPlay::Type() const
@@ -61,7 +61,7 @@ CMetaAnimBlend::CMetaAnimBlend(EMetaAnimType Type, IInputStream& rInput, EGame G
     mType = Type;
     mpMetaAnimA = gMetaAnimFactory.LoadFromStream(rInput, Game);
     mpMetaAnimB = gMetaAnimFactory.LoadFromStream(rInput, Game);
-    mBlend = rInput.ReadFloat();
+    mBlend = rInput.ReadF32();
     mUnknown = rInput.ReadBool();
 }
 
@@ -81,14 +81,14 @@ void CMetaAnimBlend::GetUniquePrimitives(std::set<CAnimPrimitive>& rPrimSet) con
 // ************ CMetaAnimRandom ************
 CMetaAnimRandom::CMetaAnimRandom(IInputStream& rInput, EGame Game)
 {
-    const uint32 NumPairs = rInput.ReadLong();
+    const auto NumPairs = rInput.ReadU32();
     mProbabilityPairs.reserve(NumPairs);
 
-    for (uint32 iAnim = 0; iAnim < NumPairs; iAnim++)
+    for (uint32_t iAnim = 0; iAnim < NumPairs; iAnim++)
     {
         SAnimProbabilityPair Pair;
         Pair.pAnim = gMetaAnimFactory.LoadFromStream(rInput, Game);
-        Pair.Probability = rInput.ReadLong();
+        Pair.Probability = rInput.ReadU32();
         mProbabilityPairs.push_back(std::move(Pair));
     }
 }
@@ -109,10 +109,10 @@ void CMetaAnimRandom::GetUniquePrimitives(std::set<CAnimPrimitive>& rPrimSet) co
 // ************ CMetaAnimSequence ************
 CMetaAnimSequence::CMetaAnimSequence(IInputStream& rInput, EGame Game)
 {
-    const uint32 NumAnims = rInput.ReadLong();
+    const auto NumAnims = rInput.ReadU32();
     mAnimations.reserve(NumAnims);
 
-    for (uint32 iAnim = 0; iAnim < NumAnims; iAnim++)
+    for (uint32_t iAnim = 0; iAnim < NumAnims; iAnim++)
     {
         mAnimations.push_back(gMetaAnimFactory.LoadFromStream(rInput, Game));
     }

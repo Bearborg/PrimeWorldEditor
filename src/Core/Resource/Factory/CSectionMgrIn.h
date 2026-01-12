@@ -19,7 +19,7 @@ public:
         : mpInputStream(pSrc), mSectionSizes(Count)
     {
         for (auto& size : mSectionSizes)
-            size = pSrc->ReadULong();
+            size = pSrc->ReadU32();
     }
 
     void Init()

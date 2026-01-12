@@ -35,40 +35,40 @@ void CScriptLoader::ReadProperty(IProperty *pProp, uint32 Size, IInputStream& rS
     case EPropertyType::Byte:
     {
         CByteProperty* pByte = TPropCast<CByteProperty>(pProp);
-        pByte->ValueRef(pData) = rSCLY.ReadByte();
+        pByte->ValueRef(pData) = rSCLY.ReadS8();
         break;
     }
 
     case EPropertyType::Short:
     {
         CShortProperty* pShort = TPropCast<CShortProperty>(pProp);
-        pShort->ValueRef(pData) = rSCLY.ReadShort();
+        pShort->ValueRef(pData) = rSCLY.ReadS16();
         break;
     }
 
     case EPropertyType::Int:
     {
         CIntProperty* pInt = TPropCast<CIntProperty>(pProp);
-        pInt->ValueRef(pData) = rSCLY.ReadLong();
+        pInt->ValueRef(pData) = rSCLY.ReadS32();
         break;
     }
 
     case EPropertyType::Float:
     {
         CFloatProperty* pFloat = TPropCast<CFloatProperty>(pProp);
-        pFloat->ValueRef(pData) = rSCLY.ReadFloat();
+        pFloat->ValueRef(pData) = rSCLY.ReadF32();
         break;
     }
 
     case EPropertyType::Choice:
     {
         CChoiceProperty* pChoice = TPropCast<CChoiceProperty>(pProp);
-        pChoice->ValueRef(pData) = rSCLY.ReadLong();
+        pChoice->ValueRef(pData) = rSCLY.ReadS32();
 
 #if VALIDATE_PROPERTY_VALUES
         if (!pChoice->HasValidValue(pData))
         {
-            uint32 Value = pChoice->ValueRef(pData);
+            const auto Value = pChoice->ValueRef(pData);
             NLog::Error("{} [0x{:X}]: Choice property \"{}\" ({}) has unrecognized value: 0x{:08X}",
                         *rSCLY.GetSourceString(),
                         rSCLY.Tell() - 4,
@@ -83,12 +83,12 @@ void CScriptLoader::ReadProperty(IProperty *pProp, uint32 Size, IInputStream& rS
     case EPropertyType::Enum:
     {
         CEnumProperty* pEnum = TPropCast<CEnumProperty>(pProp);
-        pEnum->ValueRef(pData) = rSCLY.ReadLong();
+        pEnum->ValueRef(pData) = rSCLY.ReadS32();
 
 #if VALIDATE_PROPERTY_VALUES
         if (!pEnum->HasValidValue(pData))
         {
-            uint32 Value = pEnum->ValueRef(pData);
+            const auto Value = pEnum->ValueRef(pData);
             NLog::Error("{} [0x{:X}]: Enum property \"{}\" ({}) has unrecognized value: 0x{:08X}",
                         *rSCLY.GetSourceString(),
                         rSCLY.Tell() - 4,
@@ -103,10 +103,10 @@ void CScriptLoader::ReadProperty(IProperty *pProp, uint32 Size, IInputStream& rS
     case EPropertyType::Flags:
     {
         CFlagsProperty* pFlags = TPropCast<CFlagsProperty>(pProp);
-        pFlags->ValueRef(pData) = rSCLY.ReadLong();
+        pFlags->ValueRef(pData) = rSCLY.ReadU32();
 
 #if VALIDATE_PROPERTY_VALUES
-        uint32 InvalidBits = pFlags->HasValidValue(pData);
+        const auto InvalidBits = pFlags->HasValidValue(pData);
 
         if (InvalidBits)
         {
@@ -148,7 +148,7 @@ void CScriptLoader::ReadProperty(IProperty *pProp, uint32 Size, IInputStream& rS
         pAsset->ValueRef(pData) = CAssetID(rSCLY, mpGameTemplate->Game());
 
 #if VALIDATE_PROPERTY_VALUES
-        CAssetID ID = pAsset->ValueRef(pData);
+        const CAssetID ID(pAsset->ValueRef(pData));
 
         if (ID.IsValid() && gpResourceStore)
         {
@@ -177,14 +177,14 @@ void CScriptLoader::ReadProperty(IProperty *pProp, uint32 Size, IInputStream& rS
     case EPropertyType::Sound:
     {
         CSoundProperty* pSound = TPropCast<CSoundProperty>(pProp);
-        pSound->ValueRef(pData) = rSCLY.ReadLong();
+        pSound->ValueRef(pData) = rSCLY.ReadS32();
         break;
     }
 
     case EPropertyType::Animation:
     {
         CAnimationProperty* pAnim = TPropCast<CAnimationProperty>(pProp);
-        pAnim->ValueRef(pData) = rSCLY.ReadLong();
+        pAnim->ValueRef(pData) = rSCLY.ReadU32();
         break;
     }
 
@@ -233,7 +233,7 @@ void CScriptLoader::ReadProperty(IProperty *pProp, uint32 Size, IInputStream& rS
     case EPropertyType::Array:
     {
         CArrayProperty *pArray = TPropCast<CArrayProperty>(pProp);
-        int Count = rSCLY.ReadLong();
+        const auto Count = rSCLY.ReadS32();
 
         pArray->Resize(pData, Count);
         void* pOldData = mpCurrentData;
@@ -273,11 +273,11 @@ void CScriptLoader::LoadStructMP1(IInputStream& rSCLY, CStructProperty* pStruct)
 
     // Verify property count
     const size_t PropertyCount = pStruct->NumChildren();
-    [[maybe_unused]] uint32 Version = 0;
+    [[maybe_unused]] uint32_t Version = 0;
 
     if (!pStruct->IsAtomic())
     {
-        [[maybe_unused]] const uint32 FilePropCount = rSCLY.ReadULong();
+        [[maybe_unused]] const auto FilePropCount = rSCLY.ReadU32();
         //@todo version checking
     }
 
@@ -294,12 +294,12 @@ void CScriptLoader::LoadStructMP1(IInputStream& rSCLY, CStructProperty* pStruct)
 
 CScriptObject* CScriptLoader::LoadObjectMP1(IInputStream& rSCLY)
 {
-    const uint32 StartOffset = rSCLY.Tell();
-    const uint8 Type = rSCLY.ReadUByte();
-    const uint32 Size = rSCLY.ReadULong();
-    const uint32 End = rSCLY.Tell() + Size;
+    const auto StartOffset = rSCLY.Tell();
+    const auto Type = rSCLY.ReadU8();
+    const auto Size = rSCLY.ReadU32();
+    const auto End = rSCLY.Tell() + Size;
 
-    CScriptTemplate *pTemplate = mpGameTemplate->TemplateByID(static_cast<uint32>(Type));
+    CScriptTemplate *pTemplate = mpGameTemplate->TemplateByID(static_cast<uint32_t>(Type));
     if (!pTemplate)
     {
         // No valid template for this object; can't load
@@ -308,20 +308,20 @@ CScriptObject* CScriptLoader::LoadObjectMP1(IInputStream& rSCLY)
         return nullptr;
     }
 
-    auto InstanceID = CInstanceID(rSCLY.ReadULong() & 0x03FFFFFF);
+    auto InstanceID = CInstanceID(rSCLY.ReadU32() & 0x03FFFFFF);
     if (InstanceID.Value() == 0x03FFFFFFU)
         InstanceID = mpArea->FindUnusedInstanceID();
     mpObj = new CScriptObject(InstanceID, mpArea, mpLayer, pTemplate);
 
     // Load connections
-    const uint32 NumLinks = rSCLY.ReadULong();
+    const auto NumLinks = rSCLY.ReadU32();
     mpObj->mOutLinks.reserve(NumLinks);
 
-    for (uint32 iLink = 0; iLink < NumLinks; iLink++)
+    for (uint32_t iLink = 0; iLink < NumLinks; iLink++)
     {
-        const uint32 State = rSCLY.ReadULong();
-        const uint32 Message = rSCLY.ReadULong();
-        const auto ReceiverID = CInstanceID(rSCLY.ReadULong() & 0x03FFFFFF);
+        const auto State = rSCLY.ReadU32();
+        const auto Message = rSCLY.ReadU32();
+        const auto ReceiverID = CInstanceID(rSCLY.ReadU32() & 0x03FFFFFF);
 
         CLink *pLink = new CLink(mpArea, State, Message, mpObj->mInstanceID, ReceiverID);
         mpObj->mOutLinks.push_back(pLink);
@@ -340,17 +340,17 @@ CScriptObject* CScriptLoader::LoadObjectMP1(IInputStream& rSCLY)
 
 std::unique_ptr<CScriptLayer> CScriptLoader::LoadLayerMP1(IInputStream& rSCLY)
 {
-    const uint32 LayerStart = rSCLY.Tell();
+    const auto LayerStart = rSCLY.Tell();
 
     rSCLY.Seek(0x1, SEEK_CUR); // One unknown byte at the start of each layer
-    const uint32 NumObjects = rSCLY.ReadULong();
+    const auto NumObjects = rSCLY.ReadU32();
 
     auto layer = std::make_unique<CScriptLayer>(mpArea);
 
     mpLayer = layer.get();
     mpLayer->Reserve(NumObjects);
 
-    for (uint32 ObjectIndex = 0; ObjectIndex < NumObjects; ObjectIndex++)
+    for (uint32_t ObjectIndex = 0; ObjectIndex < NumObjects; ObjectIndex++)
     {
         CScriptObject *pObject = LoadObjectMP1(rSCLY);
         if (pObject)
@@ -358,7 +358,7 @@ std::unique_ptr<CScriptLayer> CScriptLoader::LoadLayerMP1(IInputStream& rSCLY)
     }
 
     // Layer sizes are always a multiple of 32 - skip end padding before returning
-    const uint32 Remaining = 32 - ((rSCLY.Tell() - LayerStart) & 0x1F);
+    const uint32_t Remaining = 32 - ((rSCLY.Tell() - LayerStart) & 0x1F);
     rSCLY.Seek(Remaining, SEEK_CUR);
 
     return layer;
@@ -370,16 +370,16 @@ void CScriptLoader::LoadStructMP2(IInputStream& rSCLY, CStructProperty* pStruct)
     size_t ChildCount = pStruct->NumChildren();
 
     if (!pStruct->IsAtomic())
-        ChildCount = rSCLY.ReadUShort();
+        ChildCount = rSCLY.ReadU16();
 
     // Parse properties
     for (size_t ChildIdx = 0; ChildIdx < ChildCount; ChildIdx++)
     {
         IProperty* pProperty = nullptr;
-        const uint32 PropertyStart = rSCLY.Tell();
-        uint32 PropertyID = UINT32_MAX;
-        uint16 PropertySize = 0;
-        uint32 NextProperty = 0;
+        const uint32_t PropertyStart = rSCLY.Tell();
+        uint32_t PropertyID = UINT32_MAX;
+        uint16_t PropertySize = 0;
+        uint32_t NextProperty = 0;
 
         if (pStruct->IsAtomic())
         {
@@ -387,8 +387,8 @@ void CScriptLoader::LoadStructMP2(IInputStream& rSCLY, CStructProperty* pStruct)
         }
         else
         {
-            PropertyID = rSCLY.ReadLong();
-            PropertySize = rSCLY.ReadShort();
+            PropertyID = rSCLY.ReadU32();
+            PropertySize = rSCLY.ReadU16();
             NextProperty = rSCLY.Tell() + PropertySize;
             pProperty = pStruct->ChildByID(PropertyID);
         }
@@ -405,10 +405,10 @@ void CScriptLoader::LoadStructMP2(IInputStream& rSCLY, CStructProperty* pStruct)
 
 CScriptObject* CScriptLoader::LoadObjectMP2(IInputStream& rSCLY)
 {
-    const uint32 ObjStart = rSCLY.Tell();
-    const uint32 ObjectID = rSCLY.ReadULong();
-    const uint16 ObjectSize = rSCLY.ReadUShort();
-    const uint32 ObjEnd = rSCLY.Tell() + ObjectSize;
+    const auto ObjStart = rSCLY.Tell();
+    const auto ObjectID = rSCLY.ReadU32();
+    const auto ObjectSize = rSCLY.ReadU16();
+    const auto ObjEnd = rSCLY.Tell() + ObjectSize;
 
     CScriptTemplate* pTemplate = mpGameTemplate->TemplateByID(ObjectID);
 
@@ -419,20 +419,20 @@ CScriptObject* CScriptLoader::LoadObjectMP2(IInputStream& rSCLY)
         return nullptr;
     }
 
-    auto InstanceID = CInstanceID(rSCLY.ReadULong() & 0x03FFFFFF);
+    auto InstanceID = CInstanceID(rSCLY.ReadU32() & 0x03FFFFFF);
     if (InstanceID.Value() == 0x03FFFFFFU)
         InstanceID = mpArea->FindUnusedInstanceID();
     mpObj = new CScriptObject(InstanceID, mpArea, mpLayer, pTemplate);
 
     // Load connections
-    const uint32 NumConnections = rSCLY.ReadUShort();
+    const uint32_t NumConnections = rSCLY.ReadU16();
     mpObj->mOutLinks.reserve(NumConnections);
 
-    for (uint32 LinkIdx = 0; LinkIdx < NumConnections; LinkIdx++)
+    for (uint32_t LinkIdx = 0; LinkIdx < NumConnections; LinkIdx++)
     {
-        const uint32 State = rSCLY.ReadULong();
-        const uint32 Message = rSCLY.ReadULong();
-        const auto ReceiverID = CInstanceID(rSCLY.ReadULong() & 0x03FFFFFF);
+        const auto State = rSCLY.ReadU32();
+        const auto Message = rSCLY.ReadU32();
+        const auto ReceiverID = CInstanceID(rSCLY.ReadU32() & 0x03FFFFFF);
 
         auto* pLink = new CLink(mpArea, State, Message, mpObj->mInstanceID, ReceiverID);
         mpObj->mOutLinks.push_back(pLink);
@@ -451,14 +451,14 @@ CScriptObject* CScriptLoader::LoadObjectMP2(IInputStream& rSCLY)
 std::unique_ptr<CScriptLayer> CScriptLoader::LoadLayerMP2(IInputStream& rSCLY)
 {
     rSCLY.Seek(0x1, SEEK_CUR); // Skipping version. todo: verify this?
-    const uint32 NumObjects = rSCLY.ReadULong();
+    const auto NumObjects = rSCLY.ReadU32();
 
     auto layer = std::make_unique<CScriptLayer>(mpArea);
 
     mpLayer = layer.get();
     mpLayer->Reserve(NumObjects);
 
-    for (uint32 ObjectIdx = 0; ObjectIdx < NumObjects; ObjectIdx++)
+    for (uint32_t ObjectIdx = 0; ObjectIdx < NumObjects; ObjectIdx++)
     {
         CScriptObject* pObject = LoadObjectMP2(rSCLY);
         if (pObject)

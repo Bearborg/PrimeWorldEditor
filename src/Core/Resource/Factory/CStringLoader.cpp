@@ -14,13 +14,13 @@ void CStringLoader::LoadPrimeDemoSTRG(IInputStream& STRG)
     const uint32 TableStart = STRG.Tell();
 
     // Header
-    const uint32 NumStrings = STRG.ReadULong();
+    const uint32 NumStrings = STRG.ReadU32();
     Language.Strings.resize(NumStrings);
 
     // String offsets (yeah, that wasn't much of a header)
     std::vector<uint32> StringOffsets(NumStrings);
     for (auto& offset : StringOffsets)
-        offset = STRG.ReadULong();
+        offset = STRG.ReadU32();
 
     // Strings
     for (size_t StringIdx = 0; StringIdx < NumStrings; StringIdx++)
@@ -34,18 +34,18 @@ void CStringLoader::LoadPrimeSTRG(IInputStream& STRG)
 {
     // This function starts at 0x8 in the file, after magic/version
     // Header
-    const uint32 NumLanguages = STRG.ReadULong();
-    const uint32 NumStrings = STRG.ReadULong();
+    const auto NumLanguages = STRG.ReadU32();
+    const auto NumStrings = STRG.ReadU32();
 
     // Language definitions
     mpStringTable->mLanguages.resize(NumLanguages);
-    std::vector<uint32> LanguageOffsets(NumLanguages);
+    std::vector<uint32_t> LanguageOffsets(NumLanguages);
     int EnglishIdx = -1;
 
-    for (uint32 LanguageIdx = 0; LanguageIdx < NumLanguages; LanguageIdx++)
+    for (uint32_t LanguageIdx = 0; LanguageIdx < NumLanguages; LanguageIdx++)
     {
-        mpStringTable->mLanguages[LanguageIdx].Language = static_cast<ELanguage>(STRG.ReadFourCC());
-        LanguageOffsets[LanguageIdx] = STRG.ReadLong();
+        mpStringTable->mLanguages[LanguageIdx].Language = static_cast<ELanguage>(STRG.ReadFourCC().ToU32());
+        LanguageOffsets[LanguageIdx] = STRG.ReadU32();
 
         // Skip strings size in MP2
         if (mVersion >= EGame::EchoesDemo)
@@ -67,8 +67,8 @@ void CStringLoader::LoadPrimeSTRG(IInputStream& STRG)
     }
 
     // Strings
-    const uint32 StringsStart = STRG.Tell();
-    for (uint32 LanguageIdx = 0; LanguageIdx < NumLanguages; LanguageIdx++)
+    const auto StringsStart = STRG.Tell();
+    for (uint32_t LanguageIdx = 0; LanguageIdx < NumLanguages; LanguageIdx++)
     {
         STRG.GoTo(StringsStart + LanguageOffsets[LanguageIdx]);
 
@@ -82,16 +82,16 @@ void CStringLoader::LoadPrimeSTRG(IInputStream& STRG)
         Language.Strings.resize(NumStrings);
 
         // Offsets
-        const uint32 LanguageStart = STRG.Tell();
-        std::vector<uint32> StringOffsets(NumStrings);
+        const auto LanguageStart = STRG.Tell();
+        std::vector<uint32_t> StringOffsets(NumStrings);
 
         for (auto& offset : StringOffsets)
         {
-            offset = LanguageStart + STRG.ReadULong();
+            offset = LanguageStart + STRG.ReadU32();
         }
 
         // The actual strings
-        for (uint32 StringIdx = 0; StringIdx < NumStrings; StringIdx++)
+        for (uint32_t StringIdx = 0; StringIdx < NumStrings; StringIdx++)
         {
             STRG.GoTo(StringOffsets[StringIdx]);
             TString String = STRG.Read16String().ToUTF8();
@@ -102,11 +102,11 @@ void CStringLoader::LoadPrimeSTRG(IInputStream& STRG)
     // Set "localized" flags on strings
     const CStringTable::SLanguageData& kEnglishData = mpStringTable->mLanguages[EnglishIdx];
 
-    for (uint32 LanguageIdx = 0; LanguageIdx < NumLanguages; LanguageIdx++)
+    for (uint32_t LanguageIdx = 0; LanguageIdx < NumLanguages; LanguageIdx++)
     {
         CStringTable::SLanguageData& LanguageData = mpStringTable->mLanguages[LanguageIdx];
 
-        for (uint32 StringIdx = 0; StringIdx < NumStrings; StringIdx++)
+        for (uint32_t StringIdx = 0; StringIdx < NumStrings; StringIdx++)
         {
             // Flag the string as localized if it is different than the English
             // version of the same string.
@@ -121,20 +121,20 @@ void CStringLoader::LoadCorruptionSTRG(IInputStream& STRG)
 {
     // This function starts at 0x8 in the file, after magic/version
     // Header
-    const uint32 NumLanguages = STRG.ReadULong();
-    const uint32 NumStrings = STRG.ReadULong();
+    const auto NumLanguages = STRG.ReadU32();
+    const auto NumStrings = STRG.ReadU32();
 
     // String names
     LoadNameTable(STRG);
 
     // Language definitions
     mpStringTable->mLanguages.resize(NumLanguages);
-    std::vector<std::vector<uint>> LanguageOffsets(NumLanguages);
+    std::vector<std::vector<uint32_t>> LanguageOffsets(NumLanguages);
     int EnglishIdx = -1;
 
-    for (uint32 LanguageIdx = 0; LanguageIdx < NumLanguages; LanguageIdx++)
+    for (uint32_t LanguageIdx = 0; LanguageIdx < NumLanguages; LanguageIdx++)
     {
-        mpStringTable->mLanguages[LanguageIdx].Language = static_cast<ELanguage>(STRG.ReadFourCC());
+        mpStringTable->mLanguages[LanguageIdx].Language = static_cast<ELanguage>(STRG.ReadFourCC().ToU32());
 
         if (mpStringTable->mLanguages[LanguageIdx].Language == ELanguage::English)
         {
@@ -143,26 +143,26 @@ void CStringLoader::LoadCorruptionSTRG(IInputStream& STRG)
     }
     ASSERT(EnglishIdx != -1);
 
-    for (uint32 LanguageIdx = 0; LanguageIdx < NumLanguages; LanguageIdx++)
+    for (uint32_t LanguageIdx = 0; LanguageIdx < NumLanguages; LanguageIdx++)
     {
         LanguageOffsets[LanguageIdx].resize(NumStrings);
         STRG.Skip(4); // Skipping total string size
 
-        for (uint32 StringIdx = 0; StringIdx < NumStrings; StringIdx++)
+        for (uint32_t StringIdx = 0; StringIdx < NumStrings; StringIdx++)
         {
-            LanguageOffsets[LanguageIdx][StringIdx] = STRG.ReadLong();
+            LanguageOffsets[LanguageIdx][StringIdx] = STRG.ReadU32();
         }
     }
 
     // Strings
-    const uint32 StringsStart = STRG.Tell();
+    const auto StringsStart = STRG.Tell();
 
-    for (uint32 LanguageIdx = 0; LanguageIdx < NumLanguages; LanguageIdx++)
+    for (uint32_t LanguageIdx = 0; LanguageIdx < NumLanguages; LanguageIdx++)
     {
         CStringTable::SLanguageData& Language = mpStringTable->mLanguages[LanguageIdx];
         Language.Strings.resize(NumStrings);
 
-        for (uint32 StringIdx = 0; StringIdx < NumStrings; StringIdx++)
+        for (uint32_t StringIdx = 0; StringIdx < NumStrings; StringIdx++)
         {
             STRG.GoTo(StringsStart + LanguageOffsets[LanguageIdx][StringIdx]);
             STRG.Skip(4); // Skipping string size
@@ -178,15 +178,15 @@ void CStringLoader::LoadCorruptionSTRG(IInputStream& STRG)
 void CStringLoader::LoadNameTable(IInputStream& STRG)
 {
     // Name table header
-    const uint32 NameCount = STRG.ReadULong();
-    const uint32 NameTableSize = STRG.ReadULong();
-    const uint32 NameTableStart = STRG.Tell();
-    const uint32 NameTableEnd = NameTableStart + NameTableSize;
+    const auto NameCount = STRG.ReadU32();
+    const auto NameTableSize = STRG.ReadU32();
+    const auto NameTableStart = STRG.Tell();
+    const auto NameTableEnd = NameTableStart + NameTableSize;
 
     // Name definitions
     struct SNameDef {
-        uint32 NameOffset;
-        uint32 StringIndex;
+        uint32_t NameOffset;
+        uint32_t StringIndex;
     };
     std::vector<SNameDef> NameDefs(NameCount);
 
@@ -196,8 +196,8 @@ void CStringLoader::LoadNameTable(IInputStream& STRG)
 
     for (size_t NameIdx = 0; NameIdx < NameCount; NameIdx++)
     {
-        NameDefs[NameIdx].NameOffset = STRG.ReadULong() + NameTableStart;
-        NameDefs[NameIdx].StringIndex = STRG.ReadULong();
+        NameDefs[NameIdx].NameOffset = STRG.ReadU32() + NameTableStart;
+        NameDefs[NameIdx].StringIndex = STRG.ReadU32();
         MaxIndex = Math::Max(MaxIndex, static_cast<int>(NameDefs[NameIdx].StringIndex));
     }
 
@@ -220,7 +220,7 @@ std::unique_ptr<CStringTable> CStringLoader::LoadSTRG(IInputStream& STRG, CResou
         return nullptr;
 
     // Verify that this is a valid STRG
-    const uint32 Magic = STRG.ReadULong();
+    const auto Magic = STRG.ReadU32();
     EGame Version = EGame::Invalid;
 
     if (Magic != 0x87654321)
@@ -228,7 +228,7 @@ std::unique_ptr<CStringTable> CStringLoader::LoadSTRG(IInputStream& STRG, CResou
         // Check for MP1 Demo STRG format - no magic/version; the first value is actually the filesize
         // so the best I can do is verify the first value actually points to the end of the file.
         // The file can have up to 31 padding bytes at the end so we account for that
-        if (Magic <= static_cast<uint32>(STRG.Size()) && Magic > STRG.Size() - 32)
+        if (Magic <= STRG.Size() && Magic > STRG.Size() - 32)
         {
             Version = EGame::PrimeDemo;
         }
@@ -242,7 +242,7 @@ std::unique_ptr<CStringTable> CStringLoader::LoadSTRG(IInputStream& STRG, CResou
     }
     else
     {
-        const uint32 FileVersion = STRG.ReadULong();
+        const auto FileVersion = STRG.ReadU32();
         Version = GetFormatVersion(FileVersion);
 
         if (Version == EGame::Invalid)

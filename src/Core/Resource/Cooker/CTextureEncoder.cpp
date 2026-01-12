@@ -59,12 +59,12 @@ void CTextureEncoder::DetermineBestOutputFormat()
 
 void CTextureEncoder::ReadSubBlockCMPR(IInputStream& rSource, IOutputStream& rDest)
 {
-    rDest.WriteShort(rSource.ReadShort());
-    rDest.WriteShort(rSource.ReadShort());
+    rDest.WriteShort(rSource.ReadS16());
+    rDest.WriteShort(rSource.ReadS16());
 
-    for (uint32 iByte = 0; iByte < 4; iByte++)
+    for (uint32_t iByte = 0; iByte < 4; iByte++)
     {
-        uint8 Byte = rSource.ReadUByte();
+        uint8_t Byte = rSource.ReadU8();
         Byte = ((Byte & 0x3) << 6) | ((Byte & 0xC) << 2) | ((Byte & 0x30) >> 2) | ((Byte & 0xC0) >> 6);
         rDest.WriteUByte(Byte);
     }

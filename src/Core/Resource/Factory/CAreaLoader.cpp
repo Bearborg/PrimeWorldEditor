@@ -35,17 +35,17 @@ CAreaLoader::~CAreaLoader()
 void CAreaLoader::ReadHeaderPrime()
 {
     mpArea->mTransform = CTransform4f(*mpMREA);
-    mNumMeshes = mpMREA->ReadULong();
-    const uint32 mNumBlocks = mpMREA->ReadULong();
+    mNumMeshes = mpMREA->ReadU32();
+    const auto mNumBlocks = mpMREA->ReadU32();
 
-    mGeometryBlockNum = mpMREA->ReadULong();
-    mScriptLayerBlockNum = mpMREA->ReadULong();
-    mCollisionBlockNum = mpMREA->ReadULong();
-    mUnknownBlockNum = mpMREA->ReadULong();
-    mLightsBlockNum = mpMREA->ReadULong();
-    mVisiBlockNum = mpMREA->ReadULong();
-    mPathBlockNum = mpMREA->ReadULong();
-    mOctreeBlockNum = mpMREA->ReadULong();
+    mGeometryBlockNum = mpMREA->ReadU32();
+    mScriptLayerBlockNum = mpMREA->ReadU32();
+    mCollisionBlockNum = mpMREA->ReadU32();
+    mUnknownBlockNum = mpMREA->ReadU32();
+    mLightsBlockNum = mpMREA->ReadU32();
+    mVisiBlockNum = mpMREA->ReadU32();
+    mPathBlockNum = mpMREA->ReadU32();
+    mOctreeBlockNum = mpMREA->ReadU32();
 
     mpSectionMgr = new CSectionMgrIn(mNumBlocks, mpMREA);
     mpMREA->SeekToBoundary(32);
@@ -66,7 +66,7 @@ void CAreaLoader::ReadGeometryPrime()
     // Geometry
     std::vector<std::unique_ptr<CModel>> FileModels;
 
-    for (uint32 iMesh = 0; iMesh < mNumMeshes; iMesh++)
+    for (uint32_t iMesh = 0; iMesh < mNumMeshes; iMesh++)
     {
         if (mVersion <= EGame::Prime)
         {
@@ -75,12 +75,12 @@ void CAreaLoader::ReadGeometryPrime()
         else // For Echoes+, load surface mesh IDs, then skip to the start of the next mesh
         {
             auto& pModel = FileModels.emplace_back(CModelLoader::LoadWorldModel(*mpMREA, *mpSectionMgr, *mpArea->mpMaterialSet, mVersion));
-            const size_t NumSurfaces = mpMREA->ReadUShort();
+            const size_t NumSurfaces = mpMREA->ReadU16();
 
             for (size_t iSurf = 0; iSurf < NumSurfaces; iSurf++)
             {
                 mpMREA->Seek(0x2, SEEK_CUR);
-                pModel->GetSurface(iSurf)->MeshID = mpMREA->ReadUShort();
+                pModel->GetSurface(iSurf)->MeshID = mpMREA->ReadU16();
             }
 
             mpSectionMgr->ToNextSection();
@@ -115,17 +115,17 @@ void CAreaLoader::ReadSCLYPrime()
     mpMREA->Seek(mVersion <= EGame::Prime ? 4 : 1, SEEK_CUR); // Skipping unknown value which is always 1
 
     // Read layer sizes
-    mNumLayers = mpMREA->ReadULong();
+    mNumLayers = mpMREA->ReadU32();
     mpArea->mScriptLayers.resize(mNumLayers);
-    std::vector<uint32> LayerSizes(mNumLayers);
+    std::vector<uint32_t> LayerSizes(mNumLayers);
 
     for (auto& layerSize : LayerSizes)
-        layerSize = mpMREA->ReadULong();
+        layerSize = mpMREA->ReadU32();
 
     // SCLY
     for (size_t iLyr = 0; iLyr < mNumLayers; iLyr++)
     {
-        const uint32 Next = mpMREA->Tell() + LayerSizes[iLyr];
+        const auto Next = mpMREA->Tell() + LayerSizes[iLyr];
         mpArea->mScriptLayers[iLyr] = CScriptLoader::LoadLayer(*mpMREA, mpArea, mVersion);
         mpMREA->Seek(Next, SEEK_SET);
     }
@@ -136,7 +136,7 @@ void CAreaLoader::ReadSCLYPrime()
     if (mVersion >= EGame::EchoesDemo)
     {
         mpSectionMgr->ToSection(mScriptGeneratorBlockNum);
-        CFourCC SCGN = mpMREA->ReadFourCC();
+        const CFourCC SCGN(mpMREA->ReadFourCC());
 
         if (SCGN != FOURCC('SCGN'))
         {
@@ -156,27 +156,27 @@ void CAreaLoader::ReadLightsPrime()
 {
     mpSectionMgr->ToSection(mLightsBlockNum);
 
-    const uint32 BabeDead = mpMREA->ReadULong();
+    const auto BabeDead = mpMREA->ReadU32();
     if (BabeDead != 0xbabedead)
         return;
 
     mpArea->mLightLayers.resize(2);
 
-    for (uint32 iLyr = 0; iLyr < 2; iLyr++)
+    for (uint32_t iLyr = 0; iLyr < 2; iLyr++)
     {
-        const uint32 NumLights = mpMREA->ReadULong();
+        const auto NumLights = mpMREA->ReadU32();
         mpArea->mLightLayers[iLyr].resize(NumLights);
 
-        for (uint32 iLight = 0; iLight < NumLights; iLight++)
+        for (uint32_t iLight = 0; iLight < NumLights; iLight++)
         {
-            const auto Type = ELightType(mpMREA->ReadULong());
+            const auto Type = ELightType(mpMREA->ReadU32());
             CVector3f Color(*mpMREA);
             CVector3f Position(*mpMREA);
             CVector3f Direction(*mpMREA);
-            float Multiplier = mpMREA->ReadFloat();
-            const float SpotCutoff = mpMREA->ReadFloat();
+            float Multiplier = mpMREA->ReadF32();
+            const float SpotCutoff = mpMREA->ReadF32();
             mpMREA->Seek(0x9, SEEK_CUR);
-            const uint32 FalloffType = mpMREA->ReadULong();
+            const auto FalloffType = mpMREA->ReadU32();
             mpMREA->Seek(0x4, SEEK_CUR);
 
             // Relevant data is read - now we process and form a CLight out of it
@@ -237,24 +237,25 @@ void CAreaLoader::ReadHeaderEchoes()
 {
     // This function reads the header for Echoes and the Echoes demo disc
     mpArea->mTransform = CTransform4f(*mpMREA);
-    mNumMeshes = mpMREA->ReadULong();
+    mNumMeshes = mpMREA->ReadU32();
     if (mVersion == EGame::Echoes)
-        mNumLayers = mpMREA->ReadULong();
-    const uint32 numBlocks = mpMREA->ReadULong();
+        mNumLayers = mpMREA->ReadU32();
 
-    mGeometryBlockNum = mpMREA->ReadULong();
-    mScriptLayerBlockNum = mpMREA->ReadULong();
-    mScriptGeneratorBlockNum = mpMREA->ReadULong();
-    mCollisionBlockNum = mpMREA->ReadULong();
-    mUnknownBlockNum = mpMREA->ReadULong();
-    mLightsBlockNum = mpMREA->ReadULong();
-    mVisiBlockNum = mpMREA->ReadULong();
-    mPathBlockNum = mpMREA->ReadULong();
-    mFFFFBlockNum = mpMREA->ReadULong();
-    mPTLABlockNum = mpMREA->ReadULong();
-    mEGMCBlockNum = mpMREA->ReadULong();
+    const auto numBlocks = mpMREA->ReadU32();
+
+    mGeometryBlockNum = mpMREA->ReadU32();
+    mScriptLayerBlockNum = mpMREA->ReadU32();
+    mScriptGeneratorBlockNum = mpMREA->ReadU32();
+    mCollisionBlockNum = mpMREA->ReadU32();
+    mUnknownBlockNum = mpMREA->ReadU32();
+    mLightsBlockNum = mpMREA->ReadU32();
+    mVisiBlockNum = mpMREA->ReadU32();
+    mPathBlockNum = mpMREA->ReadU32();
+    mFFFFBlockNum = mpMREA->ReadU32();
+    mPTLABlockNum = mpMREA->ReadU32();
+    mEGMCBlockNum = mpMREA->ReadU32();
     if (mVersion == EGame::Echoes)
-        mClusters.resize(mpMREA->ReadULong());
+        mClusters.resize(mpMREA->ReadU32());
     mpMREA->SeekToBoundary(32);
 
     mpSectionMgr = new CSectionMgrIn(numBlocks, mpMREA);
@@ -279,7 +280,7 @@ void CAreaLoader::ReadSCLYEchoes()
     mpArea->mScriptLayers.resize(mNumLayers);
 
     // SCLY
-    for (uint32 iLyr = 0; iLyr < mNumLayers; iLyr++)
+    for (uint32_t iLyr = 0; iLyr < mNumLayers; iLyr++)
     {
         const CFourCC SCLY(*mpMREA);
         if (SCLY != FOURCC('SCLY'))
@@ -312,11 +313,11 @@ void CAreaLoader::ReadHeaderCorruption()
 {
     // This function reads the header for MP3, the MP3 prototype, and DKCR
     mpArea->mTransform = CTransform4f(*mpMREA);
-    mNumMeshes = mpMREA->ReadULong();
-    mNumLayers = mpMREA->ReadULong();
-    const uint32 NumSections = mpMREA->ReadULong();
-    mClusters.resize(mpMREA->ReadULong());
-    const uint32 SectionNumberCount = mpMREA->ReadULong();
+    mNumMeshes = mpMREA->ReadU32();
+    mNumLayers = mpMREA->ReadU32();
+    const auto NumSections = mpMREA->ReadU32();
+    mClusters.resize(mpMREA->ReadU32());
+    const auto SectionNumberCount = mpMREA->ReadU32();
     mpMREA->SeekToBoundary(32);
 
     mpSectionMgr = new CSectionMgrIn(NumSections, mpMREA);
@@ -324,10 +325,10 @@ void CAreaLoader::ReadHeaderCorruption()
 
     ReadCompressedBlocks();
 
-    for (uint32 iNum = 0; iNum < SectionNumberCount; iNum++)
+    for (uint32_t iNum = 0; iNum < SectionNumberCount; iNum++)
     {
-        CFourCC Type(*mpMREA);
-        uint32 Num = mpMREA->ReadULong();
+        const CFourCC Type(*mpMREA);
+        const auto Num = mpMREA->ReadU32();
 
         if      (Type == CFourCC("AABB")) mBoundingBoxesBlockNum = Num;
         else if (Type == CFourCC("APTL")) mPTLABlockNum = Num;
@@ -366,10 +367,10 @@ void CAreaLoader::ReadGeometryCorruption()
 
     // Geometry
     std::vector<std::unique_ptr<CModel>> FileModels;
-    uint32 CurWOBJSection = 1;
-    uint32 CurGPUSection = mGPUBlockNum;
+    uint32_t CurWOBJSection = 1;
+    uint32_t CurGPUSection = mGPUBlockNum;
 
-    for (uint32 iMesh = 0; iMesh < mNumMeshes; iMesh++)
+    for (uint32_t iMesh = 0; iMesh < mNumMeshes; iMesh++)
     {
         auto& pWorldModel = FileModels.emplace_back(CModelLoader::LoadCorruptionWorldModel(*mpMREA, *mpSectionMgr, *mpArea->mpMaterialSet, CurWOBJSection, CurGPUSection, mVersion));
 
@@ -378,12 +379,12 @@ void CAreaLoader::ReadGeometryCorruption()
 
         // Load surface mesh IDs
         mpSectionMgr->ToSection(CurWOBJSection -  2);
-        const size_t NumSurfaces = mpMREA->ReadUShort();
+        const size_t NumSurfaces = mpMREA->ReadU16();
 
         for (size_t iSurf = 0; iSurf < NumSurfaces; iSurf++)
         {
             mpMREA->Seek(0x2, SEEK_CUR);
-            pWorldModel->GetSurface(iSurf)->MeshID = mpMREA->ReadUShort();
+            pWorldModel->GetSurface(iSurf)->MeshID = mpMREA->ReadU16();
         }
     }
 
@@ -401,28 +402,28 @@ void CAreaLoader::ReadDependenciesCorruption()
     mpSectionMgr->ToSection(mDependenciesBlockNum);
 
     // Read the offsets first so we can read the deps directly into their corresponding arrays
-    const uint32 NumDeps = mpMREA->ReadULong();
-    const uint32 DepsStart = mpMREA->Tell();
+    const auto NumDeps = mpMREA->ReadU32();
+    const auto DepsStart = mpMREA->Tell();
     mpMREA->Skip(NumDeps * 0xC);
 
-    const uint32 NumOffsets = mpMREA->ReadULong();
-    std::vector<uint32> Offsets(NumOffsets);
+    const auto NumOffsets = mpMREA->ReadU32();
+    std::vector<uint32_t> Offsets(NumOffsets);
 
     for (auto& offset : Offsets)
-        offset = mpMREA->ReadULong();
+        offset = mpMREA->ReadU32();
 
     mpMREA->GoTo(DepsStart);
 
     // Read layer dependencies
-    const uint32 NumLayers = NumOffsets - 1;
+    const auto NumLayers = NumOffsets - 1;
     mpArea->mExtraLayerDeps.resize(NumLayers);
 
     for (size_t LayerIdx = 0; LayerIdx < NumLayers; LayerIdx++)
     {
-        const uint32 NumLayerDeps = Offsets[LayerIdx + 1] - Offsets[LayerIdx];
+        const auto NumLayerDeps = Offsets[LayerIdx + 1] - Offsets[LayerIdx];
         mpArea->mExtraLayerDeps[LayerIdx].reserve(NumLayerDeps);
 
-        for (uint32 DepIdx = 0; DepIdx < NumLayerDeps; DepIdx++)
+        for (uint32_t DepIdx = 0; DepIdx < NumLayerDeps; DepIdx++)
         {
             const CAssetID AssetID(*mpMREA, EGame::Corruption);
             mpMREA->Skip(4);
@@ -431,10 +432,10 @@ void CAreaLoader::ReadDependenciesCorruption()
     }
 
     // Read area dependencies
-    const uint32 NumAreaDeps = NumDeps - Offsets[NumLayers];
+    const auto NumAreaDeps = NumDeps - Offsets[NumLayers];
     mpArea->mExtraAreaDeps.reserve(NumAreaDeps);
 
-    for (uint32 DepIdx = 0; DepIdx < NumAreaDeps; DepIdx++)
+    for (uint32_t DepIdx = 0; DepIdx < NumAreaDeps; DepIdx++)
     {
         const CAssetID AssetID(*mpMREA, EGame::Corruption);
         mpMREA->Skip(4);
@@ -446,35 +447,35 @@ void CAreaLoader::ReadLightsCorruption()
 {
     mpSectionMgr->ToSection(mLightsBlockNum);
 
-    const uint32 BabeDead = mpMREA->ReadULong();
+    const auto BabeDead = mpMREA->ReadU32();
     if (BabeDead != 0xbabedead)
         return;
 
     mpArea->mLightLayers.resize(4);
 
-    for (uint32 iLayer = 0; iLayer < 4; iLayer++)
+    for (uint32_t iLayer = 0; iLayer < 4; iLayer++)
     {
-        const uint32 NumLights = mpMREA->ReadULong();
+        const auto NumLights = mpMREA->ReadU32();
         mpArea->mLightLayers[iLayer].resize(NumLights);
 
-        for (uint32 iLight = 0; iLight < NumLights; iLight++)
+        for (uint32_t iLight = 0; iLight < NumLights; iLight++)
         {
-            const auto Type = static_cast<ELightType>(mpMREA->ReadLong());
+            const auto Type = static_cast<ELightType>(mpMREA->ReadU32());
 
-            const float R = mpMREA->ReadFloat();
-            const float G = mpMREA->ReadFloat();
-            const float B = mpMREA->ReadFloat();
-            const float A = mpMREA->ReadFloat();
+            const float R = mpMREA->ReadF32();
+            const float G = mpMREA->ReadF32();
+            const float B = mpMREA->ReadF32();
+            const float A = mpMREA->ReadF32();
             const CColor LightColor(R, G, B, A);
 
             const CVector3f Position(*mpMREA);
             const CVector3f Direction(*mpMREA);
             mpMREA->Seek(0xC, SEEK_CUR);
 
-            float Multiplier = mpMREA->ReadFloat();
-            const float SpotCutoff = mpMREA->ReadFloat();
+            float Multiplier = mpMREA->ReadF32();
+            const float SpotCutoff = mpMREA->ReadF32();
             mpMREA->Seek(0x9, SEEK_CUR);
-            const uint32 FalloffType = mpMREA->ReadULong();
+            const auto FalloffType = mpMREA->ReadU32();
             mpMREA->Seek(0x18, SEEK_CUR);
 
             // Relevant data is read - now we process and form a CLight out of it
@@ -527,10 +528,10 @@ void CAreaLoader::ReadCompressedBlocks()
 
     for (auto& cluster : mClusters)
     {
-        cluster.BufferSize = mpMREA->ReadULong();
-        cluster.DecompressedSize = mpMREA->ReadULong();
-        cluster.CompressedSize = mpMREA->ReadULong();
-        cluster.NumSections = mpMREA->ReadULong();
+        cluster.BufferSize = mpMREA->ReadU32();
+        cluster.DecompressedSize = mpMREA->ReadU32();
+        cluster.CompressedSize = mpMREA->ReadU32();
+        cluster.NumSections = mpMREA->ReadU32();
         mTotalDecmpSize += cluster.DecompressedSize;
 
         if (cluster.CompressedSize != 0)
@@ -547,8 +548,8 @@ void CAreaLoader::Decompress()
     if (mVersion < EGame::Echoes) return;
 
     // Decompress clusters
-    mpDecmpBuffer = new uint8[mTotalDecmpSize];
-    uint32 Offset = 0;
+    mpDecmpBuffer = new uint8_t[mTotalDecmpSize];
+    uint32_t Offset = 0;
 
     for (auto& cluster : mClusters)
     {
@@ -562,11 +563,11 @@ void CAreaLoader::Decompress()
         }
         else
         {
-            uint32 StartOffset = 32 - (cluster.CompressedSize % 32); // For some reason they pad the beginning instead of the end
+            uint32_t StartOffset = 32 - (cluster.CompressedSize % 32); // For some reason they pad the beginning instead of the end
             if (StartOffset != 32)
                 mpMREA->Seek(StartOffset, SEEK_CUR);
 
-            std::vector<uint8> CompressedBuf(cluster.CompressedSize);
+            std::vector<uint8_t> CompressedBuf(cluster.CompressedSize);
             mpMREA->ReadBytes(CompressedBuf.data(), CompressedBuf.size());
 
             const bool Success = CompressionUtil::DecompressSegmentedData(CompressedBuf.data(), CompressedBuf.size(), mpDecmpBuffer + Offset, pClust->DecompressedSize);
@@ -591,7 +592,7 @@ void CAreaLoader::LoadSectionDataBuffers()
 
    for (size_t iSec = 0; iSec < mpSectionMgr->NumSections(); iSec++)
    {
-       const uint32 Size = mpSectionMgr->CurrentSectionSize();
+       const uint32_t Size = mpSectionMgr->CurrentSectionSize();
        mpArea->mSectionDataBuffers[iSec].resize(Size);
        mpMREA->ReadBytes(mpArea->mSectionDataBuffers[iSec].data(), mpArea->mSectionDataBuffers[iSec].size());
        mpSectionMgr->ToNextSection();
@@ -715,7 +716,7 @@ std::unique_ptr<CGameArea> CAreaLoader::LoadMREA(IInputStream& MREA, CResourceEn
     // Validation
     if (!MREA.IsValid()) return nullptr;
 
-    const uint32 DeadBeef = MREA.ReadULong();
+    const uint32 DeadBeef = MREA.ReadU32();
     if (DeadBeef != 0xdeadbeef)
     {
         NLog::Error("{}: Invalid MREA magic: 0x{:08X}", *MREA.GetSourceString(), DeadBeef);
@@ -726,7 +727,7 @@ std::unique_ptr<CGameArea> CAreaLoader::LoadMREA(IInputStream& MREA, CResourceEn
 
     // Header
     Loader.mpArea = ptr.get();
-    const uint32 Version = MREA.ReadULong();
+    const uint32 Version = MREA.ReadU32();
     Loader.mVersion = GetFormatVersion(Version);
     Loader.mpMREA = &MREA;
 

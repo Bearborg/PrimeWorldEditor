@@ -296,26 +296,26 @@ void CGameExporter::LoadPaks()
         // MP1-MP3Proto
         if (mGame < EGame::Corruption)
         {
-            [[maybe_unused]] const uint32 PakVersion = Pak.ReadULong();
+            [[maybe_unused]] const auto PakVersion = Pak.ReadU32();
             Pak.Seek(0x4, SEEK_CUR);
             ASSERT(PakVersion == 0x00030005);
 
             // Echoes demo disc has a pak that ends right here.
             if (!Pak.EoF())
             {
-                uint32 NumNamedResources = Pak.ReadULong();
+                const auto NumNamedResources = Pak.ReadU32();
                 ASSERT(NumNamedResources > 0);
 
-                for (uint32 iName = 0; iName < NumNamedResources; iName++)
+                for (uint32_t iName = 0; iName < NumNamedResources; iName++)
                 {
-                    const CFourCC ResType = Pak.ReadULong();
-                    const CAssetID ResID(Pak, mGame);
-                    const uint32 NameLen = Pak.ReadULong();
+                    const auto ResType = CFourCC(Pak.ReadU32());
+                    const auto ResID = CAssetID(Pak, mGame);
+                    const auto NameLen = Pak.ReadU32();
                     TString Name = Pak.ReadString(NameLen);
                     pPackage->AddResource(std::move(Name), ResID, ResType);
                 }
 
-                uint32 NumResources = Pak.ReadLong();
+                const auto NumResources = Pak.ReadU32();
 
                 // Keep track of which areas have duplicate resources
                 std::set<CAssetID> PakResourceSet;
@@ -323,11 +323,11 @@ void CGameExporter::LoadPaks()
 
                 for (uint32 iRes = 0; iRes < NumResources; iRes++)
                 {
-                    const bool Compressed = Pak.ReadULong() == 1;
-                    const CFourCC ResType = Pak.ReadULong();
-                    const CAssetID ResID(Pak, mGame);
-                    const uint32 ResSize = Pak.ReadULong();
-                    const uint32 ResOffset = Pak.ReadULong();
+                    const bool Compressed = Pak.ReadU32() == 1;
+                    const auto ResType = CFourCC(Pak.ReadU32());
+                    const auto ResID = CAssetID(Pak, mGame);
+                    const auto ResSize = Pak.ReadU32();
+                    const auto ResOffset = Pak.ReadU32();
 
                     if (!mResourceMap.contains(ResID))
                         mResourceMap.insert_or_assign(ResID, SResourceInstance{PakPath, ResID, ResType, ResOffset, ResSize, Compressed, false});
@@ -351,62 +351,62 @@ void CGameExporter::LoadPaks()
         }
         else // MP3 + DKCR
         {
-            [[maybe_unused]] const uint32 PakVersion = Pak.ReadULong();
-            const uint32 PakHeaderLen = Pak.ReadULong();
+            [[maybe_unused]] const auto PakVersion = Pak.ReadU32();
+            const auto PakHeaderLen = Pak.ReadU32();
             Pak.Seek(PakHeaderLen - 0x8, SEEK_CUR);
             ASSERT(PakVersion == 2);
 
             struct SPakSection {
                 CFourCC Type;
-                uint32 Size;
+                uint32_t Size;
             };
             std::vector<SPakSection> PakSections;
 
-            const uint32 NumPakSections = Pak.ReadULong();
+            const auto NumPakSections = Pak.ReadU32();
             ASSERT(NumPakSections == 3);
 
-            for (uint32 iSec = 0; iSec < NumPakSections; iSec++)
+            for (uint32_t iSec = 0; iSec < NumPakSections; iSec++)
             {
-                const CFourCC Type = Pak.ReadULong();
-                const uint32 Size = Pak.ReadULong();
+                const auto Type = CFourCC(Pak.ReadU32());
+                const auto Size = Pak.ReadU32();
                 PakSections.push_back(SPakSection{Type, Size});
             }
             Pak.SeekToBoundary(64);
 
-            for (uint32 iSec = 0; iSec < NumPakSections; iSec++)
+            for (uint32_t iSec = 0; iSec < NumPakSections; iSec++)
             {
-                const uint32 Next = Pak.Tell() + PakSections[iSec].Size;
+                const auto Next = Pak.Tell() + PakSections[iSec].Size;
 
                 // Named Resources
                 if (PakSections[iSec].Type == CFourCC("STRG"))
                 {
-                    const uint32 NumNamedResources = Pak.ReadULong();
+                    const auto NumNamedResources = Pak.ReadU32();
 
-                    for (uint32 iName = 0; iName < NumNamedResources; iName++)
+                    for (uint32_t iName = 0; iName < NumNamedResources; iName++)
                     {
                         TString Name = Pak.ReadString();
-                        const CFourCC ResType = Pak.ReadULong();
-                        const CAssetID ResID(Pak, mGame);
+                        const auto ResType = CFourCC(Pak.ReadU32());
+                        const auto ResID = CAssetID(Pak, mGame);
                         pPackage->AddResource(std::move(Name), ResID, ResType);
                     }
                 }
                 else if (PakSections[iSec].Type == CFourCC("RSHD"))
                 {
                     ASSERT(PakSections[iSec + 1].Type == "DATA");
-                    const uint32 DataStart = Next;
-                    const uint32 NumResources = Pak.ReadULong();
+                    const auto DataStart = Next;
+                    const auto NumResources = Pak.ReadU32();
 
                     // Keep track of which areas have duplicate resources
                     std::set<CAssetID> PakResourceSet;
                     bool AreaHasDuplicates = true; // Default to true so that first area is always considered as having duplicates
 
-                    for (uint32 iRes = 0; iRes < NumResources; iRes++)
+                    for (uint32_t iRes = 0; iRes < NumResources; iRes++)
                     {
-                        const bool Compressed = Pak.ReadULong() == 1;
-                        const CFourCC Type = Pak.ReadULong();
-                        const CAssetID ResID(Pak, mGame);
-                        const uint32 Size = Pak.ReadULong();
-                        const uint32 Offset = DataStart + Pak.ReadULong();
+                        const bool Compressed = Pak.ReadU32() == 1;
+                        const auto Type = CFourCC(Pak.ReadU32());
+                        const auto ResID = CAssetID(Pak, mGame);
+                        const auto Size = Pak.ReadU32();
+                        const auto Offset = DataStart + Pak.ReadU32();
 
                         if (!mResourceMap.contains(ResID))
                             mResourceMap.insert_or_assign(ResID, SResourceInstance{PakPath, ResID, Type, Offset, Size, Compressed, false});
@@ -461,15 +461,15 @@ void CGameExporter::LoadResource(const SResourceInstance& rkResource, std::vecto
 
             if (mGame <= EGame::CorruptionProto)
             {
-                std::vector<uint8> CompressedData(rkResource.PakSize);
+                std::vector<uint8_t> CompressedData(rkResource.PakSize);
 
-                const uint32 UncompressedSize = Pak.ReadULong();
+                const auto UncompressedSize = Pak.ReadU32();
                 rBuffer.resize(UncompressedSize);
                 Pak.ReadBytes(CompressedData.data(), CompressedData.size());
 
                 if (ZlibCompressed)
                 {
-                    uint32 TotalOut;
+                    uint32_t TotalOut;
                     CompressionUtil::DecompressZlib(CompressedData.data(), CompressedData.size(), rBuffer.data(), rBuffer.size(), TotalOut);
                 }
                 else
@@ -480,34 +480,34 @@ void CGameExporter::LoadResource(const SResourceInstance& rkResource, std::vecto
 
             else
             {
-                [[maybe_unused]] const CFourCC Magic = Pak.ReadULong();
+                [[maybe_unused]] const auto Magic = CFourCC(Pak.ReadU32());
                 ASSERT(Magic == "CMPD");
 
-                const uint32 NumBlocks = Pak.ReadULong();
+                const auto NumBlocks = Pak.ReadU32();
 
                 struct SCompressedBlock {
-                    uint32 CompressedSize;
-                    uint32 UncompressedSize;
+                    uint32_t CompressedSize;
+                    uint32_t UncompressedSize;
                 };
                 std::vector<SCompressedBlock> CompressedBlocks;
 
-                uint32 TotalUncompressedSize = 0;
-                for (uint32 iBlock = 0; iBlock < NumBlocks; iBlock++)
+                uint32_t TotalUncompressedSize = 0;
+                for (uint32_t iBlock = 0; iBlock < NumBlocks; iBlock++)
                 {
-                    const uint32 CompressedSize = (Pak.ReadULong() & 0x00FFFFFF);
-                    const uint32 UncompressedSize = Pak.ReadULong();
+                    const auto CompressedSize = (Pak.ReadU32() & 0x00FFFFFF);
+                    const auto UncompressedSize = Pak.ReadU32();
 
                     TotalUncompressedSize += UncompressedSize;
                     CompressedBlocks.push_back(SCompressedBlock{CompressedSize, UncompressedSize});
                 }
 
                 rBuffer.resize(TotalUncompressedSize);
-                uint32 Offset = 0;
+                uint32_t Offset = 0;
 
-                for (uint32 iBlock = 0; iBlock < NumBlocks; iBlock++)
+                for (uint32_t iBlock = 0; iBlock < NumBlocks; iBlock++)
                 {
-                    const uint32 CompressedSize = CompressedBlocks[iBlock].CompressedSize;
-                    const uint32 UncompressedSize = CompressedBlocks[iBlock].UncompressedSize;
+                    const auto CompressedSize = CompressedBlocks[iBlock].CompressedSize;
+                    const auto UncompressedSize = CompressedBlocks[iBlock].UncompressedSize;
 
                     // Block is compressed
                     if (CompressedSize != UncompressedSize)
@@ -517,7 +517,7 @@ void CGameExporter::LoadResource(const SResourceInstance& rkResource, std::vecto
 
                         if (ZlibCompressed)
                         {
-                            uint32 TotalOut;
+                            uint32_t TotalOut;
                             CompressionUtil::DecompressZlib(CompressedData.data(), CompressedData.size(), rBuffer.data() + Offset, UncompressedSize, TotalOut);
                         }
                         else

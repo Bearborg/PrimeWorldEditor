@@ -13,25 +13,25 @@ std::unique_ptr<CSkin> CSkinLoader::LoadCSKR(IInputStream& rCSKR, CResourceEntry
     auto pSkin = std::make_unique<CSkin>(pEntry);
 
     // We don't support MP3/DKCR CSKR yet
-    if (rCSKR.PeekLong() == FOURCC('SKIN'))
+    if (rCSKR.PeekU32() == FOURCC('SKIN'))
         return pSkin;
 
-    const uint32_t NumVertexGroups = rCSKR.ReadULong();
+    const auto NumVertexGroups = rCSKR.ReadU32();
     pSkin->mVertGroups.resize(NumVertexGroups);
 
     for (size_t iGrp = 0; iGrp < NumVertexGroups; iGrp++)
     {
         CSkin::SVertGroup& rGroup = pSkin->mVertGroups[iGrp];
-        const uint32_t NumWeights = rCSKR.ReadULong();
+        const auto NumWeights = rCSKR.ReadU32();
         ASSERT(NumWeights <= 4);
 
         for (size_t iWgt = 0; iWgt < NumWeights; iWgt++)
         {
-            rGroup.Weights.Indices[iWgt] = static_cast<uint8_t>(rCSKR.ReadULong());
-            rGroup.Weights.Weights[iWgt] = rCSKR.ReadFloat();
+            rGroup.Weights.Indices[iWgt] = static_cast<uint8_t>(rCSKR.ReadU32());
+            rGroup.Weights.Weights[iWgt] = rCSKR.ReadF32();
         }
 
-        rGroup.NumVertices = rCSKR.ReadULong();
+        rGroup.NumVertices = rCSKR.ReadU32();
     }
 
     return pSkin;

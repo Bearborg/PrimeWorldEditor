@@ -8,7 +8,7 @@
 std::unique_ptr<CScan> CScanLoader::LoadScanMP1(IInputStream& SCAN, CResourceEntry* pEntry)
 {
     // Validate magic
-    const uint32 Magic = SCAN.ReadULong();
+    const auto Magic = SCAN.ReadU32();
 
     if (Magic != 0x0BADBEEF)
     {
@@ -33,7 +33,7 @@ std::unique_ptr<CScan> CScanLoader::LoadScanMP1(IInputStream& SCAN, CResourceEnt
 std::unique_ptr<CScan> CScanLoader::LoadScanMP2(IInputStream& SCAN, CResourceEntry* pEntry)
 {
     // Validate version
-    const uint32 Version = SCAN.ReadULong();
+    const auto Version = SCAN.ReadU32();
 
     if (Version != 2)
     {
@@ -61,7 +61,7 @@ std::unique_ptr<CScan> CScanLoader::LoadSCAN(IInputStream& SCAN, CResourceEntry 
     // MP1 SCAN format starts with a version number and then follows with a magic.
     // The demo can be 1, 2, or 3, while the final build is 5.
     // The MP2 SCAN format starts with a 'SCAN' magic.
-    const uint32 VersionCheck = SCAN.ReadULong();
+    const auto VersionCheck = SCAN.ReadU32();
 
     // Echoes+
     if (VersionCheck == FOURCC('SCAN'))
