@@ -82,7 +82,7 @@ public:
 
                 // Replace instance ID with 0xFFFFFFFF to force it to generate a new one.
                 Out.Seek(mGame <= EGame::Prime ? 0x5 : 0x6, SEEK_SET);
-                Out.WriteLong(0xFFFFFFFF);
+                Out.WriteU32(0xFFFFFFFF);
 
                 if (!SetFirstNodePos)
                 {

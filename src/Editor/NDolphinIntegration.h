@@ -64,15 +64,15 @@ struct SQuickplayParameters
         ASSERT(Stream.IsValid());
 
         // Magic/Version
-        Stream.WriteULong(kParmsMagic);
-        Stream.WriteULong(kParmsVersion);
+        Stream.WriteU32(kParmsMagic);
+        Stream.WriteU32(kParmsVersion);
 
         // Parameters
-        Stream.WriteULong(Features.ToInt32());
-        Stream.WriteULong(BootWorldAssetID);
-        Stream.WriteULong(BootAreaAssetID);
-        Stream.WriteULong(0);
-        Stream.WriteULongLong(BootAreaLayerFlags);
+        Stream.WriteU32(Features.ToInt32());
+        Stream.WriteU32(BootWorldAssetID);
+        Stream.WriteU32(BootAreaAssetID);
+        Stream.WriteU32(0);
+        Stream.WriteU64(BootAreaLayerFlags);
         SpawnTransform.Write(Stream);
 
         Stream.Close();

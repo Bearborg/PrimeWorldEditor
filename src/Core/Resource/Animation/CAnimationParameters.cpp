@@ -66,14 +66,14 @@ void CAnimationParameters::Write(IOutputStream& rSCLY)
         if (mCharacterID.IsValid())
         {
             mCharacterID.Write(rSCLY);
-            rSCLY.WriteULong(mCharIndex);
-            rSCLY.WriteULong(mAnimIndex);
+            rSCLY.WriteU32(mCharIndex);
+            rSCLY.WriteU32(mAnimIndex);
         }
         else
         {
             CAssetID::skInvalidID32.Write(rSCLY);
-            rSCLY.WriteULong(0);
-            rSCLY.WriteULong(mGame >= EGame::EchoesDemo ? 0 : 0xFFFFFFFF);
+            rSCLY.WriteU32(0);
+            rSCLY.WriteU32(mGame >= EGame::EchoesDemo ? 0 : 0xFFFFFFFF);
         }
     }
     else if (mGame <= EGame::Corruption)
@@ -81,20 +81,20 @@ void CAnimationParameters::Write(IOutputStream& rSCLY)
         if (mCharacterID.IsValid())
         {
             mCharacterID.Write(rSCLY);
-            rSCLY.WriteULong(mAnimIndex);
+            rSCLY.WriteU32(mAnimIndex);
         }
 
         else
         {
             CAssetID::skInvalidID64.Write(rSCLY);
-            rSCLY.WriteULong(0xFFFFFFFF);
+            rSCLY.WriteU32(0xFFFFFFFF);
         }
     }
     else
     {
         if (!mCharacterID.IsValid())
         {
-            rSCLY.WriteUByte(uint8_t{0x80});
+            rSCLY.WriteU8(uint8_t{0x80});
         }
         else
         {
@@ -104,16 +104,16 @@ void CAnimationParameters::Write(IOutputStream& rSCLY)
             if (mUnknown2 != 0 || mUnknown3 != 0)
                 Flag |= 0x40;
 
-            rSCLY.WriteUByte(Flag);
+            rSCLY.WriteU8(Flag);
             mCharacterID.Write(rSCLY);
 
             if ((Flag & 0x20) != 0)
-                rSCLY.WriteULong(mAnimIndex);
+                rSCLY.WriteU32(mAnimIndex);
 
             if ((Flag & 0x40) != 0)
             {
-                rSCLY.WriteULong(mUnknown2);
-                rSCLY.WriteULong(mUnknown3);
+                rSCLY.WriteU32(mUnknown2);
+                rSCLY.WriteU32(mUnknown3);
             }
         }
     }

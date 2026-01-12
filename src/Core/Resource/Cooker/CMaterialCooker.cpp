@@ -57,17 +57,17 @@ void CMaterialCooker::WriteMatSetPrime(IOutputStream& rOut)
     mTextureIDs.erase(std::unique(mTextureIDs.begin(), mTextureIDs.end()), mTextureIDs.end());
 
     // Write texture IDs
-    rOut.WriteULong(static_cast<uint32_t>(mTextureIDs.size()));
+    rOut.WriteU32(static_cast<uint32_t>(mTextureIDs.size()));
 
     for (const auto id : mTextureIDs)
-        rOut.WriteULong(id);
+        rOut.WriteU32(id);
 
     // Write material offset filler
-    rOut.WriteULong(static_cast<uint32_t>(NumMats));
+    rOut.WriteU32(static_cast<uint32_t>(NumMats));
     const uint32_t MatOffsetsStart = rOut.Tell();
 
     for (size_t iMat = 0; iMat < NumMats; iMat++)
-        rOut.WriteULong(0);
+        rOut.WriteU32(0);
 
     // Write materials
     const uint32_t MatsStart = rOut.Tell();
@@ -85,7 +85,7 @@ void CMaterialCooker::WriteMatSetPrime(IOutputStream& rOut)
     rOut.Seek(MatOffsetsStart, SEEK_SET);
 
     for (size_t iMat = 0; iMat < NumMats; iMat++)
-        rOut.WriteULong(MatEndOffsets[iMat]);
+        rOut.WriteU32(MatEndOffsets[iMat]);
 
     // Done!
     rOut.Seek(MatsEnd, SEEK_SET);
@@ -170,12 +170,12 @@ void CMaterialCooker::WriteMaterialPrime(IOutputStream& rOut)
 
     Flags |= (HasKonst ? 0x8 : 0x0) | (mpMat->Options() & ~0x8) | (TexFlags << 16);
 
-    rOut.WriteULong(Flags);
+    rOut.WriteU32(Flags);
 
     // Texture indices
-    rOut.WriteULong(static_cast<uint32_t>(TexIndices.size()));
+    rOut.WriteU32(static_cast<uint32_t>(TexIndices.size()));
     for (const auto index : TexIndices)
-        rOut.WriteULong(index);
+        rOut.WriteU32(index);
 
     // Vertex description
     uint32_t VtxFlags = ConvertFromVertexDescription(mpMat->VtxDesc());
@@ -183,24 +183,24 @@ void CMaterialCooker::WriteMaterialPrime(IOutputStream& rOut)
     if (mVersion < EGame::Echoes)
         VtxFlags &= 0x00FFFFFF;
 
-    rOut.WriteULong(VtxFlags);
+    rOut.WriteU32(VtxFlags);
 
     // Echoes unknowns
     if (mVersion == EGame::Echoes)
     {
-        rOut.WriteULong(mpMat->EchoesUnknownA());
-        rOut.WriteULong(mpMat->EchoesUnknownB());
+        rOut.WriteU32(mpMat->EchoesUnknownA());
+        rOut.WriteU32(mpMat->EchoesUnknownB());
     }
 
     // Group index
-    rOut.WriteULong(static_cast<uint32_t>(GroupIndex));
+    rOut.WriteU32(static_cast<uint32_t>(GroupIndex));
 
     // Konst
     if (HasKonst)
     {
-        rOut.WriteULong(NumKonst);
+        rOut.WriteU32(NumKonst);
         for (size_t iKonst = 0; iKonst < NumKonst; iKonst++)
-            rOut.WriteULong(mpMat->Konst(iKonst).ToRGBA());
+            rOut.WriteU32(mpMat->Konst(iKonst).ToRGBA());
     }
 
     // Blend Mode
@@ -209,16 +209,16 @@ void CMaterialCooker::WriteMaterialPrime(IOutputStream& rOut)
     auto BlendDstFac = static_cast<uint16>(mpMat->BlendDstFac());
     if (BlendSrcFac >= 0x300) BlendSrcFac -= 0x2FE;
     if (BlendDstFac >= 0x300) BlendDstFac -= 0x2FE;
-    rOut.WriteUShort(BlendDstFac);
-    rOut.WriteUShort(BlendSrcFac);
+    rOut.WriteU16(BlendDstFac);
+    rOut.WriteU16(BlendSrcFac);
 
     // Color Channels
-    rOut.WriteLong(1);
-    rOut.WriteLong(0x3000 | (mpMat->IsLightingEnabled() ? 1 : 0));
+    rOut.WriteU32(1);
+    rOut.WriteU32(0x3000 | (mpMat->IsLightingEnabled() ? 1 : 0));
 
     // TEV
     const uint32_t NumPasses = mpMat->PassCount();
-    rOut.WriteULong(NumPasses);
+    rOut.WriteU32(NumPasses);
 
     for (uint32_t iPass = 0; iPass < NumPasses; iPass++)
     {
@@ -236,14 +236,14 @@ void CMaterialCooker::WriteMaterialPrime(IOutputStream& rOut)
         const uint32_t ColorOpFlags = 0x100 | (pPass->ColorOutput() << 9);
         const uint32_t AlphaOpFlags = 0x100 | (pPass->AlphaOutput() << 9);
 
-        rOut.WriteULong(ColorInputFlags);
-        rOut.WriteULong(AlphaInputFlags);
-        rOut.WriteULong(ColorOpFlags);
-        rOut.WriteULong(AlphaOpFlags);
-        rOut.WriteUByte(0); // Padding
-        rOut.WriteUByte(static_cast<uint8_t>(pPass->KAlphaSel()));
-        rOut.WriteUByte(static_cast<uint8_t>(pPass->KColorSel()));
-        rOut.WriteUByte(static_cast<uint8_t>(pPass->RasSel()));
+        rOut.WriteU32(ColorInputFlags);
+        rOut.WriteU32(AlphaInputFlags);
+        rOut.WriteU32(ColorOpFlags);
+        rOut.WriteU32(AlphaOpFlags);
+        rOut.WriteU8(0); // Padding
+        rOut.WriteU8(static_cast<uint8_t>(pPass->KAlphaSel()));
+        rOut.WriteU8(static_cast<uint8_t>(pPass->KColorSel()));
+        rOut.WriteU8(static_cast<uint8_t>(pPass->RasSel()));
     }
 
     // TEV Tex/UV input selection
@@ -251,23 +251,23 @@ void CMaterialCooker::WriteMaterialPrime(IOutputStream& rOut)
 
     for (size_t iPass = 0; iPass < NumPasses; iPass++)
     {
-        rOut.WriteUShort(0); // Padding
+        rOut.WriteU16(0); // Padding
 
         if (mpMat->Pass(iPass)->Texture() != nullptr)
         {
-            rOut.WriteUByte(static_cast<uint8_t>(CurTexIdx));
-            rOut.WriteUByte(static_cast<uint8_t>(CurTexIdx));
+            rOut.WriteU8(static_cast<uint8_t>(CurTexIdx));
+            rOut.WriteU8(static_cast<uint8_t>(CurTexIdx));
             CurTexIdx++;
         }
         else
         {
-            rOut.WriteUShort(static_cast<uint16_t>(0xFFFF));
+            rOut.WriteU16(static_cast<uint16_t>(0xFFFF));
         }
     }
 
     // TexGen
     const uint32_t NumTexCoords = CurTexIdx; // TexIdx is currently equal to the tex coord count
-    rOut.WriteULong(NumTexCoords);
+    rOut.WriteU32(NumTexCoords);
     uint32_t CurTexMtx = 0;
 
     for (size_t iPass = 0; iPass < NumPasses; iPass++)
@@ -307,15 +307,15 @@ void CMaterialCooker::WriteMaterialPrime(IOutputStream& rOut)
         }
 
         const uint32_t TexGenFlags = (CoordSource << 4) | (TexMtxIdx << 9) | (Normalize << 14) | (PostMtxIdx << 15);
-        rOut.WriteULong(TexGenFlags);
+        rOut.WriteU32(TexGenFlags);
     }
 
     // Animations
     const uint32_t AnimSizeOffset = rOut.Tell();
     const uint32_t NumAnims = CurTexMtx; // CurTexMtx is currently equal to the anim count
-    rOut.WriteULong(0);         // Anim size filler
+    rOut.WriteU32(0);         // Anim size filler
     const uint32_t AnimsStart = rOut.Tell();
-    rOut.WriteULong(NumAnims);
+    rOut.WriteU32(NumAnims);
 
     for (uint32_t iPass = 0; iPass < NumPasses; iPass++)
     {
@@ -324,17 +324,17 @@ void CMaterialCooker::WriteMaterialPrime(IOutputStream& rOut)
         if (AnimMode == EUVAnimMode::NoUVAnim)
             continue;
 
-        rOut.WriteLong(static_cast<int>(AnimMode));
+        rOut.WriteS32(static_cast<int>(AnimMode));
 
         if ((AnimMode >= EUVAnimMode::UVScroll) && (AnimMode != EUVAnimMode::ModelMatrix))
         {
-            rOut.WriteFloat(pPass->AnimParam(0));
-            rOut.WriteFloat(pPass->AnimParam(1));
+            rOut.WriteF32(pPass->AnimParam(0));
+            rOut.WriteF32(pPass->AnimParam(1));
 
             if ((AnimMode == EUVAnimMode::UVScroll) || (AnimMode == EUVAnimMode::HFilmstrip) || (AnimMode == EUVAnimMode::VFilmstrip))
             {
-                rOut.WriteFloat(pPass->AnimParam(2));
-                rOut.WriteFloat(pPass->AnimParam(3));
+                rOut.WriteF32(pPass->AnimParam(2));
+                rOut.WriteF32(pPass->AnimParam(3));
             }
         }
     }
@@ -342,7 +342,7 @@ void CMaterialCooker::WriteMaterialPrime(IOutputStream& rOut)
     const uint32_t AnimsEnd = rOut.Tell();
     const uint32_t AnimsSize = AnimsEnd - AnimsStart;
     rOut.Seek(AnimSizeOffset, SEEK_SET);
-    rOut.WriteULong(AnimsSize);
+    rOut.WriteU32(AnimsSize);
     rOut.Seek(AnimsEnd, SEEK_SET);
 
     // Done!

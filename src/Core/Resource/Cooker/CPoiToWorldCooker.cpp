@@ -8,7 +8,7 @@ bool CPoiToWorldCooker::CookEGMC(const CPoiToWorld* pPoiToWorld, IOutputStream& 
     // Create mappings list
     struct SPoiMapping
     {
-        uint32 MeshID;
+        uint32_t MeshID;
         CInstanceID PoiID;
     };
     std::vector<SPoiMapping> Mappings;
@@ -24,12 +24,12 @@ bool CPoiToWorldCooker::CookEGMC(const CPoiToWorld* pPoiToWorld, IOutputStream& 
     }
 
     // Write EGMC
-    rOut.WriteULong(static_cast<uint32>(Mappings.size()));
+    rOut.WriteU32(static_cast<uint32_t>(Mappings.size()));
 
     for (const auto& mapping : Mappings)
     {
-        rOut.WriteULong(mapping.MeshID);
-        rOut.WriteULong(mapping.PoiID.Value());
+        rOut.WriteU32(mapping.MeshID);
+        rOut.WriteU32(mapping.PoiID.Value());
     }
 
     return true;

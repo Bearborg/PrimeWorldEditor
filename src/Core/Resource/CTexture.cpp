@@ -182,25 +182,26 @@ float CTexture::ReadTexelAlpha(const CVector2f& rkTexCoord)
 
 bool CTexture::WriteDDS(IOutputStream& rOut)
 {
-    if (!rOut.IsValid()) return false;
+    if (!rOut.IsValid())
+        return false;
 
     CopyGLBuffer();
 
-    rOut.WriteFourCC(FOURCC('DDS ')); // "DDS " fourCC
-    rOut.WriteULong(0x7C);            // dwSize
-    rOut.WriteULong(0x21007);         // dwFlags
-    rOut.WriteULong(mHeight);         // dwHeight
-    rOut.WriteULong(mWidth);          // dwWidth
-    rOut.WriteULong(mLinearSize);     // dwPitchOrLinearSize
-    rOut.WriteULong(0);               // dwDepth
-    rOut.WriteULong(mNumMipMaps - 1); // dwMipMapCount
+    rOut.WriteFourCC(CFourCC("DDS ")); // "DDS " fourCC
+    rOut.WriteU32(0x7C);               // dwSize
+    rOut.WriteU32(0x21007);            // dwFlags
+    rOut.WriteU32(mHeight);            // dwHeight
+    rOut.WriteU32(mWidth);             // dwWidth
+    rOut.WriteU32(mLinearSize);        // dwPitchOrLinearSize
+    rOut.WriteU32(0);                  // dwDepth
+    rOut.WriteU32(mNumMipMaps - 1);    // dwMipMapCount
 
-    for (uint32 iRes = 0; iRes < 11; iRes++)
-        rOut.WriteLong(0);           // dwReserved1[11]
+    for (uint32_t iRes = 0; iRes < 11; iRes++)
+        rOut.WriteU32(0);              // dwReserved1[11]
 
     // DDS_PIXELFORMAT
-    rOut.WriteLong(32); // DDS_PIXELFORMAT.dwSize
-    uint32 PFFlags = 0, PFBpp = 0, PFRBitMask = 0, PFGBitMask = 0, PFBBitMask = 0, PFABitMask = 0;
+    rOut.WriteU32(32); // DDS_PIXELFORMAT.dwSize
+    uint32_t PFFlags = 0, PFBpp = 0, PFRBitMask = 0, PFGBitMask = 0, PFBBitMask = 0, PFABitMask = 0;
 
     switch (mTexelFormat)
     {
@@ -245,19 +246,19 @@ bool CTexture::WriteDDS(IOutputStream& rOut)
         break;
     }
 
-    rOut.WriteULong(PFFlags);    // DDS_PIXELFORMAT.dwFlags
-    (mTexelFormat == ETexelFormat::DXT1) ? rOut.WriteFourCC(FOURCC('DXT1')) : rOut.WriteLong(0); // DDS_PIXELFORMAT.dwFourCC
-    rOut.WriteULong(PFBpp);      // DDS_PIXELFORMAT.dwRGBBitCount
-    rOut.WriteULong(PFRBitMask); // DDS_PIXELFORMAT.dwRBitMask
-    rOut.WriteULong(PFGBitMask); // DDS_PIXELFORMAT.dwGBitMask
-    rOut.WriteULong(PFBBitMask); // DDS_PIXELFORMAT.dwBBitMask
-    rOut.WriteULong(PFABitMask); // DDS_PIXELFORMAT.dwABitMask
+    rOut.WriteU32(PFFlags);    // DDS_PIXELFORMAT.dwFlags
+    (mTexelFormat == ETexelFormat::DXT1) ? rOut.WriteFourCC(CFourCC("DXT1")) : rOut.WriteS32(0); // DDS_PIXELFORMAT.dwFourCC
+    rOut.WriteU32(PFBpp);      // DDS_PIXELFORMAT.dwRGBBitCount
+    rOut.WriteU32(PFRBitMask); // DDS_PIXELFORMAT.dwRBitMask
+    rOut.WriteU32(PFGBitMask); // DDS_PIXELFORMAT.dwGBitMask
+    rOut.WriteU32(PFBBitMask); // DDS_PIXELFORMAT.dwBBitMask
+    rOut.WriteU32(PFABitMask); // DDS_PIXELFORMAT.dwABitMask
 
-    rOut.WriteLong(0x401000); // dwCaps
-    rOut.WriteLong(0);        // dwCaps2
-    rOut.WriteLong(0);        // dwCaps3
-    rOut.WriteLong(0);        // dwCaps4
-    rOut.WriteLong(0);        // dwReserved2
+    rOut.WriteU32(0x401000); // dwCaps
+    rOut.WriteU32(0);        // dwCaps2
+    rOut.WriteU32(0);        // dwCaps3
+    rOut.WriteU32(0);        // dwCaps4
+    rOut.WriteU32(0);        // dwReserved2
 
     rOut.WriteBytes(mpImgDataBuffer.get(), mImgDataSize); // Image data
     return true;
@@ -313,7 +314,8 @@ uint32 CTexture::CalcTotalSize() const
 
 void CTexture::CopyGLBuffer()
 {
-    if (!mGLBufferExists) return;
+    if (!mGLBufferExists)
+        return;
 
     // Clear existing buffer
     if (mBufferExists)

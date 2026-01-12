@@ -51,19 +51,19 @@ public:
     {
         for (size_t i = 0; i < kNumSections; ++i)
         {
-            rOutput.WriteULong(Sections[i].Offset);
+            rOutput.WriteU32(Sections[i].Offset);
         }
         for (size_t i = 0; i < kNumSections; ++i)
         {
-            rOutput.WriteULong(Sections[i].BaseAddress);
+            rOutput.WriteU32(Sections[i].BaseAddress);
         }
         for (size_t i = 0; i < kNumSections; ++i)
         {
-            rOutput.WriteULong(Sections[i].Size);
+            rOutput.WriteU32(Sections[i].Size);
         }
-        rOutput.WriteULong(BssAddress);
-        rOutput.WriteULong(BssSize);
-        rOutput.WriteULong(EntryPoint);
+        rOutput.WriteU32(BssAddress);
+        rOutput.WriteU32(BssSize);
+        rOutput.WriteU32(EntryPoint);
     }
 
     bool AddTextSection(uint32_t address, uint32_t fileOffset, uint32_t size)

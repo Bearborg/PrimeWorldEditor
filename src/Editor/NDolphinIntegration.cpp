@@ -216,7 +216,7 @@ EQuickplayLaunchResult LaunchQuickplay(QWidget* pParentWidget,
     CMemoryOutStream Mem(DolData.data(), DolData.size(), std::endian::big);
     header.Write(Mem);
     Mem.GoTo(header.OffsetForAddress(callToHook));
-    Mem.WriteLong(AssembleBranchInstruction(callToHook, branchTarget));
+    Mem.WriteU32(AssembleBranchInstruction(callToHook, branchTarget));
 
     if (!FileUtil::SaveBufferToFile(DolPath, DolData))
     {

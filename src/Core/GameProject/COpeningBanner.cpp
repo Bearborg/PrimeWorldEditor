@@ -60,7 +60,7 @@ void COpeningBanner::SetEnglishGameName(const TString& rkName)
     }
 
     for (uint32_t Pad = 0; Pad < PadCount; Pad++)
-        Banner.WriteByte(0);
+        Banner.WriteU8(0);
 }
 
 void COpeningBanner::Save()

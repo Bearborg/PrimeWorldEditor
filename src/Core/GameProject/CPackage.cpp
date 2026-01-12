@@ -108,23 +108,23 @@ void CPackage::Cook(IProgressNotifier *pProgress)
     }
 
     const EGame Game = mpProject->Game();
-    const uint32 Alignment = (Game <= EGame::CorruptionProto ? 0x20 : 0x40);
-    const uint32 AlignmentMinusOne = Alignment - 1;
+    const uint32_t Alignment = (Game <= EGame::CorruptionProto ? 0x20 : 0x40);
+    const uint32_t AlignmentMinusOne = Alignment - 1;
 
-    uint32 TocOffset = 0;
-    uint32 NamesSize = 0;
-    uint32 ResTableOffset = 0;
-    uint32 ResTableSize = 0;
-    uint32 ResDataSize = 0;
+    uint32_t TocOffset = 0;
+    uint32_t NamesSize = 0;
+    uint32_t ResTableOffset = 0;
+    uint32_t ResTableSize = 0;
+    uint32_t ResDataSize = 0;
 
     // Write MP1 pak header
     if (Game <= EGame::CorruptionProto)
     {
-        Pak.WriteLong(0x00030005); // Major/Minor Version
-        Pak.WriteLong(0); // Unknown
+        Pak.WriteU32(0x00030005); // Major/Minor Version
+        Pak.WriteU32(0); // Unknown
 
         // Named Resources
-        Pak.WriteLong(mResources.size());
+        Pak.WriteU32(mResources.size());
 
         for (const auto& res : mResources)
         {
@@ -136,18 +136,18 @@ void CPackage::Cook(IProgressNotifier *pProgress)
     else // Write MP3 pak header
     {
         // Header
-        Pak.WriteLong(2); // Version
-        Pak.WriteLong(0x40); // Header size
+        Pak.WriteU32(2); // Version
+        Pak.WriteU32(0x40); // Header size
         Pak.WriteToBoundary(0x40, 0); // We don't care about the MD5 hash; the game doesn't use it
 
         // PAK table of contents; write later
         TocOffset = Pak.Tell();
-        Pak.WriteLong(0);
+        Pak.WriteU32(0);
         Pak.WriteToBoundary(0x40, 0);
 
         // Named Resources
-        const uint32 NamesStart = Pak.Tell();
-        Pak.WriteULong(static_cast<uint32>(mResources.size()));
+        const auto NamesStart = Pak.Tell();
+        Pak.WriteU32(static_cast<uint32_t>(mResources.size()));
 
         for (const auto& res : mResources)
         {
@@ -162,14 +162,14 @@ void CPackage::Cook(IProgressNotifier *pProgress)
 
     // Fill in resource table with junk, write later
     ResTableOffset = Pak.Tell();
-    Pak.WriteLong(AssetList.size());
+    Pak.WriteU32(AssetList.size());
     const CAssetID Dummy = CAssetID::InvalidID(Game);
 
     for (size_t iRes = 0; iRes < AssetList.size(); iRes++)
     {
-        Pak.WriteLongLong(0);
+        Pak.WriteU64(0);
         Dummy.Write(Pak);
-        Pak.WriteLongLong(0);
+        Pak.WriteU64(0);
     }
 
     Pak.WriteToBoundary(Alignment, 0);
@@ -179,18 +179,18 @@ void CPackage::Cook(IProgressNotifier *pProgress)
     struct SResourceTableInfo
     {
         CResourceEntry *pEntry;
-        uint32 Offset;
-        uint32 Size;
+        uint32_t Offset;
+        uint32_t Size;
         bool Compressed;
     };
     std::vector<SResourceTableInfo> ResourceTableData(AssetList.size());
-    uint32 ResIdx = 0;
-    const uint32 ResDataOffset = Pak.Tell();
+    uint32_t ResIdx = 0;
+    const uint32_t ResDataOffset = Pak.Tell();
 
     for (auto Iter = AssetList.begin(); Iter != AssetList.end() && !pProgress->ShouldCancel(); Iter++, ResIdx++)
     {
         // Initialize entry, recook assets if needed
-        const uint32 AssetOffset = Pak.Tell();
+        const uint32_t AssetOffset = Pak.Tell();
         const CAssetID ID = *Iter;
         CResourceEntry *pEntry = gpResourceStore->FindEntry(ID);
         ASSERT(pEntry != nullptr);
@@ -215,7 +215,7 @@ void CPackage::Cook(IProgressNotifier *pProgress)
         // Load resource data
         CFileInStream CookedAsset(pEntry->CookedAssetPath(), std::endian::big);
         ASSERT(CookedAsset.IsValid());
-        const uint32 ResourceSize = CookedAsset.Size();
+        const uint32_t ResourceSize = CookedAsset.Size();
 
         std::vector<uint8> ResourceData(ResourceSize);
         CookedAsset.ReadBytes(ResourceData.data(), ResourceData.size());
@@ -223,7 +223,7 @@ void CPackage::Cook(IProgressNotifier *pProgress)
         // Check if this asset should be compressed; there are a few resource types that are
         // always compressed, and some types that are compressed if they're over a certain size
         const EResourceType Type = pEntry->ResourceType();
-        const uint32 CompressThreshold = (Game <= EGame::CorruptionProto ? 0x400 : 0x80);
+        const uint32_t CompressThreshold = (Game <= EGame::CorruptionProto ? 0x400 : 0x80);
 
         bool ShouldAlwaysCompress = (Type == EResourceType::Texture || Type == EResourceType::Model ||
                                      Type == EResourceType::Skin || Type == EResourceType::AnimSet ||
@@ -255,7 +255,7 @@ void CPackage::Cook(IProgressNotifier *pProgress)
         }
         else
         {
-            uint32 CompressedSize;
+            uint32_t CompressedSize;
             std::vector<uint8> CompressedData(ResourceData.size() * 2);
             bool Success = false;
 
@@ -267,9 +267,9 @@ void CPackage::Cook(IProgressNotifier *pProgress)
             // Make sure that the compressed data is actually smaller, accounting for padding + uncompressed size value
             if (Success)
             {
-                const uint32 CompressionHeaderSize = (Game <= EGame::CorruptionProto ? 4 : 0x10);
-                const uint32 PaddedUncompressedSize = (ResourceSize + AlignmentMinusOne) & ~AlignmentMinusOne;
-                const uint32 PaddedCompressedSize = (CompressedSize + CompressionHeaderSize + AlignmentMinusOne) & ~AlignmentMinusOne;
+                const uint32_t CompressionHeaderSize = (Game <= EGame::CorruptionProto ? 4 : 0x10);
+                const uint32_t PaddedUncompressedSize = (ResourceSize + AlignmentMinusOne) & ~AlignmentMinusOne;
+                const uint32_t PaddedCompressedSize = (CompressedSize + CompressionHeaderSize + AlignmentMinusOne) & ~AlignmentMinusOne;
                 Success = (PaddedCompressedSize < PaddedUncompressedSize);
             }
 
@@ -279,7 +279,7 @@ void CPackage::Cook(IProgressNotifier *pProgress)
                 // Write MP1/2 compressed asset
                 if (Game <= EGame::CorruptionProto)
                 {
-                    Pak.WriteULong(ResourceSize);
+                    Pak.WriteU32(ResourceSize);
                 }
                 // Write MP3/DKCR compressed asset
                 else
@@ -288,10 +288,10 @@ void CPackage::Cook(IProgressNotifier *pProgress)
                     // which can store each separate component of the file (header, palette, image data) in separate blocks. However, some textures
                     // are stored in one block, and I've had no luck figuring out why. The game doesn't generally seem to care whether textures use
                     // multiple blocks or not, so for the sake of simplicity we compress everything to one block.
-                    Pak.WriteFourCC( FOURCC('CMPD') );
-                    Pak.WriteLong(1);
-                    Pak.WriteULong(0xA0000000 | CompressedSize);
-                    Pak.WriteULong(ResourceSize);
+                    Pak.WriteFourCC(CFourCC("CMPD"));
+                    Pak.WriteU32(1);
+                    Pak.WriteU32(0xA0000000 | CompressedSize);
+                    Pak.WriteU32(ResourceSize);
                 }
                 Pak.WriteBytes(CompressedData.data(), CompressedSize);
             }
@@ -321,13 +321,13 @@ void CPackage::Cook(IProgressNotifier *pProgress)
         if (Game >= EGame::Corruption)
         {
             Pak.Seek(TocOffset, SEEK_SET);
-            Pak.WriteLong(3); // Always 3 pak sections
-            Pak.WriteFourCC( FOURCC('STRG') );
-            Pak.WriteULong(NamesSize);
-            Pak.WriteFourCC( FOURCC('RSHD') );
-            Pak.WriteULong(ResTableSize);
-            Pak.WriteFourCC( FOURCC('DATA') );
-            Pak.WriteULong(ResDataSize);
+            Pak.WriteU32(3); // Always 3 pak sections
+            Pak.WriteFourCC(CFourCC("STRG"));
+            Pak.WriteU32(NamesSize);
+            Pak.WriteFourCC(CFourCC("RSHD"));
+            Pak.WriteU32(ResTableSize);
+            Pak.WriteFourCC(CFourCC("DATA"));
+            Pak.WriteU32(ResDataSize);
         }
 
         // Write resource table for real
@@ -338,11 +338,11 @@ void CPackage::Cook(IProgressNotifier *pProgress)
             const SResourceTableInfo& rkInfo = ResourceTableData[iRes];
             CResourceEntry *pEntry = rkInfo.pEntry;
 
-            Pak.WriteLong(rkInfo.Compressed ? 1 : 0);
+            Pak.WriteU32(rkInfo.Compressed ? 1 : 0);
             pEntry->CookedExtension().Write(Pak);
             pEntry->ID().Write(Pak);
-            Pak.WriteULong(rkInfo.Size);
-            Pak.WriteULong(rkInfo.Offset);
+            Pak.WriteU32(rkInfo.Size);
+            Pak.WriteU32(rkInfo.Offset);
         }
 
         // Clear recook flag

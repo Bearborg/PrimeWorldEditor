@@ -13,8 +13,8 @@ bool CWorldCooker::CookMLVL(CWorld *pWorld, IOutputStream& rMLVL)
     const EGame Game = pWorld->Game();
 
     // MLVL Header
-    rMLVL.WriteULong(0xDEAFBABE);
-    rMLVL.WriteULong(GetMLVLVersion(pWorld->Game()));
+    rMLVL.WriteU32(0xDEAFBABE);
+    rMLVL.WriteU32(GetMLVLVersion(pWorld->Game()));
 
     const CAssetID WorldNameID = pWorld->mpWorldName != nullptr ? pWorld->mpWorldName->ID() : CAssetID::InvalidID(Game);
     const CAssetID DarkWorldNameID = pWorld->mpDarkWorldName != nullptr ? pWorld->mpDarkWorldName->ID() : CAssetID::InvalidID(Game);
@@ -29,7 +29,7 @@ bool CWorldCooker::CookMLVL(CWorld *pWorld, IOutputStream& rMLVL)
     }
     if (Game >= EGame::EchoesDemo && Game <= EGame::Corruption)
     {
-        rMLVL.WriteLong(pWorld->mTempleKeyWorldIndex);
+        rMLVL.WriteU32(pWorld->mTempleKeyWorldIndex);
     }
     if (Game == EGame::DKCReturns)
     {
@@ -39,10 +39,10 @@ bool CWorldCooker::CookMLVL(CWorld *pWorld, IOutputStream& rMLVL)
         if (rkData.HasTimeAttack)
         {
             rMLVL.WriteString(rkData.ActNumber);
-            rMLVL.WriteFloat(rkData.BronzeTime);
-            rMLVL.WriteFloat(rkData.SilverTime);
-            rMLVL.WriteFloat(rkData.GoldTime);
-            rMLVL.WriteFloat(rkData.ShinyGoldTime);
+            rMLVL.WriteF32(rkData.BronzeTime);
+            rMLVL.WriteF32(rkData.SilverTime);
+            rMLVL.WriteF32(rkData.GoldTime);
+            rMLVL.WriteF32(rkData.ShinyGoldTime);
         }
     }
 
@@ -52,21 +52,21 @@ bool CWorldCooker::CookMLVL(CWorld *pWorld, IOutputStream& rMLVL)
     // Memory Relays
     if (Game == EGame::Prime)
     {
-        rMLVL.WriteULong(static_cast<uint32_t>(pWorld->mMemoryRelays.size()));
+        rMLVL.WriteU32(static_cast<uint32_t>(pWorld->mMemoryRelays.size()));
 
         for (const auto& relay : pWorld->mMemoryRelays)
         {
-            rMLVL.WriteULong(relay.InstanceID);
-            rMLVL.WriteULong(relay.TargetID);
-            rMLVL.WriteUShort(relay.Message);
+            rMLVL.WriteU32(relay.InstanceID);
+            rMLVL.WriteU32(relay.TargetID);
+            rMLVL.WriteU16(relay.Message);
             rMLVL.WriteBool(relay.Active);
         }
     }
 
     // Areas
-    rMLVL.WriteULong(static_cast<uint32_t>(pWorld->mAreas.size()));
+    rMLVL.WriteU32(static_cast<uint32_t>(pWorld->mAreas.size()));
     if (Game <= EGame::Prime)
-        rMLVL.WriteULong(1); // Unknown
+        rMLVL.WriteU32(1); // Unknown
     std::set<CAssetID> AudioGroups;
 
     for (auto& rArea : pWorld->mAreas)
@@ -85,10 +85,10 @@ bool CWorldCooker::CookMLVL(CWorld *pWorld, IOutputStream& rMLVL)
         // Attached Areas
         if (Game <= EGame::Corruption)
         {
-            rMLVL.WriteULong(static_cast<uint32_t>(rArea.AttachedAreaIDs.size()));
+            rMLVL.WriteU32(static_cast<uint32_t>(rArea.AttachedAreaIDs.size()));
 
             for (const auto id : rArea.AttachedAreaIDs)
-                rMLVL.WriteUShort(id);
+                rMLVL.WriteU16(id);
         }
 
         // Dependencies
@@ -99,8 +99,8 @@ bool CWorldCooker::CookMLVL(CWorld *pWorld, IOutputStream& rMLVL)
             CAreaDependencyListBuilder Builder(pAreaEntry);
             Builder.BuildDependencyList(Dependencies, LayerDependsOffsets, &AudioGroups);
 
-            rMLVL.WriteULong(0);
-            rMLVL.WriteULong(static_cast<uint32_t>(Dependencies.size()));
+            rMLVL.WriteU32(0);
+            rMLVL.WriteU32(static_cast<uint32_t>(Dependencies.size()));
 
             for (const auto& ID : Dependencies)
             {
@@ -109,28 +109,28 @@ bool CWorldCooker::CookMLVL(CWorld *pWorld, IOutputStream& rMLVL)
                 pEntry->CookedExtension().Write(rMLVL);
             }
 
-            rMLVL.WriteLong(static_cast<uint32_t>(LayerDependsOffsets.size()));
+            rMLVL.WriteU32(static_cast<uint32_t>(LayerDependsOffsets.size()));
 
             for (const auto offset : LayerDependsOffsets)
-                rMLVL.WriteULong(offset);
+                rMLVL.WriteU32(offset);
         }
 
         // Docks
         if (Game <= EGame::Corruption)
         {
-            rMLVL.WriteULong(static_cast<uint32_t>(rArea.Docks.size()));
+            rMLVL.WriteU32(static_cast<uint32_t>(rArea.Docks.size()));
 
             for (const auto& dock : rArea.Docks)
             {
-                rMLVL.WriteULong(static_cast<uint32_t>(dock.ConnectingDocks.size()));
+                rMLVL.WriteU32(static_cast<uint32_t>(dock.ConnectingDocks.size()));
 
                 for (const auto& connectingDock : dock.ConnectingDocks)
                 {
-                    rMLVL.WriteULong(connectingDock.AreaIndex);
-                    rMLVL.WriteULong(connectingDock.DockIndex);
+                    rMLVL.WriteU32(connectingDock.AreaIndex);
+                    rMLVL.WriteU32(connectingDock.DockIndex);
                 }
 
-                rMLVL.WriteULong(static_cast<uint32_t>(dock.DockCoordinates.size()));
+                rMLVL.WriteU32(static_cast<uint32_t>(dock.DockCoordinates.size()));
 
                 for (const auto& coordinate : dock.DockCoordinates)
                     coordinate.Write(rMLVL);
@@ -145,20 +145,20 @@ bool CWorldCooker::CookMLVL(CWorld *pWorld, IOutputStream& rMLVL)
             const auto *pAreaDeps = static_cast<CAreaDependencyTree*>(pAreaEntry->Dependencies());
             pAreaDeps->GetModuleDependencies(Game, ModuleNames, ModuleLayerOffsets);
 
-            rMLVL.WriteULong(static_cast<uint32_t>(ModuleNames.size()));
+            rMLVL.WriteU32(static_cast<uint32_t>(ModuleNames.size()));
 
             for (const auto& name : ModuleNames)
                 rMLVL.WriteString(name);
 
-            rMLVL.WriteULong(static_cast<uint32_t>(ModuleLayerOffsets.size()));
+            rMLVL.WriteU32(static_cast<uint32_t>(ModuleLayerOffsets.size()));
 
             for (const auto offset : ModuleLayerOffsets)
-                rMLVL.WriteULong(offset);
+                rMLVL.WriteU32(offset);
         }
 
         // Unknown
         if (Game == EGame::DKCReturns)
-            rMLVL.WriteULong(0);
+            rMLVL.WriteU32(0);
 
         // Internal Name
         if (Game >= EGame::EchoesDemo)
@@ -172,8 +172,8 @@ bool CWorldCooker::CookMLVL(CWorld *pWorld, IOutputStream& rMLVL)
         MapWorldID.Write(rMLVL);
 
         // Script Layer - unused in all retail builds but this will need to be supported eventually to properly support the MP1 demo
-        rMLVL.WriteUByte(0);
-        rMLVL.WriteULong(0);
+        rMLVL.WriteU8(0);
+        rMLVL.WriteU32(0);
     }
 
     // Audio Groups
@@ -194,19 +194,19 @@ bool CWorldCooker::CookMLVL(CWorld *pWorld, IOutputStream& rMLVL)
         });
 
         // Write sorted audio group list to file
-        rMLVL.WriteULong(static_cast<uint32_t>(SortedAudioGroups.size()));
+        rMLVL.WriteU32(static_cast<uint32_t>(SortedAudioGroups.size()));
 
         for (const auto* pGroup : SortedAudioGroups)
         {
-            rMLVL.WriteULong(pGroup->GroupID());
+            rMLVL.WriteU32(pGroup->GroupID());
             pGroup->ID().Write(rMLVL);
         }
 
-        rMLVL.WriteUByte(0);
+        rMLVL.WriteU8(0);
     }
 
     // Layers
-    rMLVL.WriteLong(pWorld->mAreas.size());
+    rMLVL.WriteU32(pWorld->mAreas.size());
     std::vector<TString> LayerNames;
     std::vector<CSavedStateID> LayerStateIDs;
     std::vector<uint32_t> LayerNameOffsets;
@@ -215,7 +215,7 @@ bool CWorldCooker::CookMLVL(CWorld *pWorld, IOutputStream& rMLVL)
     for (const auto& rArea : pWorld->mAreas)
     {
         LayerNameOffsets.push_back(LayerNames.size());
-        rMLVL.WriteULong(static_cast<uint32_t>(rArea.Layers.size()));
+        rMLVL.WriteU32(static_cast<uint32_t>(rArea.Layers.size()));
 
         uint64_t LayerActiveFlags = UINT64_MAX;
 
@@ -229,11 +229,11 @@ bool CWorldCooker::CookMLVL(CWorld *pWorld, IOutputStream& rMLVL)
             LayerStateIDs.push_back(rLayer.LayerStateID);
         }
 
-        rMLVL.WriteULongLong(LayerActiveFlags);
+        rMLVL.WriteU64(LayerActiveFlags);
     }
 
     // Layer Names
-    rMLVL.WriteULong(static_cast<uint32_t>(LayerNames.size()));
+    rMLVL.WriteU32(static_cast<uint32_t>(LayerNames.size()));
 
     for (const auto& name : LayerNames)
         rMLVL.WriteString(name);
@@ -241,17 +241,17 @@ bool CWorldCooker::CookMLVL(CWorld *pWorld, IOutputStream& rMLVL)
     // Layer Saved State IDs
     if (Game >= EGame::Corruption)
     {
-        rMLVL.WriteULong(static_cast<uint32_t>(LayerStateIDs.size()));
+        rMLVL.WriteU32(static_cast<uint32_t>(LayerStateIDs.size()));
 
         for (auto& id : LayerStateIDs)
             id.Write(rMLVL);
     }
 
     // Layer Name Offsets
-    rMLVL.WriteULong(static_cast<uint32_t>(LayerNameOffsets.size()));
+    rMLVL.WriteU32(static_cast<uint32_t>(LayerNameOffsets.size()));
 
     for (const auto offset : LayerNameOffsets)
-        rMLVL.WriteLong(offset);
+        rMLVL.WriteU32(offset);
 
     return true;
 }

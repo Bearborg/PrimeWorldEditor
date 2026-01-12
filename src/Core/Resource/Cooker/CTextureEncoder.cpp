@@ -11,27 +11,27 @@ CTextureEncoder::~CTextureEncoder() = default;
 void CTextureEncoder::WriteTXTR(IOutputStream& rTXTR)
 {
     // Only DXT1->CMPR supported at the moment
-    rTXTR.WriteULong(static_cast<uint>(mOutputFormat));
-    rTXTR.WriteUShort(mpTexture->mWidth);
-    rTXTR.WriteUShort(mpTexture->mHeight);
-    rTXTR.WriteULong(mpTexture->mNumMipMaps);
+    rTXTR.WriteU32(static_cast<uint32_t>(mOutputFormat));
+    rTXTR.WriteU16(mpTexture->mWidth);
+    rTXTR.WriteU16(mpTexture->mHeight);
+    rTXTR.WriteU32(mpTexture->mNumMipMaps);
 
-    uint32 MipW = mpTexture->Width() / 4;
-    uint32 MipH = mpTexture->Height() / 4;
+    uint32_t MipW = mpTexture->Width() / 4;
+    uint32_t MipH = mpTexture->Height() / 4;
     CMemoryInStream Image(mpTexture->mpImgDataBuffer.get(), mpTexture->mImgDataSize, std::endian::little);
-    uint32 MipOffset = Image.Tell();
+    uint32_t MipOffset = Image.Tell();
 
-    for (uint32 iMip = 0; iMip < mpTexture->mNumMipMaps; iMip++)
+    for (uint32_t iMip = 0; iMip < mpTexture->mNumMipMaps; iMip++)
     {
-        for (uint32 iBlockY = 0; iBlockY < MipH; iBlockY += 2)
+        for (uint32_t iBlockY = 0; iBlockY < MipH; iBlockY += 2)
         {
-            for (uint32 iBlockX = 0; iBlockX < MipW; iBlockX += 2)
+            for (uint32_t iBlockX = 0; iBlockX < MipW; iBlockX += 2)
             {
-                for (uint32 iImgY = iBlockY; iImgY < iBlockY + 2; iImgY++)
+                for (uint32_t iImgY = iBlockY; iImgY < iBlockY + 2; iImgY++)
                 {
-                    for (uint32 iImgX = iBlockX; iImgX < iBlockX + 2; iImgX++)
+                    for (uint32_t iImgX = iBlockX; iImgX < iBlockX + 2; iImgX++)
                     {
-                        uint32 SrcPos = ((iImgY * MipW) + iImgX) * 8;
+                        uint32_t SrcPos = ((iImgY * MipW) + iImgX) * 8;
                         Image.Seek(MipOffset + SrcPos, SEEK_SET);
 
                         ReadSubBlockCMPR(Image, rTXTR);
@@ -59,14 +59,14 @@ void CTextureEncoder::DetermineBestOutputFormat()
 
 void CTextureEncoder::ReadSubBlockCMPR(IInputStream& rSource, IOutputStream& rDest)
 {
-    rDest.WriteShort(rSource.ReadS16());
-    rDest.WriteShort(rSource.ReadS16());
+    rDest.WriteS16(rSource.ReadS16());
+    rDest.WriteS16(rSource.ReadS16());
 
     for (uint32_t iByte = 0; iByte < 4; iByte++)
     {
         uint8_t Byte = rSource.ReadU8();
         Byte = ((Byte & 0x3) << 6) | ((Byte & 0xC) << 2) | ((Byte & 0x30) >> 2) | ((Byte & 0xC0) >> 6);
-        rDest.WriteUByte(Byte);
+        rDest.WriteU8(Byte);
     }
 }
 

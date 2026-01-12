@@ -35,8 +35,8 @@ public:
 
     void Write(IOutputStream& rOutput)
     {
-        rOutput.WriteULongLong(m[0]);
-        rOutput.WriteULongLong(m[1]);
+        rOutput.WriteU64(m[0]);
+        rOutput.WriteU64(m[1]);
     }
 
     void Serialize(IArchive& rArc)

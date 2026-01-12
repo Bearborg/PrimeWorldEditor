@@ -26,9 +26,9 @@ void CScriptCooker::WriteProperty(IOutputStream& rOut, IProperty* pProperty, voi
 
     if (mGame >= EGame::EchoesDemo && !InAtomicStruct)
     {
-        rOut.WriteULong(pProperty->ID());
+        rOut.WriteU32(pProperty->ID());
         SizeOffset = rOut.Tell();
-        rOut.WriteUShort(0x0);
+        rOut.WriteU16(0x0);
         PropStart = rOut.Tell();
     }
 
@@ -45,49 +45,49 @@ void CScriptCooker::WriteProperty(IOutputStream& rOut, IProperty* pProperty, voi
     case EPropertyType::Byte:
     {
         auto* pByte = TPropCast<CByteProperty>(pProperty);
-        rOut.WriteByte(pByte->Value(pData));
+        rOut.WriteS8(pByte->Value(pData));
         break;
     }
 
     case EPropertyType::Short:
     {
         auto* pShort = TPropCast<CShortProperty>(pProperty);
-        rOut.WriteShort(pShort->Value(pData));
+        rOut.WriteS16(pShort->Value(pData));
         break;
     }
 
     case EPropertyType::Int:
     {
         auto* pInt = TPropCast<CIntProperty>(pProperty);
-        rOut.WriteLong(pInt->Value(pData));
+        rOut.WriteS32(pInt->Value(pData));
         break;
     }
 
     case EPropertyType::Float:
     {
         auto* pFloat = TPropCast<CFloatProperty>(pProperty);
-        rOut.WriteFloat(pFloat->Value(pData));
+        rOut.WriteF32(pFloat->Value(pData));
         break;
     }
 
     case EPropertyType::Choice:
     {
         auto* pChoice = TPropCast<CChoiceProperty>(pProperty);
-        rOut.WriteLong(pChoice->Value(pData));
+        rOut.WriteS32(pChoice->Value(pData));
         break;
     }
 
     case EPropertyType::Enum:
     {
         auto* pEnum = TPropCast<CEnumProperty>(pProperty);
-        rOut.WriteLong(pEnum->Value(pData));
+        rOut.WriteS32(pEnum->Value(pData));
         break;
     }
 
     case EPropertyType::Flags:
     {
         auto* pFlags = TPropCast<CFlagsProperty>(pProperty);
-        rOut.WriteLong(pFlags->Value(pData));
+        rOut.WriteU32(pFlags->Value(pData));
         break;
     }
 
@@ -122,14 +122,14 @@ void CScriptCooker::WriteProperty(IOutputStream& rOut, IProperty* pProperty, voi
     case EPropertyType::Sound:
     {
         auto* pSound = TPropCast<CSoundProperty>(pProperty);
-        rOut.WriteLong( pSound->Value(pData) );
+        rOut.WriteS32(pSound->Value(pData));
         break;
     }
 
     case EPropertyType::Animation:
     {
         auto* pAnim = TPropCast<CAnimationProperty>(pProperty);
-        rOut.WriteLong( pAnim->Value(pData) );
+        rOut.WriteU32(pAnim->Value(pData));
         break;
     }
 
@@ -159,19 +159,19 @@ void CScriptCooker::WriteProperty(IOutputStream& rOut, IProperty* pProperty, voi
         {
             if (mGame < EGame::DKCReturns)
             {
-                rOut.WriteShort(0);
-                rOut.WriteLong(0);
-                rOut.WriteByte(1);
-                rOut.WriteFloat(0);
-                rOut.WriteFloat(1);
+                rOut.WriteU16(0);
+                rOut.WriteU32(0);
+                rOut.WriteU8(1);
+                rOut.WriteF32(0.0f);
+                rOut.WriteF32(1.0f);
             }
             else
             {
-                rOut.WriteLong(0);
-                rOut.WriteFloat(0);
-                rOut.WriteFloat(1);
-                rOut.WriteShort(0);
-                rOut.WriteByte(1);
+                rOut.WriteU32(0);
+                rOut.WriteF32(0.0f);
+                rOut.WriteF32(1.0f);
+                rOut.WriteU16(0);
+                rOut.WriteU8(1);
             }
         }
         break;
@@ -205,9 +205,9 @@ void CScriptCooker::WriteProperty(IOutputStream& rOut, IProperty* pProperty, voi
         if (!pStruct->IsAtomic())
         {
             if (mGame <= EGame::Prime)
-                rOut.WriteULong(static_cast<uint32>(PropertiesToWrite.size()));
+                rOut.WriteU32(static_cast<uint32_t>(PropertiesToWrite.size()));
             else
-                rOut.WriteUShort(static_cast<uint16>(PropertiesToWrite.size()));
+                rOut.WriteU16(static_cast<uint16_t>(PropertiesToWrite.size()));
         }
 
         for (auto* property : PropertiesToWrite)
@@ -219,10 +219,10 @@ void CScriptCooker::WriteProperty(IOutputStream& rOut, IProperty* pProperty, voi
     case EPropertyType::Array:
     {
         CArrayProperty* pArray = TPropCast<CArrayProperty>(pProperty);
-        const uint32 Count = pArray->ArrayCount(pData);
-        rOut.WriteULong(Count);
+        const auto Count = pArray->ArrayCount(pData);
+        rOut.WriteU32(Count);
 
-        for (uint32 ElementIdx = 0; ElementIdx < pArray->ArrayCount(pData); ElementIdx++)
+        for (uint32_t ElementIdx = 0; ElementIdx < pArray->ArrayCount(pData); ElementIdx++)
         {
             WriteProperty(rOut, pArray->ItemArchetype(), pArray->ItemPointer(pData, ElementIdx), true);
         }
@@ -235,9 +235,9 @@ void CScriptCooker::WriteProperty(IOutputStream& rOut, IProperty* pProperty, voi
 
     if (SizeOffset != 0)
     {
-        const uint32 PropEnd = rOut.Tell();
+        const auto PropEnd = rOut.Tell();
         rOut.Seek(SizeOffset, SEEK_SET);
-        rOut.WriteUShort(static_cast<uint16>(PropEnd - PropStart));
+        rOut.WriteU16(static_cast<uint16_t>(PropEnd - PropStart));
         rOut.Seek(PropEnd, SEEK_SET);
     }
 }
@@ -250,33 +250,33 @@ void CScriptCooker::WriteInstance(IOutputStream& rOut, CScriptObject *pInstance)
     // number of fields changed size between MP1 and 2, but they're still the same fields
     const bool IsPrime1 = mGame <= EGame::Prime;
 
-    const uint32 ObjectType = pInstance->ObjectTypeID();
-    IsPrime1 ? rOut.WriteUByte(static_cast<uint8>(ObjectType)) : rOut.WriteULong(ObjectType);
+    const auto ObjectType = pInstance->ObjectTypeID();
+    IsPrime1 ? rOut.WriteU8(static_cast<uint8_t>(ObjectType)) : rOut.WriteU32(ObjectType);
 
-    const uint32 SizeOffset = rOut.Tell();
-    IsPrime1 ? rOut.WriteLong(0) : rOut.WriteShort(0);
+    const auto SizeOffset = rOut.Tell();
+    IsPrime1 ? rOut.WriteU32(0) : rOut.WriteU16(0);
 
-    const uint32 InstanceStart = rOut.Tell();
-    const uint32 InstanceID = (pInstance->Layer()->AreaIndex() << 26) | pInstance->InstanceID().Value();
-    rOut.WriteULong(InstanceID);
+    const auto InstanceStart = rOut.Tell();
+    const auto InstanceID = (pInstance->Layer()->AreaIndex() << 26) | pInstance->InstanceID().Value();
+    rOut.WriteU32(InstanceID);
 
     const size_t NumLinks = pInstance->NumLinks(ELinkType::Outgoing);
-    IsPrime1 ? rOut.WriteLong(static_cast<int32>(NumLinks)) : rOut.WriteUShort(static_cast<uint16>(NumLinks));
+    IsPrime1 ? rOut.WriteS32(static_cast<int32_t>(NumLinks)) : rOut.WriteU16(static_cast<uint16_t>(NumLinks));
 
     for (size_t LinkIdx = 0; LinkIdx < NumLinks; LinkIdx++)
     {
         const CLink *pLink = pInstance->Link(ELinkType::Outgoing, LinkIdx);
-        rOut.WriteULong(pLink->State());
-        rOut.WriteULong(pLink->Message());
-        rOut.WriteULong(pLink->ReceiverID().Value());
+        rOut.WriteU32(pLink->State());
+        rOut.WriteU32(pLink->Message());
+        rOut.WriteU32(pLink->ReceiverID().Value());
     }
 
     WriteProperty(rOut, pInstance->Template()->Properties(), pInstance->PropertyData(), false);
-    const uint32 InstanceEnd = rOut.Tell();
+    const auto InstanceEnd = rOut.Tell();
 
     rOut.Seek(SizeOffset, SEEK_SET);
-    const uint32 Size = InstanceEnd - InstanceStart;
-    IsPrime1 ? rOut.WriteULong(Size) : rOut.WriteUShort(static_cast<uint16>(Size));
+    const auto Size = InstanceEnd - InstanceStart;
+    IsPrime1 ? rOut.WriteU32(Size) : rOut.WriteU16(static_cast<uint16_t>(Size));
     rOut.Seek(InstanceEnd, SEEK_SET);
 }
 
@@ -284,11 +284,11 @@ void CScriptCooker::WriteLayer(IOutputStream& rOut, CScriptLayer *pLayer)
 {
     ASSERT(pLayer->Area()->Game() == mGame);
 
-    rOut.WriteByte(mGame <= EGame::Prime ? 0 : 1); // Version
+    rOut.WriteU8(mGame <= EGame::Prime ? 0 : 1); // Version
 
-    const uint32 InstanceCountOffset = rOut.Tell();
-    uint32 NumWrittenInstances = 0;
-    rOut.WriteLong(0);
+    const auto InstanceCountOffset = rOut.Tell();
+    uint32_t NumWrittenInstances = 0;
+    rOut.WriteU32(0);
 
     for (size_t iInst = 0; iInst < pLayer->NumInstances(); iInst++)
     {
@@ -345,16 +345,16 @@ void CScriptCooker::WriteLayer(IOutputStream& rOut, CScriptLayer *pLayer)
         }
     }
 
-    const uint32 LayerEnd = rOut.Tell();
+    const auto LayerEnd = rOut.Tell();
     rOut.GoTo(InstanceCountOffset);
-    rOut.WriteULong(NumWrittenInstances);
+    rOut.WriteU32(NumWrittenInstances);
     rOut.GoTo(LayerEnd);
 }
 
 void CScriptCooker::WriteGeneratedLayer(IOutputStream& rOut)
 {
-    rOut.WriteByte(1); // Version
-    rOut.WriteULong(static_cast<uint32>(mGeneratedObjects.size()));
+    rOut.WriteU8(1); // Version
+    rOut.WriteU32(static_cast<uint32_t>(mGeneratedObjects.size()));
 
     for (auto* object : mGeneratedObjects)
         WriteInstance(rOut, object);
