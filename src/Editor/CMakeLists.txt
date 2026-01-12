@@ -137,18 +137,6 @@ target_compile_definitions(
         QT_DISABLE_DEPRECATED_UP_TO=0x060800
 )
 
-add_codegen_targets(
-    "${source_files}"
-    codegen_generated_files
-    "${PROJECT_SOURCE_DIR}"
-    "${PROJECT_BINARY_DIR}"
-    "${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_SOURCE_DIR}/../../externals/LibCommon/Source"
-)
-add_custom_target(pwe_editor_codegen DEPENDS ${codegen_generated_files} SOURCES ${source_files})
-
-# Add the generated sources to the library target
-target_sources(pwe_editor PRIVATE ${codegen_generated_files})
-
 if (WIN32 OR APPLE)
     set(CPACK_GENERATOR ZIP)
     set(CPACK_STRIP_FILES ON)
