@@ -7,6 +7,7 @@
 #include "Core/Resource/Script/NPropertyMap.h"
 
 #include <list>
+#include <ranges>
 
 CGameTemplate::CGameTemplate() = default;
 CGameTemplate::~CGameTemplate() = default;
@@ -36,28 +37,23 @@ void CGameTemplate::Load(const TString& kFilePath)
 
     for (auto& [id, path] : mScriptTemplates)
     {
-        TString AbsPath = gkGameRoot + path.Path;
+        const TString AbsPath = gkGameRoot + path.Path;
         path.pTemplate = std::make_shared<CScriptTemplate>(this, id, AbsPath);
     }
 
-    for (auto& entry : mPropertyTemplates)
+    // For properties, remember that property archetypes can reference other archetypes which
+    // may not be loaded yet.. so if this happens, the referenced property will be loaded,
+    // meaning property templates can be loaded out of order, so we need to make sure
+    // that we don't load any template more than once.
+    for (auto& PropertyPath : std::views::values(mPropertyTemplates))
     {
-        // For properties, remember that property archetypes can reference other archetypes which
-        // may not be loaded yet.. so if this happens, the referenced property will be loaded,
-        // meaning property templates can be loaded out of order, so we need to make sure
-        // that we don't load any template more than once.
-        SPropertyTemplatePath& PropertyPath = entry.second;
-
         if (!PropertyPath.pTemplate)
-        {
             Internal_LoadPropertyTemplate(PropertyPath);
-        }
     }
 
-    for (auto& entry : mMiscTemplates)
+    for (auto& MiscPath : std::views::values(mMiscTemplates))
     {
-        SScriptTemplatePath& MiscPath = entry.second;
-        TString AbsPath = gkGameRoot + MiscPath.Path;
+        const TString AbsPath = gkGameRoot + MiscPath.Path;
         MiscPath.pTemplate = std::make_shared<CScriptTemplate>(this, UINT32_MAX, AbsPath);
     }
 }
@@ -97,45 +93,35 @@ void CGameTemplate::SaveGameTemplates(bool ForceAll)
         Save();
     }
 
-    for (auto& entry : mScriptTemplates)
+    for (auto& Path : std::views::values(mScriptTemplates))
     {
-        SScriptTemplatePath& Path = entry.second;
-
         if (Path.pTemplate)
-        {
             Path.pTemplate->Save(ForceAll);
+    }
+
+    for (auto& Path : std::views::values(mPropertyTemplates))
+    {
+        if (!Path.pTemplate)
+            continue;
+
+        if (ForceAll || Path.pTemplate->IsDirty())
+        {
+            const TString kOutPath = kGameDir + Path.Path;
+            FileUtil::MakeDirectory(kOutPath.GetFileDirectory());
+
+            NLog::Debug("Saving property template: {}", kOutPath.ToStdString());
+            CXMLWriter Writer(kOutPath, "PropertyTemplate", 0, Game());
+            ASSERT(Writer.IsValid());
+
+            Writer << SerialParameter("PropertyArchetype", Path.pTemplate);
+            Path.pTemplate->ClearDirtyFlag();
         }
     }
 
-    for (auto& entry : mPropertyTemplates)
+    for (auto& Path : std::views::values(mMiscTemplates))
     {
-        SPropertyTemplatePath& Path = entry.second;
-
         if (Path.pTemplate)
-        {
-            if (ForceAll || Path.pTemplate->IsDirty())
-            {
-                const TString kOutPath = kGameDir + Path.Path;
-                FileUtil::MakeDirectory(kOutPath.GetFileDirectory());
-
-                NLog::Debug("Saving property template: {}", *kOutPath);
-                CXMLWriter Writer(kOutPath, "PropertyTemplate", 0, Game());
-                ASSERT(Writer.IsValid());
-
-                Writer << SerialParameter("PropertyArchetype", Path.pTemplate);
-                Path.pTemplate->ClearDirtyFlag();
-            }
-        }
-    }
-
-    for (auto& entry : mMiscTemplates)
-    {
-        SScriptTemplatePath& Path = entry.second;
-
-        if (Path.pTemplate)
-        {
             Path.pTemplate->Save(ForceAll);
-        }
     }
 }
 
