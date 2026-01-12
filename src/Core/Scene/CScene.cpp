@@ -22,6 +22,7 @@
 #include <Common/Log.h>
 #include <Common/TString.h>
 
+#include <algorithm>
 #include <list>
 #include <string>
 
@@ -143,14 +144,9 @@ void CScene::DeleteNode(CSceneNode *pNode)
     const ENodeType Type = pNode->NodeType();
     auto& nodeEntry = mNodes[Type];
 
-    for (auto it = nodeEntry.begin(); it != nodeEntry.end(); ++it)
-    {
-        if (*it == pNode)
-        {
-            nodeEntry.erase(it);
-            break;
-        }
-    }
+    const auto entryIt = std::ranges::find_if(nodeEntry, [&](const auto* entry)  { return entry == pNode; });
+    if (entryIt != nodeEntry.end())
+        nodeEntry.erase(entryIt);
 
     if (const auto MapIt = mNodeMap.find(pNode->ID()); MapIt != mNodeMap.end())
         mNodeMap.erase(MapIt);
@@ -166,15 +162,13 @@ void CScene::DeleteNode(CSceneNode *pNode)
         {
         case 0x4E:
         case FOURCC('REAA'):
-            for (auto it = mAreaAttributesObjects.begin(); it != mAreaAttributesObjects.end(); ++it)
-            {
-                if ((*it).Instance() == pScript->Instance())
-                {
-                    mAreaAttributesObjects.erase(it);
-                    break;
-                }
-            }
+        {
+            const auto it = std::ranges::find_if(mAreaAttributesObjects,
+                                                 [&](const auto& obj) { return obj.Instance() == pScript->Instance(); });
+            if (it != mAreaAttributesObjects.end())
+                mAreaAttributesObjects.erase(it);
             break;
+        }
         }
     }
 
@@ -321,20 +315,20 @@ CSceneNode* CScene::NodeByID(uint32_t NodeID)
 {
     const auto it = mNodeMap.find(NodeID);
 
-    if (it != mNodeMap.cend())
-        return it->second;
+    if (it == mNodeMap.cend())
+        return nullptr;
 
-    return nullptr;
+    return it->second;
 }
 
 CScriptNode* CScene::NodeForInstanceID(CInstanceID ID)
 {
     const auto it = mScriptMap.find(ID);
 
-    if (it != mScriptMap.cend())
-        return it->second;
+    if (it == mScriptMap.cend())
+        return nullptr;
 
-    return nullptr;
+    return it->second;
 }
 
 CScriptNode* CScene::NodeForInstance(const CScriptObject *pObj)
@@ -347,8 +341,8 @@ CLightNode* CScene::NodeForLight(const CLight *pLight)
     // Slow. Is there a better way to do this?
     std::vector<CSceneNode*>& rLights = mNodes[ENodeType::Light];
 
-    const auto iter = std::find_if(rLights.begin(), rLights.end(),
-                                   [pLight](const auto* entry) { return static_cast<const CLightNode*>(entry)->Light() == pLight; });
+    const auto iter = std::ranges::find_if(rLights,
+                                           [pLight](const auto* entry) { return static_cast<const CLightNode*>(entry)->Light() == pLight; });
 
     if (iter == rLights.cend())
         return nullptr;
