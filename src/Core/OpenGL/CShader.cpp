@@ -8,10 +8,31 @@
 #include "Core/Render/CGraphics.h"
 
 #include <fstream>
+#include <fmt/format.h>
 
 static bool gDebugDumpShaders = false;
 static uint64 gFailedCompileCount = 0;
 static uint64 gSuccessfulCompileCount = 0;
+
+static void DumpShaderSource(GLuint shader, const std::string& out)
+{
+    GLint SourceLen = 0;
+    glGetShaderiv(shader, GL_SHADER_SOURCE_LENGTH, &SourceLen);
+    auto Source = std::make_unique_for_overwrite<GLchar[]>(SourceLen);
+    glGetShaderSource(shader, SourceLen, nullptr, Source.get());
+
+    GLint LogLen = 0;
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &LogLen);
+    auto pInfoLog = std::make_unique_for_overwrite<GLchar[]>(LogLen);
+    glGetShaderInfoLog(shader, LogLen, nullptr, pInfoLog.get());
+
+    std::ofstream ShaderOut(out);
+
+    if (SourceLen > 0)
+        ShaderOut << Source.get();
+    if (LogLen > 0)
+        ShaderOut << pInfoLog.get();
+}
 
 CShader::CShader()
 {
@@ -60,9 +81,9 @@ bool CShader::CompileVertexSource(std::string_view source)
 
     if (CompileStatus == GL_FALSE)
     {
-        TString Out = "dump/BadVS_" + std::to_string(gFailedCompileCount) + ".txt";
-        DumpShaderSource(mVertexShader, Out);
-        NLog::Error("Unable to compile vertex shader; dumped to {}", *Out);
+        const auto out = fmt::format("dump/BadVS_{:08d}.txt", gFailedCompileCount);
+        DumpShaderSource(mVertexShader, out);
+        NLog::Error("Unable to compile vertex shader; dumped to {}", out);
 
         gFailedCompileCount++;
         glDeleteShader(mVertexShader);
@@ -71,9 +92,9 @@ bool CShader::CompileVertexSource(std::string_view source)
     // Debug dump
     else if (gDebugDumpShaders == true)
     {
-        TString Out = "dump/VS_" + TString::FromInt64(gSuccessfulCompileCount, 8, 10) + ".txt";
-        DumpShaderSource(mVertexShader, Out);
-        NLog::Debug("Debug shader dumping enabled; dumped to {}", *Out);
+        const auto out = fmt::format("dump/VS_{:08d}.txt", gSuccessfulCompileCount);
+        DumpShaderSource(mVertexShader, out);
+        NLog::Debug("Debug shader dumping enabled; dumped to {}", out);
 
         gSuccessfulCompileCount++;
     }
@@ -97,9 +118,9 @@ bool CShader::CompilePixelSource(std::string_view source)
 
     if (CompileStatus == GL_FALSE)
     {
-        TString Out = "dump/BadPS_" + TString::FromInt64(gFailedCompileCount, 8, 10) + ".txt";
-        NLog::Error("Unable to compile pixel shader; dumped to {}", *Out);
-        DumpShaderSource(mPixelShader, Out);
+        const auto out = fmt::format("dump/BadPS_{:08d}.txt", gFailedCompileCount);
+        NLog::Error("Unable to compile pixel shader; dumped to {}", out);
+        DumpShaderSource(mPixelShader, out);
 
         gFailedCompileCount++;
         glDeleteShader(mPixelShader);
@@ -109,9 +130,9 @@ bool CShader::CompilePixelSource(std::string_view source)
     // Debug dump
     if (gDebugDumpShaders == true)
     {
-        TString Out = "dump/PS_" + TString::FromInt64(gSuccessfulCompileCount, 8, 10) + ".txt";
-        NLog::Debug("Debug shader dumping enabled; dumped to {}", *Out);
-        DumpShaderSource(mPixelShader, Out);
+        const auto out = fmt::format("dump/PS_{:08d}.txt", gSuccessfulCompileCount);
+        NLog::Debug("Debug shader dumping enabled; dumped to {}", out);
+        DumpShaderSource(mPixelShader, out);
 
         gSuccessfulCompileCount++;
     }
@@ -136,20 +157,20 @@ bool CShader::LinkShaders()
     mPixelShaderExists = false;
 
     // Shader should be linked - check for errors
-    GLint LinkStatus;
+    GLint LinkStatus{};
     glGetProgramiv(mProgram, GL_LINK_STATUS, &LinkStatus);
 
     if (LinkStatus == GL_FALSE)
     {
-        TString Out = "dump/BadLink_" + TString::FromInt64(gFailedCompileCount, 8, 10) + ".txt";
-        NLog::Error("Unable to link shaders. Dumped error log to {}", *Out);
+        const auto out = fmt::format("dump/BadLink_{:08d}.txt", gFailedCompileCount);
+        NLog::Error("Unable to link shaders. Dumped error log to {}", out);
 
         GLint LogLen{};
         glGetProgramiv(mProgram, GL_INFO_LOG_LENGTH, &LogLen);
         auto pInfoLog = std::make_unique_for_overwrite<GLchar[]>(LogLen);
         glGetProgramInfoLog(mProgram, LogLen, nullptr, pInfoLog.get());
 
-        std::ofstream LinkOut(*Out);
+        std::ofstream LinkOut(out);
         if (LogLen > 0)
             LinkOut << pInfoLog.get();
 
@@ -258,24 +279,4 @@ void CShader::CacheCommonUniforms()
     }
 
     mNumLightsUniform = glGetUniformLocation(mProgram, "NumLights");
-}
-
-void CShader::DumpShaderSource(GLuint Shader, const TString& rkOut)
-{
-    GLint SourceLen = 0;
-    glGetShaderiv(Shader, GL_SHADER_SOURCE_LENGTH, &SourceLen);
-    auto Source = std::make_unique_for_overwrite<GLchar[]>(SourceLen);
-    glGetShaderSource(Shader, SourceLen, nullptr, Source.get());
-
-    GLint LogLen = 0;
-    glGetShaderiv(Shader, GL_INFO_LOG_LENGTH, &LogLen);
-    auto pInfoLog = std::make_unique_for_overwrite<GLchar[]>(LogLen);
-    glGetShaderInfoLog(Shader, LogLen, nullptr, pInfoLog.get());
-
-    std::ofstream ShaderOut(*rkOut);
-
-    if (SourceLen > 0)
-        ShaderOut << Source.get();
-    if (LogLen > 0)
-        ShaderOut << pInfoLog.get();
 }

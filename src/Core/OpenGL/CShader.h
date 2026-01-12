@@ -54,7 +54,6 @@ public:
 
 private:
     void CacheCommonUniforms();
-    void DumpShaderSource(GLuint Shader, const TString& rkOut);
 };
 
 #endif // CSHADER_H
