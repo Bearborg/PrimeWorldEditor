@@ -151,7 +151,7 @@ void CAreaCooker::WriteCorruptionHeader(IOutputStream& rOut)
 
     for (const auto& num : mpArea->mSectionNumbers)
     {
-        rOut.WriteULong(num.SectionID.ToLong());
+        rOut.WriteULong(num.SectionID.ToU32());
         rOut.WriteULong(num.Index);
     }
     rOut.WriteToBoundary(32, 0);

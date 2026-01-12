@@ -30,7 +30,7 @@ std::unique_ptr<CTweakData> CTweakLoader::LoadCTWK(IInputStream& CTWK, CResource
         { 0xF1ED8FD7, "TweakPlayerControls", },
     };
 
-    auto Find = skIdToTemplateName.find(pEntry->ID().ToLong());
+    auto Find = skIdToTemplateName.find(pEntry->ID().ToU32());
     ASSERT(Find != skIdToTemplateName.end());
     const char* pkTemplateName = Find->second;
 
@@ -42,7 +42,7 @@ std::unique_ptr<CTweakData> CTweakLoader::LoadCTWK(IInputStream& CTWK, CResource
     ASSERT(pTweakTemplate != nullptr);
 
     // Load tweak data
-    auto pTweakData = std::make_unique<CTweakData>(pTweakTemplate, pEntry->ID().ToLong(), pEntry);
+    auto pTweakData = std::make_unique<CTweakData>(pTweakTemplate, pEntry->ID().ToU32(), pEntry);
     CScriptLoader::LoadStructData(CTWK, pTweakData->TweakData());
 
     // Verify

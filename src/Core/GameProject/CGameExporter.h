@@ -105,7 +105,7 @@ protected:
     // Convenience Functions
     SResourceInstance* FindResourceInstance(const CAssetID& rkID)
     {
-        const uint64_t IntegralID = rkID.ToLongLong();
+        const auto IntegralID = rkID.ToU64();
         const auto Found = mResourceMap.find(IntegralID);
         return (Found == mResourceMap.end() ? nullptr : &Found->second);
     }

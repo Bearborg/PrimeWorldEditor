@@ -366,7 +366,7 @@ void CPoiMapSidebar::OnRemovePoiButtonClicked()
 void CPoiMapSidebar::OnPoiPicked(const SRayIntersection& rkIntersect, const QMouseEvent* pEvent)
 {
     auto* pPOI = static_cast<CScriptNode*>(rkIntersect.pNode);
-    if (pPOI->Instance()->ObjectTypeID() != CFourCC("POIN").ToLong())
+    if (pPOI->Instance()->ObjectTypeID() != CFourCC("POIN").ToU32())
         return;
 
     mSourceModel.AddPOI(pPOI);

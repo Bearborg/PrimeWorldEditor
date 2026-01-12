@@ -1015,8 +1015,8 @@ void CWorldEditor::LaunchQuickplayFromLocation(const CVector3f& Location, bool F
 
     // Fill in parameters and start running
     SQuickplayParameters Parameters = mQuickplayParms;
-    Parameters.BootWorldAssetID = mpWorld->ID().ToLong();
-    Parameters.BootAreaAssetID = mpArea->ID().ToLong();
+    Parameters.BootWorldAssetID = mpWorld->ID().ToU32();
+    Parameters.BootAreaAssetID = mpArea->ID().ToU32();
     Parameters.SpawnTransform = Viewport()->Camera().GetCameraTransform();
     Parameters.SpawnTransform.SetTranslation(Location);
 

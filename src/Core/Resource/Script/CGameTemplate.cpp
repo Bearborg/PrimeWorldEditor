@@ -137,7 +137,7 @@ CScriptTemplate* CGameTemplate::TemplateByID(uint32 ObjectID)
 
 CScriptTemplate* CGameTemplate::TemplateByID(const CFourCC& ObjectID)
 {
-    return TemplateByID(ObjectID.ToLong());
+    return TemplateByID(ObjectID.ToU32());
 }
 
 CScriptTemplate* CGameTemplate::TemplateByIndex(uint32 Index)
@@ -158,7 +158,7 @@ SState CGameTemplate::StateByID(uint32 StateID) const
 
 SState CGameTemplate::StateByID(const CFourCC& State) const
 {
-    return StateByID(State.ToLong());
+    return StateByID(State.ToU32());
 }
 
 SState CGameTemplate::StateByIndex(uint32 Index) const
@@ -180,7 +180,7 @@ SMessage CGameTemplate::MessageByID(uint32 MessageID) const
 
 SMessage CGameTemplate::MessageByID(const CFourCC& MessageID) const
 {
-    return MessageByID(MessageID.ToLong());
+    return MessageByID(MessageID.ToU32());
 }
 
 SMessage CGameTemplate::MessageByIndex(uint32 Index) const

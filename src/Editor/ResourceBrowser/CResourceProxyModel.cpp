@@ -80,8 +80,8 @@ bool CResourceProxyModel::filterAcceptsRow(int SourceRow, const QModelIndex& rkS
 
         if (mCompareBitLength <= IDBitLength)
         {
-            const uint64_t ID = pEntry->ID().ToLongLong();
-            const uint32_t MaxShift = IDBitLength - mCompareBitLength;
+            const auto ID = pEntry->ID().ToU64();
+            const auto MaxShift = IDBitLength - mCompareBitLength;
 
             for (uint32_t Shift = 0; Shift <= MaxShift; Shift += 4)
             {

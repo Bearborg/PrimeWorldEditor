@@ -48,7 +48,7 @@ void CMaterialCooker::WriteMatSetPrime(IOutputStream& rOut)
         for (size_t iPass = 0; iPass < NumPasses; iPass++)
         {
             if (const CTexture* pTex = pMat->Pass(iPass)->Texture())
-                mTextureIDs.push_back(pTex->ID().ToLong());
+                mTextureIDs.push_back(pTex->ID().ToU32());
         }
     }
 
@@ -124,7 +124,7 @@ void CMaterialCooker::WriteMaterialPrime(IOutputStream& rOut)
         if (pPassTex != nullptr)
         {
             TexFlags |= (1 << iPass);
-            uint32_t TexID = pPassTex->ID().ToLong();
+            uint32_t TexID = pPassTex->ID().ToU32();
 
             for (uint32_t iTex = 0; iTex < mTextureIDs.size(); iTex++)
             {

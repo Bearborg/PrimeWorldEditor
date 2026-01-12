@@ -142,7 +142,7 @@ std::unique_ptr<CDependencyGroup> CUnsupportedFormatLoader::LoadFRME(IInputStrea
         for (uint32 iWgt = 0; iWgt < NumWidgets; iWgt++)
         {
             // Widget Header
-            CFourCC WidgetType = rFRME.ReadULong();
+            CFourCC WidgetType(rFRME.ReadULong());
             rFRME.ReadString();
             rFRME.ReadString();
             rFRME.Seek(0x18, SEEK_CUR);
@@ -347,7 +347,7 @@ std::unique_ptr<CDependencyGroup> CUnsupportedFormatLoader::LoadFSM2(IInputStrea
 
 std::unique_ptr<CDependencyGroup> CUnsupportedFormatLoader::LoadFSMC(IInputStream& rFSMC, CResourceEntry *pEntry)
 {
-    [[maybe_unused]] const CFourCC Magic = rFSMC.ReadULong();
+    [[maybe_unused]] const CFourCC Magic(rFSMC.ReadULong());
     ASSERT(Magic == FOURCC('FSMC'));
 
     auto pGroup = std::make_unique<CDependencyGroup>(pEntry);
@@ -363,7 +363,7 @@ std::unique_ptr<CDependencyGroup> CUnsupportedFormatLoader::LoadFSMC(IInputStrea
 
 std::unique_ptr<CDependencyGroup> CUnsupportedFormatLoader::LoadHIER(IInputStream& rHIER, CResourceEntry *pEntry)
 {
-    [[maybe_unused]] const CFourCC Magic = rHIER.ReadLong();
+    [[maybe_unused]] const CFourCC Magic(rHIER.ReadULong());
     ASSERT(Magic == "HIER");
 
     const uint32 NumNodes = rHIER.ReadULong();

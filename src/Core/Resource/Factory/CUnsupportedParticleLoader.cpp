@@ -11,12 +11,12 @@
 // ************ PARAMETER LOADING ************
 bool CUnsupportedParticleLoader::ParseParticleParameter(IInputStream& rPART)
 {
-    uint32 ParamOffset = rPART.Tell();
-    CFourCC Param = rPART.ReadLong();
+    const auto ParamOffset = rPART.Tell();
+    const CFourCC Param(rPART.ReadULong());
     if (Param == FOURCC('_END'))
         return false;
 
-    switch (Param.ToLong())
+    switch (Param.ToU32())
     {
     // Bool Constant
     case FOURCC('AAPH'):
@@ -228,12 +228,12 @@ bool CUnsupportedParticleLoader::ParseParticleParameter(IInputStream& rPART)
 
 bool CUnsupportedParticleLoader::ParseElectricParameter(IInputStream& rELSC)
 {
-    uint32 ParamOffset = rELSC.Tell();
-    CFourCC Param = rELSC.ReadLong();
+    const auto ParamOffset = rELSC.Tell();
+    const CFourCC Param(rELSC.ReadULong());
     if (Param == FOURCC('_END'))
         return false;
 
-    switch (Param.ToLong())
+    switch (Param.ToU32())
     {
     case FOURCC('ZERY'):
         ParseBool(rELSC);
@@ -292,8 +292,8 @@ bool CUnsupportedParticleLoader::ParseElectricParameter(IInputStream& rELSC)
 
 bool CUnsupportedParticleLoader::ParseSortedParameter(IInputStream& rSRSC)
 {
-    uint32 ParamOffset = rSRSC.Tell();
-    CFourCC Param = rSRSC.ReadLong();
+    const auto ParamOffset = rSRSC.Tell();
+    const CFourCC Param(rSRSC.ReadULong());
     if (Param == FOURCC('_END'))
         return false;
 
@@ -312,12 +312,12 @@ bool CUnsupportedParticleLoader::ParseSortedParameter(IInputStream& rSRSC)
 
 bool CUnsupportedParticleLoader::ParseSpawnParameter(IInputStream& rSPSC)
 {
-    uint32 ParamOffset = rSPSC.Tell();
-    CFourCC Param = rSPSC.ReadLong();
+    const auto ParamOffset = rSPSC.Tell();
+    const CFourCC Param(rSPSC.ReadULong());
     if (Param == FOURCC('_END'))
         return false;
 
-    switch (Param.ToLong())
+    switch (Param.ToU32())
     {
     case FOURCC('DEOL'):
     case FOURCC('FRCO'):
@@ -371,12 +371,12 @@ bool CUnsupportedParticleLoader::ParseSpawnParameter(IInputStream& rSPSC)
 
 bool CUnsupportedParticleLoader::ParseSwooshParameter(IInputStream& rSWHC)
 {
-    uint32 ParamOffset = rSWHC.Tell();
-    CFourCC Param = rSWHC.ReadLong();
+    const auto ParamOffset = rSWHC.Tell();
+    const CFourCC Param(rSWHC.ReadULong());
     if (Param == FOURCC('_END'))
         return false;
 
-    switch (Param.ToLong())
+    switch (Param.ToU32())
     {
     case FOURCC('AALP'):
     case FOURCC('CLTX'):
@@ -449,12 +449,12 @@ bool CUnsupportedParticleLoader::ParseSwooshParameter(IInputStream& rSWHC)
 
 bool CUnsupportedParticleLoader::ParseDecalParameter(IInputStream& rDPSC)
 {
-    uint32 ParamOffset = rDPSC.Tell();
-    CFourCC Param = rDPSC.ReadLong();
+    const auto ParamOffset = rDPSC.Tell();
+    const CFourCC Param(rDPSC.ReadULong());
     if (Param == FOURCC('_END'))
         return false;
 
-    switch (Param.ToLong())
+    switch (Param.ToU32())
     {
     case FOURCC('1ADD'):
     case FOURCC('2ADD'):
@@ -509,12 +509,12 @@ bool CUnsupportedParticleLoader::ParseDecalParameter(IInputStream& rDPSC)
 
 bool CUnsupportedParticleLoader::ParseWeaponParameter(IInputStream& rWPSC)
 {
-    uint32 ParamOffset = rWPSC.Tell();
-    CFourCC Param = rWPSC.ReadLong();
+    const auto ParamOffset = rWPSC.Tell();
+    const CFourCC Param(rWPSC.ReadULong());
     if (Param == FOURCC('_END'))
         return false;
 
-    switch (Param.ToLong())
+    switch (Param.ToU32())
     {
     case FOURCC('APSO'):
     case FOURCC('AP11'):
@@ -621,13 +621,13 @@ bool CUnsupportedParticleLoader::ParseWeaponParameter(IInputStream& rWPSC)
 
 bool CUnsupportedParticleLoader::ParseCollisionResponseParameter(IInputStream& rCRSC)
 {
-    uint32 ParamOffset = rCRSC.Tell();
-    CFourCC Param = rCRSC.ReadLong();
+    const auto ParamOffset = rCRSC.Tell();
+    const CFourCC Param(rCRSC.ReadULong());
     if (Param == FOURCC('_END'))
         return false;
 
     // CRSC has way too many useless extra parameters that are never used to bother typing out, so just skip past them
-    uint32 FuncPeek = rCRSC.PeekLong();
+    const auto FuncPeek = rCRSC.PeekULong();
 
     if (FuncPeek == FOURCC('NONE'))
     {
@@ -635,7 +635,7 @@ bool CUnsupportedParticleLoader::ParseCollisionResponseParameter(IInputStream& r
         return true;
     }
 
-    switch (Param.ToLong())
+    switch (Param.ToU32())
     {
     case FOURCC('1ATA'):
     case FOURCC('2ATA'):
@@ -749,12 +749,12 @@ bool CUnsupportedParticleLoader::ParseCollisionResponseParameter(IInputStream& r
 
 bool CUnsupportedParticleLoader::ParseBurstFireParameter(IInputStream& rBFRC)
 {
-    uint32 ParamOffset = rBFRC.Tell();
-    CFourCC Param = rBFRC.ReadLong();
+    const auto ParamOffset = rBFRC.Tell();
+    const CFourCC Param(rBFRC.ReadULong());
     if (Param == FOURCC('_END'))
         return false;
 
-    switch (Param.ToLong())
+    switch (Param.ToU32())
     {
     case FOURCC('BTMI'):
         ParseIntFunction(rBFRC);
@@ -792,12 +792,12 @@ bool CUnsupportedParticleLoader::ParseBurstFireParameter(IInputStream& rBFRC)
 
 bool CUnsupportedParticleLoader::ParseUserEvaluatorParameter(IInputStream& rUSRC)
 {
-    uint32 ParamOffset = rUSRC.Tell();
-    CFourCC Param = rUSRC.ReadLong();
+    const auto ParamOffset = rUSRC.Tell();
+    const CFourCC Param(rUSRC.ReadULong());
     if (Param == FOURCC('_END'))
         return false;
 
-    switch (Param.ToLong())
+    switch (Param.ToU32())
     {
     case FOURCC('IPM0'):
     case FOURCC('IPM1'):
@@ -854,12 +854,12 @@ bool CUnsupportedParticleLoader::ParseUserEvaluatorParameter(IInputStream& rUSRC
 
 bool CUnsupportedParticleLoader::ParseTransformParameter(IInputStream& rXFSC)
 {
-    uint32 ParamOffset = rXFSC.Tell();
-    CFourCC Param = rXFSC.ReadLong();
+    const auto ParamOffset = rXFSC.Tell();
+    const CFourCC Param(rXFSC.ReadULong());
     if (Param == FOURCC('_END'))
         return false;
 
-    switch (Param.ToLong())
+    switch (Param.ToU32())
     {
     case FOURCC('IAV0'):
     case FOURCC('IAV1'):
@@ -907,10 +907,10 @@ bool CUnsupportedParticleLoader::ParseTransformParameter(IInputStream& rXFSC)
 // ************ FUNCTION LOADING ************
 void CUnsupportedParticleLoader::ParseBool(IInputStream& rFile)
 {
-    uint32 FuncOffset = rFile.Tell();
-    CFourCC Func = rFile.ReadLong();
+    const auto FuncOffset = rFile.Tell();
+    const CFourCC Func(rFile.ReadULong());
 
-    switch (Func.ToLong())
+    switch (Func.ToU32())
     {
     case FOURCC('CNST'):
         rFile.Seek(0x1, SEEK_CUR);
@@ -927,10 +927,10 @@ void CUnsupportedParticleLoader::ParseBool(IInputStream& rFile)
 
 void CUnsupportedParticleLoader::ParseBoolFunction(IInputStream& rFile)
 {
-    uint32 FuncOffset = rFile.Tell();
-    CFourCC Func = rFile.ReadLong();
+    const auto FuncOffset = rFile.Tell();
+    const CFourCC Func(rFile.ReadULong());
 
-    switch (Func.ToLong())
+    switch (Func.ToU32())
     {
     case FOURCC('CNST'):
         rFile.Seek(0x1, SEEK_CUR);
@@ -964,10 +964,10 @@ void CUnsupportedParticleLoader::ParseBitfieldFunction(IInputStream& rFile)
 
 void CUnsupportedParticleLoader::ParseIntFunction(IInputStream& rFile)
 {
-    uint32 FuncOffset = rFile.Tell();
-    CFourCC Func = rFile.ReadLong();
+    const auto FuncOffset = rFile.Tell();
+    const CFourCC Func(rFile.ReadULong());
 
-    switch (Func.ToLong())
+    switch (Func.ToU32())
     {
     case FOURCC('NONE'):
     case FOURCC('GAPC'):
@@ -1017,7 +1017,7 @@ void CUnsupportedParticleLoader::ParseIntFunction(IInputStream& rFile)
 
     case FOURCC('CNST'):
     {
-        [[maybe_unused]] const uint32 Value = rFile.ReadULong();
+        [[maybe_unused]] const auto Value = rFile.ReadULong();
         ASSERT(gpResourceStore->FindEntry(CAssetID(Value)) == nullptr);
         break;
     }
@@ -1051,10 +1051,10 @@ void CUnsupportedParticleLoader::ParseIntFunction(IInputStream& rFile)
 
 void CUnsupportedParticleLoader::ParseFloatFunction(IInputStream& rFile)
 {
-    uint32 FuncOffset = rFile.Tell();
-    CFourCC Func = rFile.ReadLong();
+    const auto FuncOffset = rFile.Tell();
+    const CFourCC Func(rFile.ReadULong());
 
-    switch (Func.ToLong())
+    switch (Func.ToU32())
     {
     case FOURCC('NONE'):
     case FOURCC('GTCP'):
@@ -1230,7 +1230,8 @@ void CUnsupportedParticleLoader::ParseFloatFunction(IInputStream& rFile)
 
     case FOURCC('CEXT'):
         ParseIntFunction(rFile);
-        if (mpGroup->Game() >= EGame::DKCReturns) ParseFloatFunction(rFile);
+        if (mpGroup->Game() >= EGame::DKCReturns)
+            ParseFloatFunction(rFile);
         break;
 
     default:
@@ -1241,10 +1242,10 @@ void CUnsupportedParticleLoader::ParseFloatFunction(IInputStream& rFile)
 
 void CUnsupportedParticleLoader::ParseVectorFunction(IInputStream& rFile)
 {
-    uint32 FuncOffset = rFile.Tell();
-    CFourCC Func = rFile.ReadLong();
+    const auto FuncOffset = rFile.Tell();
+    const CFourCC Func(rFile.ReadULong());
 
-    switch (Func.ToLong())
+    switch (Func.ToU32())
     {
     case FOURCC('ADD_'):
     case FOURCC('ISWT'):
@@ -1374,10 +1375,10 @@ void CUnsupportedParticleLoader::ParseVectorFunction(IInputStream& rFile)
 
 void CUnsupportedParticleLoader::ParseModVectorFunction(IInputStream& rFile)
 {
-    uint32 FuncOffset = rFile.Tell();
-    CFourCC Func = rFile.ReadLong();
+    const auto FuncOffset = rFile.Tell();
+    const CFourCC Func(rFile.ReadULong());
 
-    switch (Func.ToLong())
+    switch (Func.ToU32())
     {
     case FOURCC('NONE'):
         break;
@@ -1462,10 +1463,10 @@ void CUnsupportedParticleLoader::ParseModVectorFunction(IInputStream& rFile)
 
 void CUnsupportedParticleLoader::ParseColorFunction(IInputStream& rFile)
 {
-    uint32 FuncOffset = rFile.Tell();
-    CFourCC Func = rFile.ReadLong();
+    const auto FuncOffset = rFile.Tell();
+    const CFourCC Func(rFile.ReadULong());
 
-    switch (Func.ToLong())
+    switch (Func.ToU32())
     {
     case FOURCC('CFDE'):
         ParseColorFunction(rFile);
@@ -1543,10 +1544,10 @@ void CUnsupportedParticleLoader::ParseColorFunction(IInputStream& rFile)
 
 void CUnsupportedParticleLoader::ParseRotationFunction(IInputStream& rFile)
 {
-    uint32 FuncOffset = rFile.Tell();
-    CFourCC Func = rFile.ReadLong();
+    const auto FuncOffset = rFile.Tell();
+    const CFourCC Func(rFile.ReadULong());
 
-    switch (Func.ToLong())
+    switch (Func.ToU32())
     {
     case FOURCC('NONE'):
     case FOURCC('RLCL'):
@@ -1600,10 +1601,10 @@ void CUnsupportedParticleLoader::ParseRotationFunction(IInputStream& rFile)
 
 void CUnsupportedParticleLoader::ParseUVFunction(IInputStream& rFile)
 {
-    uint32 FuncOffset = rFile.Tell();
-    CFourCC Func = rFile.ReadLong();
+    const auto FuncOffset = rFile.Tell();
+    const CFourCC Func(rFile.ReadULong());
 
-    switch (Func.ToLong())
+    switch (Func.ToU32())
     {
     case FOURCC('NONE'):
         break;
@@ -1637,10 +1638,10 @@ void CUnsupportedParticleLoader::ParseUVFunction(IInputStream& rFile)
 
 void CUnsupportedParticleLoader::ParseEmitterFunction(IInputStream& rFile)
 {
-    uint32 FuncOffset = rFile.Tell();
-    CFourCC Func = rFile.ReadLong();
+    const auto FuncOffset = rFile.Tell();
+    const CFourCC Func(rFile.ReadULong());
 
-    switch (Func.ToLong())
+    switch (Func.ToU32())
     {
     case FOURCC('NONE'):
         break;
@@ -1696,21 +1697,21 @@ void CUnsupportedParticleLoader::ParseEmitterFunction(IInputStream& rFile)
 
 void CUnsupportedParticleLoader::ParseSoundFunction(IInputStream& rFile)
 {
-    uint32 FuncOffset = rFile.Tell();
-    CFourCC Func = rFile.ReadLong();
+    const auto FuncOffset = rFile.Tell();
+    const CFourCC Func(rFile.ReadULong());
     
-    switch (Func.ToLong())
+    switch (Func.ToU32())
     {
     case FOURCC('NONE'):
         break;
         
     case FOURCC('CNST'):
     {
-        uint32 SoundID = rFile.ReadLong() & 0xFFFF;
+        const auto SoundID = rFile.ReadULong() & 0xFFFF;
 
         if (SoundID != 0xFFFF)
         {
-            SSoundInfo SoundInfo = mpGroup->Entry()->Project()->AudioManager()->GetSoundInfo(SoundID);
+            const SSoundInfo SoundInfo = mpGroup->Entry()->Project()->AudioManager()->GetSoundInfo(SoundID);
             mpGroup->AddDependency(SoundInfo.pAudioGroup);
         }
         
@@ -1725,16 +1726,16 @@ void CUnsupportedParticleLoader::ParseSoundFunction(IInputStream& rFile)
 
 void CUnsupportedParticleLoader::ParseAssetFunction(IInputStream& rFile)
 {
-    uint32 FuncOffset = rFile.Tell();
-    CFourCC Func = rFile.ReadLong();
+    const auto FuncOffset = rFile.Tell();
+    const CFourCC Func(rFile.ReadULong());
 
-    switch (Func.ToLong())
+    switch (Func.ToU32())
     {
     case FOURCC('NONE'):
         break;
 
     case FOURCC('CNST'):
-        mpGroup->AddDependency( CAssetID(rFile, mpGroup->Game()) );
+        mpGroup->AddDependency(CAssetID(rFile, mpGroup->Game()));
         break;
 
     default:
@@ -1745,21 +1746,21 @@ void CUnsupportedParticleLoader::ParseAssetFunction(IInputStream& rFile)
 
 void CUnsupportedParticleLoader::ParseSpawnSystemKeyframeData(IInputStream& rFile)
 {
-    CFourCC Func = rFile.ReadLong();
+    const CFourCC Func(rFile.ReadULong());
     if (Func == CFourCC("NONE"))
         return;
 
     ASSERT(Func == CFourCC("CNST"));
 
     rFile.Seek(0x10, SEEK_CUR); // Skip unneeded values
-    uint32 Count = rFile.ReadLong();
+    const auto Count = rFile.ReadULong();
 
-    for (uint32 iKey = 0; iKey < Count; iKey++)
+    for (uint32_t iKey = 0; iKey < Count; iKey++)
     {
         rFile.Seek(0x4, SEEK_CUR); // Skip frame number
-        uint32 InfoCount = rFile.ReadLong();
+        const auto InfoCount = rFile.ReadULong();
 
-        for (uint32 iInfo = 0; iInfo < InfoCount; iInfo++)
+        for (uint32_t iInfo = 0; iInfo < InfoCount; iInfo++)
         {
             mpGroup->AddDependency(CAssetID(rFile, mpGroup->Game()));
             rFile.Seek(0xC, SEEK_CUR); // Skip unknown/unneeded values
@@ -1767,7 +1768,7 @@ void CUnsupportedParticleLoader::ParseSpawnSystemKeyframeData(IInputStream& rFil
     }
 }
 
-void CUnsupportedParticleLoader::ParseKeyframeEmitterData(IInputStream& rFile, const CFourCC& rkFunc, uint32 ElemSize)
+void CUnsupportedParticleLoader::ParseKeyframeEmitterData(IInputStream& rFile, const CFourCC& rkFunc, uint32_t ElemSize)
 {
     // Skip unneeded values
     if (rkFunc == CFourCC("KEYE") || rkFunc == CFourCC("KEYP"))
@@ -1775,7 +1776,7 @@ void CUnsupportedParticleLoader::ParseKeyframeEmitterData(IInputStream& rFile, c
     else if (rkFunc == CFourCC("KEYF"))
         rFile.Seek(0x1A, SEEK_CUR);
 
-    uint32 KeyCount = rFile.ReadLong();
+    const auto KeyCount = rFile.ReadULong();
     rFile.Seek(KeyCount * ElemSize, SEEK_CUR);
 
     if (rkFunc == CFourCC("KEYF"))
@@ -1791,7 +1792,7 @@ std::unique_ptr<CDependencyGroup> CUnsupportedParticleLoader::LoadParticle(IInpu
     // Validate DKCR asset header
     if (pEntry->Game() == EGame::DKCReturns)
     {
-        uint32 AssetHeader = rFile.ReadLong();
+        const auto AssetHeader = rFile.ReadULong();
 
         if (AssetHeader != 0x6E190001)
         {
@@ -1800,14 +1801,14 @@ std::unique_ptr<CDependencyGroup> CUnsupportedParticleLoader::LoadParticle(IInpu
         }
     }
 
-    CFourCC Magic = rFile.ReadLong();
+    const CFourCC Magic(rFile.ReadULong());
 
     // Loop through particle functions
     while (true)
     {
         bool ShouldContinue = false;
 
-        switch (Magic.ToLong())
+        switch (Magic.ToU32())
         {
         case FOURCC('GPSM'): ShouldContinue = Loader.ParseParticleParameter(rFile);          break;
         case FOURCC('ELSM'): ShouldContinue = Loader.ParseElectricParameter(rFile);          break;

@@ -133,7 +133,7 @@ bool CExportGameDialog::ValidateGame()
     CFourCC GameID(&mGameID[0]);
     GameID[3] = 'X';
 
-    switch (GameID.ToLong())
+    switch (GameID.ToU32())
     {
     case FOURCC('GM8X'):
         // This ID is normally MP1, but it's used by the MP1 NTSC demo and the MP2 bonus disc demo as well

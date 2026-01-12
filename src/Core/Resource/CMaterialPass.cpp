@@ -44,7 +44,7 @@ void CMaterialPass::HashParameters(CFNV1A& rHash)
     if (!mEnabled)
         return;
 
-    rHash.HashData(mPassType.ToLong());
+    rHash.HashData(mPassType.ToU32());
     rHash.HashData(mSettings);
     rHash.HashData(mColorInputs.data(), sizeof(mColorInputs));
     rHash.HashData(mAlphaInputs.data(), sizeof(mAlphaInputs));
