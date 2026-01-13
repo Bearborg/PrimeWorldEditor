@@ -127,7 +127,7 @@ inline void ErrorMsg(QWidget *pParent, const QString& ErrorText)
 
 inline bool YesNoQuestion(QWidget *pParent, const QString& InfoBoxTitle, const QString& Question)
 {
-    QMessageBox::StandardButton Button = QMessageBox::question(pParent, InfoBoxTitle, Question, QMessageBox::Yes | QMessageBox::No);
+    const auto Button = QMessageBox::question(pParent, InfoBoxTitle, Question, QMessageBox::Yes | QMessageBox::No);
     return Button == QMessageBox::Yes;
 }
 
