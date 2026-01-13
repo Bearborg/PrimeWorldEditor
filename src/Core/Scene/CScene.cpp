@@ -377,21 +377,21 @@ CGameArea* CScene::ActiveArea()
 FShowFlags CScene::ShowFlagsForNodeFlags(FNodeFlags NodeFlags)
 {
     FShowFlags Out;
-    if ((NodeFlags & ENodeType::Model) != 0)     Out |= EShowFlag::SplitWorld;
-    if ((NodeFlags & ENodeType::Static) != 0)    Out |= EShowFlag::MergedWorld;
-    if ((NodeFlags & ENodeType::Script) != 0)    Out |= EShowFlag::Objects;
-    if ((NodeFlags & ENodeType::Collision) != 0) Out |= EShowFlag::WorldCollision;
-    if ((NodeFlags & ENodeType::Light) != 0)     Out |= EShowFlag::Lights;
+    if (NodeFlags.HasFlag(ENodeType::Model))     Out |= EShowFlag::SplitWorld;
+    if (NodeFlags.HasFlag(ENodeType::Static))    Out |= EShowFlag::MergedWorld;
+    if (NodeFlags.HasFlag(ENodeType::Script))    Out |= EShowFlag::Objects;
+    if (NodeFlags.HasFlag(ENodeType::Collision)) Out |= EShowFlag::WorldCollision;
+    if (NodeFlags.HasFlag(ENodeType::Light))     Out |= EShowFlag::Lights;
     return Out;
 }
 
 FNodeFlags CScene::NodeFlagsForShowFlags(FShowFlags ShowFlags)
 {
     FNodeFlags Out = ENodeType::Root;
-    if ((ShowFlags & EShowFlag::SplitWorld) != 0)      Out |= ENodeType::Model;
-    if ((ShowFlags & EShowFlag::MergedWorld) != 0)     Out |= ENodeType::Static;
-    if ((ShowFlags & EShowFlag::WorldCollision) != 0)  Out |= ENodeType::Collision;
-    if ((ShowFlags & EShowFlag::Objects) != 0)         Out |= ENodeType::Script | ENodeType::ScriptExtra;
-    if ((ShowFlags & EShowFlag::Lights) != 0)          Out |= ENodeType::Light;
+    if (ShowFlags.HasFlag(EShowFlag::SplitWorld))     Out |= ENodeType::Model;
+    if (ShowFlags.HasFlag(EShowFlag::MergedWorld))    Out |= ENodeType::Static;
+    if (ShowFlags.HasFlag(EShowFlag::WorldCollision)) Out |= ENodeType::Collision;
+    if (ShowFlags.HasFlag(EShowFlag::Objects))        Out |= ENodeType::Script | ENodeType::ScriptExtra;
+    if (ShowFlags.HasFlag(EShowFlag::Lights))         Out |= ENodeType::Light;
     return Out;
 }

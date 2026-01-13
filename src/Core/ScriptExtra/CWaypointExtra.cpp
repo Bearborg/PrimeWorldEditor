@@ -161,9 +161,10 @@ void CWaypointExtra::AddToRenderer(CRenderer *pRenderer, const SViewInfo& rkView
 {
     // This call is necessary because if we try to build links in the constructor, it
     // won't work properly because we haven't finished loading the scene yet.
-    if (!mLinksBuilt) BuildLinks();
+    if (!mLinksBuilt)
+        BuildLinks();
 
-    if (!rkViewInfo.GameMode && ((rkViewInfo.ShowFlags & EShowFlag::ObjectGeometry) != 0) && mpParent->IsVisible() && !mpParent->IsSelected())
+    if (!rkViewInfo.GameMode && rkViewInfo.ShowFlags.HasFlag(EShowFlag::ObjectGeometry) && mpParent->IsVisible() && !mpParent->IsSelected())
     {
         for (uint32 iLink = 0; iLink < mLinks.size(); iLink++)
         {

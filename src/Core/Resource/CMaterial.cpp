@@ -134,7 +134,7 @@ bool CMaterial::SetCurrent(FRenderOptions Options)
         // Set RGB blend equation - force to ZERO/ONE if alpha is disabled
         GLenum srcRGB, dstRGB, srcAlpha, dstAlpha;
 
-        if ((Options & ERenderOption::NoAlpha) != 0) {
+        if (Options.HasFlag(ERenderOption::NoAlpha)) {
             srcRGB = GL_ONE;
             dstRGB = GL_ZERO;
         } else {
@@ -142,7 +142,7 @@ bool CMaterial::SetCurrent(FRenderOptions Options)
             dstRGB = mBlendDstFac;
         }
 
-        if ((mOptions & EMaterialOption::ZeroDestAlpha) != 0) {
+        if (mOptions.HasFlag(EMaterialOption::ZeroDestAlpha)) {
             srcAlpha = GL_ZERO;
             dstAlpha = GL_ZERO;
         } else {
@@ -165,7 +165,7 @@ bool CMaterial::SetCurrent(FRenderOptions Options)
         // COLOR0_Amb,Mat is initialized by the node instead of by the material
 
         // Set depth write - force on if alpha is disabled (lots of weird depth issues otherwise)
-        if ((mOptions & EMaterialOption::DepthWrite) != 0 || (Options & ERenderOption::NoAlpha) != 0)
+        if (mOptions.HasFlag(EMaterialOption::DepthWrite) || Options.HasFlag(ERenderOption::NoAlpha))
             glDepthMask(GL_TRUE);
         else
             glDepthMask(GL_FALSE);

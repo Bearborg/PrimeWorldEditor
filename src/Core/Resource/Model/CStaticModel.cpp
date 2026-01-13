@@ -14,7 +14,7 @@ CStaticModel::CStaticModel()
 
 CStaticModel::CStaticModel(CMaterial *pMat)
     : mpMaterial(pMat)
-    , mTransparent((pMat->Options() & EMaterialOption::Transparent) != 0)
+    , mTransparent(pMat->Options().HasFlag(EMaterialOption::Transparent))
 {
 }
 
@@ -125,17 +125,17 @@ void CStaticModel::Draw(FRenderOptions Options)
     };
 
     // Bind material
-    if ((Options & ERenderOption::NoMaterialSetup) == 0)
+    if (Options.HasFlag(ERenderOption::NoMaterialSetup))
+    {
+        DoDraw();
+    }
+    else
     {
         for (CMaterial* passMat = mpMaterial; passMat != nullptr; passMat = passMat->GetNextDrawPass())
         {
             passMat->SetCurrent(Options);
             DoDraw();
         }
-    }
-    else
-    {
-        DoDraw();
     }
 
     mVBO.Unbind();
@@ -170,17 +170,17 @@ void CStaticModel::DrawSurface(FRenderOptions Options, uint32_t Surface)
     };
 
     // Bind material
-    if ((Options & ERenderOption::NoMaterialSetup) == 0)
+    if (Options.HasFlag(ERenderOption::NoMaterialSetup))
+    {
+        DoDraw();
+    }
+    else
     {
         for (CMaterial* passMat = mpMaterial; passMat != nullptr; passMat = passMat->GetNextDrawPass())
         {
             passMat->SetCurrent(Options);
             DoDraw();
         }
-    }
-    else
-    {
-        DoDraw();
     }
 
     mVBO.Unbind();

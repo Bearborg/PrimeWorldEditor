@@ -253,15 +253,15 @@ bool CBasicViewport::IsCursorVisible() const
 
 bool CBasicViewport::IsMouseInputActive() const
 {
-    static constexpr FMouseInputs skMoveButtons = EMouseInput::MiddleButton | EMouseInput::RightButton;
-    return ((mButtonsPressed & skMoveButtons) != 0);
+    static constexpr auto skMoveButtons = FMouseInputs(EMouseInput::MiddleButton | EMouseInput::RightButton);
+    return mButtonsPressed.HasAnyFlags(skMoveButtons);
 }
 
 bool CBasicViewport::IsKeyboardInputActive() const
 {
-    static constexpr FKeyInputs skMoveKeys = EKeyInput::Q | EKeyInput::W | EKeyInput::E |
-                                             EKeyInput::A | EKeyInput::S | EKeyInput::D;
-    return ((mKeysPressed & skMoveKeys) != 0);
+    static constexpr auto skMoveKeys = FKeyInputs(EKeyInput::Q | EKeyInput::W | EKeyInput::E |
+                                                  EKeyInput::A | EKeyInput::S | EKeyInput::D);
+    return mKeysPressed.HasAnyFlags(skMoveKeys);
 }
 
 CCamera& CBasicViewport::Camera()
@@ -337,8 +337,10 @@ void CBasicViewport::ProcessInput()
     }
 
     if (IsKeyboardInputActive())
-        if ((mKeysPressed & EKeyInput::Ctrl) == 0)
+    {
+        if (!mKeysPressed.HasFlag(EKeyInput::Ctrl))
             mCamera.ProcessKeyInput(mKeysPressed, DeltaTime);
+    }
 
     // Update view info
     const CMatrix4f& rkView = mCamera.ViewMatrix();

@@ -67,7 +67,7 @@ void CCollisionRenderData::BuildRenderData(const SCollisionIndexData& kIndexData
         uint16 VertIdx2 = (LineBVertA != LineAVertA && LineBVertA != LineAVertB ? LineBVertA : LineBVertB);
 
         // Reverse vertex order if material indicates tri is flipped
-        if ((kMaterial & eCF_FlippedTri) != 0)
+        if (kMaterial.HasFlag(eCF_FlippedTri))
         {
             std::swap(VertIdx0, VertIdx2);
         }

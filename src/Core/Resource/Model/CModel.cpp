@@ -281,7 +281,7 @@ bool CModel::HasTransparency(size_t MatSet) const
 
     for (size_t iMat = 0; iMat < mMaterialSets[MatSet]->NumMaterials(); iMat++)
     {
-        if (mMaterialSets[MatSet]->MaterialByIndex(iMat, true)->Options() & EMaterialOption::Transparent)
+        if (mMaterialSets[MatSet]->MaterialByIndex(iMat, true)->Options().HasFlag(EMaterialOption::Transparent))
             return true;
     }
 
@@ -293,8 +293,8 @@ bool CModel::IsSurfaceTransparent(size_t Surface, size_t MatSet) const
     if (MatSet >= mMaterialSets.size())
         MatSet = mMaterialSets.size() - 1;
 
-    const uint32 matID = mSurfaces[Surface]->MaterialID;
-    return (mMaterialSets[MatSet]->MaterialByIndex(matID, true)->Options() & EMaterialOption::Transparent) != 0;
+    const auto matID = mSurfaces[Surface]->MaterialID;
+    return mMaterialSets[MatSet]->MaterialByIndex(matID, true)->Options().HasFlag(EMaterialOption::Transparent);
 }
 
 bool CModel::IsLightmapped() const

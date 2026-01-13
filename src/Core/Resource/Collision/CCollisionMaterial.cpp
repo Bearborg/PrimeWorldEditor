@@ -1,7 +1,8 @@
 #include "CCollisionMaterial.h"
-#include <Common/Macros.h>
-#include <unordered_map>
+
 #include <array>
+#include <span>
+#include <unordered_map>
 
 ECollisionFlag CCollisionMaterial::SurfaceType(EGame Game) const
 {
@@ -19,25 +20,17 @@ ECollisionFlag CCollisionMaterial::SurfaceType(EGame Game) const
     };
 
     // Determine which list we should use.
-    const ECollisionFlag* pkFlagArray;
-    size_t Num;
-
+    std::span<const ECollisionFlag> colFlags;
     if (Game <= EGame::Prime)
-    {
-        pkFlagArray = skPrimeTypeHierarchy.data();
-        Num = skPrimeTypeHierarchy.size();
-    }
+        colFlags = skPrimeTypeHierarchy;
     else
-    {
-        pkFlagArray = skEchoesTypeHierarchy.data();
-        Num = skEchoesTypeHierarchy.size();
-    }
+        colFlags = skEchoesTypeHierarchy;
 
     // Locate type.
-    for (size_t iType = 0; iType < Num; iType++)
+    for (const auto flag : colFlags)
     {
-        if (*this & pkFlagArray[iType])
-            return pkFlagArray[iType];
+        if (HasFlag(flag))
+            return flag;
     }
     return eCF_Unknown;
 }

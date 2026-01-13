@@ -30,7 +30,7 @@ void CModelLoader::LoadWorldMeshHeader(IInputStream& rModel)
 void CModelLoader::LoadAttribArrays(IInputStream& rModel)
 {
     // Positions
-    if ((mFlags & EModelLoaderFlag::HalfPrecisionPositions) != 0) // 16-bit (DKCR only)
+    if (mFlags.HasFlag(EModelLoaderFlag::HalfPrecisionPositions)) // 16-bit (DKCR only)
     {
         mPositions.resize(mpSectionMgr->CurrentSectionSize() / 0x6);
         constexpr float Divisor = 8192.f; // Might be incorrect! Needs verification via size comparison.
@@ -53,7 +53,7 @@ void CModelLoader::LoadAttribArrays(IInputStream& rModel)
     mpSectionMgr->ToNextSection();
 
     // Normals
-    if ((mFlags & EModelLoaderFlag::HalfPrecisionNormals) != 0) // 16-bit
+    if (mFlags.HasFlag(EModelLoaderFlag::HalfPrecisionNormals)) // 16-bit
     {
         mNormals.resize(mpSectionMgr->CurrentSectionSize() / 0x6);
         const float Divisor = (mVersion < EGame::DKCReturns) ? 32768.f : 16384.f;
@@ -93,7 +93,7 @@ void CModelLoader::LoadAttribArrays(IInputStream& rModel)
     mpSectionMgr->ToNextSection();
 
     // Lightmap UVs
-    if ((mFlags & EModelLoaderFlag::LightmapUVs) != 0)
+    if (mFlags.HasFlag(EModelLoaderFlag::LightmapUVs))
     {
         mTex1.resize(mpSectionMgr->CurrentSectionSize() / 0x4);
         const float Divisor = (mVersion < EGame::DKCReturns) ? 32768.f : 8192.f;
@@ -149,7 +149,7 @@ SSurface* CModelLoader::LoadSurface(IInputStream& rModel)
 
             for (uint32_t iMtxAttr = 0; iMtxAttr < 8; iMtxAttr++)
             {
-                if ((VtxDesc & static_cast<uint>(EVertexAttribute::PosMtx << iMtxAttr)) != 0)
+                if (VtxDesc.HasFlag(EVertexAttribute(EVertexAttribute::PosMtx << iMtxAttr)))
                     rModel.Seek(0x1, SEEK_CUR);
             }
 
@@ -158,7 +158,7 @@ SSurface* CModelLoader::LoadSurface(IInputStream& rModel)
             // tex0 can also be read from either UV buffer; depends what the material says.
 
             // Position
-            if ((VtxDesc & EVertexAttribute::Position) != 0)
+            if (VtxDesc.HasFlag(EVertexAttribute::Position))
             {
                 const auto PosIndex = rModel.ReadU16();
                 Vtx.Position = mPositions[PosIndex];
@@ -169,13 +169,13 @@ SSurface* CModelLoader::LoadSurface(IInputStream& rModel)
             }
 
             // Normal
-            if ((VtxDesc & EVertexAttribute::Normal) != 0)
+            if (VtxDesc.HasFlag(EVertexAttribute::Normal))
                 Vtx.Normal = mNormals[rModel.ReadU16()];
 
             // Color
             for (size_t iClr = 0; iClr < Vtx.Color.size(); iClr++)
             {
-                if ((VtxDesc & static_cast<uint32>(EVertexAttribute::Color0 << iClr)) != 0)
+                if (VtxDesc.HasFlag(EVertexAttribute(EVertexAttribute::Color0 << iClr)))
                     Vtx.Color[iClr] = mColors[rModel.ReadU16()];
             }
 
@@ -183,9 +183,9 @@ SSurface* CModelLoader::LoadSurface(IInputStream& rModel)
             if (mVersion < EGame::DKCReturns)
             {
                 // Tex0
-                if ((VtxDesc & EVertexAttribute::Tex0) != 0)
+                if (VtxDesc.HasFlag(EVertexAttribute::Tex0))
                 {
-                    if ((mFlags & EModelLoaderFlag::LightmapUVs) != 0 && (pMat->Options() & EMaterialOption::ShortTexCoord) != 0)
+                    if (mFlags.HasFlag(EModelLoaderFlag::LightmapUVs) && pMat->Options().HasFlag(EMaterialOption::ShortTexCoord))
                         Vtx.Tex[0] = mTex1[rModel.ReadU16()];
                     else
                         Vtx.Tex[0] = mTex0[rModel.ReadU16()];
@@ -194,7 +194,7 @@ SSurface* CModelLoader::LoadSurface(IInputStream& rModel)
                 // Tex1-7
                 for (size_t iTex = 1; iTex < 7; iTex++)
                 {
-                    if ((VtxDesc & static_cast<uint32>(EVertexAttribute::Tex0 << iTex)) != 0)
+                    if (VtxDesc.HasFlag(EVertexAttribute(EVertexAttribute::Tex0 << iTex)))
                         Vtx.Tex[iTex] = mTex0[rModel.ReadU16()];
                 }
             }
@@ -203,7 +203,7 @@ SSurface* CModelLoader::LoadSurface(IInputStream& rModel)
                 // Tex0-7
                 for (size_t iTex = 0; iTex < 7; iTex++)
                 {
-                    if ((VtxDesc & static_cast<uint32>(EVertexAttribute::Tex0 << iTex)) != 0)
+                    if (VtxDesc.HasFlag(EVertexAttribute(EVertexAttribute::Tex0 << iTex)))
                     {
                         if (!mSurfaceUsingTex1)
                             Vtx.Tex[iTex] = mTex0[rModel.ReadU16()];
@@ -306,7 +306,7 @@ SSurface* CModelLoader::LoadAssimpMesh(const aiMesh *pkMesh, CMaterialSet *pSet)
             Desc |= EVertexAttribute::Normal;
 
         for (size_t iUV = 0; iUV < pkMesh->GetNumUVChannels(); iUV++)
-            Desc |= static_cast<uint32>(EVertexAttribute::Tex0 << iUV);
+            Desc |= EVertexAttribute(EVertexAttribute::Tex0 << iUV);
 
         pMat->SetVertexDescription(Desc);
 

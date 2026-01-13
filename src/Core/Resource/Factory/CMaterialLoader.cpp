@@ -72,7 +72,7 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadPrimeMaterial()
     auto pMat = std::make_unique<CMaterial>(mVersion, FVertexDescription{});
 
     // Flags
-    pMat->mOptions = (mpFile->ReadU32() & static_cast<uint>(EMaterialOption::AllMP1Settings));
+    pMat->mOptions = FMaterialOptions(mpFile->ReadU32() & static_cast<uint32_t>(EMaterialOption::AllMP1Settings));
     pMat->mOptions.SetFlag(EMaterialOption::ColorWrite);
 
     // Textures
@@ -96,7 +96,7 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadPrimeMaterial()
     mpFile->Seek(0x4, SEEK_CUR); // Skipping group index
 
     // Konst
-    if ((pMat->mOptions & EMaterialOption::Konst) != 0)
+    if (pMat->mOptions.HasFlag(EMaterialOption::Konst))
     {
         const auto KonstCount = mpFile->ReadU32();
 
@@ -117,7 +117,7 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadPrimeMaterial()
     pMat->mBlendSrcFac = gBlendFactor[mpFile->ReadU16()];
 
     // Indirect texture
-    if ((pMat->mOptions & EMaterialOption::IndStage) != 0)
+    if (pMat->mOptions.HasFlag(EMaterialOption::IndStage))
     {
         const auto IndTexIndex = mpFile->ReadU32();
         pMat->mpIndirectTexture = mTextures[TextureIndices[IndTexIndex]];
@@ -469,22 +469,22 @@ void CMaterialLoader::SelectBestCombinerConfig(EMP3RenderConfig& OutConfig, uint
     const uint8 UseAlpha = Material.GetINT(EINT::OPAC);
 
     EMP3RenderConfig UseConfig = EMP3RenderConfig::FullRenderOpaque;
-    if ((Material.mOptions & EMP3MaterialOption::SolidWhiteOnly) != 0)
+    if (Material.mOptions.HasFlag(EMP3MaterialOption::SolidWhiteOnly))
     {
         // Just white
         UseConfig = EMP3RenderConfig::SolidWhite;
     }
-    else if ((Material.mOptions & EMP3MaterialOption::SolidColorOnly) != 0)
+    else if (Material.mOptions.HasFlag(EMP3MaterialOption::SolidColorOnly))
     {
         // Just KColor/KAlpha
         UseConfig = EMP3RenderConfig::SolidKColorKAlpha;
     }
     else
     {
-        const bool AdditiveIncandecence = (Material.mOptions & EMP3MaterialOption::AdditiveIncandecence) != 0;
+        const bool AdditiveIncandecence = Material.mOptions.HasFlag(EMP3MaterialOption::AdditiveIncandecence);
         // Essentially skips optimized variants for special rendering cases even if opaque
         // Config 6 being an important case here
-        const bool ForceAlphaBlendingConfig = (Material.mOptions & EMP3MaterialOption::PreIncandecenceTransparency) != 0;
+        const bool ForceAlphaBlendingConfig = Material.mOptions.HasFlag(EMP3MaterialOption::PreIncandecenceTransparency);
         if (AdditiveIncandecence && !ForceAlphaBlendingConfig)
         {
             // Incandecence/Reflect only
@@ -493,7 +493,7 @@ void CMaterialLoader::SelectBestCombinerConfig(EMP3RenderConfig& OutConfig, uint
         else
         {
             bool AlphaCompare = false;
-            if ((Material.mOptions & EMP3MaterialOption::Masked) != 0 && UseAlpha == 255)
+            if (Material.mOptions.HasFlag(EMP3MaterialOption::Masked) && UseAlpha == 255)
             {
                 AlphaCompare = true;
             }
@@ -505,7 +505,7 @@ void CMaterialLoader::SelectBestCombinerConfig(EMP3RenderConfig& OutConfig, uint
             }
 
             bool ForceNoBloom = true;
-            if (!(ConsiderBloom && (Material.mOptions & EMP3MaterialOption::Bloom) != 0))
+            if (!(ConsiderBloom && Material.mOptions.HasFlag(EMP3MaterialOption::Bloom)))
                 ForceNoBloom = false;
 
             if (AdditiveIncandecence)
@@ -587,14 +587,13 @@ constexpr std::array KColorEighths
 bool CMaterialLoader::SetupStaticDiffuseLightingStage(STevTracker& Tracker, CMaterial* pMat,
                                                       const SMP3IntermediateMaterial& Intermediate, bool FullAlpha)
 {
-    const bool hasDIFFTexture = Intermediate.GetPASS(EPASS::DIFF).operator bool();
-    if (!hasDIFFTexture && (Intermediate.mOptions & (EMP3MaterialOption::AdditiveIncandecence |
-                                                     EMP3MaterialOption::PreIncandecenceTransparency |
-                                                     EMP3MaterialOption::ForceLightingStage)) !=
-                                                     EMP3MaterialOption::ForceLightingStage)
-    {
+    const bool hasDIFFTexture = Intermediate.GetPASS(EPASS::DIFF).has_value();
+    constexpr auto LightTest = EMP3MaterialOption(EMP3MaterialOption::AdditiveIncandecence |
+                                                  EMP3MaterialOption::PreIncandecenceTransparency |
+                                                  EMP3MaterialOption::ForceLightingStage);
+
+    if (!hasDIFFTexture && (Intermediate.mOptions & LightTest) != EMP3MaterialOption::ForceLightingStage)
         return false;
-    }
 
     pMat->SetTevColor(Intermediate.GetCLR(ECLR::DIFB), kColor1Reg);
     auto pPass = std::make_unique<CMaterialPass>(pMat);
@@ -802,7 +801,7 @@ bool CMaterialLoader::SetupTransparencyStage(STevTracker& Tracker, CMaterial* pM
         auto pPass = std::make_unique<CMaterialPass>(pMat);
         SetMP3IntermediateIntoMaterialPass(pPass.get(), *IntermediateTran);
 
-        if ((IntermediateTran->mSettings & EPassSettings::InvertOpacityMap) != 0)
+        if (IntermediateTran->mSettings.HasFlag(EPassSettings::InvertOpacityMap))
         {
             pPass->SetAlphaInputs(kPrevAlpha, kZeroAlpha, kTextureAlpha, kZeroAlpha);
         }
@@ -861,7 +860,7 @@ void CMaterialLoader::SetupTransparencyKAlphaMultiplyStage(STevTracker& Tracker,
             }
         }
         const auto& IntermediateTran = Intermediate.GetPASS(EPASS::TRAN);
-        if (IntermediateTran && (IntermediateTran->mSettings & EPassSettings::InvertOpacityMap) != 0)
+        if (IntermediateTran && IntermediateTran->mSettings.HasFlag(EPassSettings::InvertOpacityMap))
         {
             pPass->SetAlphaInputs(argA, kZeroAlpha, kTextureAlpha, kZeroAlpha);
         }
@@ -907,7 +906,7 @@ void CMaterialLoader::SetupTransparencyKAlphaMultiplyStage(STevTracker& Tracker,
 bool CMaterialLoader::SetupReflectionAlphaStage(STevTracker& Tracker, CMaterial* pMat,
                                                 const SMP3IntermediateMaterial& Intermediate)
 {
-    if ((Intermediate.mOptions & EMP3MaterialOption::ReflectionAlphaTarget) != 0)
+    if (Intermediate.mOptions.HasFlag(EMP3MaterialOption::ReflectionAlphaTarget))
     {
         if (const auto& IntermediateRfld = Intermediate.GetPASS(EPASS::RFLD))
         {
@@ -932,7 +931,7 @@ bool CMaterialLoader::SetupReflectionStages(STevTracker& Tracker, CMaterial* pMa
                                             const SMP3IntermediateMaterial& Intermediate,
                                             ETevColorInput argD, bool StaticLighting)
 {
-    if (!Intermediate.GetPASS(EPASS::RFLD) || (Intermediate.mOptions & EMP3MaterialOption::ReflectionAlphaTarget) != 0)
+    if (!Intermediate.GetPASS(EPASS::RFLD) || Intermediate.mOptions.HasFlag(EMP3MaterialOption::ReflectionAlphaTarget))
         return false;
 
     ETevColorInput argC = kOneRGB;
@@ -1015,7 +1014,7 @@ bool CMaterialLoader::SetupIncandecenceStage(STevTracker& Tracker, CMaterial* pM
     pPass->SetColorOutput(kPrevReg);
     pPass->SetAlphaOutput(kPrevReg);
     pPass->SetRasSel(kRasColorNull);
-    if ((IntermediateInca->mSettings & EPassSettings::BloomContribution) != 0)
+    if (IntermediateInca->mSettings.HasFlag(EPassSettings::BloomContribution))
     {
         pPass->SetTexSwapComp(3, IntermediateInca->GetSwapAlphaComp());
         pPass->SetKAlphaSel(KColorEighths[Intermediate.GetINT(EINT::BNIF) / 32]);
@@ -1091,7 +1090,7 @@ bool CMaterialLoader::SetupStartingIncandecenceStage(STevTracker& Tracker, CMate
     /* KColor is set as the INCA mod color in game */
     pPass->SetKColorSel(kKonstOne);
     pPass->SetColorInputs(kZeroRGB, kTextureRGB, kKonstRGB, kZeroRGB);
-    if ((IntermediateInca->mSettings & EPassSettings::BloomContribution) != 0)
+    if (IntermediateInca->mSettings.HasFlag(EPassSettings::BloomContribution))
     {
         pPass->SetTexSwapComp(3, IntermediateInca->GetSwapAlphaComp());
         const uint8 bnif = Intermediate.GetINT(EINT::BNIF);

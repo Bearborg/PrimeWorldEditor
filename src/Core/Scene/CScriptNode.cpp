@@ -144,10 +144,10 @@ void CScriptNode::AddToRenderer(CRenderer* pRenderer, const SViewInfo& rkViewInf
     if (ShouldDraw)
     {
         // Otherwise, we proceed as normal
-        if ((rkViewInfo.ShowFlags & EShowFlag::ObjectCollision) != 0 && !rkViewInfo.GameMode)
+        if (rkViewInfo.ShowFlags.HasFlag(EShowFlag::ObjectCollision) && !rkViewInfo.GameMode)
             mpCollisionNode->AddToRenderer(pRenderer, rkViewInfo);
 
-        if ((rkViewInfo.ShowFlags & EShowFlag::ObjectGeometry) != 0 || rkViewInfo.GameMode)
+        if (rkViewInfo.ShowFlags.HasFlag(EShowFlag::ObjectGeometry) || rkViewInfo.GameMode)
         {
             for (auto& attachment : mAttachments)
                 attachment->AddToRenderer(pRenderer, rkViewInfo);

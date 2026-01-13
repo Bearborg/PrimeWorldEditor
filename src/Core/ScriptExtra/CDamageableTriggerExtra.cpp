@@ -213,7 +213,7 @@ void CDamageableTriggerExtra::AddToRenderer(CRenderer *pRenderer, const SViewInf
     if (rkViewInfo.GameMode && !mpInstance->IsActive())
         return;
 
-    if (!rkViewInfo.GameMode && ((rkViewInfo.ShowFlags & EShowFlag::ObjectGeometry) == 0))
+    if (!rkViewInfo.GameMode && !rkViewInfo.ShowFlags.HasFlag(EShowFlag::ObjectGeometry))
         return;
 
     if (mRenderSide != ERenderSide::NoRender)

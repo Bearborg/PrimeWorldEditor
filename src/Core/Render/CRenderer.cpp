@@ -112,7 +112,7 @@ void CRenderer::RenderBuckets(const SViewInfo& rkViewInfo)
     mSceneFramebuffer.Bind();
 
     // Set backface culling
-    if ((mOptions & ERenderOption::EnableBackfaceCull) != 0)
+    if (mOptions.HasFlag(ERenderOption::EnableBackfaceCull))
         glEnable(GL_CULL_FACE);
     else
         glDisable(GL_CULL_FACE);

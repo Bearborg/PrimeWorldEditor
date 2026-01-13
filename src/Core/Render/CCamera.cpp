@@ -82,15 +82,15 @@ void CCamera::ProcessKeyInput(FKeyInputs KeyFlags, double DeltaTime)
     // Generally the camera moves at a fixed rate without any modifier
     // key held down. However in a lot of editors, it's a little more intuitive
     // to allow holding down e.g. Shift for a toggleable speed.
-    const auto is_shift_pressed = (KeyFlags & EKeyInput::Shift) != 0;
+    const auto is_shift_pressed = KeyFlags.HasFlag(EKeyInput::Shift);
     mMoveSpeed = is_shift_pressed ? 2.0f : default_move_speed;
 
-    if ((KeyFlags & EKeyInput::W) != 0) Zoom(FDeltaTime * 25.f);
-    if ((KeyFlags & EKeyInput::S) != 0) Zoom(-FDeltaTime * 25.f);
-    if ((KeyFlags & EKeyInput::Q) != 0) Pan(0, -FDeltaTime * 25.f);
-    if ((KeyFlags & EKeyInput::E) != 0) Pan(0, FDeltaTime * 25.f);
-    if ((KeyFlags & EKeyInput::A) != 0) Pan(-FDeltaTime * 25.f, 0);
-    if ((KeyFlags & EKeyInput::D) != 0) Pan(FDeltaTime * 25.f, 0);
+    if (KeyFlags.HasFlag(EKeyInput::W)) Zoom(FDeltaTime * 25.f);
+    if (KeyFlags.HasFlag(EKeyInput::S)) Zoom(-FDeltaTime * 25.f);
+    if (KeyFlags.HasFlag(EKeyInput::Q)) Pan(0, -FDeltaTime * 25.f);
+    if (KeyFlags.HasFlag(EKeyInput::E)) Pan(0, FDeltaTime * 25.f);
+    if (KeyFlags.HasFlag(EKeyInput::A)) Pan(-FDeltaTime * 25.f, 0);
+    if (KeyFlags.HasFlag(EKeyInput::D)) Pan(FDeltaTime * 25.f, 0);
 }
 
 void CCamera::ProcessMouseInput(FKeyInputs KeyFlags, FMouseInputs MouseFlags, float XMovement, float YMovement)
@@ -98,14 +98,14 @@ void CCamera::ProcessMouseInput(FKeyInputs KeyFlags, FMouseInputs MouseFlags, fl
     // Free Camera
     if (mMode == ECameraMoveMode::Free)
     {
-        if ((MouseFlags & EMouseInput::MiddleButton) != 0)
+        if (MouseFlags.HasFlag(EMouseInput::MiddleButton))
         {
-            if ((KeyFlags & EKeyInput::Ctrl) != 0)
+            if (KeyFlags.HasFlag(EKeyInput::Ctrl))
                 Zoom(-YMovement * 0.2f);
             else
                 Pan(-XMovement, YMovement);
         }
-        else if ((MouseFlags & EMouseInput::RightButton) != 0)
+        else if (MouseFlags.HasFlag(EMouseInput::RightButton))
         {
             Rotate(XMovement, YMovement);
         }
@@ -113,8 +113,7 @@ void CCamera::ProcessMouseInput(FKeyInputs KeyFlags, FMouseInputs MouseFlags, fl
     else if (mMode == ECameraMoveMode::Orbit)
     {
         // Orbit Camera
-
-        if ((MouseFlags & EMouseInput::MiddleButton) != 0 || (MouseFlags & EMouseInput::RightButton) != 0)
+        if (MouseFlags.HasFlag(EMouseInput::MiddleButton) || MouseFlags.HasFlag(EMouseInput::RightButton))
             Pan(-XMovement, YMovement);
     }
 }

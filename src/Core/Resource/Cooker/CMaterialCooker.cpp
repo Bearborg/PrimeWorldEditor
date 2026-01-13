@@ -9,26 +9,26 @@
 static uint32_t ConvertFromVertexDescription(FVertexDescription VtxDesc)
 {
     uint32_t Flags = 0;
-    if (VtxDesc & EVertexAttribute::Position)    Flags |= 0x00000003;
-    if (VtxDesc & EVertexAttribute::Normal)      Flags |= 0x0000000C;
-    if (VtxDesc & EVertexAttribute::Color0)      Flags |= 0x00000030;
-    if (VtxDesc & EVertexAttribute::Color1)      Flags |= 0x000000C0;
-    if (VtxDesc & EVertexAttribute::Tex0)        Flags |= 0x00000300;
-    if (VtxDesc & EVertexAttribute::Tex1)        Flags |= 0x00000C00;
-    if (VtxDesc & EVertexAttribute::Tex2)        Flags |= 0x00003000;
-    if (VtxDesc & EVertexAttribute::Tex3)        Flags |= 0x0000C000;
-    if (VtxDesc & EVertexAttribute::Tex4)        Flags |= 0x00030000;
-    if (VtxDesc & EVertexAttribute::Tex5)        Flags |= 0x000C0000;
-    if (VtxDesc & EVertexAttribute::Tex6)        Flags |= 0x00300000;
-    if (VtxDesc & EVertexAttribute::Tex7)        Flags |= 0x00C00000;
-    if (VtxDesc & EVertexAttribute::PosMtx)      Flags |= 0x01000000;
-    if (VtxDesc & EVertexAttribute::Tex0Mtx)     Flags |= 0x02000000;
-    if (VtxDesc & EVertexAttribute::Tex1Mtx)     Flags |= 0x04000000;
-    if (VtxDesc & EVertexAttribute::Tex2Mtx)     Flags |= 0x08000000;
-    if (VtxDesc & EVertexAttribute::Tex3Mtx)     Flags |= 0x10000000;
-    if (VtxDesc & EVertexAttribute::Tex4Mtx)     Flags |= 0x20000000;
-    if (VtxDesc & EVertexAttribute::Tex5Mtx)     Flags |= 0x40000000;
-    if (VtxDesc & EVertexAttribute::Tex6Mtx)     Flags |= 0x80000000;
+    if (VtxDesc.HasFlag(EVertexAttribute::Position)) Flags |= 0x00000003;
+    if (VtxDesc.HasFlag(EVertexAttribute::Normal))   Flags |= 0x0000000C;
+    if (VtxDesc.HasFlag(EVertexAttribute::Color0))   Flags |= 0x00000030;
+    if (VtxDesc.HasFlag(EVertexAttribute::Color1))   Flags |= 0x000000C0;
+    if (VtxDesc.HasFlag(EVertexAttribute::Tex0))     Flags |= 0x00000300;
+    if (VtxDesc.HasFlag(EVertexAttribute::Tex1))     Flags |= 0x00000C00;
+    if (VtxDesc.HasFlag(EVertexAttribute::Tex2))     Flags |= 0x00003000;
+    if (VtxDesc.HasFlag(EVertexAttribute::Tex3))     Flags |= 0x0000C000;
+    if (VtxDesc.HasFlag(EVertexAttribute::Tex4))     Flags |= 0x00030000;
+    if (VtxDesc.HasFlag(EVertexAttribute::Tex5))     Flags |= 0x000C0000;
+    if (VtxDesc.HasFlag(EVertexAttribute::Tex6))     Flags |= 0x00300000;
+    if (VtxDesc.HasFlag(EVertexAttribute::Tex7))     Flags |= 0x00C00000;
+    if (VtxDesc.HasFlag(EVertexAttribute::PosMtx))   Flags |= 0x01000000;
+    if (VtxDesc.HasFlag(EVertexAttribute::Tex0Mtx))  Flags |= 0x02000000;
+    if (VtxDesc.HasFlag(EVertexAttribute::Tex1Mtx))  Flags |= 0x04000000;
+    if (VtxDesc.HasFlag(EVertexAttribute::Tex2Mtx))  Flags |= 0x08000000;
+    if (VtxDesc.HasFlag(EVertexAttribute::Tex3Mtx))  Flags |= 0x10000000;
+    if (VtxDesc.HasFlag(EVertexAttribute::Tex4Mtx))  Flags |= 0x20000000;
+    if (VtxDesc.HasFlag(EVertexAttribute::Tex5Mtx))  Flags |= 0x40000000;
+    if (VtxDesc.HasFlag(EVertexAttribute::Tex6Mtx))  Flags |= 0x80000000;
     return Flags;
 }
 

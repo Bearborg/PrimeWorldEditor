@@ -67,7 +67,7 @@ void CDoorExtra::AddToRenderer(CRenderer *pRenderer, const SViewInfo& rkViewInfo
     if (rkViewInfo.GameMode && !mpInstance->IsActive())
         return;
 
-    if (!rkViewInfo.GameMode && ((rkViewInfo.ShowFlags & EShowFlag::ObjectGeometry) == 0))
+    if (!rkViewInfo.GameMode && !rkViewInfo.ShowFlags.HasFlag(EShowFlag::ObjectGeometry))
         return;
 
     if (mpParent->IsVisible() && rkViewInfo.ViewFrustum.BoxInFrustum(AABox()))

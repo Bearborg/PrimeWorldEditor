@@ -42,7 +42,7 @@ void CModelCooker::GenerateSurfaceData()
 
             for (size_t iVtx = 0; iVtx < NumVerts; iVtx++)
             {
-                const uint32 VertIndex = pPrim->Vertices[iVtx].ArrayPosition;
+                const uint32_t VertIndex = pPrim->Vertices[iVtx].ArrayPosition;
                 mVertices[VertIndex] = pPrim->Vertices[iVtx];
 
                 if (VertIndex > MaxIndex)
@@ -118,8 +118,8 @@ void CModelCooker::WriteModelPrime(IOutputStream& rOut)
     // Float UV coordinates
     for (size_t iTexSlot = 0; iTexSlot < 8; iTexSlot++)
     {
-        const auto TexSlotBit = static_cast<uint32_t>(EVertexAttribute::Tex0 << iTexSlot);
-        const bool HasTexSlot = (mVtxAttribs & TexSlotBit) != 0;
+        const auto TexSlotBit = EVertexAttribute(EVertexAttribute::Tex0 << iTexSlot);
+        const bool HasTexSlot = mVtxAttribs.HasFlag(TexSlotBit);
         if (HasTexSlot)
         {
             for (size_t iTex = 0; iTex < mNumVertices; iTex++)
@@ -173,37 +173,37 @@ void CModelCooker::WriteModelPrime(IOutputStream& rOut)
                 {
                     for (size_t iMtxAttribs = 0; iMtxAttribs < pVert.MatrixIndices.size(); iMtxAttribs++)
                     {
-                        const auto  MatrixBit = static_cast<uint32_t>(EVertexAttribute::PosMtx << iMtxAttribs);
-                        if ((VtxAttribs & MatrixBit) != 0)
+                        const auto MatrixBit = EVertexAttribute(EVertexAttribute::PosMtx << iMtxAttribs);
+                        if (VtxAttribs.HasFlag(MatrixBit))
                         {
                             rOut.WriteU8(pVert.MatrixIndices[iMtxAttribs]);
                         }
                     }
                 }
 
-                const auto VertexIndex = static_cast<uint16>(pVert.ArrayPosition);
+                const auto VertexIndex = static_cast<uint16_t>(pVert.ArrayPosition);
 
-                if ((VtxAttribs & EVertexAttribute::Position) != 0)
+                if (VtxAttribs.HasFlag(EVertexAttribute::Position))
                     rOut.WriteU16(VertexIndex);
 
-                if ((VtxAttribs & EVertexAttribute::Normal) != 0)
+                if (VtxAttribs.HasFlag(EVertexAttribute::Normal))
                     rOut.WriteU16(VertexIndex);
 
-                if ((VtxAttribs & EVertexAttribute::Color0) != 0)
+                if (VtxAttribs.HasFlag(EVertexAttribute::Color0))
                     rOut.WriteU16(VertexIndex);
 
-                if ((VtxAttribs & EVertexAttribute::Color1) != 0)
+                if (VtxAttribs.HasFlag(EVertexAttribute::Color1))
                     rOut.WriteU16(VertexIndex);
 
                 uint16 TexOffset = 0;
                 for (uint32_t iTex = 0; iTex < 8; iTex++)
                 {
-                    const auto TexBit = static_cast<uint32_t>(EVertexAttribute::Tex0 << iTex);
+                    const auto TexBit = EVertexAttribute(EVertexAttribute::Tex0 << iTex);
 
-                    if ((VtxAttribs & TexBit) != 0)
+                    if (VtxAttribs.HasFlag(TexBit))
                     {
-                        rOut.WriteU16(static_cast<uint16>(VertexIndex + TexOffset));
-                        TexOffset += static_cast<uint16>(mNumVertices);
+                        rOut.WriteU16(static_cast<uint16_t>(VertexIndex + TexOffset));
+                        TexOffset += static_cast<uint16_t>(mNumVertices);
                     }
                 }
             }
@@ -213,7 +213,7 @@ void CModelCooker::WriteModelPrime(IOutputStream& rOut)
         const uint32_t PrimTableEnd = rOut.Tell();
         const uint32_t PrimTableSize = PrimTableEnd - PrimTableStart;
         rOut.Seek(PrimTableSizeOffset, SEEK_SET);
-        rOut.WriteU16(static_cast<uint16>(PrimTableSize));
+        rOut.WriteU16(static_cast<uint16_t>(PrimTableSize));
         rOut.Seek(PrimTableEnd, SEEK_SET);
 
         SectionMgr.AddSize(rOut);
