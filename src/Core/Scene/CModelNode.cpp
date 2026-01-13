@@ -152,7 +152,7 @@ SRayIntersection CModelNode::RayNodeIntersectTest(const CRay& rkRay, uint32_t As
 
     const CRay TransformedRay = rkRay.Transformed(Transform().Inverse());
     const FRenderOptions Options = rkViewInfo.pRenderer->RenderOptions();
-    const auto [intersects, distance] = mpModel->GetSurface(AssetID)->IntersectsRay(TransformedRay, ((Options & ERenderOption::EnableBackfaceCull) == 0));
+    const auto [intersects, distance] = mpModel->GetSurface(AssetID)->IntersectsRay(TransformedRay, !Options.HasFlag(ERenderOption::EnableBackfaceCull));
 
     if (intersects)
     {

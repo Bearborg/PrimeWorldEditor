@@ -259,7 +259,7 @@ void CDamageableTriggerExtra::RayAABoxIntersectTest(CRayCollisionTester& rTester
 
     const CRay& rkRay = rTester.Ray();
 
-    if ((rkViewInfo.pRenderer->RenderOptions() & ERenderOption::EnableBackfaceCull) != 0)
+    if (rkViewInfo.pRenderer->RenderOptions().HasFlag(ERenderOption::EnableBackfaceCull))
     {
         // We're guaranteed to be axis-aligned, so we can take advantage of that
         // to perform a very simple backface check.
