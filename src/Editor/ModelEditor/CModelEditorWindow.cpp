@@ -655,12 +655,12 @@ void CModelEditorWindow::UpdateAnimParamUI(EUVAnimMode Mode)
 {
     // Update the param labels with actual names + hide unused params for each mode.
 
-    switch ((int) Mode)
+    switch (Mode)
     {
-    case -1: // N/A
-    case 0: // ModelView No Translate
-    case 1: // ModelView
-    case 6: // Model
+    case EUVAnimMode::NoUVAnim:            // N/A
+    case EUVAnimMode::InverseMV:           // ModelView No Translate
+    case EUVAnimMode::InverseMVTranslated: // ModelView
+    case EUVAnimMode::ModelMatrix:         // Model
         ui->AnimParamALabel->hide();
         ui->AnimParamBLabel->hide();
         ui->AnimParamCLabel->hide();
@@ -671,7 +671,7 @@ void CModelEditorWindow::UpdateAnimParamUI(EUVAnimMode Mode)
         ui->AnimParamDSpinBox->hide();
         break;
 
-    case 2: // UV Scroll
+    case EUVAnimMode::UVScroll: // UV Scroll
         ui->AnimParamALabel->setText(tr("<b>Horizontal Offset:</b>"));
         ui->AnimParamBLabel->setText(tr("<b>Vertical Offset:</b>"));
         ui->AnimParamCLabel->setText(tr("<b>Horizontal Scale:</b>"));
@@ -690,7 +690,7 @@ void CModelEditorWindow::UpdateAnimParamUI(EUVAnimMode Mode)
         ui->AnimParamDSpinBox->show();
         break;
 
-    case 3: // Rotation
+    case EUVAnimMode::UVRotation: // Rotation
         ui->AnimParamALabel->setText(tr("<b>Offset:</b>"));
         ui->AnimParamBLabel->setText(tr("<b>Scale:</b>"));
         ui->AnimParamASpinBox->setValue(mpCurrentPass->AnimParam(0));
@@ -705,8 +705,8 @@ void CModelEditorWindow::UpdateAnimParamUI(EUVAnimMode Mode)
         ui->AnimParamDSpinBox->hide();
         break;
 
-    case 4: // Horizontal Filmstrip
-    case 5: // Vertical Filmstrip
+    case EUVAnimMode::HFilmstrip: // Horizontal Filmstrip
+    case EUVAnimMode::VFilmstrip: // Vertical Filmstrip
         ui->AnimParamALabel->setText(tr("<b>Scale:</b>"));
         ui->AnimParamBLabel->setText(tr("<b>Num Frames:</b>"));
         ui->AnimParamCLabel->setText(tr("<b>Step:</b>"));
@@ -725,7 +725,7 @@ void CModelEditorWindow::UpdateAnimParamUI(EUVAnimMode Mode)
         ui->AnimParamDSpinBox->show();
         break;
 
-    case 7: // Mysterious mode 7
+    case EUVAnimMode::ConvolutedModeA: // Mysterious mode 7
         ui->AnimParamALabel->setText(tr("<b>ParamA:</b>"));
         ui->AnimParamBLabel->setText(tr("<b>ParamB:</b>"));
         ui->AnimParamASpinBox->setValue(mpCurrentPass->AnimParam(0));
@@ -738,6 +738,11 @@ void CModelEditorWindow::UpdateAnimParamUI(EUVAnimMode Mode)
         ui->AnimParamBSpinBox->show();
         ui->AnimParamCSpinBox->hide();
         ui->AnimParamDSpinBox->hide();
+        break;
+
+    case EUVAnimMode::ConvolutedModeB:
+    case EUVAnimMode::SimpleMode:
+    case EUVAnimMode::Eleven:
         break;
     }
 }
