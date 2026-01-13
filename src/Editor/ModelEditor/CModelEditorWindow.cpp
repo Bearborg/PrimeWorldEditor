@@ -788,58 +788,57 @@ void CModelEditorWindow::Import()
 
 void CModelEditorWindow::ConvertToDDS()
 {
-    QString Input = QFileDialog::getOpenFileName(this, tr("Retro Texture (*.TXTR)"), {}, QStringLiteral("*.TXTR"));
+    const QString Input = QFileDialog::getOpenFileName(this, tr("Retro Texture (*.TXTR)"), {}, QStringLiteral("*.TXTR"));
     if (Input.isEmpty())
         return;
 
-    TString TexFilename = TO_TSTRING(Input);
-    CFileInStream InTextureFile(TexFilename, std::endian::little);
-    auto pTex = CTextureDecoder::LoadTXTR( InTextureFile, nullptr );
-
+    const TString TexFilename = TO_TSTRING(Input);
     const TString OutName = TexFilename.GetFilePathWithoutExtension() + ".dds";
+
+    auto InTextureFile = CFileInStream(TexFilename, std::endian::little);
+    auto pTex = CTextureDecoder::LoadTXTR(InTextureFile, nullptr);
+
     CFileOutStream Out(OutName, std::endian::little);
     if (!Out.IsValid())
     {
         QMessageBox::warning(this, tr("Error"), tr("Couldn't open output DDS!"));
+        return;
     }
+
+    const bool Success = pTex->WriteDDS(Out);
+    if (!Success)
+        QMessageBox::warning(this, tr("Error"), tr("Couldn't write output DDS!"));
     else
-    {
-        const bool Success = pTex->WriteDDS(Out);
-        if (!Success)
-            QMessageBox::warning(this, tr("Error"), tr("Couldn't write output DDS!"));
-        else
-            QMessageBox::information(this, tr("Success"), tr("Successfully converted to DDS!"));
-    }
+        QMessageBox::information(this, tr("Success"), tr("Successfully converted to DDS!"));
 }
 
 void CModelEditorWindow::ConvertToTXTR()
 {
-    QString Input = QFileDialog::getOpenFileName(this, tr("DirectDraw Surface (*.dds)"), QString(), QStringLiteral("*.dds"));
+    const QString Input = QFileDialog::getOpenFileName(this, tr("DirectDraw Surface (*.dds)"), QString(), QStringLiteral("*.dds"));
     if (Input.isEmpty())
         return;
 
-    TString TexFilename = TO_TSTRING(Input);
-    CFileInStream InTextureFile = CFileInStream(TexFilename, std::endian::little);
+    const TString TexFilename = TO_TSTRING(Input);
+    const TString OutName = TexFilename.GetFilePathWithoutExtension() + ".txtr";
+
+    auto InTextureFile = CFileInStream(TexFilename, std::endian::little);
     auto pTex = CTextureDecoder::LoadDDS(InTextureFile, nullptr);
-    TString OutName = TexFilename.GetFilePathWithoutExtension() + ".txtr";
 
     if ((pTex->TexelFormat() != ETexelFormat::DXT1) || (pTex->NumMipMaps() > 1))
     {
         QMessageBox::warning(this, tr("Error"), tr("Can't convert DDS to TXTR! Save your texture as a DXT1 DDS with no mipmaps, then try again."));
+        return;
     }
-    else
+
+    CFileOutStream Out(OutName, std::endian::big);
+    if (!Out.IsValid())
     {
-        CFileOutStream Out(OutName, std::endian::big);
-        if (!Out.IsValid())
-        {
-            QMessageBox::warning(this, tr("Error"), tr("Couldn't open output TXTR!"));
-        }
-        else
-        {
-            CTextureEncoder::EncodeTXTR(Out, pTex.get(), ETexelFormat::GX_CMPR);
-            QMessageBox::information(this, tr("Success"), tr("Successfully converted to TXTR!"));
-        }
+        QMessageBox::warning(this, tr("Error"), tr("Couldn't open output TXTR!"));
+        return;
     }
+
+    CTextureEncoder::EncodeTXTR(Out, pTex.get(), ETexelFormat::GX_CMPR);
+    QMessageBox::information(this, tr("Success"), tr("Successfully converted to TXTR!"));
 }
 
 void CModelEditorWindow::SetMeshPreview()
