@@ -1,7 +1,6 @@
 #ifndef CSELECTALLCOMMAND_H
 #define CSELECTALLCOMMAND_H
 
-#include "Editor/CSelectionIterator.h"
 #include "Editor/Undo/IUndoCommand.h"
 #include "Editor/Undo/ObjReferences.h"
 #include <Core/Scene/ENodeType.h>
@@ -19,8 +18,8 @@ public:
         : IUndoCommand(QCoreApplication::translate("CSelectAllCommand", "Select All"))
         , mpSelection(pSelection)
     {
-        for (CSelectionIterator It(pSelection); It; ++It)
-            mOldSelection.push_back(*It);
+        for (auto* node : pSelection->Nodes())
+            mOldSelection.push_back(node);
         for (auto* node : pScene->MakeNodeView(NodeFlags))
             mNewSelection.push_back(node);
     }

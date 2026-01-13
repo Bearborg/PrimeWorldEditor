@@ -1,6 +1,5 @@
 #include "Editor/INodeEditor.h"
 
-#include "Editor/CSelectionIterator.h"
 #include "Editor/Undo/UndoCommands.h"
 #include <Core/SRayIntersection.h>
 #include <QMouseEvent>
@@ -259,8 +258,8 @@ void INodeEditor::ExitPickMode()
 
 void INodeEditor::NotifySelectionTransformed()
 {
-    for (CSelectionIterator It(mpSelection); It; ++It)
-        It->OnTransformed();
+    for (auto* node : mpSelection->Nodes())
+        node->OnTransformed();
 
     mpSelection->UpdateBounds();
     emit SelectionTransformed();
@@ -417,11 +416,11 @@ void INodeEditor::UpdateTransformActionsEnabled()
     bool AllowTranslate = true, AllowRotate = true, AllowScale = true;
     bool SelectedModeWasEnabled = mpGizmoGroup->checkedAction()->isEnabled();
 
-    for (CSelectionIterator It(mpSelection); It; ++It)
+    for (auto* node : mpSelection->Nodes())
     {
-        if (!It->AllowsTranslate()) AllowTranslate = false;
-        if (!It->AllowsRotate())    AllowRotate = false;
-        if (!It->AllowsScale())     AllowScale = false;
+        if (!node->AllowsTranslate()) AllowTranslate = false;
+        if (!node->AllowsRotate())    AllowRotate = false;
+        if (!node->AllowsScale())     AllowScale = false;
     }
 
     mGizmoActions[1]->setEnabled(AllowTranslate);

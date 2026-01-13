@@ -4,8 +4,6 @@
 #include "Editor/Undo/IUndoCommand.h"
 #include "Editor/Undo/ObjReferences.h"
 
-#include "Editor/CSelectionIterator.h"
-
 #include <QCoreApplication>
 
 class CClearSelectionCommand : public IUndoCommand
@@ -18,8 +16,8 @@ public:
         : IUndoCommand(QCoreApplication::translate("CClearSelectionCommand", "Clear Selection")),
           mpSelection(pSelection)
     {
-        for (CSelectionIterator It(pSelection); It; ++It)
-            mOldSelection.push_back(*It);
+        for (auto* node : pSelection->Nodes())
+            mOldSelection.push_back(node);
     }
 
     void undo() override { mpSelection->SetSelectedNodes(mOldSelection.DereferenceList()); }

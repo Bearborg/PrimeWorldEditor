@@ -1,6 +1,5 @@
 #include "Editor/Undo/CCloneSelectionCommand.h"
 
-#include "Editor/CSelectionIterator.h"
 #include "Editor/WorldEditor/CWorldEditor.h"
 
 #include <QCoreApplication>
@@ -11,15 +10,15 @@ CCloneSelectionCommand::CCloneSelectionCommand(INodeEditor *pEditor)
 {
     mOriginalSelection = mpEditor->Selection()->SelectedNodeList();
 
-    for (CSelectionIterator It(mpEditor->Selection()); It; ++It)
+    for (auto* node : mpEditor->Selection()->Nodes())
     {
-        if (It->NodeType() == ENodeType::Script)
+        if (node->NodeType() == ENodeType::Script)
         {
-            mNodesToClone.push_back(*It);
+            mNodesToClone.push_back(node);
 
             // Fetch linked objects
-            CScriptNode *pScript = static_cast<CScriptNode*>(*It);
-            CScriptObject *pInst = pScript->Instance();
+            auto* pScript = static_cast<CScriptNode*>(node);
+            auto* pInst = pScript->Instance();
 
             for (size_t iLink = 0; iLink < pInst->NumLinks(ELinkType::Outgoing); iLink++)
             {

@@ -1,6 +1,5 @@
 #include "Editor/CSceneViewport.h"
 
-#include "Editor/CSelectionIterator.h"
 #include "Editor/UICommon.h"
 #include "Editor/Undo/UndoCommands.h"
 #include "Editor/WorldEditor/CWorldEditor.h"
@@ -464,8 +463,8 @@ void CSceneViewport::OnSelectConnected()
 
 void CSceneViewport::OnHideSelection()
 {
-    for (CSelectionIterator It(mpEditor->Selection()); It; ++It)
-        It->SetVisible(false);
+    for (auto* node : mpEditor->Selection()->Nodes())
+        node->SetVisible(false);
 }
 
 void CSceneViewport::OnHideUnselected()

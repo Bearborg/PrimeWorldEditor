@@ -9,7 +9,6 @@
 #include "Editor/CNodeCopyMimeData.h"
 #include "Editor/CProjectSettingsDialog.h"
 #include "Editor/CQuickplayPropertyEditor.h"
-#include "Editor/CSelectionIterator.h"
 #include "Editor/CTweakEditor.h"
 #include "Editor/UICommon.h"
 #include "Editor/PropertyEdit/CPropertyView.h"
@@ -45,6 +44,8 @@
 #include <QSettings>
 #include <QToolButton>
 #include <QVBoxLayout>
+
+#include <algorithm>
 
 CWorldEditor::CWorldEditor(QWidget *parent)
     : INodeEditor(parent)
@@ -350,13 +351,9 @@ void CWorldEditor::ResetCamera()
 
 bool CWorldEditor::HasAnyScriptNodesSelected() const
 {
-    for (CSelectionIterator It(mpSelection); It; ++It)
-    {
-        if (It->NodeType() == ENodeType::Script)
-            return true;
-    }
-
-    return false;
+    return std::ranges::any_of(mpSelection->Nodes(), [](const auto* node) {
+        return node->NodeType() == ENodeType::Script;
+    });
 }
 
 bool CWorldEditor::IsQuickplayEnabled() const
@@ -606,13 +603,11 @@ void CWorldEditor::OnPropertyModified(IProperty *pProp)
 {
     bool ShouldUpdateSelection = false;
 
-    for (CSelectionIterator It(mpSelection); It; ++It)
+    for (auto* pNode : mpSelection->Nodes())
     {
-        CSceneNode* pNode = *It;
-
         if (pNode && pNode->NodeType() == ENodeType::Script)
         {
-            CScriptNode* pScript = static_cast<CScriptNode*>(pNode);
+            auto* pScript = static_cast<CScriptNode*>(pNode);
             pScript->PropertyModified(pProp);
 
             // If this is the name, update other parts of the UI to reflect the new value.
@@ -658,12 +653,12 @@ void CWorldEditor::SetSelectionActive(bool Active)
     // Gather list of selected objects that actually have Active properties
     QList<CScriptObject*> Objects;
 
-    for (CSelectionIterator It(mpSelection); It; ++It)
+    for (auto* node : mpSelection->Nodes())
     {
-        if (It->NodeType() == ENodeType::Script)
+        if (node->NodeType() == ENodeType::Script)
         {
-            CScriptNode* pScript = static_cast<CScriptNode*>(*It);
-            CScriptObject* pInst = pScript->Instance();
+            auto* pScript = static_cast<CScriptNode*>(node);
+            auto* pInst = pScript->Instance();
             Objects.push_back(pInst);
         }
     }
@@ -738,10 +733,10 @@ void CWorldEditor::SetSelectionLayer(CScriptLayer *pLayer)
 {
     QList<CScriptNode*> ScriptNodes;
 
-    for (CSelectionIterator It(mpSelection); It; ++It)
+    for (auto* node : mpSelection->Nodes())
     {
-        if (It->NodeType() == ENodeType::Script)
-            ScriptNodes.push_back(static_cast<CScriptNode*>(*It));
+        if (node->NodeType() == ENodeType::Script)
+            ScriptNodes.push_back(static_cast<CScriptNode*>(node));
     }
 
     if (!ScriptNodes.isEmpty())
@@ -1139,11 +1134,10 @@ void CWorldEditor::OnLinkEnd()
 void CWorldEditor::OnUnlinkClicked()
 {
     QList<CScriptNode*> SelectedScriptNodes;
-
-    for (CSelectionIterator It(mpSelection); It; ++It)
+    for (auto* node : mpSelection->Nodes())
     {
-        if (It->NodeType() == ENodeType::Script)
-            SelectedScriptNodes.push_back(static_cast<CScriptNode*>(*It));
+        if (node->NodeType() == ENodeType::Script)
+            SelectedScriptNodes.push_back(static_cast<CScriptNode*>(node));
     }
 
     if (!SelectedScriptNodes.isEmpty())

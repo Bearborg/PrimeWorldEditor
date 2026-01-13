@@ -9,7 +9,6 @@
 #include <Core/Resource/Cooker/CScriptCooker.h>
 #include <Core/Resource/Script/CScriptObject.h>
 #include <Core/Scene/CSceneNode.h>
-#include "Editor/CSelectionIterator.h"
 #include "Editor/WorldEditor/CWorldEditor.h"
 
 #include <QList>
@@ -61,24 +60,24 @@ public:
         CVector3f FirstNodePos;
         bool SetFirstNodePos = false;
 
-        for (CSelectionIterator It(pEditor->Selection()); It; ++It)
+        for (auto* node : pEditor->Selection()->Nodes())
         {
             SCopiedNode& rNode = mCopiedNodes[NodeIndex];
-            rNode.Type = It->NodeType();
-            rNode.Name = It->Name();
-            rNode.Position = It->LocalPosition();
-            rNode.Rotation = It->LocalRotation();
-            rNode.Scale = It->LocalScale();
+            rNode.Type = node->NodeType();
+            rNode.Name = node->Name();
+            rNode.Position = node->LocalPosition();
+            rNode.Rotation = node->LocalRotation();
+            rNode.Scale = node->LocalScale();
 
             if (rNode.Type == ENodeType::Script)
             {
-                CScriptObject *pInst = static_cast<CScriptNode*>(*It)->Instance();
+                CScriptObject *pInst = static_cast<CScriptNode*>(node)->Instance();
                 rNode.OriginalInstanceID = pInst->InstanceID();
 
                 CVectorOutStream Out(&rNode.InstanceData, std::endian::big);
 
                 CScriptCooker Cooker(mGame);
-                Cooker.WriteInstance(Out, static_cast<CScriptNode*>(*It)->Instance());
+                Cooker.WriteInstance(Out, static_cast<CScriptNode*>(node)->Instance());
 
                 // Replace instance ID with 0xFFFFFFFF to force it to generate a new one.
                 Out.Seek(mGame <= EGame::Prime ? 0x5 : 0x6, SEEK_SET);

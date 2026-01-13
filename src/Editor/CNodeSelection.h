@@ -8,6 +8,8 @@
 #include <QObject>
 #include <QSignalBlocker>
 
+#include <span>
+
 class CNodeSelection : public QObject
 {
     Q_OBJECT
@@ -109,12 +111,14 @@ public:
         return mCachedBounds;
     }
 
+    std::span<CSceneNode*> Nodes()                     { return mSelectedNodes; }
+    std::span<CSceneNode* const> Nodes() const         { return mSelectedNodes; }
+
     uint32 Size() const                                { return mSelectedNodes.size(); }
     bool IsEmpty() const                               { return Size() == 0; }
-    CSceneNode* At(uint32 Index) const                 { return mSelectedNodes[Index]; }
     CSceneNode* Front() const                          { return mSelectedNodes.front(); }
     CSceneNode* Back() const                           { return mSelectedNodes.back(); }
-    CSceneNode* operator[](uint32 Index) const         { return mSelectedNodes[Index]; }
+
     void UpdateBounds()                                { mBoundsDirty = true; }
     void SetAllowedNodeTypes(FNodeFlags Types)         { mAllowedNodes = Types; }
     bool IsAllowedType(ENodeType Type) const           { return (mAllowedNodes & Type) != 0; }

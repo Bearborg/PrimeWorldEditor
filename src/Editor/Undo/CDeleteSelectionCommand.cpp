@@ -1,6 +1,5 @@
 #include "Editor/Undo/CDeleteSelectionCommand.h"
 
-#include "Editor/CSelectionIterator.h"
 #include "Editor/WorldEditor/CWorldEditor.h"
 #include <Common/FileIO.h>
 #include <Core/Resource/Cooker/CScriptCooker.h>
@@ -45,13 +44,13 @@ CDeleteSelectionCommand::CDeleteSelectionCommand(CWorldEditor *pEditor, const QS
     QSet<CLink*> Links;
     QList<CScriptObject*> LinkedInstances;
 
-    for (CSelectionIterator It(pEditor->Selection()); It; ++It)
+    for (auto* node : pEditor->Selection()->Nodes())
     {
-        mOldSelection.push_back(*It);
+        mOldSelection.push_back(node);
 
-        if (It->NodeType() == ENodeType::Script)
+        if (node->NodeType() == ENodeType::Script)
         {
-            auto* pScript = static_cast<CScriptNode*>(*It);
+            auto* pScript = static_cast<CScriptNode*>(node);
             auto* pInst = pScript->Instance();
             auto& rNode = mDeletedNodes.emplace_back();
 
@@ -99,7 +98,7 @@ CDeleteSelectionCommand::CDeleteSelectionCommand(CWorldEditor *pEditor, const QS
         }
         else
         {
-            mNewSelection.push_back(*It);
+            mNewSelection.push_back(node);
         }
     }
 
