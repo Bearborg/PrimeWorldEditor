@@ -134,7 +134,7 @@ SRayIntersection CScriptAttachNode::RayNodeIntersectTest(const CRay& rkRay, uint
     Out.ComponentIndex = AssetID;
 
     const CRay TransformedRay = rkRay.Transformed(Transform().Inverse());
-    const auto [intersects, distance] = Model()->GetSurface(AssetID)->IntersectsRay(TransformedRay, Options.HasFlag(ERenderOption::EnableBackfaceCull));
+    const auto [intersects, distance] = Model()->GetSurface(AssetID)->IntersectsRay(TransformedRay, !Options.HasFlag(ERenderOption::EnableBackfaceCull));
 
     if (intersects)
     {
