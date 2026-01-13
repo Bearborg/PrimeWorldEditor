@@ -228,16 +228,16 @@ void CModelEditorWindow::SetActiveMaterial(int MatIndex)
         return;
 
     // Set up UI
-    FMaterialOptions Settings = mpCurrentMat->Options();
+    const FMaterialOptions Settings = mpCurrentMat->Options();
 
     mIgnoreSignals = true;
-    ui->EnableTransparencyCheck->setChecked(Settings & EMaterialOption::Transparent);
-    ui->EnablePunchthroughCheck->setChecked(Settings & EMaterialOption::Masked);
-    ui->EnableReflectionCheck->setChecked(Settings & EMaterialOption::Reflection);
-    ui->EnableSurfaceReflectionCheck->setChecked(Settings & EMaterialOption::SurfaceReflection);
-    ui->EnableDepthWriteCheck->setChecked(Settings & EMaterialOption::DepthWrite);
-    ui->EnableOccluderCheck->setChecked(Settings & EMaterialOption::Occluder);
-    ui->EnableLightmapCheck->setChecked(Settings & EMaterialOption::Lightmap);
+    ui->EnableTransparencyCheck->setChecked(Settings.HasFlag(EMaterialOption::Transparent));
+    ui->EnablePunchthroughCheck->setChecked(Settings.HasFlag(EMaterialOption::Masked));
+    ui->EnableReflectionCheck->setChecked(Settings.HasFlag(EMaterialOption::Reflection));
+    ui->EnableSurfaceReflectionCheck->setChecked(Settings.HasFlag(EMaterialOption::SurfaceReflection));
+    ui->EnableDepthWriteCheck->setChecked(Settings.HasFlag(EMaterialOption::DepthWrite));
+    ui->EnableOccluderCheck->setChecked(Settings.HasFlag(EMaterialOption::Occluder));
+    ui->EnableLightmapCheck->setChecked(Settings.HasFlag(EMaterialOption::Lightmap));
     ui->EnableDynamicLightingCheck->setChecked(mpCurrentMat->IsLightingEnabled());
 
     auto SrcFac = uint32_t(mpCurrentMat->BlendSrcFac());
@@ -247,7 +247,7 @@ void CModelEditorWindow::SetActiveMaterial(int MatIndex)
     ui->SourceBlendComboBox->setCurrentIndex(SrcFac);
     ui->DestBlendComboBox->setCurrentIndex(DstFac);
 
-    if (Settings & EMaterialOption::IndStage)
+    if (Settings.HasFlag(EMaterialOption::IndStage))
         ui->IndTextureResSelector->SetResource(mpCurrentMat->IndTexture());
     else
         ui->IndTextureResSelector->Clear();
@@ -267,11 +267,11 @@ void CModelEditorWindow::SetActiveMaterial(int MatIndex)
         else if (iKonst == 3) ui->KonstColorPickerD->SetColor(Color);
     }
 
-    uint32 PassCount = mpCurrentMat->PassCount();
+    const auto PassCount = mpCurrentMat->PassCount();
     ui->PassTable->clear();
     ui->PassTable->setRowCount(PassCount);
 
-    for (uint32 iPass = 0; iPass < PassCount; iPass++)
+    for (uint32_t iPass = 0; iPass < PassCount; iPass++)
     {
         CMaterialPass *pPass = mpCurrentMat->Pass(iPass);
 
@@ -289,19 +289,19 @@ void CModelEditorWindow::SetActiveMaterial(int MatIndex)
 
     // Set up the tex coord source combo box so it only shows vertex attributes that exist on this material
     ui->TexCoordSrcComboBox->clear();
-    FVertexDescription Desc = mpCurrentMat->VtxDesc();
+    const FVertexDescription Desc = mpCurrentMat->VtxDesc();
 
     ui->TexCoordSrcComboBox->addItem(tr("None"));
-    if ((Desc & EVertexAttribute::Position) != 0) ui->TexCoordSrcComboBox->addItem(tr("Position"));
-    if ((Desc & EVertexAttribute::Normal) != 0)   ui->TexCoordSrcComboBox->addItem(tr("Normal"));
-    if ((Desc & EVertexAttribute::Tex0) != 0)     ui->TexCoordSrcComboBox->addItem(tr("Tex Coord 1"));
-    if ((Desc & EVertexAttribute::Tex1) != 0)     ui->TexCoordSrcComboBox->addItem(tr("Tex Coord 2"));
-    if ((Desc & EVertexAttribute::Tex2) != 0)     ui->TexCoordSrcComboBox->addItem(tr("Tex Coord 3"));
-    if ((Desc & EVertexAttribute::Tex3) != 0)     ui->TexCoordSrcComboBox->addItem(tr("Tex Coord 4"));
-    if ((Desc & EVertexAttribute::Tex4) != 0)     ui->TexCoordSrcComboBox->addItem(tr("Tex Coord 5"));
-    if ((Desc & EVertexAttribute::Tex5) != 0)     ui->TexCoordSrcComboBox->addItem(tr("Tex Coord 6"));
-    if ((Desc & EVertexAttribute::Tex6) != 0)     ui->TexCoordSrcComboBox->addItem(tr("Tex Coord 7"));
-    if ((Desc & EVertexAttribute::Tex7) != 0)     ui->TexCoordSrcComboBox->addItem(tr("Tex Coord 8"));
+    if (Desc.HasFlag(EVertexAttribute::Position)) ui->TexCoordSrcComboBox->addItem(tr("Position"));
+    if (Desc.HasFlag(EVertexAttribute::Normal))   ui->TexCoordSrcComboBox->addItem(tr("Normal"));
+    if (Desc.HasFlag(EVertexAttribute::Tex0))     ui->TexCoordSrcComboBox->addItem(tr("Tex Coord 1"));
+    if (Desc.HasFlag(EVertexAttribute::Tex1))     ui->TexCoordSrcComboBox->addItem(tr("Tex Coord 2"));
+    if (Desc.HasFlag(EVertexAttribute::Tex2))     ui->TexCoordSrcComboBox->addItem(tr("Tex Coord 3"));
+    if (Desc.HasFlag(EVertexAttribute::Tex3))     ui->TexCoordSrcComboBox->addItem(tr("Tex Coord 4"));
+    if (Desc.HasFlag(EVertexAttribute::Tex4))     ui->TexCoordSrcComboBox->addItem(tr("Tex Coord 5"));
+    if (Desc.HasFlag(EVertexAttribute::Tex5))     ui->TexCoordSrcComboBox->addItem(tr("Tex Coord 6"));
+    if (Desc.HasFlag(EVertexAttribute::Tex6))     ui->TexCoordSrcComboBox->addItem(tr("Tex Coord 7"));
+    if (Desc.HasFlag(EVertexAttribute::Tex7))     ui->TexCoordSrcComboBox->addItem(tr("Tex Coord 8"));
 
     // Emit signal from Pass Table to set up the Pass UI
     mIgnoreSignals = false;
@@ -538,14 +538,14 @@ void CModelEditorWindow::UpdateMaterial(bool Value)
     case EModelEditorWidget::EnableOccluderCheckBox:
     case EModelEditorWidget::EnableLightmapCheckBox:
     {
-        FMaterialOptions Options = (mpCurrentMat->Options() & 0x2408);
-        Options |= (ui->EnableTransparencyCheck->isChecked()      <<  4);
-        Options |= (ui->EnablePunchthroughCheck->isChecked()      <<  5);
-        Options |= (ui->EnableReflectionCheck->isChecked()        <<  6);
-        Options |= (ui->EnableDepthWriteCheck->isChecked()        <<  7);
-        Options |= (ui->EnableSurfaceReflectionCheck->isChecked() <<  8);
-        Options |= (ui->EnableOccluderCheck->isChecked()          <<  9);
-        Options |= (ui->EnableLightmapCheck->isChecked()          << 11);
+        FMaterialOptions Options = EMaterialOption(mpCurrentMat->Options().ToInt32() & 0x2408);
+        Options |= EMaterialOption(ui->EnableTransparencyCheck->isChecked()      <<  4);
+        Options |= EMaterialOption(ui->EnablePunchthroughCheck->isChecked()      <<  5);
+        Options |= EMaterialOption(ui->EnableReflectionCheck->isChecked()        <<  6);
+        Options |= EMaterialOption(ui->EnableDepthWriteCheck->isChecked()        <<  7);
+        Options |= EMaterialOption(ui->EnableSurfaceReflectionCheck->isChecked() <<  8);
+        Options |= EMaterialOption(ui->EnableOccluderCheck->isChecked()          <<  9);
+        Options |= EMaterialOption(ui->EnableLightmapCheck->isChecked()          << 11);
         mpCurrentMat->SetOptions(Options);
         break;
     }
