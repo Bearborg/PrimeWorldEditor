@@ -297,20 +297,18 @@ TString CResourceStore::DeletedResourcePath() const
 
 CResourceEntry* CResourceStore::FindEntry(const CAssetID& rkID) const
 {
-    if (rkID.IsValid())
-    {
-        const auto Found = mResourceEntries.find(rkID);
+    if (!rkID.IsValid())
+        return nullptr;
 
-        if (Found != mResourceEntries.cend())
-        {
-            const auto& pEntry = Found->second;
+    const auto Found = mResourceEntries.find(rkID);
+    if (Found == mResourceEntries.cend())
+        return nullptr;
 
-            if (!pEntry->IsMarkedForDeletion())
-                return pEntry.get();
-        }
-    }
+    const auto& pEntry = Found->second;
+    if (pEntry->IsMarkedForDeletion())
+        return nullptr;
 
-    return nullptr;
+    return pEntry.get();
 }
 
 CResourceEntry* CResourceStore::FindEntry(const TString& rkPath) const
