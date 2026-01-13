@@ -7,7 +7,6 @@
 #include <Core/Resource/Script/CScriptLayer.h>
 #include <Core/Resource/Script/NGameList.h>
 #include <Core/Scene/CScene.h>
-#include <Core/Scene/CSceneIterator.h>
 
 #include <QAction>
 #include <QMenu>
@@ -336,8 +335,8 @@ void WInstancesTab::OnUnhideAllTypes()
 void WInstancesTab::OnUnhideAll()
 {
     // Unhide instances
-    for (CSceneIterator It(mpScene, ENodeType::Script, true); !It.DoneIterating(); ++It)
-        It->SetVisible(true);
+    for (auto* node : mpScene->MakeNodeView(ENodeType::Script, true))
+        node->SetVisible(true);
 
     // Unhide layers
     QModelIndex LayersRoot = mpLayersModel->index(0, 0, mpLayersModel->index(0, 0));

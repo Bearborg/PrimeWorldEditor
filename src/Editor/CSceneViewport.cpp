@@ -7,7 +7,6 @@
 #include <Core/Render/CRenderer.h>
 #include <Core/Render/SViewInfo.h>
 #include <Core/Resource/Script/CScriptLayer.h>
-#include <Core/Scene/CSceneIterator.h>
 #include <QApplication>
 #include <QMenu>
 
@@ -471,9 +470,11 @@ void CSceneViewport::OnHideSelection()
 
 void CSceneViewport::OnHideUnselected()
 {
-    for (CSceneIterator It(mpScene, ENodeType::Script | ENodeType::Light); !It.DoneIterating(); ++It)
-        if (!It->IsSelected())
-            It->SetVisible(false);
+    for (auto* node : mpScene->MakeNodeView(ENodeType::Script | ENodeType::Light))
+    {
+        if (!node->IsSelected())
+            node->SetVisible(false);
+    }
 }
 
 void CSceneViewport::OnHideNode()
@@ -493,33 +494,27 @@ void CSceneViewport::OnHideLayer()
 
 void CSceneViewport::OnUnhideAll()
 {
-    CSceneIterator it(mpScene, ENodeType::Script | ENodeType::Light, true);
-
-    while (!it.DoneIterating())
+    for (auto* node : mpScene->MakeNodeView(ENodeType::Script | ENodeType::Light, true))
     {
-        if (!it->IsVisible())
-        {
-            if (it->NodeType() == ENodeType::Light)
-            {
-                it->SetVisible(true);
-            }
-            else
-            {
-                CScriptNode *pScript = static_cast<CScriptNode*>(*it);
+        if (node->IsVisible())
+            continue;
 
-                if (!pScript->MarkedVisible())
-                {
-                    pScript->SetVisible(true);
-                }
-                else
-                {
-                    pScript->Template()->SetVisible(true);
-                    pScript->Instance()->Layer()->SetVisible(true);
-                }
-            }
+        if (node->NodeType() == ENodeType::Light)
+        {
+            node->SetVisible(true);
+            continue;
         }
 
-        ++it;
+        auto* script = static_cast<CScriptNode*>(node);
+        if (script->MarkedVisible())
+        {
+            script->Template()->SetVisible(true);
+            script->Instance()->Layer()->SetVisible(true);
+        }
+        else
+        {
+            script->SetVisible(true);
+        }
     }
 }
 

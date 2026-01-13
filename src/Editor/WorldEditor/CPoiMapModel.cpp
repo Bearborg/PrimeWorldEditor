@@ -7,7 +7,6 @@
 #include <Core/Resource/Scan/CScan.h>
 #include <Core/Resource/Script/CScriptObject.h>
 #include <Core/Scene/CModelNode.h>
-#include <Core/Scene/CSceneIterator.h>
 #include <Core/Scene/CScriptNode.h>
 #include <Core/ScriptExtra/CPointOfInterestExtra.h>
 
@@ -182,10 +181,10 @@ void CPoiMapModel::OnMapChange(CWorld*, CGameArea *pArea)
         // Create an ID -> Model Node lookup map
         QMap<uint32, CModelNode*> NodeMap;
 
-        for (CSceneIterator It(mpEditor->Scene(), ENodeType::Model, true); !It.DoneIterating(); ++It)
+        for (auto* node : mpEditor->Scene()->MakeNodeView(ENodeType::Model, true))
         {
-            auto* pNode = static_cast<CModelNode*>(*It);
-            NodeMap[pNode->FindMeshID()] = pNode;
+            auto* model = static_cast<CModelNode*>(node);
+            NodeMap[model->FindMeshID()] = model;
         }
 
         // Create internal model map

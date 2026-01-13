@@ -4,7 +4,6 @@
 #include "Editor/CSelectionIterator.h"
 #include "Editor/Undo/IUndoCommand.h"
 #include "Editor/Undo/ObjReferences.h"
-#include <Core/Scene/CSceneIterator.h>
 #include <Core/Scene/ENodeType.h>
 
 #include <QCoreApplication>
@@ -22,8 +21,8 @@ public:
     {
         for (CSelectionIterator It(pSelection); It; ++It)
             mOldSelection.push_back(*It);
-        for (CSceneIterator It(pScene, NodeFlags); It; ++It)
-            mNewSelection.push_back(*It);
+        for (auto* node : pScene->MakeNodeView(NodeFlags))
+            mNewSelection.push_back(node);
     }
 
     void undo() override { mpSelection->SetSelectedNodes(mOldSelection.DereferenceList()); }

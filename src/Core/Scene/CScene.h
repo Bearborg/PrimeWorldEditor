@@ -3,11 +3,13 @@
 
 #include "Core/Resource/TResPtr.h"
 #include "Core/Resource/Script/CInstanceID.h"
-#include <Core/Scene/ENodeType.h>
+#include "Core/Scene/CSceneNode.h"
+#include "Core/Scene/ENodeType.h"
 #include "Core/Scene/FShowFlags.h"
 
 #include <cstdint>
 #include <memory>
+#include <ranges>
 #include <unordered_map>
 #include <vector>
 
@@ -22,7 +24,6 @@ class CModelNode;
 class CRay;
 class CRenderer;
 class CRootNode;
-class CSceneNode;
 class CScriptNode;
 class CScriptObject;
 class CStaticNode;
@@ -35,8 +36,6 @@ struct SViewInfo;
 /** Needs lots of changes, see CSceneNode for most of my thoughts on this */
 class CScene
 {
-    friend class CSceneIterator;
-    
     bool mSplitTerrain = true;
     bool mRanPostLoad = false;
 
@@ -84,6 +83,23 @@ public:
     // Static
     static FShowFlags ShowFlagsForNodeFlags(FNodeFlags NodeFlags);
     static FNodeFlags NodeFlagsForShowFlags(FShowFlags ShowFlags);
+
+    // Provides a range based view over particular scene nodes.
+    auto MakeNodeView(FNodeFlags allowedNodeTypes = ENodeType::All, bool allowHiddenNodes = false) const {
+        // First, check which node categories are allowed
+        auto validNodes = mNodes | std::views::filter([=](const auto& entry) {
+            return allowedNodeTypes.HasFlag(entry.first);
+        });
+
+        // Then create a view that joins all the allowed category vectors together without allocating
+        auto nodeSequence = validNodes | std::views::values | std::views::join;
+
+        // Now, we can lazily evaluate all of the nodes. By default we only iterate visible
+        // scene nodes, but we also allow for iterating hidden nodes too
+        return nodeSequence | std::views::filter([=](const auto* node) {
+            return allowHiddenNodes || node->IsVisible();
+        });
+    }
 };
 
 #endif // CSCENE_H

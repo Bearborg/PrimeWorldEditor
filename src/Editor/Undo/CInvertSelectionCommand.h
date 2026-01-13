@@ -19,12 +19,12 @@ public:
         : IUndoCommand(QCoreApplication::translate("CInvertSelectionCommand", "Invert Selection"))
         , mpSelection(pSelection)
     {
-        for (CSceneIterator It(pScene, NodeFlags); It; ++It)
+        for (auto* node : pScene->MakeNodeView(NodeFlags))
         {
-            if (It->IsSelected())
-                mOldSelection.push_back(*It);
+            if (node->IsSelected())
+                mOldSelection.push_back(node);
             else
-                mNewSelection.push_back(*It);
+                mNewSelection.push_back(node);
         }
     }
 

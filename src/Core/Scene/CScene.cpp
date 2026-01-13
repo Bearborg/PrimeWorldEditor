@@ -1,5 +1,4 @@
 #include "Core/Scene/CScene.h"
-#include "Core/Scene/CSceneIterator.h"
 
 #include "Core/CAreaAttributes.h"
 #include "Core/CRayCollisionTester.h"
@@ -224,9 +223,9 @@ void CScene::SetActiveArea(CWorld *pWorld, CGameArea *pArea)
     }
 
     // Ensure script nodes have valid positions + build light lists
-    for (CSceneIterator It(this, ENodeType::Script, true); It; ++It)
+    for (auto* node : MakeNodeView(ENodeType::Script, true))
     {
-        CScriptNode *pScript = static_cast<CScriptNode*>(*It);
+        auto* pScript = static_cast<CScriptNode*>(node);
         pScript->GeneratePosition();
         pScript->BuildLightList(mpArea);
     }
@@ -287,11 +286,8 @@ void CScene::AddSceneToRenderer(CRenderer *pRenderer, const SViewInfo& rkViewInf
     const FShowFlags ShowFlags = rkViewInfo.GameMode ? gkGameModeShowFlags : rkViewInfo.ShowFlags;
     const FNodeFlags NodeFlags = NodeFlagsForShowFlags(ShowFlags);
 
-    for (CSceneIterator It(this, NodeFlags, false); It; ++It)
-    {
-        if (rkViewInfo.GameMode || It->IsVisible())
-            It->AddToRenderer(pRenderer, rkViewInfo);
-    }
+    for (auto* node : MakeNodeView(NodeFlags))
+        node->AddToRenderer(pRenderer, rkViewInfo);
 }
 
 SRayIntersection CScene::SceneRayCast(const CRay& rkRay, const SViewInfo& rkViewInfo)
@@ -300,11 +296,8 @@ SRayIntersection CScene::SceneRayCast(const CRay& rkRay, const SViewInfo& rkView
     const FNodeFlags NodeFlags = NodeFlagsForShowFlags(ShowFlags);
     CRayCollisionTester Tester(rkRay);
 
-    for (CSceneIterator It(this, NodeFlags, false); It; ++It)
-    {
-        if (It->IsVisible())
-            It->RayAABoxIntersectTest(Tester, rkViewInfo);
-    }
+    for (auto* node : MakeNodeView(NodeFlags))
+        node->RayAABoxIntersectTest(Tester, rkViewInfo);
 
     return Tester.TestNodes(rkViewInfo);
 }
