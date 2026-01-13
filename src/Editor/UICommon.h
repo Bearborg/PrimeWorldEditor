@@ -35,13 +35,7 @@
 #define TO_QCOLOR(Clr)      QColor(Clr.R * 255, Clr.G * 255, Clr.B * 255, Clr.A * 255)
 
 //@todo This name isn't ideal, too similar to ToWChar and so might cause confusion
-#define TO_WCHAR(Str)       ToWChar( UICommon::ToT16String(Str) )
-
-#if NOD_UCS2
-#define QStringToNodString(string) TO_WCHAR(string)
-#else
-#define QStringToNodString(string) string.toUtf8().data()
-#endif
+#define TO_WCHAR(Str)       ToWChar(UICommon::ToT16String(Str))
 
 namespace UICommon
 {
