@@ -252,19 +252,14 @@ void CModelEditorWindow::SetActiveMaterial(int MatIndex)
     else
         ui->IndTextureResSelector->Clear();
 
-    for (uint32 iKonst = 0; iKonst < 4; iKonst++)
+    for (size_t iKonst = 0; auto* picker : {ui->KonstColorPickerA, ui->KonstColorPickerB,
+                                            ui->KonstColorPickerC, ui->KonstColorPickerD})
     {
-        QColor Color;
-        CColor KColor = mpCurrentMat->Konst(iKonst);
-        Color.setRed(KColor.R * 255);
-        Color.setGreen(KColor.G * 255);
-        Color.setBlue(KColor.B * 255);
-        Color.setAlpha(KColor.A * 255);
+        const auto KColor = mpCurrentMat->Konst(iKonst);
+        const auto Color = QColor(KColor.R * 255, KColor.G * 255, KColor.B * 255, KColor.A * 255);
 
-        if (iKonst == 0) ui->KonstColorPickerA->SetColor(Color);
-        else if (iKonst == 1) ui->KonstColorPickerB->SetColor(Color);
-        else if (iKonst == 2) ui->KonstColorPickerC->SetColor(Color);
-        else if (iKonst == 3) ui->KonstColorPickerD->SetColor(Color);
+        picker->SetColor(Color);
+        iKonst++;
     }
 
     const auto PassCount = mpCurrentMat->PassCount();
