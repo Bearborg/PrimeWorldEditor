@@ -33,7 +33,7 @@ class CGameExporter
     // Project Data
     std::unique_ptr<CGameProject> mpProject;
     TString mProjectPath;
-    CResourceStore *mpStore;
+    CResourceStore *mpStore = nullptr;
     EGame mGame;
     ERegion mRegion;
     TString mGameName;
