@@ -5,7 +5,7 @@
 #include "Editor/UICommon.h"
 
 #include <Core/GameProject/CResourceEntry.h>
-#include <Core/GameProject/CResourceIterator.h>
+#include <Core/GameProject/CResourceStore.h>
 #include <Core/Resource/CResTypeFilter.h>
 
 #include <QAbstractTableModel>
@@ -23,11 +23,11 @@ public:
     {
         const CResTypeFilter& rkFilter = pSelector->TypeFilter();
 
-        for (CResourceIterator It; It; ++It)
+        for (const auto& It : MakeResourceView())
         {
-            if (rkFilter.Accepts(*It))
+            if (rkFilter.Accepts(It.get()))
             {
-                mEntries.push_back(*It);
+                mEntries.push_back(It.get());
             }
         }
 

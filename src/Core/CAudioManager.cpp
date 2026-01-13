@@ -1,7 +1,6 @@
 #include "Core/CAudioManager.h"
 
 #include "Core/GameProject/CGameProject.h"
-#include "Core/GameProject/CResourceIterator.h"
 #include "Core/Resource/CAudioGroup.h"
 #include "Core/Resource/CAudioLookupTable.h"
 #include "Core/Resource/CStringList.h"
@@ -26,7 +25,7 @@ void CAudioManager::LoadAssets()
     mSfxIdMap.clear();
 
     // Load/sort all audio groups
-    for (TResourceIterator<EResourceType::AudioGroup> It(mpProject->ResourceStore()); It; ++It)
+    for (const auto& It : MakeTypedResourceView(EResourceType::AudioGroup, mpProject->ResourceStore()))
     {
         if (auto* pGroup = static_cast<CAudioGroup*>(It->Load()))
             mAudioGroups.emplace_back(pGroup);

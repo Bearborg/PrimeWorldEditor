@@ -4,7 +4,6 @@
 #include "Editor/UICommon.h"
 #include "Editor/WorldEditor/CWorldEditor.h"
 #include <Core/GameProject/CGameProject.h>
-#include <Core/GameProject/CResourceIterator.h>
 #include <Core/Resource/CWorld.h>
 
 #include <QIcon>
@@ -320,10 +319,10 @@ void CWorldTreeModel::OnProjectChanged(CGameProject *pProj)
             pInfo = &mWorldList.front();
             pInfo->WorldName = QStringLiteral("FrontEnd");
 
-            for (TResourceIterator<EResourceType::World> It; It; ++It)
+            for (const auto& It : MakeTypedResourceView(EResourceType::World))
             {
                 if (!UsedWorlds.contains(It->ID()))
-                    pInfo->Areas.push_back(*It);
+                    pInfo->Areas.push_back(It.get());
             }
 
             // Sort FrontEnd world

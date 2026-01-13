@@ -1,12 +1,16 @@
 #ifndef CRESOURCESTORE_H
 #define CRESOURCESTORE_H
 
+#include "Core/GameProject/CResourceEntry.h"
 #include "Core/GameProject/CVirtualDirectory.h"
 #include "Core/Resource/EResType.h"
 #include <Common/CAssetID.h>
 #include <Common/TString.h>
+
+#include <functional>
 #include <map>
 #include <memory>
+#include <ranges>
 
 class CGameExporter;
 class CGameProject;
@@ -87,8 +91,23 @@ public:
     uint32_t NumLoadedResources() const      { return mLoadedResources.size(); }
     bool IsCacheDirty() const                { return mDatabaseCacheDirty; }
 
-    void SetCacheDirty()                     { mDatabaseCacheDirty = true; }
-    bool IsEditorStore() const               { return mpProj == nullptr; }
+    // Returns a non-owning filter view into resource entries, which allows for lazily evaluating all entries.
+    // We only care about entries that aren't marked for deletion.
+    auto MakeResourceView() const
+    {
+        return mResourceEntries
+                | std::views::values
+                | std::views::filter(std::not_fn(&CResourceEntry::IsMarkedForDeletion));
+    }
+    // Creates a non-owning filter view for a particular resource type.
+    auto MakeTypedResourceView(EResourceType Type) const {
+        return mResourceEntries
+                | std::views::values
+                | std::views::filter([Type](const auto& entry) { return !entry->IsMarkedForDeletion() && entry->ResourceType() == Type; });
+    }
+
+    void SetCacheDirty()       { mDatabaseCacheDirty = true; }
+    bool IsEditorStore() const { return mpProj == nullptr; }
 };
 
 extern TString gDataDir;
@@ -96,5 +115,14 @@ extern bool gResourcesWritable;
 extern bool gTemplatesWritable;
 extern CResourceStore *gpResourceStore;
 extern CResourceStore *gpEditorStore;
+
+inline auto MakeResourceView(CResourceStore* store = gpResourceStore)
+{
+    return store->MakeResourceView();
+}
+inline auto MakeTypedResourceView(EResourceType Type, CResourceStore* store = gpResourceStore)
+{
+    return store->MakeTypedResourceView(Type);
+}
 
 #endif // CRESOURCESTORE_H

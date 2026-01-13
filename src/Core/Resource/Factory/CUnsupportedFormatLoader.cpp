@@ -4,7 +4,6 @@
 #include <Common/EGame.h>
 #include <Common/Log.h>
 #include "Core/GameProject/CGameProject.h"
-#include "Core/GameProject/CResourceIterator.h"
 #include "Core/Resource/CAudioMacro.h"
 #include "Core/Resource/CDependencyGroup.h"
 #include "Core/Resource/CMapArea.h"
@@ -454,7 +453,7 @@ std::unique_ptr<CMapArea> CUnsupportedFormatLoader::LoadMAPA(IInputStream& /*rMA
     CAssetID MapWorldID;
     size_t WorldIndex = SIZE_MAX;
 
-    for (TResourceIterator<EResourceType::MapWorld> It; It; ++It)
+    for (const auto& It : MakeTypedResourceView(EResourceType::MapWorld))
     {
         auto *pGroup = static_cast<CDependencyGroup*>(It->Load());
 
@@ -475,7 +474,7 @@ std::unique_ptr<CMapArea> CUnsupportedFormatLoader::LoadMAPA(IInputStream& /*rMA
     // Find a world that contains this MapWorld
     if (WorldIndex != SIZE_MAX)
     {
-        for (TResourceIterator<EResourceType::World> It; It; ++It)
+        for (const auto& It : MakeTypedResourceView(EResourceType::World))
         {
             auto *pWorld = static_cast<CWorld*>(It->Load());
             auto *pMapWorld = static_cast<CDependencyGroup*>(pWorld->MapWorld());

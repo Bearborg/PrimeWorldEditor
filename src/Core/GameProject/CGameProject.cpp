@@ -5,7 +5,6 @@
 #include "Core/IUIRelay.h"
 #include "Core/GameProject/CGameInfo.h"
 #include "Core/GameProject/CPackage.h"
-#include "Core/GameProject/CResourceIterator.h"
 #include "Core/GameProject/CResourceStore.h"
 #include "Core/Resource/Script/CGameTemplate.h"
 #include "Core/Tweaks/CTweakManager.h"
@@ -280,7 +279,7 @@ std::unique_ptr<CGameProject> CGameProject::LoadProject(const TString& rkProjPat
         CResourceStore* pOldStore = gpResourceStore;
         gpResourceStore = pProj->mpResourceStore.get();
 
-        for (CResourceIterator It; It; ++It)
+        for (const auto& It : MakeResourceView())
         {
             if (It->TypeInfo()->CanBeSerialized() && !It->HasRawVersion())
             {

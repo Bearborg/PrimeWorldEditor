@@ -4,7 +4,6 @@
 #include "Core/IUIRelay.h"
 #include "Core/GameProject/CGameExporter.h"
 #include "Core/GameProject/CGameProject.h"
-#include "Core/GameProject/CResourceIterator.h"
 #include "Core/Resource/CResource.h"
 #include <Common/Macros.h>
 #include <Common/FileUtil.h>
@@ -67,13 +66,11 @@ bool CResourceStore::SerializeDatabaseCache(IArchive& rArc)
         if (rArc.IsWriter())
         {
             // Make sure deleted resources aren't included in the count.
-            // We can't use CResourceIterator because it skips MarkedForDeletion resources.
-            for (const auto& entry : mResourceEntries)
+            // We can't use any of the resource view because they skip MarkedForDeletion resources.
+            for (const auto& entry : mResourceEntries | std::views::values)
             {
-                if (entry.second->IsMarkedForDeletion())
-                {
+                if (entry->IsMarkedForDeletion())
                     ResourceCount--;
-                }
             }
         }
 
@@ -94,15 +91,12 @@ bool CResourceStore::SerializeDatabaseCache(IArchive& rArc)
         }
         else
         {
-            for (CResourceIterator It(this); It; ++It)
+            for (const auto& entry : MakeResourceView())
             {
-                if (!It->IsMarkedForDeletion())
+                if (rArc.ParamBegin("Resource", 0))
                 {
-                    if (rArc.ParamBegin("Resource", 0))
-                    {
-                        It->SerializeEntryInfo(rArc, false);
-                        rArc.ParamEnd();
-                    }
+                    entry->SerializeEntryInfo(rArc, false);
+                    rArc.ParamEnd();
                 }
             }
         }
@@ -318,13 +312,9 @@ CResourceEntry* CResourceStore::FindEntry(const TString& rkPath) const
 
 bool CResourceStore::AreAllEntriesValid() const
 {
-    for (CResourceIterator Iter(this); Iter; ++Iter)
-    {
-        if (!Iter->HasCookedVersion() && !Iter->HasRawVersion())
-            return false;
-    }
-
-    return true;
+    return std::ranges::all_of(MakeResourceView(), [](const auto& entry) {
+        return entry->HasCookedVersion() || entry->HasRawVersion();
+    });
 }
 
 void CResourceStore::ClearDatabase()
@@ -408,8 +398,8 @@ bool CResourceStore::BuildFromDirectory(bool ShouldGenerateCacheFile)
             mpProj->AudioManager()->LoadAssets();
 
         // Update dependencies
-        for (CResourceIterator It(this); It; ++It)
-            It->UpdateDependencies();
+        for (auto& resource : MakeResourceView())
+            resource->UpdateDependencies();
 
         // Update database file
         mDatabaseCacheDirty = true;

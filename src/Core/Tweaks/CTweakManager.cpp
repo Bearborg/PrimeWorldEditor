@@ -4,7 +4,6 @@
 #include <Common/FileIO/CFileInStream.h>
 #include <Common/FileIO/CFileOutStream.h>
 #include "Core/GameProject/CGameProject.h"
-#include "Core/GameProject/CResourceIterator.h"
 #include "Core/Tweaks/CTweakCooker.h"
 #include "Core/Tweaks/CTweakData.h"
 #include "Core/Tweaks/CTweakLoader.h"
@@ -26,9 +25,9 @@ void CTweakManager::LoadTweaks()
     // MP1 - Load all tweak assets into memory
     if (mpProject->Game() <= EGame::Prime)
     {
-        for (TResourceIterator<EResourceType::Tweaks> It(mpProject->ResourceStore()); It; ++It)
+        for (const auto& It : MakeTypedResourceView(EResourceType::Tweaks, mpProject->ResourceStore()))
         {
-            if (CTweakData* pTweaks = (CTweakData*)It->Load())
+            if (auto* pTweaks = static_cast<CTweakData*>(It->Load()))
             {
                 pTweaks->Lock();
                 mTweakObjects.push_back(pTweaks);

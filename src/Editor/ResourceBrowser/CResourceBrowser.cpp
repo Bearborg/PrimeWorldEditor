@@ -18,7 +18,6 @@
 #include <Common/FileUtil.h>
 #include <Core/GameProject/AssetNameGeneration.h>
 #include <Core/GameProject/CAssetNameMap.h>
-#include <Core/GameProject/CResourceIterator.h>
 #include <Core/Resource/CResource.h>
 #include <Core/Resource/CResTypeInfo.h>
 
@@ -1001,7 +1000,7 @@ void CResourceBrowser::ImportAssetNameMap()
 
     SetActiveDirectory(nullptr);
 
-    for (CResourceIterator It(mpStore); It; ++It)
+    for (const auto& It : MakeResourceView(mpStore))
     {
         TString Dir, Name;
         bool AutoDir, AutoName;

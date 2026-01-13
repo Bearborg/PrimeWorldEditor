@@ -5,7 +5,6 @@
 #include "Editor/ResourceBrowser/CResourceBrowser.h"
 #include "Editor/ResourceBrowser/CResourceTableModel.h"
 #include "Editor/ResourceBrowser/CResourceProxyModel.h"
-#include <Core/GameProject/CResourceIterator.h>
 #include <Core/Resource/Scan/CScan.h>
 
 #include <QClipboard>
@@ -176,10 +175,10 @@ void CResourceTableContextMenu::ShowReferencers()
 
     QList<CResourceEntry*> EntryList;
 
-    for (CResourceIterator Iter(mpClickedEntry->ResourceStore()); Iter; ++Iter)
+    for (const auto& Iter : MakeResourceView(mpClickedEntry->ResourceStore()))
     {
         if (Iter->Dependencies()->HasDependency(mpClickedEntry->ID()))
-            EntryList.push_back(*Iter);
+            EntryList.push_back(Iter.get());
     }
 
     if (!mpModel->IsDisplayingUserEntryList())

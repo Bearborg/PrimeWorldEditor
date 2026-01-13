@@ -2,7 +2,6 @@
 
 #include "Core/GameProject/CGameProject.h"
 #include "Core/GameProject/CPackage.h"
-#include "Core/GameProject/CResourceIterator.h"
 #include "Core/Resource/CAudioGroup.h"
 #include "Core/Resource/CAudioMacro.h"
 #include "Core/Resource/CDependencyGroup.h"
@@ -102,15 +101,16 @@ void GenerateAssetNames(CGameProject *pProj)
     // Revert all auto-generated asset names back to default to prevent name conflicts resulting in inconsistent results.
     NLog::Debug("Reverting auto-generated names");
 
-    for (CResourceIterator It(pStore); It; ++It)
+    for (auto& resource : MakeResourceView())
     {
-        bool HasCustomDir = !It->HasFlag(EResEntryFlag::AutoResDir);
-        bool HasCustomName = !It->HasFlag(EResEntryFlag::AutoResName);
-        if (HasCustomDir && HasCustomName) continue;
+        const bool HasCustomDir = !resource->HasFlag(EResEntryFlag::AutoResDir);
+        const bool HasCustomName = !resource->HasFlag(EResEntryFlag::AutoResName);
+        if (HasCustomDir && HasCustomName)
+            continue;
 
-        TString NewDir = (HasCustomDir ? It->DirectoryPath() : pStore->DefaultResourceDirPath());
-        TString NewName = (HasCustomName ? It->Name() : It->ID().ToString());
-        It->MoveAndRename(NewDir, NewName, true, true);
+        const TString NewDir = (HasCustomDir ? resource->DirectoryPath() : pStore->DefaultResourceDirPath());
+        const TString NewName = (HasCustomName ? resource->Name() : resource->ID().ToString());
+        resource->MoveAndRename(NewDir, NewName, true, true);
     }
 #endif
 
@@ -137,7 +137,7 @@ void GenerateAssetNames(CGameProject *pProj)
     NLog::Debug("Processing worlds");
     const TString kWorldsRoot = "Worlds/";
 
-    for (TResourceIterator<EResourceType::World> It(pStore); It; ++It)
+    for (const auto& It : MakeTypedResourceView(EResourceType::World, pStore))
     {
         // Set world name
         TResPtr<CWorld> pWorld = It->Load();
@@ -146,7 +146,7 @@ void GenerateAssetNames(CGameProject *pProj)
 
         const TString WorldMasterName = "!" + WorldName + "_Master";
         const TString WorldMasterDir = WorldDir + WorldMasterName + '/';
-        ApplyGeneratedName(*It, WorldMasterDir, WorldMasterName);
+        ApplyGeneratedName(It.get(), WorldMasterDir, WorldMasterName);
 
         // Move world stuff
         const TString WorldNamesDir = "Strings/Worlds/General/";
@@ -411,7 +411,7 @@ void GenerateAssetNames(CGameProject *pProj)
     // Generate Model Lightmap names
     NLog::Debug("Processing model lightmaps");
 
-    for (TResourceIterator<EResourceType::Model> It(pStore); It; ++It)
+    for (const auto& It : MakeTypedResourceView(EResourceType::Model, pStore))
     {
         CModel *pModel = (CModel*) It->Load();
         size_t LightmapNum = 0;
@@ -456,11 +456,11 @@ void GenerateAssetNames(CGameProject *pProj)
     NLog::Debug("Processing audio groups");
     const TString kAudioGrpDir = "Audio/";
 
-    for (TResourceIterator<EResourceType::AudioGroup> It(pStore); It; ++It)
+    for (const auto& It : MakeTypedResourceView(EResourceType::AudioGroup, pStore))
     {
         auto* pGroup = static_cast<CAudioGroup*>(It->Load());
         const TString& GroupName = pGroup->GroupName();
-        ApplyGeneratedName(*It, kAudioGrpDir, GroupName);
+        ApplyGeneratedName(It.get(), kAudioGrpDir, GroupName);
     }
 #endif
 
@@ -469,11 +469,11 @@ void GenerateAssetNames(CGameProject *pProj)
     NLog::Debug("Processing audio macros");
     const TString kSfxDir = "Audio/Uncategorized/";
 
-    for (TResourceIterator<EResourceType::AudioMacro> It(pStore); It; ++It)
+    for (const auto& It : MakeTypedResourceView(EResourceType::AudioMacro, pStore))
     {
         const auto* pMacro = static_cast<CAudioMacro*>(It->Load());
         const TString& MacroName = pMacro->MacroName();
-        ApplyGeneratedName(*It, kSfxDir, MacroName);
+        ApplyGeneratedName(It.get(), kSfxDir, MacroName);
 
         for (const auto [idx, SampleID] : std::views::enumerate(pMacro->Samples()))
         {
@@ -496,12 +496,9 @@ void GenerateAssetNames(CGameProject *pProj)
     // Generate animation format names
     // Hacky syntax because animsets are under eAnimSet in MP1/2 and eCharacter in MP3/DKCR
     NLog::Debug("Processing animation data");
-    CResourceIterator *pIter = (pProj->Game() <= EGame::Echoes ?
-                                    (CResourceIterator*) new TResourceIterator<EResourceType::AnimSet> :
-                                    (CResourceIterator*) new TResourceIterator<EResourceType::Character>);
-    CResourceIterator& It = *pIter;
-
-    for (; It; ++It)
+    auto View = pProj->Game() <= EGame::Echoes ? MakeTypedResourceView(EResourceType::AnimSet, pStore) :
+                                                 MakeTypedResourceView(EResourceType::Character, pStore);
+    for (const auto& It : View)
     {
         TString SetDir = It->DirectoryPath();
         TString NewSetName;
@@ -559,7 +556,7 @@ void GenerateAssetNames(CGameProject *pProj)
         }
 
         if (!NewSetName.IsEmpty())
-            ApplyGeneratedName(*It, SetDir, NewSetName);
+            ApplyGeneratedName(It.get(), SetDir, NewSetName);
 
         std::set<CAnimPrimitive> AnimPrimitives;
         pSet->GetUniquePrimitives(AnimPrimitives);
@@ -578,7 +575,6 @@ void GenerateAssetNames(CGameProject *pProj)
             }
         }
     }
-    delete pIter;
 #endif
 
 #if PROCESS_STRINGS
@@ -586,7 +582,7 @@ void GenerateAssetNames(CGameProject *pProj)
     NLog::Debug("Processing strings");
     const TString kStringsDir = "Strings/Uncategorized/";
 
-    for (TResourceIterator<EResourceType::StringTable> It(pStore); It; ++It)
+    for (const auto& It : MakeTypedResourceView(EResourceType::StringTable, pStore))
     {
         if (It->IsNamed())
             continue;
@@ -613,7 +609,7 @@ void GenerateAssetNames(CGameProject *pProj)
 #if PROCESS_SCANS
     // Generate scan names
     NLog::Debug("Processing scans");
-    for (TResourceIterator<EResourceType::Scan> It(pStore); It; ++It)
+    for (const auto& It : MakeTypedResourceView(EResourceType::Scan, pStore))
     {
         if (It->IsNamed())
             continue;
@@ -650,7 +646,7 @@ void GenerateAssetNames(CGameProject *pProj)
 #if PROCESS_FONTS
     // Generate font names
     NLog::Debug("Processing fonts");
-    for (TResourceIterator<EResourceType::Font> It(pStore); It; ++It)
+    for (const auto& It : MakeTypedResourceView(EResourceType::Font, pStore))
     {
         if (auto* pFont = static_cast<CFont*>(It->Load()))
         {

@@ -1,6 +1,5 @@
 #include "Core/GameProject/CAssetNameMap.h"
 
-#include "Core/GameProject/CResourceIterator.h"
 #include "Core/GameProject/CResourceEntry.h"
 #include "Core/GameProject/CResourceStore.h"
 
@@ -127,7 +126,7 @@ void CAssetNameMap::CopyFromStore(CResourceStore *pStore)
     // Do a first pass to remove old paths from used set to prevent false positives from eg. if two resources switch places
     ASSERT(CAssetID::GameIDLength(pStore->Game()) == mIDLength);
 
-    for (CResourceIterator It(pStore); It; ++It)
+    for (const auto& It : MakeResourceView(pStore))
     {
         if (It->IsCategorized() || It->IsNamed())
         {
@@ -144,7 +143,7 @@ void CAssetNameMap::CopyFromStore(CResourceStore *pStore)
     }
 
     // Do a second pass to add the new paths to the map
-    for (CResourceIterator It(pStore); It; ++It)
+    for (const auto& It : MakeResourceView(pStore))
     {
         if (It->IsCategorized() || It->IsNamed())
         {

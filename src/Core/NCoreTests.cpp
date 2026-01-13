@@ -3,7 +3,6 @@
 #include "Core/IUIRelay.h"
 #include "Core/GameProject/CGameProject.h"
 #include "Core/GameProject/CResourceEntry.h"
-#include "Core/GameProject/CResourceIterator.h"
 #include "Core/Resource/Cooker/CResourceCooker.h"
 #include <Common/FileUtil.h>
 #include <Common/Log.h>
@@ -98,7 +97,7 @@ bool ValidateCooker(EResourceType ResourceType, bool DumpInvalidFileContents)
     uint NumValid = 0, NumInvalid = 0;
 
     // Iterate through all resources
-    for (CResourceIterator It(pStore); It; ++It)
+    for (const auto& It : MakeResourceView(pStore))
     {
         if (It->ResourceType() != ResourceType || !It->HasCookedVersion())
             continue;
@@ -117,7 +116,7 @@ bool ValidateCooker(EResourceType ResourceType, bool DumpInvalidFileContents)
         // Generate new cooked data
         std::vector<char> NewData;
         CVectorOutStream MemoryStream(&NewData, std::endian::big);
-        CResourceCooker::CookResource(*It, MemoryStream);
+        CResourceCooker::CookResource(It.get(), MemoryStream);
 
         // Start our comparison by making sure the sizes match up
         const uint kAlignment           = (It->Game() >= EGame::Corruption ? 64 : 32);

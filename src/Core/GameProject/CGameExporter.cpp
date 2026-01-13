@@ -6,7 +6,6 @@
 #include "Core/GameProject/CAssetNameMap.h"
 #include "Core/GameProject/CGameInfo.h"
 #include "Core/GameProject/CGameProject.h"
-#include "Core/GameProject/CResourceIterator.h"
 #include "Core/GameProject/CResourceStore.h"
 #include "Core/GameProject/CPackage.h"
 #include "Core/Resource/CWorld.h"
@@ -572,8 +571,11 @@ void CGameExporter::ExportResourceEditorData()
         // todo: we're wasting a ton of time loading the same resources over and over because most resources automatically
         // load all their dependencies and then we just clear it out from memory even though we'll need it again later. we
         // should really be doing this by dependency order instead of by ID order.
-        for (CResourceIterator It(mpStore); It && !mpProgress->ShouldCancel(); ++It, ++ResIndex)
+        for (const auto& It : MakeResourceView(mpStore))
         {
+            if (mpProgress->ShouldCancel())
+                break;
+
             // Update progress
             if ((ResIndex & 0x3) == 0 || It->ResourceType() == EResourceType::Area)
             {
@@ -609,6 +611,8 @@ void CGameExporter::ExportResourceEditorData()
 
             // Set flags, save metadata
             It->SaveMetadata(true);
+
+            ++ResIndex;
         }
     }
 

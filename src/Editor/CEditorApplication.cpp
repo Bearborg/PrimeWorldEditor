@@ -18,7 +18,6 @@
 #include <Common/CTimer.h>
 #include <Core/GameProject/CGameProject.h>
 #include <Core/GameProject/CPackage.h>
-#include <Core/GameProject/CResourceIterator.h>
 #include <Core/Resource/CWorld.h>
 #include <Core/Resource/Animation/CAnimSet.h>
 #include <Core/Resource/Collision/CCollisionMeshGroup.h>
@@ -148,7 +147,7 @@ void CEditorApplication::EditResource(CResourceEntry *pEntry)
         {
         case EResourceType::Area:
             // We can't open an area on its own. Find a world that contains this area.
-            for (TResourceIterator<EResourceType::World> It; It; ++It)
+            for (const auto& It : MakeTypedResourceView(EResourceType::World))
             {
                 if (It->Dependencies()->HasDependency(pEntry->ID()))
                 {
