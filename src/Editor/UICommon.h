@@ -79,11 +79,6 @@ inline TString ToTString(const QString& rkStr)
     return TString(rkStr.toStdString());
 }
 
-inline T16String ToT16String(const QString& rkStr)
-{
-    return T16String(rkStr.toStdU16String());
-}
-
 // QFileDialog wrappers
 // Note: pause editor ticks while file dialogs are open because otherwise there's a bug that makes it really difficult to tab out and back in
 #define PUSH_TICKS_ENABLED \
