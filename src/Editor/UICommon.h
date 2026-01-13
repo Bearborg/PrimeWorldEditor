@@ -139,7 +139,7 @@ inline bool OpenProject()
 }
 
 // Constants
-const QColor kImportantButtonColor(36, 100, 100);
+constexpr QColor kImportantButtonColor(36, 100, 100);
 
 } // UICommon Namespace End
 
