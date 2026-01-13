@@ -81,42 +81,41 @@ inline TString ToTString(const QString& rkStr)
 
 // QFileDialog wrappers
 // Note: pause editor ticks while file dialogs are open because otherwise there's a bug that makes it really difficult to tab out and back in
-#define PUSH_TICKS_ENABLED \
-    bool TicksEnabled = gpEdApp->AreEditorTicksEnabled(); \
-    gpEdApp->SetEditorTicksEnabled(false);
-#define POP_TICKS_ENABLED \
-    gpEdApp->SetEditorTicksEnabled(TicksEnabled);
+class CEditorTickDisabler
+{
+public:
+    CEditorTickDisabler() : m_state{gpEdApp->AreEditorTicksEnabled()} {
+        gpEdApp->SetEditorTicksEnabled(false);
+    }
+    ~CEditorTickDisabler() {
+        gpEdApp->SetEditorTicksEnabled(m_state);
+    }
 
+private:
+    bool m_state{};
+};
 inline QString OpenFileDialog(QWidget* pParent, const QString& rkCaption, const QString& rkFilter, const QString& rkStartingDir = {})
 {
-    PUSH_TICKS_ENABLED;
-    QString Result = QFileDialog::getOpenFileName(pParent, rkCaption, rkStartingDir, rkFilter);
-    POP_TICKS_ENABLED;
-    return Result;
+    [[maybe_unused]] const auto disabler = CEditorTickDisabler();
+    return QFileDialog::getOpenFileName(pParent, rkCaption, rkStartingDir, rkFilter);
 }
 
 inline QStringList OpenFilesDialog(QWidget* pParent, const QString& rkCaption, const QString& rkFilter, const QString& rkStartingDir = {})
 {
-    PUSH_TICKS_ENABLED;
-    QStringList Result = QFileDialog::getOpenFileNames(pParent, rkCaption, rkStartingDir, rkFilter);
-    POP_TICKS_ENABLED;
-    return Result;
+    [[maybe_unused]] const auto disabler = CEditorTickDisabler();
+    return QFileDialog::getOpenFileNames(pParent, rkCaption, rkStartingDir, rkFilter);
 }
 
 inline QString SaveFileDialog(QWidget* pParent, const QString& rkCaption, const QString& rkFilter, const QString& rkStartingDir = {})
 {
-    PUSH_TICKS_ENABLED;
-    QString Result = QFileDialog::getSaveFileName(pParent, rkCaption, rkStartingDir, rkFilter);
-    POP_TICKS_ENABLED;
-    return Result;
+    [[maybe_unused]] const auto disabler = CEditorTickDisabler();
+    return QFileDialog::getSaveFileName(pParent, rkCaption, rkStartingDir, rkFilter);
 }
 
 inline QString OpenDirDialog(QWidget* pParent, const QString& rkCaption, const QString& rkStartingDir = {})
 {
-    PUSH_TICKS_ENABLED;
-    QString Result = QFileDialog::getExistingDirectory(pParent, rkCaption, rkStartingDir);
-    POP_TICKS_ENABLED;
-    return Result;
+    [[maybe_unused]] const auto disabler = CEditorTickDisabler();
+    return QFileDialog::getExistingDirectory(pParent, rkCaption, rkStartingDir);
 }
 
 // QMessageBox wrappers
