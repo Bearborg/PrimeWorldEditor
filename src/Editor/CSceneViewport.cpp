@@ -48,7 +48,7 @@ void CSceneViewport::SetRenderMergedWorld(bool RenderMerged)
 {
     mRenderingMergedWorld = RenderMerged;
 
-    if (mViewInfo.ShowFlags & (EShowFlag::SplitWorld | EShowFlag::MergedWorld))
+    if (mViewInfo.ShowFlags.HasFlag(EShowFlag(EShowFlag::SplitWorld | EShowFlag::MergedWorld)))
     {
         SetShowFlag(EShowFlag::SplitWorld, !RenderMerged);
         SetShowFlag(EShowFlag::MergedWorld, RenderMerged);
@@ -314,7 +314,7 @@ void CSceneViewport::Paint()
     mpRenderer->BeginFrame();
 
     // todo: The sky should really just be a regular node in the background depth group instead of having special rendering code here
-    if ((mViewInfo.ShowFlags & EShowFlag::Sky) != 0 || mViewInfo.GameMode)
+    if (mViewInfo.ShowFlags.HasFlag(EShowFlag::Sky) || mViewInfo.GameMode)
     {
         if (CModel* pSky = mpScene->ActiveSkybox())
             mpRenderer->RenderSky(pSky, mViewInfo);
