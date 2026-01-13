@@ -27,12 +27,6 @@
 #define USE_ASSET_NAME_MAP 1
 #define EXPORT_COOKED 1
 
-#if NOD_UCS2
-#define TStringToNodString(string) ToWChar(string)
-#else
-#define TStringToNodString(string) *string
-#endif
-
 CGameExporter::CGameExporter(EDiscType DiscType, EGame Game, bool FrontEnd, ERegion Region, const TString& rkGameName, const TString& rkGameID, float BuildVersion)
     : mGame(Game)
     , mRegion(Region)
@@ -188,23 +182,25 @@ bool CGameExporter::ExtractDiscData()
 
     // Create Disc output folder
     TString AbsDiscDir = mExportDir + mDiscDir;
-    bool IsWii = (mBuildVersion >= 3.f);
-    if (IsWii) AbsDiscDir += "DATA/";
+    const bool IsWii = (mBuildVersion >= 3.f);
+    if (IsWii)
+        AbsDiscDir += "DATA/";
     FileUtil::MakeDirectory(AbsDiscDir);
 
     // Extract disc filesystem
     nod::IPartition *pDataPartition = mpDisc->getDataPartition();
     nod::ExtractionContext Context;
     Context.force = false;
-    Context.progressCB = [&](const std::string_view rkDesc, float ProgressPercent) {
-        mpProgress->Report((int) (ProgressPercent * 10000), 10000, std::string(rkDesc));
+    Context.progressCB = [&](std::string_view rkDesc, float ProgressPercent) {
+        mpProgress->Report(int(ProgressPercent * 10000), 10000, std::string(rkDesc));
     };
 
     TString FilesDir = AbsDiscDir + "files/";
     FileUtil::MakeDirectory(FilesDir);
 
     bool Success = ExtractDiscNodeRecursive(&pDataPartition->getFSTRoot(), FilesDir, true, Context);
-    if (!Success) return false;
+    if (!Success)
+        return false;
 
     if (!mpProgress->ShouldCancel())
     {
@@ -213,22 +209,22 @@ bool CGameExporter::ExtractDiscData()
         if (IsWii)
         {
             // Extract crypto files
-            if (!pDataPartition->extractCryptoFiles(TStringToNodString(AbsDiscDir), Context))
+            if (!pDataPartition->extractCryptoFiles(AbsDiscDir, Context))
                 return false;
 
             // Extract disc header files
-            if (!mpDisc->extractDiscHeaderFiles(TStringToNodString(AbsDiscDir), Context))
+            if (!mpDisc->extractDiscHeaderFiles(AbsDiscDir, Context))
                 return false;
         }
 
         // Extract system files
-        if (!pDataPartition->extractSysFiles(TStringToNodString(AbsDiscDir), Context))
+        if (!pDataPartition->extractSysFiles(AbsDiscDir, Context))
             return false;
 
         return true;
     }
-    else
-        return false;
+
+    return false;
 }
 
 bool CGameExporter::ExtractDiscNodeRecursive(const nod::Node *pkNode, const TString& rkDir, bool RootNode, const nod::ExtractionContext& rkContext)
@@ -241,7 +237,7 @@ bool CGameExporter::ExtractDiscNodeRecursive(const nod::Node *pkNode, const TStr
         if (Iter->getKind() == nod::Node::Kind::File)
         {
             TString FilePath = rkDir + Iter->getName().data();
-            bool Success = Iter->extractToDirectory(TStringToNodString(rkDir), rkContext);
+            bool Success = Iter->extractToDirectory(rkDir, rkContext);
             if (!Success)
                 return false;
 
@@ -252,7 +248,6 @@ bool CGameExporter::ExtractDiscNodeRecursive(const nod::Node *pkNode, const TStr
                     mPaks.push_back(FilePath);
             }
         }
-
         else
         {
             TString Subdir = rkDir + Iter->getName().data() + "/";

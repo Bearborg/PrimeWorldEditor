@@ -18,12 +18,6 @@
 
 #include <algorithm>
 
-#if NOD_UCS2
-#define TStringToNodString(string) ToWChar(string)
-#else
-#define TStringToNodString(string) *string
-#endif
-
 CGameProject::CGameProject()
     : mpGameInfo{std::make_unique<CGameInfo>()}
     , mpAudioManager{std::make_unique<CAudioManager>(this)}
@@ -110,13 +104,13 @@ bool CGameProject::BuildISO(const TString& rkIsoPath, IProgressNotifier *pProgre
 
     if (!IsWiiBuild())
     {
-        nod::DiscBuilderGCN Builder(TStringToNodString(rkIsoPath), ProgressCallback);
-        return Builder.buildFromDirectory(TStringToNodString(DiscRoot)) == nod::EBuildResult::Success;
+        nod::DiscBuilderGCN Builder(rkIsoPath, ProgressCallback);
+        return Builder.buildFromDirectory(DiscRoot) == nod::EBuildResult::Success;
     }
     else
     {
-        nod::DiscBuilderWii Builder(TStringToNodString(rkIsoPath), IsTrilogy(), ProgressCallback);
-        return Builder.buildFromDirectory(TStringToNodString(DiscRoot)) == nod::EBuildResult::Success;
+        nod::DiscBuilderWii Builder(rkIsoPath, IsTrilogy(), ProgressCallback);
+        return Builder.buildFromDirectory(DiscRoot) == nod::EBuildResult::Success;
     }
 }
 
@@ -135,8 +129,8 @@ bool CGameProject::MergeISO(const TString& rkIsoPath, nod::DiscWii *pOriginalIso
 
     const TString DiscRoot = DiscFilesystemRoot(false);
 
-    nod::DiscMergerWii Merger(TStringToNodString(rkIsoPath), *pOriginalIso, IsTrilogy(), ProgressCallback);
-    return Merger.mergeFromDirectory(TStringToNodString(DiscRoot)) == nod::EBuildResult::Success;
+    nod::DiscMergerWii Merger(rkIsoPath, *pOriginalIso, IsTrilogy(), ProgressCallback);
+    return Merger.mergeFromDirectory(DiscRoot) == nod::EBuildResult::Success;
 }
 
 void CGameProject::GetWorldList(std::list<CAssetID>& rOut) const
