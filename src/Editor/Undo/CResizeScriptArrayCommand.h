@@ -3,7 +3,9 @@
 
 #include "Editor/PropertyEdit/CPropertyModel.h"
 #include "Editor/Undo/CEditScriptPropertyCommand.h"
+
 #include <QCoreApplication>
+#include <span>
 
 class CResizeScriptArrayCommand : public CEditScriptPropertyCommand
 {
@@ -13,12 +15,12 @@ class CResizeScriptArrayCommand : public CEditScriptPropertyCommand
 
 public:
     CResizeScriptArrayCommand(IProperty* pProperty,
-                              const QList<CScriptObject*>& rkInstances,
+                              std::span<CScriptObject*> instances,
                               CPropertyModel* pModel,
                               QModelIndex Index = QModelIndex(),
                               const QString& rkCommandName = QCoreApplication::translate("CResizeScriptArrayCommand", "Resize Array")
                 )
-        :   CEditScriptPropertyCommand(pProperty, rkInstances, pModel, Index, rkCommandName)
+        :   CEditScriptPropertyCommand(pProperty, instances, pModel, Index, rkCommandName)
     {
     }
 

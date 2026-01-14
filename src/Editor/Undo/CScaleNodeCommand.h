@@ -5,6 +5,7 @@
 #include "Editor/Undo/ObjReferences.h"
 
 #include <QList>
+#include <span>
 
 class CSceneNode;
 class CVector3f;
@@ -20,7 +21,7 @@ class CScaleNodeCommand : public IUndoCommand
 
 public:
     CScaleNodeCommand();
-    CScaleNodeCommand(INodeEditor *pEditor, const QList<CSceneNode*>& rkNodes, bool UsePivot, const CVector3f& rkPivot, const CVector3f& rkDelta);
+    CScaleNodeCommand(INodeEditor *pEditor, std::span<CSceneNode*> nodes, bool UsePivot, const CVector3f& rkPivot, const CVector3f& rkDelta);
     ~CScaleNodeCommand() override;
 
     int id() const override;

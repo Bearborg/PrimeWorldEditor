@@ -22,7 +22,7 @@ class CPasteNodesCommand : public IUndoCommand
     CInstancePtrList mLinkedInstances;
 
 public:
-    CPasteNodesCommand(CWorldEditor *pEditor, CScriptLayer *pLayer, CVector3f PastePoint);
+    CPasteNodesCommand(CWorldEditor *pEditor, CScriptLayer *pLayer, const CVector3f& PastePoint);
     ~CPasteNodesCommand() override;
 
     void undo() override;

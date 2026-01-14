@@ -5,6 +5,7 @@
 #include "Editor/Undo/ObjReferences.h"
 
 #include <QCoreApplication>
+#include <span>
 
 class CEditScriptPropertyCommand : public IEditPropertyCommand
 {
@@ -14,7 +15,7 @@ protected:
 
 public:
     CEditScriptPropertyCommand(IProperty* pProperty,
-                               const QList<CScriptObject*>& kInstances,
+                               std::span<CScriptObject*> kInstances,
                                CPropertyModel* pModel,
                                QModelIndex Index = QModelIndex(),
                                const QString& kCommandName = QCoreApplication::translate("CEditScriptPropertyCommand", "Edit Property"))

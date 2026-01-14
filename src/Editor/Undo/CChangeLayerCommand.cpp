@@ -5,12 +5,12 @@
 
 #include <QCoreApplication>
 
-CChangeLayerCommand::CChangeLayerCommand(CWorldEditor *pEditor, const QList<CScriptNode*>& rkNodeList, CScriptLayer *pNewLayer)
+CChangeLayerCommand::CChangeLayerCommand(CWorldEditor *pEditor, std::span<CScriptNode*> nodeList, CScriptLayer *pNewLayer)
     : IUndoCommand(QCoreApplication::translate("CChangeLayerCommand", "Change Layer"))
     , mpNewLayer(pNewLayer)
     , mpEditor(pEditor)
 {
-    for (CScriptNode *pNode : rkNodeList)
+    for (CScriptNode *pNode : nodeList)
     {
         CScriptLayer *pLayer = pNode->Instance()->Layer();
 

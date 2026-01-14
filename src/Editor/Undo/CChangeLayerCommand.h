@@ -5,6 +5,7 @@
 #include "Editor/Undo/ObjReferences.h"
 
 #include <QMap>
+#include <span>
 
 class CScriptLayer;
 class CScriptNode;
@@ -18,7 +19,7 @@ class CChangeLayerCommand : public IUndoCommand
     CWorldEditor *mpEditor;
 
 public:
-    CChangeLayerCommand(CWorldEditor *pEditor, const QList<CScriptNode*>& rkNodeList, CScriptLayer *pNewLayer);
+    CChangeLayerCommand(CWorldEditor *pEditor, std::span<CScriptNode*> nodeList, CScriptLayer *pNewLayer);
     void undo() override;
     void redo() override;
     bool AffectsCleanState() const override { return true; }

@@ -5,6 +5,7 @@
 #include "Editor/Undo/ObjReferences.h"
 
 #include <QList>
+#include <span>
 
 class CQuaternion;
 class CSceneNode;
@@ -21,7 +22,8 @@ class CRotateNodeCommand : public IUndoCommand
 
 public:
     CRotateNodeCommand();
-    CRotateNodeCommand(INodeEditor *pEditor, const QList<CSceneNode*>& rkNodes, bool UsePivot, const CVector3f& rkPivot, const CQuaternion& rkPivotRotation, const CQuaternion& rkDelta, ETransformSpace TransformSpace);
+    CRotateNodeCommand(INodeEditor *pEditor, std::span<CSceneNode*> nodes, bool UsePivot, const CVector3f& rkPivot,
+                       const CQuaternion& rkPivotRotation, const CQuaternion& rkDelta, ETransformSpace TransformSpace);
     ~CRotateNodeCommand() override;
 
     int id() const override;

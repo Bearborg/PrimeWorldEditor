@@ -20,13 +20,13 @@ CScaleNodeCommand::CScaleNodeCommand()
 {
 }
 
-CScaleNodeCommand::CScaleNodeCommand(INodeEditor *pEditor, const QList<CSceneNode*>& rkNodes, bool UsePivot, const CVector3f& rkPivot, const CVector3f& rkDelta)
+CScaleNodeCommand::CScaleNodeCommand(INodeEditor *pEditor, std::span<CSceneNode*> nodes, bool UsePivot, const CVector3f& rkPivot, const CVector3f& rkDelta)
     : IUndoCommand(QCoreApplication::translate("CScaleNodeCommand", "Scale")),
       mpEditor(pEditor)
 {
-    mNodeList.reserve(rkNodes.size());
+    mNodeList.reserve(nodes.size());
 
-    for (CSceneNode *pNode : rkNodes)
+    for (CSceneNode *pNode : nodes)
     {
         SNodeScale Scale;
         Scale.pNode = pNode;

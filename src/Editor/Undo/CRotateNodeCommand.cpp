@@ -22,7 +22,7 @@ CRotateNodeCommand::CRotateNodeCommand()
 
 CRotateNodeCommand::CRotateNodeCommand(
         INodeEditor *pEditor,
-        const QList<CSceneNode*>& rkNodes,
+        std::span<CSceneNode*> nodes,
         bool UsePivot,
         const CVector3f& rkPivot,
         const CQuaternion& rkPivotRotation,
@@ -32,9 +32,9 @@ CRotateNodeCommand::CRotateNodeCommand(
     : IUndoCommand(QCoreApplication::translate("CRotateNodeCommand", "Rotate")),
       mpEditor(pEditor)
 {
-    mNodeList.reserve(rkNodes.size());
+    mNodeList.reserve(nodes.size());
 
-    for (CSceneNode *pNode : rkNodes)
+    for (CSceneNode *pNode : nodes)
     {
         SNodeRotate Rotate;
         Rotate.pNode = pNode;

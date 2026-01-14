@@ -378,7 +378,7 @@ void CPropertyDelegate::setModelData(QWidget *pEditor, QAbstractItemModel* /*pMo
         }
         else
         {
-            const QList<CScriptObject*> Objects{pObject};
+            QList<CScriptObject*> Objects{pObject};
             pCommand = (Type != EPropertyType::Array) ?
                         new CEditScriptPropertyCommand(pProp, Objects, mpModel, rkIndex) :
                         new CResizeScriptArrayCommand (pProp, Objects, mpModel, rkIndex);

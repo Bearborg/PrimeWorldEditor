@@ -18,13 +18,13 @@ CTranslateNodeCommand::CTranslateNodeCommand()
 {
 }
 
-CTranslateNodeCommand::CTranslateNodeCommand(INodeEditor *pEditor, const QList<CSceneNode*>& rkNodes, const CVector3f& Delta, ETransformSpace TransformSpace)
+CTranslateNodeCommand::CTranslateNodeCommand(INodeEditor *pEditor, std::span<CSceneNode*> nodes, const CVector3f& Delta, ETransformSpace TransformSpace)
     : IUndoCommand(QCoreApplication::translate("CTranslateNodeCommand", "Translate")),
       mpEditor(pEditor)
 {
-    mNodeList.reserve(rkNodes.size());
+    mNodeList.reserve(nodes.size());
 
-    for (CSceneNode *pNode : rkNodes)
+    for (CSceneNode *pNode : nodes)
     {
         SNodeTranslate Translate;
         Translate.pNode = pNode;

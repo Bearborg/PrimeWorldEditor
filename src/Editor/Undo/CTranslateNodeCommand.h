@@ -5,6 +5,7 @@
 #include "Editor/Undo/ObjReferences.h"
 
 #include <QList>
+#include <span>
 
 class CSceneNode;
 class CVector3f;
@@ -20,7 +21,7 @@ class CTranslateNodeCommand : public IUndoCommand
 
 public:
     CTranslateNodeCommand();
-    CTranslateNodeCommand(INodeEditor *pEditor, const QList<CSceneNode*>& rkNodes, const CVector3f& rkDelta, ETransformSpace TransformSpace);
+    CTranslateNodeCommand(INodeEditor *pEditor, std::span<CSceneNode*> nodes, const CVector3f& rkDelta, ETransformSpace TransformSpace);
     ~CTranslateNodeCommand() override;
 
     int id() const override;

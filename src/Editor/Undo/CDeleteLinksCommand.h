@@ -4,6 +4,8 @@
 #include "Editor/Undo/IUndoCommand.h"
 #include "Editor/Undo/ObjReferences.h"
 
+#include <span>
+
 class CScriptObject;
 class CWorldEditor;
 
@@ -17,7 +19,7 @@ class CDeleteLinksCommand : public IUndoCommand
 
 public:
     CDeleteLinksCommand();
-    CDeleteLinksCommand(CWorldEditor *pEditor, CScriptObject *pObject, ELinkType Type, const QList<uint32_t>& rkIndices);
+    CDeleteLinksCommand(CWorldEditor *pEditor, CScriptObject *pObject, ELinkType Type, std::span<uint32_t> indices);
     ~CDeleteLinksCommand() override;
 
     void undo() override;

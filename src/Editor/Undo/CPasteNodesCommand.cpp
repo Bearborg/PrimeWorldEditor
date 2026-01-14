@@ -8,16 +8,14 @@
 #include <QCoreApplication>
 #include <QClipboard>
 
-CPasteNodesCommand::CPasteNodesCommand(CWorldEditor *pEditor, CScriptLayer *pLayer, CVector3f PastePoint)
+CPasteNodesCommand::CPasteNodesCommand(CWorldEditor *pEditor, CScriptLayer *pLayer, const CVector3f& PastePoint)
     : IUndoCommand(QCoreApplication::translate("CPasteNodesCommand", "Paste"))
     , mpEditor(pEditor)
     , mpLayer(pLayer)
     , mPastePoint(PastePoint)
     , mOriginalSelection(pEditor->Selection()->SelectedNodeList())
 {
-    const CNodeCopyMimeData *pkMimeData = qobject_cast<const CNodeCopyMimeData*>(qApp->clipboard()->mimeData());
-
-    if (pkMimeData)
+    if (const auto* pkMimeData = qobject_cast<const CNodeCopyMimeData*>(qApp->clipboard()->mimeData()))
         mpMimeData = std::make_unique<CNodeCopyMimeData>(*pkMimeData);
 }
 

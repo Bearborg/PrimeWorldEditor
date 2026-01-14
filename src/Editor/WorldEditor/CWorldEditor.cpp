@@ -1227,21 +1227,21 @@ void CWorldEditor::OnTransformSpinBoxModified(const CVector3f& Value)
     case CGizmo::EGizmoMode::Translate:
     {
         CVector3f Delta = Value - mpSelection->Front()->AbsolutePosition();
-        UndoStack().push(new CTranslateNodeCommand(this, mpSelection->SelectedNodeList(), Delta, mTranslateSpace));
+        UndoStack().push(new CTranslateNodeCommand(this, mpSelection->Nodes(), Delta, mTranslateSpace));
         break;
     }
 
     case CGizmo::EGizmoMode::Rotate:
     {
         CQuaternion Delta = CQuaternion::FromEuler(Value) * mpSelection->Front()->AbsoluteRotation().Inverse();
-        UndoStack().push(new CRotateNodeCommand(this, mpSelection->SelectedNodeList(), true, mGizmo.Position(), mGizmo.Rotation(), Delta, mRotateSpace));
+        UndoStack().push(new CRotateNodeCommand(this, mpSelection->Nodes(), true, mGizmo.Position(), mGizmo.Rotation(), Delta, mRotateSpace));
         break;
     }
 
     case CGizmo::EGizmoMode::Scale:
     {
         CVector3f Delta = Value / mpSelection->Front()->AbsoluteScale();
-        UndoStack().push(new CScaleNodeCommand(this, mpSelection->SelectedNodeList(), true, mGizmo.Position(), Delta));
+        UndoStack().push(new CScaleNodeCommand(this, mpSelection->Nodes(), true, mGizmo.Position(), Delta));
         break;
     }
 

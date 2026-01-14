@@ -17,13 +17,13 @@ struct CDeleteLinksCommand::SDeletedLink
 
 CDeleteLinksCommand::CDeleteLinksCommand() = default;
 
-CDeleteLinksCommand::CDeleteLinksCommand(CWorldEditor *pEditor, CScriptObject *pObject, ELinkType Type, const QList<uint32>& rkIndices)
+CDeleteLinksCommand::CDeleteLinksCommand(CWorldEditor *pEditor, CScriptObject *pObject, ELinkType Type, std::span<uint32_t> indices)
     : IUndoCommand(QCoreApplication::translate("CDeleteLinksCommand", "Delete Links"))
     , mpEditor(pEditor)
 {
     mAffectedInstances.push_back(pObject);
 
-    for (const auto index : rkIndices)
+    for (const auto index : indices)
     {
         const CLink *pLink = pObject->Link(Type, index);
 
