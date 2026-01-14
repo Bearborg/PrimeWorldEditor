@@ -10,9 +10,9 @@ CTexture::CTexture(CResourceEntry *pEntry)
 {
 }
 
-CTexture::CTexture(uint32 Width, uint32 Height)
-    : mWidth(static_cast<uint16>(Width))
-    , mHeight(static_cast<uint16>(Height))
+CTexture::CTexture(uint32_t Width, uint32_t Height)
+    : mWidth(static_cast<uint16_t>(Width))
+    , mHeight(static_cast<uint16_t>(Height))
     , mNumMipMaps(1)
     , mLinearSize(Width * Height * 4)
 {
@@ -114,7 +114,7 @@ bool CTexture::BufferGL()
     return true;
 }
 
-void CTexture::Bind(uint32 GLTextureUnit)
+void CTexture::Bind(uint32_t GLTextureUnit)
 {
     glActiveTexture(GL_TEXTURE0 + GLTextureUnit);
 
@@ -125,13 +125,13 @@ void CTexture::Bind(uint32 GLTextureUnit)
     glBindTexture(BindTarget, mTextureID);
 }
 
-void CTexture::Resize(uint32 Width, uint32 Height)
+void CTexture::Resize(uint32_t Width, uint32_t Height)
 {
     if ((mWidth != Width) || (mHeight != Height))
     {
         DeleteBuffers();
-        mWidth = static_cast<uint16>(Width);
-        mHeight = static_cast<uint16>(Height);
+        mWidth = static_cast<uint16_t>(Width);
+        mHeight = static_cast<uint16_t>(Height);
         mNumMipMaps = 1;
         CalcLinearSize();
     }

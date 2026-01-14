@@ -18,10 +18,10 @@ class CTexture : public CResource
 
     ETexelFormat mTexelFormat{ETexelFormat::RGBA8};       // Format of decoded image data
     ETexelFormat mSourceTexelFormat{ETexelFormat::RGBA8}; // Format of input TXTR file
-    uint16_t mWidth = 0;                                    // Image width
-    uint16_t mHeight = 0;                                   // Image height
-    uint32_t mNumMipMaps = 0;                               // The number of mipmaps this texture has
-    uint32_t mLinearSize = 0;                               // The size of the top level mipmap, in bytes
+    uint16_t mWidth = 0;                                  // Image width
+    uint16_t mHeight = 0;                                 // Image height
+    uint32_t mNumMipMaps = 0;                             // The number of mipmaps this texture has
+    uint32_t mLinearSize = 0;                             // The size of the top level mipmap, in bytes
 
     bool mEnableMultisampling = false;  // Whether multisample should be enabled (if this texture is a render target).
     bool mBufferExists = false;         // Indicates whether image data buffer has valid data
@@ -33,7 +33,7 @@ class CTexture : public CResource
 
 public:
     explicit CTexture(CResourceEntry *pEntry = nullptr);
-    CTexture(uint32_t Width, uint32_t Height);
+    explicit CTexture(uint32_t Width, uint32_t Height);
     ~CTexture() override;
 
     bool BufferGL();
