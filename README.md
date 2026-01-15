@@ -95,6 +95,6 @@ They should be set to `C:/Qt/<QT VERSION>/msvc2022_64/lib/cmake/Qt6`.
 1. `cd <PATH TO PrimeWorldEditor ROOT>`
 2. `mkdir build`
 3. `cd build`
-4. `cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..`
+4. `cmake -G Ninja -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release ..`
 5. `ninja`
 6. *PrimeWorldEditor* is found in the `build/bin` directory.
