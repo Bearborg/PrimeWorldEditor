@@ -17,16 +17,16 @@ void CDrawUtil::DrawGrid(CColor LineColor, CColor BoldLineColor)
     CGraphics::UpdateMVPBlock();
 
     glBlendFunc(GL_ONE, GL_ZERO);
-    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_FALSE);
     glDepthMask(GL_TRUE);
 
     glLineWidth(1.0f);
-    LineColor.A = 0.f;
+    LineColor.A = 1.f;
     UseColorShader(LineColor);
     mGridIndices.DrawElements(0, mGridIndices.GetSize() - 4);
 
     glLineWidth(1.5f);
-    BoldLineColor.A = 0.f;
+    BoldLineColor.A = 1.f;
     UseColorShader(BoldLineColor);
     mGridIndices.DrawElements(mGridIndices.GetSize() - 4, 4);
 }
@@ -179,7 +179,7 @@ void CDrawUtil::DrawWireSphere(const CVector3f& Position, float Radius, const CC
     UseColorShader(Color);
     CMaterial::KillCachedMaterial();
     glBlendFunc(GL_ONE, GL_ZERO);
-    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_FALSE);
     glDepthMask(GL_TRUE);
 
     // Draw
@@ -208,7 +208,7 @@ void CDrawUtil::DrawBillboard(CTexture* pTexture, const CVector3f& Position, con
     // Set other properties
     CMaterial::KillCachedMaterial();
     glBlendFunc(GL_ONE, GL_ZERO);
-    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_FALSE);
     glDepthMask(GL_TRUE);
 
     // Draw
@@ -248,7 +248,7 @@ void CDrawUtil::DrawLightBillboard(ELightType Type, const CColor& LightColor, co
     // Set other properties
     CMaterial::KillCachedMaterial();
     glBlendFunc(GL_ONE, GL_ZERO);
-    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_FALSE);
     glDepthMask(GL_TRUE);
 
     // Draw

@@ -87,7 +87,7 @@ void CRenderer::SetBloom(EBloomMode BloomMode)
 void CRenderer::SetClearColor(const CColor& rkClear)
 {
     mClearColor = rkClear;
-    mClearColor.A = 0.f;
+    //mClearColor.A = 0.f;
     glClearColor(mClearColor.R, mClearColor.G, mClearColor.B, mClearColor.A);
 }
 
