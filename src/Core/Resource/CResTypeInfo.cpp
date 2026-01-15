@@ -6,7 +6,7 @@
 
 #include <algorithm>
 #include <memory>
-#include <Unordered_map>
+#include <unordered_map>
 
 std::unordered_map<EResourceType, std::unique_ptr<CResTypeInfo>> CResTypeInfo::smTypeMap;
 

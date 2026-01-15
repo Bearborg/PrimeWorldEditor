@@ -332,3 +332,12 @@ bool CPropertyNameGenerator::IsValidPropertyID(uint32 ID, const char*& pkType, c
         return IsValid && (!IsAlreadyNamed || !rkParams.ExcludeAccuratelyNamedProperties);
     }
 }
+
+template <>
+const CEnumNameMap TEnumReflection<ENameCasing>::skNameMap = {
+    { 0, "PascalCase" },
+    { 1, "Snake_Case" },
+    { 2, "camelCase" },
+ };
+template <>
+const int TEnumReflection<ENameCasing>::skErrorValue = -1;

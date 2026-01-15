@@ -21,14 +21,6 @@ enum class ENameCasing
     Snake_Case,
     camelCase,
 };
-template <>
-const CEnumNameMap TEnumReflection<ENameCasing>::skNameMap = {
-    { 0, "PascalCase" },
-    { 1, "Snake_Case" },
-    { 2, "camelCase" },
- };
-template <>
-const int TEnumReflection<ENameCasing>::skErrorValue = -1;
 
 /** ID/type pairing for ID pool */
 struct SPropertyIdTypePair

@@ -36,7 +36,7 @@ public:
 
         // Make sure TaskCount and StepCount are at least 1 so we don't have divide-by-zero errors
         int TaskCount = std::max(mTaskCount, 1);
-        StepCount = std::max(StepCount, 1ULL);
+        StepCount = std::max<uint64_t>(StepCount, 1);
 
         // Calculate percentage
         double TaskPercent = 1.f / (double) TaskCount;

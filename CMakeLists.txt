@@ -7,7 +7,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 set(CMAKE_CONFIGURATION_TYPES ${CMAKE_BUILD_TYPE})
 
-project(PrimeWorldEditor CXX)
+project(PrimeWorldEditor LANGUAGES C CXX)
 
 option(PWE_PUBLIC_RELEASE "Enable end-user deployment configuration for PWE" ON)
 if (PWE_PUBLIC_RELEASE)
@@ -30,7 +30,9 @@ set(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
 set(ASSIMP_BUILD_MINIZIP ON)
 set(ASSIMP_BUILD_TESTS OFF)
 set(ASSIMP_BUILD_ZLIB OFF)
+set(ASSIMP_WARNINGS_AS_ERRORS OFF)
 set(tinyxml2_BUILD_TESTING OFF)
+set(BUILD_SHARED_LIBS OFF)
 
 set(ZLIB_BUILD_EXAMPLES OFF)
 set(ZLIB_LIBRARY zlibstatic)
@@ -78,7 +80,7 @@ FetchContent_Declare(
 FetchContent_Declare(
   lzokay
   GIT_REPOSITORY https://github.com/AxioDL/lzokay.git
-  GIT_TAG        546a9695271e8a8b4711383f828172754fd825f2
+  GIT_TAG        db2df1fcbebc2ed06c10f727f72567d40f06a2be
   OVERRIDE_FIND_PACKAGE
   EXCLUDE_FROM_ALL
 )
@@ -115,7 +117,7 @@ if(MSVC)
         /Zc:throwingNew
     )
 else()
-    add_compile_options(-Wno-multichar -Wno-undefined-var-template)
+    add_compile_options(-Wno-multichar -Wno-undefined-var-template -Wno-error=array-bounds -fcommon)
 endif()
 
 if(APPLE)

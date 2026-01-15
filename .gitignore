@@ -25,6 +25,9 @@ ui_*.h
 Makefile*
 *-build-*
 
+# CLion
+.idea/**
+
 # QtCreator
 *.autosave
 CMakeLists.txt.user
