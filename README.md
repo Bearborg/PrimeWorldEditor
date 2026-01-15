@@ -15,8 +15,6 @@ by running `git submodule update --init --recursive`.
 
 * [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) (Desktop development with C++)
 * [Qt 6.5+](https://download.qt.io/official_releases/qt/) (MSVC 2022 64-bit specification)
-* [LLVM 6.0.1 x86-64](http://releases.llvm.org/6.0.1/LLVM-6.0.1-win64.exe) installation; currently must be installed to `C:\Program Files\LLVM\`
-* [Python 3 x86-64](https://www.python.org/downloads/windows/)
 
 ## Build using Qt Creator
 
@@ -55,7 +53,7 @@ They should be set to `C:/Qt/<QT VERSION>/msvc2022_64/lib/cmake/Qt6`.
 2. `cd <PATH TO PrimeWorldEditor ROOT>`
 3. `mkdir build`
 4. `cd build`
-5. `cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=C:/Qt/<QT VERSION>/msvc2022_64/lib/cmake/Qt6 ..`
+5. `cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_PREFIX_PATH=C:/Qt/<QT VERSION>/msvc2022_64/lib/cmake/Qt6 ..`
 6. `ninja`
 7. *PrimeWorldEditor.exe* is found in the `build/bin` directory.
 
@@ -65,14 +63,14 @@ They should be set to `C:/Qt/<QT VERSION>/msvc2022_64/lib/cmake/Qt6`.
 
 * [Xcode 10.2+](https://developer.apple.com/xcode/)
 * [Qt 6.5+](https://download.qt.io/official_releases/qt/) (macOS specification)
-* *cmake*, *ninja* and *python* installed using [Homebrew](https://brew.sh/)
+* *cmake* and *ninja* installed using [Homebrew](https://brew.sh/)
 
 ## Build using Xcode
 
 1. `cd <PATH TO PrimeWorldEditor ROOT>`
 2. `mkdir build`
 3. `cd build`
-4. `cmake -G Xcode -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=~/Qt/<QT VERSION>/clang_64/lib/cmake/Qt6 ..`
+4. `cmake -G Xcode -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_PREFIX_PATH=~/Qt/<QT VERSION>/clang_64/lib/cmake/Qt6 ..`
 5. Open *PrimeWorldEditor.xcodeproj*
 6. Edit/Build/Debug/Run
 
@@ -81,7 +79,7 @@ They should be set to `C:/Qt/<QT VERSION>/msvc2022_64/lib/cmake/Qt6`.
 1. `cd <PATH TO PrimeWorldEditor ROOT>`
 2. `mkdir build`
 3. `cd build`
-4. `cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=~/Qt/<QT VERSION>/clang_64/lib/cmake/Qt6 ..`
+4. `cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_PREFIX_PATH=~/Qt/<QT VERSION>/clang_64/lib/cmake/Qt6 ..`
 5. `ninja`
 6. *PrimeWorldEditor.app* is found in the `build/bin` directory.
 
@@ -90,7 +88,7 @@ They should be set to `C:/Qt/<QT VERSION>/msvc2022_64/lib/cmake/Qt6`.
 ## Requirements
 
 * A working compiler toolchain (GCC or Clang)
-* *cmake*, *ninja*, *python3*, *qt6* (dev), *clang* (dev) packages
+* *cmake*, *ninja*, *qt6* (dev)
 
 ## Build using Command Line
 

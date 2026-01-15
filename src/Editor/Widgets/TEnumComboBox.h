@@ -2,7 +2,7 @@
 #define TENUMCOMBOBOX_H
 
 #include <QComboBox>
-#include <codegen/EnumReflection.h>
+#include <Common/EnumReflection.h>
 
 /**
  * Combo box subclass that auto-fills with an enum

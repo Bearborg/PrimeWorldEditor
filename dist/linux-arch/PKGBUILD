@@ -8,12 +8,11 @@ pkgdesc='An editor for games by Retro Studios'
 arch=('x86_64')
 url='https://github.com/arukibree/PrimeWorldEditor'
 license=('MIT')
-depends=('qt5-base' 'zlib')
-makedepends=('clang' 'python' 'ninja')
+depends=('qt6-base' 'zlib')
+makedepends=('clang' 'ninja')
 source=('git+https://github.com/AxioDL/PrimeWorldEditor.git'
-        'git+https://github.com/AxioDL/LibCommon.git'
-        'git+https://github.com/AxioDL/CodeGen.git')
-sha256sums=('SKIP' 'SKIP' 'SKIP')
+        'git+https://github.com/AxioDL/LibCommon.git')
+sha256sums=('SKIP' 'SKIP')
 
 pkgver() {
   cd PrimeWorldEditor
@@ -28,16 +27,10 @@ prepare() {
   mkdir build
   
   ln -s $startdir/LibCommon $startdir/LibCommon.git
-  ln -s $startdir/CodeGen $startdir/CodeGen.git
   
   cd PrimeWorldEditor
   git submodule init
   git config submodule.LibCommon.url $srcdir/LibCommon
-  git submodule update
-  
-  cd externals/LibCommon
-  git submodule init
-  git config submodule.CodeGen.url $srcdir/CodeGen
   git submodule update
 }
 
