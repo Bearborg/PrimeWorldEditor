@@ -22,8 +22,7 @@ CModel::CModel(CMaterialSet *pSet, bool OwnsMatSet)
     mHasOwnMaterials = OwnsMatSet;
     mHasOwnSurfaces = true;
 
-    mMaterialSets.resize(1);
-    mMaterialSets[0] = pSet;
+    mMaterialSets.push_back(pSet);
 }
 
 CModel::~CModel()
