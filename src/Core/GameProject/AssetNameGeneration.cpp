@@ -14,8 +14,8 @@
 #include "Core/Resource/Script/CScriptTemplate.h"
 #include <Common/FileUtil.h>
 #include <Common/Log.h>
-#include <Common/Math/MathUtil.h>
 
+#include <algorithm>
 #include <ranges>
 
 #define REVERT_AUTO_NAMES 1
@@ -595,7 +595,7 @@ void GenerateAssetNames(CGameProject *pProj)
 
         if (!String.IsEmpty())
         {
-            TString Name = String.SubString(0, Math::Min<uint32>(String.Size(), 50)).Trimmed();
+            TString Name = String.SubString(0, std::min(String.Size(), size_t{50})).Trimmed();
             Name.Replace("\n", " ");
 
             while (Name.EndsWith(".") || TString::IsWhitespace(Name.Back()))
