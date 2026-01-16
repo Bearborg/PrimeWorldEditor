@@ -305,21 +305,21 @@ void INodeEditor::OnGizmoMoved()
     {
         case CGizmo::EGizmoMode::Translate:
         {
-            CVector3f Delta = mGizmo.DeltaTranslation();
+            const CVector3f& Delta = mGizmo.DeltaTranslation();
             mUndoStack.push(new CTranslateNodeCommand(this, mpSelection->Nodes(), Delta, mTranslateSpace));
             break;
         }
 
         case CGizmo::EGizmoMode::Rotate:
         {
-            CQuaternion Delta = mGizmo.DeltaRotation();
+            const CQuaternion& Delta = mGizmo.DeltaRotation();
             mUndoStack.push(new CRotateNodeCommand(this, mpSelection->Nodes(), true, mGizmo.Position(), mGizmo.Rotation(), Delta, mRotateSpace));
             break;
         }
 
         case CGizmo::EGizmoMode::Scale:
         {
-            CVector3f Delta = mGizmo.DeltaScale();
+            const CVector3f& Delta = mGizmo.DeltaScale();
             mUndoStack.push(new CScaleNodeCommand(this, mpSelection->Nodes(), true, mGizmo.Position(), Delta));
             break;
         }

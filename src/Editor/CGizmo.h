@@ -119,31 +119,31 @@ public:
     ETransformSpace TransformSpace() const
     { return mTransformSpace; }
 
-    CVector3f Position() const
+    const CVector3f& Position() const
     { return mPosition; }
 
-    CVector3f DeltaTranslation() const
+    const CVector3f& DeltaTranslation() const
     { return mDeltaTranslation; }
 
-    CVector3f TotalTranslation() const
+    const CVector3f& TotalTranslation() const
     { return mTotalTranslation; }
 
-    CQuaternion Rotation() const
+    const CQuaternion& Rotation() const
     { return mRotation; }
 
-    CQuaternion DeltaRotation() const
+    const CQuaternion& DeltaRotation() const
     { return mDeltaRotation; }
 
-    CVector3f TotalRotation() const
+    const CVector3f& TotalRotation() const
     { return mTotalRotation; }
 
-    CVector3f Scale() const
+    const CVector3f& Scale() const
     { return mScale; }
 
-    CVector3f DeltaScale() const
+    const CVector3f& DeltaScale() const
     { return mDeltaScale; }
 
-    CVector3f TotalScale() const
+    const CVector3f& TotalScale() const
     { return mTotalScale; }
 
     bool IsTransforming() const
