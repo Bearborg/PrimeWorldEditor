@@ -1,9 +1,10 @@
 #ifndef CPROGRESSBARNOTIFIER_H
 #define CPROGRESSBARNOTIFIER_H
 
-#include <Common/Math/MathUtil.h>
 #include <Core/IProgressNotifier.h>
 #include <QProgressBar>
+
+#include <cmath>
 
 /** Progress notifier class that updates a QProgressBar. */
 class CProgressBarNotifier : public IProgressNotifier
@@ -40,7 +41,7 @@ protected:
             return;
 
         // Defer setValue call so it runs on the correct thread
-        const int Alpha = Math::Lerp(mpProgressBar->minimum(), mpProgressBar->maximum(), ProgressPercent);
+        const int Alpha = std::lerp(mpProgressBar->minimum(), mpProgressBar->maximum(), ProgressPercent);
         QMetaObject::invokeMethod(mpProgressBar, &QProgressBar::setValue, Qt::AutoConnection, Alpha);
     }
 };
