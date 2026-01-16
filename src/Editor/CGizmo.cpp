@@ -9,6 +9,7 @@
 #include <Core/Resource/Model/CModel.h>
 #include <Core/Resource/Model/SSurface.h>
 
+#include <cmath>
 #include <QApplication>
 #include <QScreen>
 
@@ -390,7 +391,7 @@ bool CGizmo::TransformFromInput(const CRay& rkRay, CCamera& rCamera)
             // Check relativity of new pos to camera to reduce issue where the gizmo might
             // go flying off into the distance if newPosToCamera is parallel to the plane
             CVector3f NewPosToCamera = (NewPos - rCamera.Position()).Normalized();
-            float Dot = Math::Abs(PlaneNormal.Dot(NewPosToCamera));
+            float Dot = std::abs(PlaneNormal.Dot(NewPosToCamera));
             if (Dot < 0.02f)
                 return false;
 
