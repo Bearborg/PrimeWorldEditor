@@ -329,7 +329,7 @@ void CGizmo::StartTransform()
     }
 }
 
-bool CGizmo::TransformFromInput(const CRay& rkRay, CCamera& rCamera)
+bool CGizmo::TransformFromInput(const CRay& rkRay, const CCamera& rCamera)
 {
     // Wrap cursor (this has no effect until the next time this function is called)
     if (mEnableCursorWrap && (mMode != EGizmoMode::Translate))

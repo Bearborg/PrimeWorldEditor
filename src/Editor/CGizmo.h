@@ -109,7 +109,7 @@ public:
     uint32 NumSelectedAxes() const;
     void ResetSelectedAxes();
     void StartTransform();
-    bool TransformFromInput(const CRay& rkRay, CCamera& rkCamera);
+    bool TransformFromInput(const CRay& rkRay, const CCamera& rkCamera);
     void EndTransform();
 
     // Accessors
