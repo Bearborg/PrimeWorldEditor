@@ -18,7 +18,7 @@ enum class EShowFlag : uint32_t
     Skeletons           = 0x80,
     All                 = 0xFFFFFFFF
 };
-DECLARE_FLAGS_ENUMCLASS(EShowFlag, FShowFlags)
+AXIO_DECLARE_FLAGS_ENUMCLASS(EShowFlag, FShowFlags)
 
 constexpr inline FShowFlags gkGameModeShowFlags{EShowFlag::MergedWorld | EShowFlag::ObjectGeometry | EShowFlag::Sky};
 

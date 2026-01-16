@@ -21,7 +21,7 @@ enum class EPassSettings
     ModulateIncandecenceMap = 0x8,
     InvertOpacityMap        = 0x10
 };
-DECLARE_FLAGS_ENUMCLASS(EPassSettings, FPassSettings)
+AXIO_DECLARE_FLAGS_ENUMCLASS(EPassSettings, FPassSettings)
 
 class CMaterialPass
 {

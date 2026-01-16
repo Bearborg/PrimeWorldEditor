@@ -533,7 +533,7 @@ void CModelEditorWindow::UpdateMaterial(bool Value)
     case EModelEditorWidget::EnableOccluderCheckBox:
     case EModelEditorWidget::EnableLightmapCheckBox:
     {
-        FMaterialOptions Options = EMaterialOption(mpCurrentMat->Options().ToInt32() & 0x2408);
+        auto Options = FMaterialOptions(mpCurrentMat->Options().Value() & 0x2408);
         Options |= EMaterialOption(ui->EnableTransparencyCheck->isChecked()      <<  4);
         Options |= EMaterialOption(ui->EnablePunchthroughCheck->isChecked()      <<  5);
         Options |= EMaterialOption(ui->EnableReflectionCheck->isChecked()        <<  6);

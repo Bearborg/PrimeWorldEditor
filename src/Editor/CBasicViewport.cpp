@@ -205,8 +205,8 @@ void CBasicViewport::keyReleaseEvent(QKeyEvent *pEvent)
 void CBasicViewport::focusOutEvent(QFocusEvent*)
 {
     // When the widget loses focus, release all input.
-    mButtonsPressed = 0;
-    mKeysPressed = 0;
+    mButtonsPressed = {};
+    mKeysPressed = {};
     SetCursorVisible(true);
 }
 

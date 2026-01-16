@@ -168,7 +168,7 @@ void CMaterialCooker::WriteMaterialPrime(IOutputStream& rOut)
     else
         Flags = 0x4002;
 
-    Flags |= (HasKonst ? 0x8 : 0x0) | (mpMat->Options() & ~0x8) | (TexFlags << 16);
+    Flags |= (HasKonst ? 0x8 : 0x0) | (mpMat->Options().Value() & ~0x8) | (TexFlags << 16);
 
     rOut.WriteU32(Flags);
 

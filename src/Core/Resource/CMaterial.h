@@ -35,7 +35,7 @@ enum class EMaterialOption
     ZeroDestAlpha           = 0x40000,
     DrawWhiteAmbientDKCR    = 0x80000
 };
-DECLARE_FLAGS_ENUMCLASS(EMaterialOption, FMaterialOptions)
+AXIO_DECLARE_FLAGS_ENUMCLASS(EMaterialOption, FMaterialOptions)
 
 enum class EMP3MaterialOption
 {
@@ -54,7 +54,7 @@ enum class EMP3MaterialOption
     XRayAlphaTarget             = 0x10000,
     DrawWhiteAmbientDKCR        = 0x80000,
 };
-DECLARE_FLAGS_ENUMCLASS(EMP3MaterialOption, FMP3MaterialOptions)
+AXIO_DECLARE_FLAGS_ENUMCLASS(EMP3MaterialOption, FMP3MaterialOptions)
 
 class CMaterial
 {

@@ -42,13 +42,13 @@ uint16 CVertexBuffer::AddVertex(const CVertex& rkVtx)
 
     for (size_t iTex = 0; iTex < mTexCoords.size(); iTex++)
     {
-        if (mVtxDesc.HasFlag(EVertexAttribute(EVertexAttribute::Tex0 << iTex)))
+        if (mVtxDesc.HasFlag(EVertexAttribute::Tex0 << iTex))
             mTexCoords[iTex].emplace_back(rkVtx.Tex[iTex]);
     }
 
     for (size_t iMtx = 0; iMtx < mTexCoords.size(); iMtx++)
     {
-        if ((mVtxDesc & (EVertexAttribute::PosMtx << iMtx)) != 0)
+        if (mVtxDesc.HasFlag(EVertexAttribute::PosMtx << iMtx))
             mTexCoords[iMtx].emplace_back(rkVtx.MatrixIndices[iMtx]);
     }
 
@@ -107,7 +107,7 @@ uint16_t CVertexBuffer::AddIfUnique(const CVertex& rkVtx, uint16_t Start)
             {
                 for (size_t iTex = 0; iTex < mTexCoords.size(); iTex++)
                 {
-                    if (mVtxDesc.HasFlag(EVertexAttribute(EVertexAttribute::Tex0 << iTex)))
+                    if (mVtxDesc.HasFlag(EVertexAttribute::Tex0 << iTex))
                     {
                         if (rkVtx.Tex[iTex] != mTexCoords[iTex][iVert])
                         {
@@ -159,7 +159,7 @@ void CVertexBuffer::Reserve(size_t Size)
 
     for (size_t iTex = 0; iTex < mTexCoords.size(); iTex++)
     {
-        if (mVtxDesc.HasFlag(EVertexAttribute(EVertexAttribute::Tex0 << iTex)))
+        if (mVtxDesc.HasFlag(EVertexAttribute::Tex0 << iTex))
             mTexCoords[iTex].reserve(ReserveSize);
     }
 
@@ -202,7 +202,7 @@ void CVertexBuffer::Buffer()
 
     for (size_t iAttrib = 0; iAttrib < mAttribBuffers.size(); iAttrib++)
     {
-        const auto Attrib = EVertexAttribute(EVertexAttribute::Position << iAttrib);
+        const auto Attrib = EVertexAttribute::Position << iAttrib;
         const bool HasAttrib = mVtxDesc.HasFlag(Attrib);
         if (!HasAttrib)
             continue;
@@ -291,7 +291,7 @@ GLuint CVertexBuffer::CreateVAO()
 
     for (size_t iAttrib = 0; iAttrib < mAttribBuffers.size(); iAttrib++)
     {
-        const auto Attrib = EVertexAttribute(EVertexAttribute::Position << iAttrib);
+        const auto Attrib = EVertexAttribute::Position << iAttrib;
         const bool HasAttrib = mVtxDesc.HasFlag(Attrib);
         if (!HasAttrib)
             continue;

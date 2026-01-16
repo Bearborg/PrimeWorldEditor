@@ -153,7 +153,7 @@ void CModel::DrawSurface(FRenderOptions Options, size_t Surface, size_t MatSet)
     };
 
     // Bind material
-    if ((Options & ERenderOption::NoMaterialSetup) == 0)
+    if (!Options.HasFlag(ERenderOption::NoMaterialSetup))
     {
         const SSurface *pSurf = mSurfaces[Surface];
         CMaterial *pMat = mMaterialSets[MatSet]->MaterialByIndex(pSurf->MaterialID, Options.HasFlag(ERenderOption::EnableBloom));

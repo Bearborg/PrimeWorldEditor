@@ -121,8 +121,8 @@ public:
 
     void UpdateBounds()                                { mBoundsDirty = true; }
     void SetAllowedNodeTypes(FNodeFlags Types)         { mAllowedNodes = Types; }
-    bool IsAllowedType(ENodeType Type) const           { return (mAllowedNodes & Type) != 0; }
-    bool IsAllowedType(const CSceneNode *pNode) const  { return (mAllowedNodes & pNode->NodeType()) != 0; }
+    bool IsAllowedType(ENodeType Type) const           { return mAllowedNodes.HasFlag(Type); }
+    bool IsAllowedType(const CSceneNode *pNode) const  { return mAllowedNodes.HasFlag(pNode->NodeType()); }
     const QList<CSceneNode*>& SelectedNodeList() const { return mSelectedNodes; }
 
 signals:

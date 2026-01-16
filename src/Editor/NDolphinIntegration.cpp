@@ -397,13 +397,13 @@ QString AskForDolphinPath(QWidget* pParentWidget) {
 void SaveQuickplayParameters(const SQuickplayParameters& kParms)
 {
     QSettings Settings;
-    Settings.setValue(gkFeaturesSetting, kParms.Features.ToInt32());
+    Settings.setValue(gkFeaturesSetting, kParms.Features.Value());
 }
 
 void LoadQuickplayParameters(SQuickplayParameters& Parms)
 {
     QSettings Settings;
-    Parms.Features = Settings.value(gkFeaturesSetting, (uint32) EQuickplayFeature::DefaultFeatures).toInt();
+    Parms.Features = FQuickplayFeatures(Settings.value(gkFeaturesSetting, (uint32) EQuickplayFeature::DefaultFeatures).toUInt());
 }
 
 }

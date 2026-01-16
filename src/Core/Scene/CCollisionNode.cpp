@@ -65,7 +65,7 @@ void CCollisionNode::Draw(FRenderOptions /*Options*/, int /*ComponentIndex*/, ER
         {
             const CCollisionMaterial& kMat = kIndexData.Materials[MatIdx];
 
-            if ((rkViewInfo.CollisionSettings.HideMaterial & kMat) != 0) 
+            if (rkViewInfo.CollisionSettings.HideMaterial & kMat) 
                 continue;
 
             if (rkViewInfo.CollisionSettings.HideMask != 0 && (kMat.RawFlags() & rkViewInfo.CollisionSettings.HideMask) != 0)

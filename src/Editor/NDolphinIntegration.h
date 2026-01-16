@@ -36,7 +36,7 @@ enum class EQuickplayFeature
     /** Flags enabled by default */
     DefaultFeatures         = JumpToArea | SetSpawnPosition
 };
-DECLARE_FLAGS_ENUMCLASS(EQuickplayFeature, FQuickplayFeatures)
+AXIO_DECLARE_FLAGS_ENUMCLASS(EQuickplayFeature, FQuickplayFeatures)
 
 /** Full parameter set for quickplay that gets passed to the game. */
 struct SQuickplayParameters
@@ -68,7 +68,7 @@ struct SQuickplayParameters
         Stream.WriteU32(kParmsVersion);
 
         // Parameters
-        Stream.WriteU32(Features.ToInt32());
+        Stream.WriteU32(Features.Value());
         Stream.WriteU32(BootWorldAssetID);
         Stream.WriteU32(BootAreaAssetID);
         Stream.WriteU32(0);

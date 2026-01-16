@@ -32,7 +32,7 @@ enum class EModelLoaderFlag
     VisibilityGroups        = 0x8,
     Skinned                 = 0x10
 };
-DECLARE_FLAGS_ENUMCLASS(EModelLoaderFlag, FModelLoaderFlags)
+AXIO_DECLARE_FLAGS_ENUMCLASS(EModelLoaderFlag, FModelLoaderFlags)
 
 class CModelLoader
 {

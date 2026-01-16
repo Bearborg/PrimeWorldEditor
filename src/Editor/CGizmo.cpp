@@ -116,7 +116,7 @@ void CGizmo::Draw(FRenderOptions /*Options*/, int ComponentIndex, ERenderCommand
     // Set model matrix
     if (pPart[ComponentIndex].IsBillboard)
         CGraphics::sMVPBlock.ModelMatrix = mBillboardTransform;
-    else if ((mMode == EGizmoMode::Scale) && ((mSelectedAxes & pPart[ComponentIndex].ModelAxes) != 0))
+    else if (mMode == EGizmoMode::Scale && (mSelectedAxes & pPart[ComponentIndex].ModelAxes))
         CGraphics::sMVPBlock.ModelMatrix = mScaledTransform;
     else
         CGraphics::sMVPBlock.ModelMatrix = mTransform;

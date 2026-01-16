@@ -349,14 +349,12 @@ void INodeEditor::OnViewportClick(const SRayIntersection& rkRayIntersect, QMouse
 
             DeselectNode(pNode);
         }
-
         // Ctrl: Add to selection
         else if (CtrlPressed)
         {
             if (ValidNode)
                 SelectNode(pNode);
         }
-
         // Neither: clear selection + select
         else
         {
@@ -369,11 +367,9 @@ void INodeEditor::OnViewportClick(const SRayIntersection& rkRayIntersect, QMouse
             }
         }
     }
-
-    // In pick mode: process node pick
-    else
+    else // In pick mode: process node pick
     {
-        bool ValidNode = (pNode && (pNode->NodeType() & mAllowedPickNodes));
+        bool ValidNode = (pNode && mAllowedPickNodes.HasFlag(pNode->NodeType()));
 
         if (ValidNode || mEmitOnInvalidPick)
             emit PickModeClick(rkRayIntersect, pEvent);
@@ -396,7 +392,7 @@ void INodeEditor::OnViewportInputProcessed(const SRayIntersection& rkRayIntersec
 
         if (NewNode || ((ModifiersChanged || ButtonsChanged) && mEmitOnButtonPress))
         {
-            bool ValidNode = (pNode && (pNode->NodeType() & mAllowedPickNodes));
+            bool ValidNode = (pNode && mAllowedPickNodes.HasFlag(pNode->NodeType()));
 
             if (ValidNode || mEmitOnInvalidPick)
                 emit PickModeHoverChanged(rkRayIntersect, pEvent);

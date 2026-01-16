@@ -30,7 +30,7 @@ enum class EVertexAttribute
     Tex5Mtx         = 0x100000,
     Tex6Mtx         = 0x200000
 };
-DECLARE_FLAGS_ENUMCLASS(EVertexAttribute, FVertexDescription)
+AXIO_DECLARE_FLAGS_ENUMCLASS(EVertexAttribute, FVertexDescription)
 
 uint32_t VertexAttributeSize(EVertexAttribute Attrib);
 

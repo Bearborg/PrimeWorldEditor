@@ -91,7 +91,7 @@ struct SMP3IntermediateMaterial
 
         char GetSwapAlphaComp() const
         {
-            switch (mSettings.ToInt32() & 0x3)
+            switch (mSettings.Value() & 0x3)
             {
             case 0: return 'r';
             case 1: return 'g';

@@ -44,7 +44,7 @@ enum class EPropertyFlag : uint32_t
     /** Flags that are inheritable from parent */
     InheritableFlags       = IsArchetype | IsArrayArchetype | IsAtomic,
 };
-DECLARE_FLAGS_ENUMCLASS(EPropertyFlag, FPropertyFlags)
+AXIO_DECLARE_FLAGS_ENUMCLASS(EPropertyFlag, FPropertyFlags)
 
 /** Property type */
 enum class EPropertyType

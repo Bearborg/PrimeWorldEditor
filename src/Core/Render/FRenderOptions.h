@@ -13,7 +13,7 @@ enum class ERenderOption
     EnableBloom         = 0x10,
     NoAlpha             = 0x20
 };
-DECLARE_FLAGS_ENUMCLASS(ERenderOption, FRenderOptions)
+AXIO_DECLARE_FLAGS_ENUMCLASS(ERenderOption, FRenderOptions)
 
 #endif // FRENDEROPTIONS_H
 

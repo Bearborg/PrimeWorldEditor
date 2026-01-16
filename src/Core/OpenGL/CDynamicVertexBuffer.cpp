@@ -68,13 +68,13 @@ void CDynamicVertexBuffer::ClearBuffers()
 {
     for (size_t iAttrib = 0; iAttrib < mAttribBuffers.size(); iAttrib++)
     {
-        const auto Bit = 1U << iAttrib;
+        const auto Bit = EVertexAttribute(1U << iAttrib);
 
-        if ((mBufferedFlags & Bit) != 0)
+        if (mBufferedFlags.HasFlag(Bit))
             glDeleteBuffers(1, &mAttribBuffers[iAttrib]);
     }
 
-    mBufferedFlags = EVertexAttribute::None;
+    mBufferedFlags.Reset(EVertexAttribute::None);
 }
 
 GLuint CDynamicVertexBuffer::CreateVAO()

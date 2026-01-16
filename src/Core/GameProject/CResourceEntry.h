@@ -26,7 +26,7 @@ enum class EResEntryFlag
     AutoResDir          = 0x00000020, // Resource directory name is auto-generated
     MarkedForDeletion   = 0x00000040, // Resource has been marked for deletion by the user
 };
-DECLARE_FLAGS(EResEntryFlag, FResEntryFlags)
+AXIO_DECLARE_FLAGS(EResEntryFlag, FResEntryFlags)
 
 class CResourceEntry
 {

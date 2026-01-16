@@ -47,6 +47,7 @@ enum ECollisionFlag
     eCF_AiBlock             = 0x40000000,
     eCF_JumpNotAllowed      = 0x80000000
 };
+AXIO_DEFINE_ENUM_OPS(ECollisionFlag)
 
 class CCollisionMaterial : public TFlags<ECollisionFlag>
 {

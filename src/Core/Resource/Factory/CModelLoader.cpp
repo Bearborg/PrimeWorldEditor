@@ -149,7 +149,7 @@ SSurface* CModelLoader::LoadSurface(IInputStream& rModel)
 
             for (uint32_t iMtxAttr = 0; iMtxAttr < 8; iMtxAttr++)
             {
-                if (VtxDesc.HasFlag(EVertexAttribute(EVertexAttribute::PosMtx << iMtxAttr)))
+                if (VtxDesc.HasFlag(EVertexAttribute::PosMtx << iMtxAttr))
                     rModel.Seek(0x1, SEEK_CUR);
             }
 
@@ -175,7 +175,7 @@ SSurface* CModelLoader::LoadSurface(IInputStream& rModel)
             // Color
             for (size_t iClr = 0; iClr < Vtx.Color.size(); iClr++)
             {
-                if (VtxDesc.HasFlag(EVertexAttribute(EVertexAttribute::Color0 << iClr)))
+                if (VtxDesc.HasFlag(EVertexAttribute::Color0 << iClr))
                     Vtx.Color[iClr] = mColors[rModel.ReadU16()];
             }
 
@@ -194,7 +194,7 @@ SSurface* CModelLoader::LoadSurface(IInputStream& rModel)
                 // Tex1-7
                 for (size_t iTex = 1; iTex < 7; iTex++)
                 {
-                    if (VtxDesc.HasFlag(EVertexAttribute(EVertexAttribute::Tex0 << iTex)))
+                    if (VtxDesc.HasFlag(EVertexAttribute::Tex0 << iTex))
                         Vtx.Tex[iTex] = mTex0[rModel.ReadU16()];
                 }
             }
@@ -203,7 +203,7 @@ SSurface* CModelLoader::LoadSurface(IInputStream& rModel)
                 // Tex0-7
                 for (size_t iTex = 0; iTex < 7; iTex++)
                 {
-                    if (VtxDesc.HasFlag(EVertexAttribute(EVertexAttribute::Tex0 << iTex)))
+                    if (VtxDesc.HasFlag(EVertexAttribute::Tex0 << iTex))
                     {
                         if (!mSurfaceUsingTex1)
                             Vtx.Tex[iTex] = mTex0[rModel.ReadU16()];

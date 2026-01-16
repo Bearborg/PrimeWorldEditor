@@ -19,7 +19,7 @@ enum class ENodeType : uint32_t
     All             = 0xFFFFFFFF
 };
 
-DECLARE_FLAGS_ENUMCLASS(ENodeType, FNodeFlags)
+AXIO_DECLARE_FLAGS_ENUMCLASS(ENodeType, FNodeFlags)
 
 #endif // ENODETYPE_H
 
