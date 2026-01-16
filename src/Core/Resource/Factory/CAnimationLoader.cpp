@@ -403,7 +403,7 @@ void CAnimationLoader::ReadCompressedAnimationData()
     }
 
     // Fill in missing keys
-    uint32 NumMissedKeys = 0;
+    uint32_t NumMissedKeys = 0;
 
     for (size_t iKey = 0; iKey < mpAnim->mNumKeys; iKey++)
     {
@@ -413,9 +413,9 @@ void CAnimationLoader::ReadCompressedAnimationData()
         }
         else if (NumMissedKeys > 0)
         {
-            const uint32 FirstIndex = iKey - NumMissedKeys - 1;
+            const uint32_t FirstIndex = iKey - NumMissedKeys - 1;
             const size_t LastIndex = iKey;
-            const uint32 RelLastIndex = LastIndex - FirstIndex;
+            const uint32_t RelLastIndex = LastIndex - FirstIndex;
 
             for (size_t iMissed = 0; iMissed < NumMissedKeys; iMissed++)
             {
@@ -423,31 +423,31 @@ void CAnimationLoader::ReadCompressedAnimationData()
                 const size_t RelKeyIndex = (KeyIndex - FirstIndex);
                 const float Interp = static_cast<float>(RelKeyIndex) / static_cast<float>(RelLastIndex);
 
-                for (uint32 iChan = 0; iChan < mCompressedChannels.size(); iChan++)
+                for (auto&& [idx, channel] : Utils::enumerate(mCompressedChannels))
                 {
-                    const bool HasTranslationKeys = mCompressedChannels[iChan].NumTranslationKeys > 0;
-                    const bool HasRotationKeys = mCompressedChannels[iChan].NumRotationKeys > 0;
-                    const bool HasScaleKeys = mCompressedChannels[iChan].NumScaleKeys > 0;
+                    const bool HasTranslationKeys = channel.NumTranslationKeys > 0;
+                    const bool HasRotationKeys = channel.NumRotationKeys > 0;
+                    const bool HasScaleKeys = channel.NumScaleKeys > 0;
 
                     if (HasRotationKeys)
                     {
-                        const CQuaternion Left = mpAnim->mRotationChannels[iChan][FirstIndex];
-                        const CQuaternion Right = mpAnim->mRotationChannels[iChan][LastIndex];
-                        mpAnim->mRotationChannels[iChan][KeyIndex] = Left.Slerp(Right, Interp);
+                        const CQuaternion& Left = mpAnim->mRotationChannels[idx][FirstIndex];
+                        const CQuaternion& Right = mpAnim->mRotationChannels[idx][LastIndex];
+                        mpAnim->mRotationChannels[idx][KeyIndex] = Left.Slerp(Right, Interp);
                     }
 
                     if (HasTranslationKeys)
                     {
-                        const CVector3f Left = mpAnim->mTranslationChannels[iChan][FirstIndex];
-                        const CVector3f Right = mpAnim->mTranslationChannels[iChan][LastIndex];
-                        mpAnim->mTranslationChannels[iChan][KeyIndex] = Math::Lerp<CVector3f>(Left, Right, Interp);
+                        const CVector3f& Left = mpAnim->mTranslationChannels[idx][FirstIndex];
+                        const CVector3f& Right = mpAnim->mTranslationChannels[idx][LastIndex];
+                        mpAnim->mTranslationChannels[idx][KeyIndex] = Math::Lerp<CVector3f>(Left, Right, Interp);
                     }
 
                     if (HasScaleKeys)
                     {
-                        const CVector3f Left = mpAnim->mScaleChannels[iChan][FirstIndex];
-                        const CVector3f Right = mpAnim->mScaleChannels[iChan][LastIndex];
-                        mpAnim->mScaleChannels[iChan][KeyIndex] = Math::Lerp<CVector3f>(Left, Right, Interp);
+                        const CVector3f& Left = mpAnim->mScaleChannels[idx][FirstIndex];
+                        const CVector3f& Right = mpAnim->mScaleChannels[idx][LastIndex];
+                        mpAnim->mScaleChannels[idx][KeyIndex] = Math::Lerp<CVector3f>(Left, Right, Interp);
                     }
                 }
             }
