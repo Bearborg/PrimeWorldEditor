@@ -1,5 +1,6 @@
 #include "Core/Resource/Factory/CMaterialLoader.h"
 
+#include "Core/NRangeUtils.h"
 #include "Core/GameProject/CResourceStore.h"
 #include "Core/OpenGL/GLCommon.h"
 #include "Core/Resource/CMaterialSet.h"
@@ -7,6 +8,7 @@
 #include <Common/FileIO/IInputStream.h>
 
 #include <assimp/scene.h>
+#include <fmt/format.h>
 
 CMaterialLoader::CMaterialLoader() = default;
 
@@ -44,10 +46,10 @@ void CMaterialLoader::ReadPrimeMatSet()
     const auto NumTextures = mpFile->ReadU32();
     mTextures.resize(NumTextures);
 
-    for (size_t iTex = 0; iTex < NumTextures; iTex++)
+    for (auto& texture : mTextures)
     {
         const auto TextureID = mpFile->ReadU32();
-        mTextures[iTex] = gpResourceStore->LoadResource<CTexture>(TextureID);
+        texture = gpResourceStore->LoadResource<CTexture>(TextureID);
     }
 
     // Materials
@@ -58,12 +60,12 @@ void CMaterialLoader::ReadPrimeMatSet()
 
     const auto MatsStart = mpFile->Tell();
     mpSet->mMaterials.resize(NumMats);
-    for (uint32_t iMat = 0; iMat < NumMats; iMat++)
+    for (auto&& [idx, material] : Utils::enumerate(mpSet->mMaterials))
     {
-        mpSet->mMaterials[iMat] = ReadPrimeMaterial();
-        mpSet->mMaterials[iMat]->mVersion = mVersion;
-        mpSet->mMaterials[iMat]->mName = TString("Material #") + TString::FromInt32(iMat + 1, 0, 10);
-        mpFile->Seek(MatsStart + Offsets[iMat], SEEK_SET);
+        material = ReadPrimeMaterial();
+        material->mVersion = mVersion;
+        material->mName = fmt::format("Material #{}", idx + 1);
+        mpFile->Seek(MatsStart + Offsets[idx], SEEK_SET);
     }
 }
 
@@ -132,7 +134,7 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadPrimeMaterial()
     const auto TevCount = mpFile->ReadU32();
     pMat->mPasses.resize(TevCount);
 
-    for (size_t iTev = 0; iTev < TevCount; iTev++)
+    for (auto& matPass : pMat->mPasses)
     {
         auto pPass = std::make_unique<CMaterialPass>(pMat.get());
 
@@ -151,7 +153,7 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadPrimeMaterial()
             pPass->mAlphaInputs[iInput] = static_cast<ETevAlphaInput>((AlphaIn >> (iInput * 5)) & 0x7);
         }
 
-        pMat->mPasses[iTev] = std::move(pPass);
+        matPass = std::move(pPass);
     }
 
     std::vector<uint8_t> TevCoordIndices(TevCount);
@@ -217,19 +219,18 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadPrimeMaterial()
     }
 
     // Move TexGen and anims into passes
-    for (size_t iPass = 0; iPass < pMat->mPasses.size(); iPass++)
+    for (auto&& [idx, pass] : Utils::enumerate(pMat->mPasses))
     {
-        CMaterialPass *pPass = pMat->mPasses[iPass].get();
-        const auto TexCoordIdx = TevCoordIndices[iPass];
+        const auto TexCoordIdx = TevCoordIndices[idx];
 
         if (TexGens.empty() || TexCoordIdx == 0xFF)
         {
-            pPass->mTexCoordSource = 0xFF;
-            pPass->mAnimMode = EUVAnimMode::NoUVAnim;
+            pass->mTexCoordSource = 0xFF;
+            pass->mAnimMode = EUVAnimMode::NoUVAnim;
         }
         else
         {
-            pPass->mTexCoordSource = static_cast<uint8_t>((TexGens[TexCoordIdx] & 0x1F0) >> 4);
+            pass->mTexCoordSource = static_cast<uint8_t>((TexGens[TexCoordIdx] & 0x1F0) >> 4);
 
             // Next step - find which animation is used by this pass
             // Texture matrix is a reliable way to tell, because every UV anim mode generates a texture matrix
@@ -238,14 +239,14 @@ std::unique_ptr<CMaterial> CMaterialLoader::ReadPrimeMaterial()
             // 10 is identity matrix; indicates no UV anim for this pass
             if (TexMtxIdx == 10)
             {
-                pPass->mAnimMode = EUVAnimMode::NoUVAnim;
+                pass->mAnimMode = EUVAnimMode::NoUVAnim;
             }
             else
             {
-                pPass->mAnimMode = static_cast<EUVAnimMode>(Anims[TexMtxIdx].Mode);
+                pass->mAnimMode = static_cast<EUVAnimMode>(Anims[TexMtxIdx].Mode);
 
                 for (size_t iParam = 0; iParam < 4; iParam++)
-                    pPass->mAnimParams[iParam] = Anims[TexMtxIdx].Params[iParam];
+                    pass->mAnimParams[iParam] = Anims[TexMtxIdx].Params[iParam];
             }
         }
     }
@@ -258,13 +259,13 @@ void CMaterialLoader::ReadCorruptionMatSet()
     const auto NumMats = mpFile->ReadU32();
     mpSet->mMaterials.resize(NumMats);
 
-    for (uint32_t iMat = 0; iMat < NumMats; iMat++)
+    for (auto&& [idx, material] : Utils::enumerate(mpSet->mMaterials))
     {
         const auto Size = mpFile->ReadU32();
         const auto Next = mpFile->Tell() + Size;
-        mpSet->mMaterials[iMat] = ReadCorruptionMaterial();
-        mpSet->mMaterials[iMat]->mVersion = mVersion;
-        mpSet->mMaterials[iMat]->mName = TString("Material #") + std::to_string(iMat + 1);
+        material = ReadCorruptionMaterial();
+        material->mVersion = mVersion;
+        material->mName = fmt::format("Material #{}", idx + 1);
         mpFile->Seek(Next, SEEK_SET);
     }
 }
