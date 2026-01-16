@@ -1,5 +1,6 @@
 #include "Core/Resource/CMaterial.h"
 
+#include "Core/NRangeUtils.h"
 #include "Core/GameProject/CResourceStore.h"
 #include "Core/Render/CDrawUtil.h"
 #include "Core/Render/CGraphics.h"
@@ -176,28 +177,28 @@ bool CMaterial::SetCurrent(FRenderOptions Options)
         glColorMask(bColorWrite, bColorWrite, bColorWrite, bAlphaWrite);
 
         // Load uniforms
-        for (size_t iPass = 0; iPass < mPasses.size(); iPass++)
-            mPasses[iPass]->SetAnimCurrent(Options, iPass);
+        for (auto [idx, pass] : Utils::enumerate(mPasses))
+            pass->SetAnimCurrent(Options, idx);
 
         sCurrentMaterial = HashParameters();
     }
     else // If the passes are otherwise the same, update UV anims that use the model matrix
     {
-        for (size_t iPass = 0; iPass < mPasses.size(); iPass++)
+        for (auto [idx, pass] : Utils::enumerate(mPasses))
         {
-            const EUVAnimMode mode = mPasses[iPass]->AnimMode();
+            const EUVAnimMode mode = pass->AnimMode();
 
             if (mode == EUVAnimMode::InverseMV || mode == EUVAnimMode::InverseMVTranslated ||
                 mode == EUVAnimMode::ModelMatrix || mode == EUVAnimMode::SimpleMode)
             {
-                mPasses[iPass]->SetAnimCurrent(Options, iPass);
+                pass->SetAnimCurrent(Options, idx);
             }
         }
     }
 
     // Set up shader uniforms
-    for (uint32 iPass = 0; iPass < mPasses.size(); iPass++)
-        mPasses[iPass]->LoadTexture(iPass);
+    for (auto [idx, pass] : Utils::enumerate(mPasses))
+        pass->LoadTexture(idx);
 
     CShader *pShader = CShader::CurrentShader();
     pShader->SetTextureUniforms(mPasses.size());
