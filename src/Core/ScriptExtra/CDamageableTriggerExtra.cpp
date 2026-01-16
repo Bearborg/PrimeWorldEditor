@@ -7,7 +7,8 @@
 #include "Core/Resource/Script/CScriptObject.h"
 #include "Core/Scene/CScriptNode.h"
 #include <Common/Macros.h>
-#include <Common/Math/MathUtil.h>
+
+#include <cmath>
 
 CDamageableTriggerExtra::CDamageableTriggerExtra(CScriptObject *pInstance, CScene *pScene, CScriptNode *pParent)
     : CScriptExtra(pInstance, pScene, pParent)
@@ -134,7 +135,7 @@ void CDamageableTriggerExtra::UpdatePlaneTransform()
 CDamageableTriggerExtra::ERenderSide CDamageableTriggerExtra::RenderSideForDirection(const CVector3f& rkDir) const 
 {
     // Get the index of the largest XYZ component
-    const CVector3f AbsDir(Math::Abs(rkDir.X), Math::Abs(rkDir.Y), Math::Abs(rkDir.Z));
+    const CVector3f AbsDir(std::abs(rkDir.X), std::abs(rkDir.Y), std::abs(rkDir.Z));
     uint32_t Max = (AbsDir.X > AbsDir.Y ? 0 : 1);
     Max = (AbsDir[Max] > AbsDir.Z ? Max : 2);
 
