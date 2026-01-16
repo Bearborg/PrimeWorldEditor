@@ -5,6 +5,7 @@
 #include <Common/FileIO/CBitStreamInWrapper.h>
 #include <Common/Math/CQuaternion.h>
 #include <Common/Math/MathUtil.h>
+#include "Core/NRangeUtils.h"
 #include "Core/Resource/Animation/CAnimation.h"
 #include "Core/Resource/Animation/CAnimEventData.h"
 
@@ -157,7 +158,6 @@ void CAnimationLoader::ReadUncompressedANIM()
             mpAnim->mBoneInfo[iBone].ScaleChannelIdx = (ScaleIndices.empty() ? 0xFF : ScaleIndices[iChan]);
             iChan++;
         }
-
         else
         {
             mpAnim->mBoneInfo[iBone].TranslationChannelIdx = 0xFF;
@@ -172,35 +172,32 @@ void CAnimationLoader::ReadUncompressedANIM()
         mpInput->Seek(0x4, SEEK_CUR); // Skipping scale key count
         mpAnim->mScaleChannels.resize(NumScaleChannels);
 
-        for (size_t iScale = 0; iScale < NumScaleChannels; iScale++)
+        for (auto& scaleChannel : mpAnim->mScaleChannels)
         {
-            mpAnim->mScaleChannels[iScale].resize(mpAnim->mNumKeys);
-
+            scaleChannel.reserve(mpAnim->mNumKeys);
             for (size_t iKey = 0; iKey < mpAnim->mNumKeys; iKey++)
-                mpAnim->mScaleChannels[iScale][iKey] = CVector3f(*mpInput);
+                scaleChannel.emplace_back(*mpInput);
         }
     }
 
     mpInput->Seek(0x4, SEEK_CUR); // Skipping rotation key count
     mpAnim->mRotationChannels.resize(NumRotationChannels);
 
-    for (size_t iRot = 0; iRot < NumRotationChannels; iRot++)
+    for (auto& rotationChannel : mpAnim->mRotationChannels)
     {
-        mpAnim->mRotationChannels[iRot].resize(mpAnim->mNumKeys);
-
+        rotationChannel.reserve(mpAnim->mNumKeys);
         for (size_t iKey = 0; iKey < mpAnim->mNumKeys; iKey++)
-            mpAnim->mRotationChannels[iRot][iKey] = CQuaternion(*mpInput);
+            rotationChannel.emplace_back(*mpInput);
     }
 
     mpInput->Seek(0x4, SEEK_CUR); // Skipping translation key count
     mpAnim->mTranslationChannels.resize(NumTranslationChannels);
 
-    for (size_t iTrans = 0; iTrans < NumTranslationChannels; iTrans++)
+    for (auto& transChannel : mpAnim->mTranslationChannels)
     {
-        mpAnim->mTranslationChannels[iTrans].resize(mpAnim->mNumKeys);
-
+        transChannel.reserve(mpAnim->mNumKeys);
         for (size_t iKey = 0; iKey < mpAnim->mNumKeys; iKey++)
-            mpAnim->mTranslationChannels[iTrans][iKey] = CVector3f(*mpInput);
+            transChannel.emplace_back(*mpInput);
     }
 
     if (mGame == EGame::Prime)
@@ -243,10 +240,8 @@ void CAnimationLoader::ReadCompressedANIM()
     {
         CBitStreamInWrapper BitStream(mpInput);
 
-        for (size_t i = 0; i < mKeyFlags.size(); ++i)
-        {
-            mKeyFlags[i] = BitStream.ReadBit();
-        }
+        for (auto&& flag : mKeyFlags)
+            flag = BitStream.ReadBit();
     }
     mpInput->Seek(mGame == EGame::Prime ? 0x8 : 0x4, SEEK_CUR);
 
@@ -327,30 +322,28 @@ void CAnimationLoader::ReadCompressedAnimationData()
     CBitStreamInWrapper BitStream(mpInput);
 
     // Initialize
-    for (size_t iChan = 0; iChan < mCompressedChannels.size(); iChan++)
+    for (auto&& [idx, channel] : Utils::enumerate(mCompressedChannels))
     {
-        SCompressedChannel& rChan = mCompressedChannels[iChan];
-
         // Set initial rotation/translation/scale
-        if (rChan.NumRotationKeys > 0)
+        if (channel.NumRotationKeys > 0)
         {
-            mpAnim->mRotationChannels[iChan].reserve(rChan.NumRotationKeys + 1);
-            CQuaternion Rotation = DequantizeRotation(false, rChan.Rotation[0], rChan.Rotation[1], rChan.Rotation[2]);
-            mpAnim->mRotationChannels[iChan].push_back(Rotation);
+            mpAnim->mRotationChannels[idx].reserve(channel.NumRotationKeys + 1);
+            CQuaternion Rotation = DequantizeRotation(false, channel.Rotation[0], channel.Rotation[1], channel.Rotation[2]);
+            mpAnim->mRotationChannels[idx].push_back(Rotation);
         }
 
-        if (rChan.NumTranslationKeys > 0)
+        if (channel.NumTranslationKeys > 0)
         {
-            mpAnim->mTranslationChannels[iChan].reserve(rChan.NumTranslationKeys + 1);
-            CVector3f Translate = CVector3f(rChan.Translation[0], rChan.Translation[1], rChan.Translation[2]) * mTranslationMultiplier;
-            mpAnim->mTranslationChannels[iChan].push_back(Translate);
+            mpAnim->mTranslationChannels[idx].reserve(channel.NumTranslationKeys + 1);
+            CVector3f Translate = CVector3f(channel.Translation[0], channel.Translation[1], channel.Translation[2]) * mTranslationMultiplier;
+            mpAnim->mTranslationChannels[idx].push_back(Translate);
         }
 
-        if (rChan.NumScaleKeys > 0)
+        if (channel.NumScaleKeys > 0)
         {
-            mpAnim->mScaleChannels[iChan].reserve(rChan.NumScaleKeys + 1);
-            CVector3f Scale = CVector3f(rChan.Scale[0], rChan.Scale[1], rChan.Scale[2]) * mScaleMultiplier;
-            mpAnim->mScaleChannels[iChan].push_back(Scale);
+            mpAnim->mScaleChannels[idx].reserve(channel.NumScaleKeys + 1);
+            CVector3f Scale = CVector3f(channel.Scale[0], channel.Scale[1], channel.Scale[2]) * mScaleMultiplier;
+            mpAnim->mScaleChannels[idx].push_back(Scale);
         }
     }
 
@@ -359,12 +352,10 @@ void CAnimationLoader::ReadCompressedAnimationData()
     {
         const bool KeyPresent = mKeyFlags[iKey + 1];
 
-        for (size_t iChan = 0; iChan < mCompressedChannels.size(); iChan++)
+        for (auto&& [idx, channel] : Utils::enumerate(mCompressedChannels))
         {
-            SCompressedChannel& rChan = mCompressedChannels[iChan];
-
             // Read rotation
-            if (rChan.NumRotationKeys > 0)
+            if (channel.NumRotationKeys > 0)
             {
                 // Note if KeyPresent is false, this isn't the correct value of WSign.
                 // However, we're going to recreate this key later via interpolation, so it doesn't matter what value we use here.
@@ -372,41 +363,41 @@ void CAnimationLoader::ReadCompressedAnimationData()
 
                 if (KeyPresent)
                 {
-                    rChan.Rotation[0] += static_cast<int16>(BitStream.ReadBits(rChan.RotationBits[0]));
-                    rChan.Rotation[1] += static_cast<int16>(BitStream.ReadBits(rChan.RotationBits[1]));
-                    rChan.Rotation[2] += static_cast<int16>(BitStream.ReadBits(rChan.RotationBits[2]));
+                    channel.Rotation[0] += static_cast<int16_t>(BitStream.ReadBits(channel.RotationBits[0]));
+                    channel.Rotation[1] += static_cast<int16_t>(BitStream.ReadBits(channel.RotationBits[1]));
+                    channel.Rotation[2] += static_cast<int16_t>(BitStream.ReadBits(channel.RotationBits[2]));
                 }
 
-                const CQuaternion Rotation = DequantizeRotation(WSign, rChan.Rotation[0], rChan.Rotation[1], rChan.Rotation[2]);
-                mpAnim->mRotationChannels[iChan].push_back(Rotation);
+                const CQuaternion Rotation = DequantizeRotation(WSign, channel.Rotation[0], channel.Rotation[1], channel.Rotation[2]);
+                mpAnim->mRotationChannels[idx].push_back(Rotation);
             }
 
             // Read translation
-            if (rChan.NumTranslationKeys > 0)
+            if (channel.NumTranslationKeys > 0)
             {
                 if (KeyPresent)
                 {
-                    rChan.Translation[0] += static_cast<int16>(BitStream.ReadBits(rChan.TranslationBits[0]));
-                    rChan.Translation[1] += static_cast<int16>(BitStream.ReadBits(rChan.TranslationBits[1]));
-                    rChan.Translation[2] += static_cast<int16>(BitStream.ReadBits(rChan.TranslationBits[2]));
+                    channel.Translation[0] += static_cast<int16_t>(BitStream.ReadBits(channel.TranslationBits[0]));
+                    channel.Translation[1] += static_cast<int16_t>(BitStream.ReadBits(channel.TranslationBits[1]));
+                    channel.Translation[2] += static_cast<int16_t>(BitStream.ReadBits(channel.TranslationBits[2]));
                 }
 
-                const CVector3f Translate = CVector3f(rChan.Translation[0], rChan.Translation[1], rChan.Translation[2]) * mTranslationMultiplier;
-                mpAnim->mTranslationChannels[iChan].push_back(Translate);
+                const CVector3f Translate = CVector3f(channel.Translation[0], channel.Translation[1], channel.Translation[2]) * mTranslationMultiplier;
+                mpAnim->mTranslationChannels[idx].push_back(Translate);
             }
 
             // Read scale
-            if (rChan.NumScaleKeys > 0)
+            if (channel.NumScaleKeys > 0)
             {
                 if (KeyPresent)
                 {
-                    rChan.Scale[0] += static_cast<int16>(BitStream.ReadBits(rChan.ScaleBits[0]));
-                    rChan.Scale[1] += static_cast<int16>(BitStream.ReadBits(rChan.ScaleBits[1]));
-                    rChan.Scale[2] += static_cast<int16>(BitStream.ReadBits(rChan.ScaleBits[2]));
+                    channel.Scale[0] += static_cast<int16_t>(BitStream.ReadBits(channel.ScaleBits[0]));
+                    channel.Scale[1] += static_cast<int16_t>(BitStream.ReadBits(channel.ScaleBits[1]));
+                    channel.Scale[2] += static_cast<int16_t>(BitStream.ReadBits(channel.ScaleBits[2]));
                 }
 
-                const CVector3f Scale = CVector3f(rChan.Scale[0], rChan.Scale[1], rChan.Scale[2]) * mScaleMultiplier;
-                mpAnim->mScaleChannels[iChan].push_back(Scale);
+                const CVector3f Scale = CVector3f(channel.Scale[0], channel.Scale[1], channel.Scale[2]) * mScaleMultiplier;
+                mpAnim->mScaleChannels[idx].push_back(Scale);
             }
         }
     }
