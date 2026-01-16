@@ -1,8 +1,9 @@
 #include "Core/Resource/Factory/CStringLoader.h"
 
 #include <Common/Log.h>
-#include <Common/Math/MathUtil.h>
 #include "Core/Resource/StringTable/CStringTable.h"
+
+#include <algorithm>
 
 void CStringLoader::LoadPrimeDemoSTRG(IInputStream& STRG)
 {
@@ -198,7 +199,7 @@ void CStringLoader::LoadNameTable(IInputStream& STRG)
     {
         NameDefs[NameIdx].NameOffset = STRG.ReadU32() + NameTableStart;
         NameDefs[NameIdx].StringIndex = STRG.ReadU32();
-        MaxIndex = Math::Max(MaxIndex, static_cast<int>(NameDefs[NameIdx].StringIndex));
+        MaxIndex = std::max(MaxIndex, static_cast<int>(NameDefs[NameIdx].StringIndex));
     }
 
     // Name strings
