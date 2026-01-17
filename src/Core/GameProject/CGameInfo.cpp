@@ -2,8 +2,9 @@
 
 #include "Core/GameProject/CResourceStore.h"
 #include <Common/Macros.h>
+#include <Common/Serialization/CXMLReader.h>
+#include <Common/Serialization/CXMLWriter.h>
 #include <Common/Serialization/IArchive.h>
-#include <Common/Serialization/XML.h>
 #include <algorithm>
 
 constexpr char gkGameInfoDir[] = "resources/gameinfo";

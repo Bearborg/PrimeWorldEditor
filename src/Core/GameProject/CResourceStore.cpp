@@ -8,8 +8,8 @@
 #include <Common/Macros.h>
 #include <Common/FileUtil.h>
 #include <Common/Log.h>
-#include <Common/Serialization/Binary.h>
-#include <Common/Serialization/XML.h>
+#include <Common/Serialization/CBasicBinaryReader.h>
+#include <Common/Serialization/CBasicBinaryWriter.h>
 #include <tinyxml2.h>
 
 using namespace tinyxml2;

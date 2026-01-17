@@ -3,7 +3,9 @@
 #include "Core/GameProject/CResourceStore.h"
 #include "Core/Resource/Script/NGameList.h"
 #include "Core/Resource/Script/Property/IProperty.h"
-#include <Common/Serialization/XML.h>
+#include <Common/Log.h>
+#include <Common/Serialization/CXMLReader.h>
+#include <Common/Serialization/CXMLWriter.h>
 
 #include <map>
 #include <set>

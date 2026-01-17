@@ -4,8 +4,10 @@
 #include "Core/GameProject/CResourceStore.h"
 
 #include <Common/CFourCC.h>
+#include <Common/Log.h>
 #include <Common/Macros.h>
-#include <Common/Serialization/XML.h>
+#include <Common/Serialization/CXMLReader.h>
+#include <Common/Serialization/CXMLWriter.h>
 
 constexpr char gkAssetMapPath[] = "resources/gameinfo/AssetNameMap";
 constexpr char gkAssetMapExt[] = "xml";

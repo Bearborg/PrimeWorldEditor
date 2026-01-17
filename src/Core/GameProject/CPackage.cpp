@@ -9,7 +9,8 @@
 #include <Common/Macros.h>
 #include <Common/FileIO.h>
 #include <Common/FileUtil.h>
-#include <Common/Serialization/XML.h>
+#include <Common/Serialization/CXMLReader.h>
+#include <Common/Serialization/CXMLWriter.h>
 
 using namespace tinyxml2;
 

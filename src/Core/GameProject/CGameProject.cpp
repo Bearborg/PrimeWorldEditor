@@ -10,7 +10,8 @@
 #include "Core/Tweaks/CTweakManager.h"
 
 #include <Common/FileUtil.h>
-#include <Common/Serialization/XML.h>
+#include <Common/Serialization/CXMLReader.h>
+#include <Common/Serialization/CXMLWriter.h>
 #include <fmt/format.h>
 #include <nod/DiscGCN.hpp>
 #include <nod/DiscWii.hpp>
