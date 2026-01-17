@@ -166,7 +166,7 @@ void CAssetNameMap::CopyFromStore(CResourceStore *pStore)
 
                 while (mUsedSet.contains(NewNameInfo))
                 {
-                    NewNameInfo.Name = NameInfo.Name + '_' + TString::FromInt32(NumConflicted, 0, 10);
+                    NewNameInfo.Name = fmt::format("{}_{}", NameInfo.Name.ToStdString(), NumConflicted);
                     NumConflicted++;
                 }
 
