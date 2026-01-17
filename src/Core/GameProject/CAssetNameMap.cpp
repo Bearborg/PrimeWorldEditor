@@ -172,7 +172,7 @@ void CAssetNameMap::CopyFromStore(CResourceStore *pStore)
 
                 NLog::Warn("Detected name conflict when copying asset name from the resource store; renaming.");
                 NLog::Warn("\tOld Path: {}", NameInfo.FullPath().ToStdString());
-                NLog::Warn("\tNew Path: %s", NewNameInfo.FullPath().ToStdString());
+                NLog::Warn("\tNew Path: {}", NewNameInfo.FullPath().ToStdString());
                 NameInfo.Name = NewNameInfo.Name;
             }
 
