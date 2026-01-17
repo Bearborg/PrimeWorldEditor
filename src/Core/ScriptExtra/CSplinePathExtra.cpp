@@ -50,14 +50,12 @@ void CSplinePathExtra::AddWaypoints()
 
     std::set<CWaypointExtra*> CheckedWaypoints;
 
-    for (size_t LinkIdx = 0; LinkIdx < mpInstance->NumLinks(ELinkType::Outgoing); LinkIdx++)
+    for (const auto* link : mpInstance->Links(ELinkType::Outgoing))
     {
-        const CLink* pLink = mpInstance->Link(ELinkType::Outgoing, LinkIdx);
-
-        if ((pLink->State() == FOURCC('IS00') && pLink->Message() == FOURCC('ATCH')) || // InternalState00/Attach
-            (pLink->State() == FOURCC('MOTP') && pLink->Message() == FOURCC('ATCH')))   // MotionPath/Attach
+        if ((link->State() == FOURCC('IS00') && link->Message() == FOURCC('ATCH')) || // InternalState00/Attach
+            (link->State() == FOURCC('MOTP') && link->Message() == FOURCC('ATCH')))   // MotionPath/Attach
         {
-            CScriptNode* pNode = mpScene->NodeForInstanceID(pLink->ReceiverID());
+            CScriptNode* pNode = mpScene->NodeForInstanceID(link->ReceiverID());
 
             if (pNode && pNode->Instance()->ObjectTypeID() == FOURCC('WAYP')) // Waypoint
             {

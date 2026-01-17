@@ -8,6 +8,7 @@
 #include "Core/Resource/Script/Property/TPropertyRef.h"
 
 #include <cstdint>
+#include <span>
 #include <vector>
 
 class CCollisionMeshGroup;
@@ -83,10 +84,15 @@ public:
     uint32_t Version() const                        { return mVersion; }
     uint32_t ObjectTypeID() const;
     CInstanceID InstanceID() const                  { return mInstanceID; }
-    size_t NumLinks(ELinkType Type) const           { return (Type == ELinkType::Incoming ? mInLinks.size() : mOutLinks.size()); }
-    CLink* Link(ELinkType Type, size_t Index) const { return (Type == ELinkType::Incoming ? mInLinks[Index] : mOutLinks[Index]); }
+
     void* PropertyData()                            { return mPropertyData.data(); }
     const void* PropertyData() const                { return mPropertyData.data(); }
+
+    size_t NumLinks(ELinkType Type) const { return (Type == ELinkType::Incoming ? mInLinks.size() : mOutLinks.size()); }
+    CLink* Link(ELinkType Type, size_t Index) const { return (Type == ELinkType::Incoming ? mInLinks[Index] : mOutLinks[Index]); }
+
+    std::span<CLink*> Links(ELinkType Type) { return (Type == ELinkType::Incoming) ? mInLinks : mOutLinks; }
+    std::span<CLink* const> Links(ELinkType Type) const { return (Type == ELinkType::Incoming) ? mInLinks : mOutLinks; }
 
     CVector3f Position() const                  { return mPosition.IsValid() ? mPosition.Get() : CVector3f::Zero(); }
     CVector3f Rotation() const                  { return mRotation.IsValid() ? mRotation.Get() : CVector3f::Zero(); }

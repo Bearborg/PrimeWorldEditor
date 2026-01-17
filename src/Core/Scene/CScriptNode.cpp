@@ -274,19 +274,17 @@ void CScriptNode::DrawSelection()
         CGraphics::sMVPBlock.ModelMatrix = CMatrix4f::skIdentity;
         CGraphics::UpdateMVPBlock();
 
-        for (size_t iIn = 0; iIn < mpInstance->NumLinks(ELinkType::Incoming); iIn++)
+        for (const auto* link : mpInstance->Links(ELinkType::Incoming))
         {
             // Don't draw in links if the other object is selected.
-            const CLink* pLink = mpInstance->Link(ELinkType::Incoming, iIn);
-            const CScriptNode* pLinkNode = mpScene->NodeForInstanceID(pLink->SenderID());
+            const CScriptNode* pLinkNode = mpScene->NodeForInstanceID(link->SenderID());
             if (pLinkNode != nullptr && !pLinkNode->IsSelected())
                 CDrawUtil::DrawLine(CenterPoint(), pLinkNode->CenterPoint(), CColor::TransparentRed());
         }
 
-        for (size_t iOut = 0; iOut < mpInstance->NumLinks(ELinkType::Outgoing); iOut++)
+        for (const auto* link : mpInstance->Links(ELinkType::Outgoing))
         {
-            const CLink* pLink = mpInstance->Link(ELinkType::Outgoing, iOut);
-            const CScriptNode* pLinkNode = mpScene->NodeForInstanceID(pLink->ReceiverID());
+            const CScriptNode* pLinkNode = mpScene->NodeForInstanceID(link->ReceiverID());
             if (pLinkNode != nullptr)
                 CDrawUtil::DrawLine(CenterPoint(), pLinkNode->CenterPoint(), CColor::TransparentGreen());
         }
@@ -609,9 +607,9 @@ void CScriptNode::GeneratePosition()
         {
             CVector3f NewPos = CVector3f::Zero();
 
-            for (size_t iIn = 0; iIn < mpInstance->NumLinks(ELinkType::Incoming); iIn++)
+            for (const auto* link : mpInstance->Links(ELinkType::Incoming))
             {
-                CScriptNode* pNode = mpScene->NodeForInstanceID(mpInstance->Link(ELinkType::Incoming, iIn)->SenderID());
+                CScriptNode* pNode = mpScene->NodeForInstanceID(link->SenderID());
 
                 if (pNode != nullptr)
                 {
@@ -620,9 +618,9 @@ void CScriptNode::GeneratePosition()
                 }
             }
 
-            for (size_t iOut = 0; iOut < mpInstance->NumLinks(ELinkType::Outgoing); iOut++)
+            for (const auto* link : mpInstance->Links(ELinkType::Outgoing))
             {
-                CScriptNode* pNode = mpScene->NodeForInstanceID(mpInstance->Link(ELinkType::Outgoing, iOut)->ReceiverID());
+                CScriptNode* pNode = mpScene->NodeForInstanceID(link->ReceiverID());
 
                 if (pNode != nullptr)
                 {

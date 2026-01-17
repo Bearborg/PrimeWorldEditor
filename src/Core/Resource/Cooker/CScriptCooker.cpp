@@ -260,15 +260,14 @@ void CScriptCooker::WriteInstance(IOutputStream& rOut, CScriptObject *pInstance)
     const auto InstanceID = (pInstance->Layer()->AreaIndex() << 26) | pInstance->InstanceID().Value();
     rOut.WriteU32(InstanceID);
 
-    const size_t NumLinks = pInstance->NumLinks(ELinkType::Outgoing);
-    IsPrime1 ? rOut.WriteS32(static_cast<int32_t>(NumLinks)) : rOut.WriteU16(static_cast<uint16_t>(NumLinks));
+    const auto Links = pInstance->Links(ELinkType::Outgoing);
+    IsPrime1 ? rOut.WriteS32(static_cast<int32_t>(Links.size())) : rOut.WriteU16(static_cast<uint16_t>(Links.size()));
 
-    for (size_t LinkIdx = 0; LinkIdx < NumLinks; LinkIdx++)
+    for (const auto* link : Links)
     {
-        const CLink *pLink = pInstance->Link(ELinkType::Outgoing, LinkIdx);
-        rOut.WriteU32(pLink->State());
-        rOut.WriteU32(pLink->Message());
-        rOut.WriteU32(pLink->ReceiverID().Value());
+        rOut.WriteU32(link->State());
+        rOut.WriteU32(link->Message());
+        rOut.WriteU32(link->ReceiverID().Value());
     }
 
     WriteProperty(rOut, pInstance->Template()->Properties(), pInstance->PropertyData(), false);
@@ -308,13 +307,11 @@ void CScriptCooker::WriteLayer(IOutputStream& rOut, CScriptLayer *pLayer)
             // Generate/Attach message (MP3+) should be written to SCGN, not SCLY
             else
             {
-                for (size_t LinkIdx = 0; LinkIdx < pInstance->NumLinks(ELinkType::Incoming); LinkIdx++)
+                for (const auto* link : pInstance->Links(ELinkType::Incoming))
                 {
-                    const CLink *pLink = pInstance->Link(ELinkType::Incoming, LinkIdx);
-
                     if (mGame <= EGame::Echoes)
                     {
-                        if (pLink->State() == FOURCC('GRNT') && pLink->Message() == FOURCC('ACTV'))
+                        if (link->State() == FOURCC('GRNT') && link->Message() == FOURCC('ACTV'))
                         {
                             ShouldWrite = false;
                             break;
@@ -322,9 +319,9 @@ void CScriptCooker::WriteLayer(IOutputStream& rOut, CScriptLayer *pLayer)
                     }
                     else
                     {
-                        if (pLink->Message() == FOURCC('ATCH'))
+                        if (link->Message() == FOURCC('ATCH'))
                         {
-                            if (pLink->State() == FOURCC('GRNT') || pLink->State() == FOURCC('GRN0') || pLink->State() == FOURCC('GRN1'))
+                            if (link->State() == FOURCC('GRNT') || link->State() == FOURCC('GRN0') || link->State() == FOURCC('GRN1'))
                             {
                                 ShouldWrite = false;
                                 break;

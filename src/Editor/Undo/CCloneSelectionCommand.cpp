@@ -20,9 +20,9 @@ CCloneSelectionCommand::CCloneSelectionCommand(INodeEditor *pEditor)
             auto* pScript = static_cast<CScriptNode*>(node);
             auto* pInst = pScript->Instance();
 
-            for (size_t iLink = 0; iLink < pInst->NumLinks(ELinkType::Outgoing); iLink++)
+            for (const auto* link : pInst->Links(ELinkType::Outgoing))
             {
-                CScriptNode *pNode = mpEditor->Scene()->NodeForInstance(pInst->Link(ELinkType::Outgoing, iLink)->Receiver());
+                CScriptNode *pNode = mpEditor->Scene()->NodeForInstance(link->Receiver());
 
                 if (!pNode->IsSelected())
                     mLinkedInstances.push_back(pNode->Instance());
@@ -88,16 +88,14 @@ void CCloneSelectionCommand::redo()
         auto* pSrc = static_cast<CScriptNode*>(ToClone[iNode])->Instance();
         auto* pClone = static_cast<CScriptNode*>(ClonedNodes[iNode])->Instance();
 
-        for (size_t iLink = 0; iLink < pSrc->NumLinks(ELinkType::Outgoing); iLink++)
+        for (const auto* srcLink : pSrc->Links(ELinkType::Outgoing))
         {
-            CLink *pSrcLink = pSrc->Link(ELinkType::Outgoing, iLink);
-
             // If we're cloning the receiver then target the cloned receiver instead of the original one.
-            auto ReceiverID = pSrcLink->ReceiverID();
+            auto ReceiverID = srcLink->ReceiverID();
             if (ToCloneInstanceIDs.contains(ReceiverID))
                 ReceiverID = ClonedInstanceIDs[ToCloneInstanceIDs.indexOf(ReceiverID)];
 
-            CLink *pCloneLink = new CLink(pSrcLink->Area(), pSrcLink->State(), pSrcLink->Message(), pClone->InstanceID(), ReceiverID);
+            CLink *pCloneLink = new CLink(srcLink->Area(), srcLink->State(), srcLink->Message(), pClone->InstanceID(), ReceiverID);
             pCloneLink->Sender()->AddLink(ELinkType::Outgoing, pCloneLink);
             pCloneLink->Receiver()->AddLink(ELinkType::Incoming, pCloneLink);
         }

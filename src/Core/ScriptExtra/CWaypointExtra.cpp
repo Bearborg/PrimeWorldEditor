@@ -77,13 +77,11 @@ void CWaypointExtra::BuildLinks()
 {
     mLinks.clear();
 
-    for (size_t iLink = 0; iLink < mpInstance->NumLinks(ELinkType::Outgoing); iLink++)
+    for (const auto* link : mpInstance->Links(ELinkType::Outgoing))
     {
-        const CLink *pLink = mpInstance->Link(ELinkType::Outgoing, iLink);
-
-        if (IsPathLink(pLink))
+        if (IsPathLink(link))
         {
-            CScriptNode *pNode = mpScene->NodeForInstanceID(pLink->ReceiverID());
+            CScriptNode *pNode = mpScene->NodeForInstanceID(link->ReceiverID());
 
             SWaypointLink Link;
             Link.pWaypoint = pNode;

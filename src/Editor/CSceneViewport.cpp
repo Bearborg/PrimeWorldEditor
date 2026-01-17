@@ -254,23 +254,19 @@ void CSceneViewport::FindConnectedObjects(CInstanceID InstanceID, bool SearchOut
 
     if (SearchOutgoing)
     {
-        for (size_t iLink = 0; iLink < pInst->NumLinks(ELinkType::Outgoing); iLink++)
+        for (const auto* link : pInst->Links(ELinkType::Outgoing))
         {
-            const CLink* pLink = pInst->Link(ELinkType::Outgoing, iLink);
-
-            if (!rIDList.contains(pLink->ReceiverID()))
-                FindConnectedObjects(pLink->ReceiverID(), SearchOutgoing, SearchIncoming, rIDList);
+            if (!rIDList.contains(link->ReceiverID()))
+                FindConnectedObjects(link->ReceiverID(), SearchOutgoing, SearchIncoming, rIDList);
         }
     }
 
     if (SearchIncoming)
     {
-        for (size_t iLink = 0; iLink < pInst->NumLinks(ELinkType::Incoming); iLink++)
+        for (const auto* link : pInst->Links(ELinkType::Incoming))
         {
-            const CLink* pLink = pInst->Link(ELinkType::Incoming, iLink);
-
-            if (!rIDList.contains(pLink->SenderID()))
-                FindConnectedObjects(pLink->SenderID(), SearchOutgoing, SearchIncoming, rIDList);
+            if (!rIDList.contains(link->SenderID()))
+                FindConnectedObjects(link->SenderID(), SearchOutgoing, SearchIncoming, rIDList);
         }
     }
 }

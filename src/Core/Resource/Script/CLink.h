@@ -1,6 +1,7 @@
 #ifndef CLINK_H
 #define CLINK_H
 
+#include "Core/NRangeUtils.h"
 #include "Core/Resource/Area/CGameArea.h"
 #include "Core/Resource/Script/CScriptObject.h"
 #include <Common/TString.h>
@@ -113,10 +114,10 @@ public:
     {
         if (const CScriptObject* pSender = mpArea->InstanceByID(mSenderID))
         {
-            for (uint32_t iLink = 0; iLink < pSender->NumLinks(ELinkType::Outgoing); iLink++)
+            for (auto&& [idx, link] : Utils::enumerate(pSender->Links(ELinkType::Outgoing)))
             {
-                if (pSender->Link(ELinkType::Outgoing, iLink) == this)
-                    return iLink;
+                if (link == this)
+                    return uint32_t(idx);
             }
         }
 
@@ -127,10 +128,10 @@ public:
     {
         if (const CScriptObject* pReceiver = mpArea->InstanceByID(mReceiverID))
         {
-            for (uint32_t iLink = 0; iLink < pReceiver->NumLinks(ELinkType::Incoming); iLink++)
+            for (auto&& [idx, link] : Utils::enumerate(pReceiver->Links(ELinkType::Incoming)))
             {
-                if (pReceiver->Link(ELinkType::Incoming, iLink) == this)
-                    return iLink;
+                if (link == this)
+                    return uint32_t(idx);
             }
         }
 
