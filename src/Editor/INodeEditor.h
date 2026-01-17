@@ -12,6 +12,8 @@
 #include <QComboBox>
 #include <QList>
 
+#include <memory>
+
 class INodeEditor : public IEditor
 {
     Q_OBJECT
@@ -25,7 +27,7 @@ public:
 protected:
     // Node management
     CScene mScene;
-    CNodeSelection *mpSelection;
+    std::unique_ptr<CNodeSelection> mpSelection;
     bool mSelectionLocked = false;
 
     // Gizmo

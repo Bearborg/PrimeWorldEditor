@@ -239,7 +239,7 @@ CWorldEditor::~CWorldEditor()
     // We also block the Modified signal that would be emitted on clearing, since the
     // application is shutting down, so any UI updates aren't meaningful here.
     {
-        [[maybe_unused]] const QSignalBlocker blocker{mpSelection};
+        [[maybe_unused]] const QSignalBlocker blocker{mpSelection.get()};
         mpSelection->Clear();
     }
 

@@ -6,7 +6,7 @@
 
 INodeEditor::INodeEditor(QWidget *pParent)
     : IEditor(pParent)
-    , mpSelection(new CNodeSelection)
+    , mpSelection(std::make_unique<CNodeSelection>())
 {
     // Create gizmo actions
     mGizmoActions.append(new QAction(QIcon(QStringLiteral(":/icons/SelectMode.svg")), tr("Select Objects"), this));
@@ -40,13 +40,10 @@ INodeEditor::INodeEditor(QWidget *pParent)
     connect(mGizmoActions[2], &QAction::triggered, this, &INodeEditor::OnRotateTriggered);
     connect(mGizmoActions[3], &QAction::triggered, this, &INodeEditor::OnScaleTriggered);
     connect(mpTransformCombo, &QComboBox::currentIndexChanged, this, &INodeEditor::OnTransformSpaceChanged);
-    connect(mpSelection, &CNodeSelection::Modified, this, &INodeEditor::OnSelectionModified);
+    connect(mpSelection.get(), &CNodeSelection::Modified, this, &INodeEditor::OnSelectionModified);
 }
 
-INodeEditor::~INodeEditor()
-{
-    delete mpSelection;
-}
+INodeEditor::~INodeEditor() = default;
 
 CScene* INodeEditor::Scene()
 {
@@ -113,7 +110,7 @@ void INodeEditor::SelectNode(CSceneNode *pNode)
         return;
 
     if (!pNode->IsSelected())
-        mUndoStack.push(new CSelectNodeCommand(mpSelection, pNode));
+        mUndoStack.push(new CSelectNodeCommand(mpSelection.get(), pNode));
 }
 
 void INodeEditor::BatchSelectNodes(QList<CSceneNode*> Nodes, bool ClearExistingSelection, const QString& rkCommandName /*= "Select"*/)
@@ -150,7 +147,7 @@ void INodeEditor::DeselectNode(CSceneNode *pNode)
         return;
 
     if (pNode->IsSelected())
-        mUndoStack.push(new CDeselectNodeCommand(mpSelection, pNode));
+        mUndoStack.push(new CDeselectNodeCommand(mpSelection.get(), pNode));
 }
 
 void INodeEditor::BatchDeselectNodes(QList<CSceneNode*> Nodes, const QString& rkCommandName /*= "Deselect"*/)
@@ -181,7 +178,7 @@ void INodeEditor::ClearSelection()
         return;
 
     if (!mpSelection->IsEmpty())
-        mUndoStack.push(new CClearSelectionCommand(mpSelection));
+        mUndoStack.push(new CClearSelectionCommand(mpSelection.get()));
 }
 
 void INodeEditor::ClearAndSelectNode(CSceneNode *pNode)
@@ -191,7 +188,7 @@ void INodeEditor::ClearAndSelectNode(CSceneNode *pNode)
 
     if (mpSelection->IsEmpty())
     {
-        mUndoStack.push(new CSelectNodeCommand(mpSelection, pNode));
+        mUndoStack.push(new CSelectNodeCommand(mpSelection.get(), pNode));
     }
     else if ((mpSelection->Size() == 1) && (mpSelection->Front() == pNode))
     {
@@ -200,8 +197,8 @@ void INodeEditor::ClearAndSelectNode(CSceneNode *pNode)
     else
     {
         mUndoStack.beginMacro(tr("Select"));
-        mUndoStack.push(new CClearSelectionCommand(mpSelection));
-        mUndoStack.push(new CSelectNodeCommand(mpSelection, pNode));
+        mUndoStack.push(new CClearSelectionCommand(mpSelection.get()));
+        mUndoStack.push(new CSelectNodeCommand(mpSelection.get(), pNode));
         mUndoStack.endMacro();
     }
 }
@@ -209,13 +206,13 @@ void INodeEditor::ClearAndSelectNode(CSceneNode *pNode)
 void INodeEditor::SelectAll(FNodeFlags NodeFlags)
 {
     if (!mSelectionLocked)
-        mUndoStack.push(new CSelectAllCommand(mpSelection, &mScene, NodeFlags));
+        mUndoStack.push(new CSelectAllCommand(mpSelection.get(), &mScene, NodeFlags));
 }
 
 void INodeEditor::InvertSelection(FNodeFlags NodeFlags)
 {
     if (!mSelectionLocked)
-        mUndoStack.push(new CInvertSelectionCommand(mpSelection, &mScene, NodeFlags));
+        mUndoStack.push(new CInvertSelectionCommand(mpSelection.get(), &mScene, NodeFlags));
 }
 
 void INodeEditor::SetSelectionLocked(bool Locked)
@@ -230,7 +227,7 @@ bool INodeEditor::HasSelection() const
 
 CNodeSelection* INodeEditor::Selection() const
 {
-    return mpSelection;
+    return mpSelection.get();
 }
 
 void INodeEditor::EnterPickMode(FNodeFlags AllowedNodes, bool ExitOnInvalidPick, bool EmitOnInvalidPick, bool EmitHoverOnButtonPress, const QCursor& Cursor /*= Qt::CrossCursor*/)
