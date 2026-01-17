@@ -1,11 +1,13 @@
 #include "Editor/Undo/CDeleteSelectionCommand.h"
 
 #include "Editor/WorldEditor/CWorldEditor.h"
-#include <Common/FileIO.h>
 #include <Core/Resource/Cooker/CScriptCooker.h>
 #include <Core/Resource/Factory/CScriptLoader.h>
 #include <Core/Resource/Script/CScriptLayer.h>
 #include <Core/Scene/CSceneNode.h>
+
+#include <Common/FileIO/CMemoryInStream.h>
+#include <Common/FileIO/CVectorOutStream.h>
 
 #include <vector>
 

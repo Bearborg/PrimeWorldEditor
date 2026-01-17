@@ -1,7 +1,7 @@
 #include "Core/Resource/Cooker/CPoiToWorldCooker.h"
 
-#include <Common/FileIO.h>
 #include "Core/Resource/CPoiToWorld.h"
+#include <vector>
 
 bool CPoiToWorldCooker::CookEGMC(const CPoiToWorld* pPoiToWorld, IOutputStream& rOut)
 {

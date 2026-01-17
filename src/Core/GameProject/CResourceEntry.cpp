@@ -8,9 +8,10 @@
 #include "Core/Resource/CResTypeInfo.h"
 #include "Core/Resource/Cooker/CResourceCooker.h"
 #include "Core/Resource/Factory/CResourceFactory.h"
-#include <Common/FileIO.h>
 #include <Common/FileUtil.h>
 #include <Common/TString.h>
+#include <Common/FileIO/CFileInStream.h>
+#include <Common/FileIO/CFileOutStream.h>
 #include <Common/Serialization/CBinaryReader.h>
 #include <Common/Serialization/CBinaryWriter.h>
 #include <Common/Serialization/CXMLReader.h>

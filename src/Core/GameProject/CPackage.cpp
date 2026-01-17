@@ -7,8 +7,9 @@
 #include "Core/Resource/Cooker/CWorldCooker.h"
 #include <Common/CScopedTimer.h>
 #include <Common/Macros.h>
-#include <Common/FileIO.h>
 #include <Common/FileUtil.h>
+#include <Common/FileIO/CFileInStream.h>
+#include <Common/FileIO/CFileOutStream.h>
 #include <Common/Serialization/CXMLReader.h>
 #include <Common/Serialization/CXMLWriter.h>
 
