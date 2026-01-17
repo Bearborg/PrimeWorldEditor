@@ -23,19 +23,19 @@ static void QtLogRedirect(QtMsgType Type, const QMessageLogContext& /*rkContext*
     switch (Type)
     {
     case QtDebugMsg:
-        NLog::Debug("Qt Debug: %s", *TO_TSTRING(rkMessage));
+        NLog::Debug("Qt Debug: {}", rkMessage.toStdString());
         break;
     case QtWarningMsg:
-        NLog::Warn("Qt Warning: %s", *TO_TSTRING(rkMessage));
+        NLog::Warn("Qt Warning: {}", rkMessage.toStdString());
         break;
     case QtCriticalMsg:
-        NLog::Error("Qt Critical: %s", *TO_TSTRING(rkMessage));
+        NLog::Error("Qt Critical: {}", rkMessage.toStdString());
         break;
     case QtFatalMsg:
-        NLog::Fatal("Qt Fatal: %s", *TO_TSTRING(rkMessage));
+        NLog::Fatal("Qt Fatal: {}", rkMessage.toStdString());
         break;
     case QtInfoMsg:
-        NLog::Debug("Qt Info: %s", *TO_TSTRING(rkMessage));
+        NLog::Debug("Qt Info: {}", rkMessage.toStdString());
         break;
     }
 }
