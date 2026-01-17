@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <ranges>
 #include <unordered_map>
 
 std::unordered_map<EResourceType, std::unique_ptr<CResTypeInfo>> CResTypeInfo::smTypeMap;
@@ -25,8 +26,8 @@ CResTypeInfo::~CResTypeInfo() = default;
 
 bool CResTypeInfo::IsInGame(EGame Game) const
 {
-    return std::any_of(mCookedExtensions.cbegin(), mCookedExtensions.cend(),
-                       [Game](const auto& entry) { return entry.Game == Game; });
+    return std::ranges::any_of(mCookedExtensions,
+                               [Game](const auto& entry) { return entry.Game == Game; });
 }
 
 CFourCC CResTypeInfo::CookedExtension(EGame Game) const
@@ -35,8 +36,8 @@ CFourCC CResTypeInfo::CookedExtension(EGame Game) const
     if (Game == EGame::Invalid)
         Game = EGame::Prime;
 
-    const auto iter = std::find_if(mCookedExtensions.cbegin(), mCookedExtensions.cend(),
-                                   [Game](const auto& entry) { return entry.Game == Game; });
+    const auto iter = std::ranges::find_if(mCookedExtensions,
+                                           [Game](const auto& entry) { return entry.Game == Game; });
 
     if (iter == mCookedExtensions.cend())
         return CFourCC("NONE");
@@ -47,10 +48,8 @@ CFourCC CResTypeInfo::CookedExtension(EGame Game) const
 // ************ STATIC ************
 void CResTypeInfo::GetAllTypesInGame(EGame Game, std::list<CResTypeInfo*>& rOut)
 {
-    for (const auto& entry : smTypeMap)
+    for (const auto& type : smTypeMap | std::views::values)
     {
-        const auto& type = entry.second;
-
         if (type->IsInGame(Game))
             rOut.push_back(type.get());
     }
@@ -77,14 +76,12 @@ CResTypeInfo* CResTypeInfo::TypeForCookedExtension(EGame Game, CFourCC Ext)
         return Iter->second;
 
     // Not cached - do a slow lookup
-    for (auto& entry : smTypeMap)
+    for (auto& type : smTypeMap | std::views::values)
     {
-        auto* type = entry.second.get();
-
         if (type->CookedExtension(Game) == Ext)
         {
-            sCachedTypeMap.insert_or_assign(Ext, type);
-            return type;
+            sCachedTypeMap.insert_or_assign(Ext, type.get());
+            return type.get();
         }
     }
 
