@@ -4,6 +4,8 @@
 #include "Editor/SDolHeader.h"
 #include <Common/FileUtil.h>
 #include <Common/Log.h>
+#include <Common/FileIO/CMemoryInStream.h>
+#include <Common/FileIO/CMemoryOutStream.h>
 #include <Common/Math/MathUtil.h>
 #include <Core/GameProject/CResourceStore.h>
 

@@ -1,7 +1,8 @@
 #ifndef NDOLPHININTEGRATION_H
 #define NDOLPHININTEGRATION_H
 
-#include <Common/Common.h>
+#include <Common/Flags.h>
+#include <Common/FileIO/CFileOutStream.h>
 #include <Common/FileIO/IOutputStream.h>
 #include <Common/Math/CTransform4f.h>
 #include <Core/GameProject/CGameProject.h>

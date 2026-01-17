@@ -1,8 +1,14 @@
 #ifndef TSERIALIZEUNDOCOMMAND_H
 #define TSERIALIZEUNDOCOMMAND_H
 
-#include "IUndoCommand.h"
-#include <Common/Common.h>
+#include "Editor/Undo/IUndoCommand.h"
+#include <Common/CFourCC.h>
+#include <Common/FileIO/CMemoryInStream.h>
+#include <Common/FileIO/CVectorOutStream.h>
+#include <Common/Serialization/CBasicBinaryReader.h>
+#include <Common/Serialization/CBasicBinaryWriter.h>
+
+#include <vector>
 
 /**
  * Undo command that works by restoring the full state of an object

@@ -8,7 +8,7 @@
 #include <Core/GameProject/CResourceEntry.h>
 #include <Core/GameProject/CVirtualDirectory.h>
 #include <Core/Resource/CResTypeInfo.h>
-#include <Common/Common.h>
+#include <Common/Macros.h>
 
 #include <QLineEdit>
 #include <QPainter>

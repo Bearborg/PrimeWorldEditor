@@ -5,6 +5,10 @@
 #include "Editor/Undo/EUndoCommand.h"
 #include "Editor/WorldEditor/CWorldEditor.h"
 
+#include <Common/FileIO/CVectorOutStream.h>
+#include <Common/Serialization/CBasicBinaryReader.h>
+#include <Common/Serialization/CBasicBinaryWriter.h>
+
 /** Save the current state of the object properties to the given data buffer */
 void IEditPropertyCommand::SaveObjectStateToArray(std::vector<char>& rVector)
 {

@@ -4,6 +4,7 @@
 #include "Editor/WorldEditor/CWorldEditor.h"
 #include <Core/Resource/Factory/CScriptLoader.h>
 #include <Core/Resource/Script/CScriptLayer.h>
+#include <Common/FileIO/CMemoryInStream.h>
 
 #include <QCoreApplication>
 #include <QClipboard>
