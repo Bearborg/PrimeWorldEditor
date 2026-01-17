@@ -54,7 +54,7 @@ static TString LocateDataDirectory()
 #endif
     {
         /* This is for locating appimage root */
-        TString dir = FileUtil::MakeAbsolute(TString(QCoreApplication::applicationDirPath().toUtf8().data()) + "/../share/PrimeWorldEditor");
+        TString dir = FileUtil::MakeAbsolute(TString(QCoreApplication::applicationDirPath().toStdString()) + "/../share/PrimeWorldEditor");
         NLog::Debug("Checking '{}' for resources", *dir);
         if (FileUtil::IsDirectory(dir + "resources"))
             return dir;
@@ -63,7 +63,7 @@ static TString LocateDataDirectory()
 #if defined(__APPLE__)
     {
         /* This is for locating mac bundle root */
-        TString dir = FileUtil::MakeAbsolute(TString(QCoreApplication::applicationDirPath().toUtf8().data()) + "/../Resources");
+        TString dir = FileUtil::MakeAbsolute(TString(QCoreApplication::applicationDirPath().toStdString()) + "/../Resources");
         NLog::Debug("Checking '{}' for resources", *dir);
         if (FileUtil::IsDirectory(dir + "resources"))
             return dir;
@@ -71,7 +71,7 @@ static TString LocateDataDirectory()
 #endif
     {
         /* This is for locating build directory root */
-        TString dir = FileUtil::MakeAbsolute(TString(QCoreApplication::applicationDirPath().toUtf8().data()) + "/..");
+        TString dir = FileUtil::MakeAbsolute(TString(QCoreApplication::applicationDirPath().toStdString()) + "/..");
         NLog::Debug("Checking '{}' for resources", *dir);
         if (FileUtil::IsDirectory(dir + "resources"))
             return dir;
