@@ -4,6 +4,7 @@
 #include "Editor/SDolHeader.h"
 #include <Common/FileUtil.h>
 #include <Common/Log.h>
+#include <Common/Math/MathUtil.h>
 #include <Core/GameProject/CResourceStore.h>
 
 #include <QCoreApplication>
@@ -199,8 +200,8 @@ EQuickplayLaunchResult LaunchQuickplay(QWidget* pParentWidget,
     SDolHeader header(inStream);
 
     // Append the patch data to the end of the dol
-    uint32 AlignedDolSize = VAL_ALIGN(DolData.size(), 32);
-    uint32 AlignedPatchSize = VAL_ALIGN(PatchData.size(), 32);
+    const auto AlignedDolSize = Math::Align(DolData.size(), 32);
+    const auto AlignedPatchSize = Math::Align(PatchData.size(), 32);
     DolData.resize(AlignedDolSize + AlignedPatchSize);
     memcpy(&DolData[AlignedDolSize], &PatchData[0], PatchData.size());
 

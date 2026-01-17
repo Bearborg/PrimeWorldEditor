@@ -3,6 +3,8 @@
 
 #include "Core/Resource/Script/Property/IProperty.h"
 
+#include <Common/Math/MathUtil.h>
+
 #include <algorithm>
 #include <vector>
 
@@ -212,7 +214,7 @@ public:
     uint32_t ItemSize() const
     {
         const uint32_t ItemAlign = mpItemArchetype->DataAlignment();
-        const uint32_t ItemSize = VAL_ALIGN(mpItemArchetype->DataSize(), ItemAlign);
+        const uint32_t ItemSize = Math::Align(mpItemArchetype->DataSize(), ItemAlign);
         return ItemSize;
     }
 

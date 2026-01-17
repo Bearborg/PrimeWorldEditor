@@ -1,6 +1,7 @@
 #include "Core/Resource/Script/Property/IProperty.h"
 
 #include <Common/NBasics.h>
+#include <Common/Math/MathUtil.h>
 #include "Core/Resource/Script/CGameTemplate.h"
 #include "Core/Resource/Script/CScriptTemplate.h"
 #include "Core/Resource/Script/NGameList.h"
@@ -211,7 +212,7 @@ void IProperty::Initialize(IProperty* pInParent, CScriptTemplate* pInTemplate, u
         {
             ChildOffset += mChildren[ChildIdx - 1]->DataSize();
         }
-        ChildOffset = VAL_ALIGN(ChildOffset, pChild->DataAlignment());
+        ChildOffset = Math::Align(ChildOffset, pChild->DataAlignment());
 
         // Don't call Initialize on intrinsic children as they have already been initialized.
         if (!pChild->IsIntrinsic())
