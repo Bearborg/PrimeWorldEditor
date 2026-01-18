@@ -226,8 +226,6 @@ void CLight::Load() const
         pLight->DistAtten = mDistAttenCoefficients;
         pLight->AngleAtten = mAngleAttenCoefficients;
         break;
-    default:
-        return;
     }
     CGraphics::sNumLights++;
 }
