@@ -136,7 +136,7 @@ struct SNameValue
 std::map<SNameKey, SNameValue> gNameMap;
 
 /** Legacy map that only includes the ID in the key */
-std::map<uint32, TString> gLegacyNameMap;
+std::map<uint32_t, TString> gLegacyNameMap;
 
 /** Internal: Creates a name key for the given property. */
 SNameKey CreateKey(const IProperty* pProperty)
@@ -147,9 +147,9 @@ SNameKey CreateKey(const IProperty* pProperty)
     return Key;
 }
 
-SNameKey CreateKey(uint32 ID, const char* pkTypeName)
+SNameKey CreateKey(uint32_t ID, std::string_view typeName)
 {
-    return SNameKey(CCRC32::StaticHashString(pkTypeName), ID);
+    return SNameKey(CCRC32::StaticHashString(typeName), ID);
 }
 } // Anonymous namespace
 
@@ -174,7 +174,7 @@ void LoadMap()
         // Iterate over the map and set up the valid flags
         for (auto& [key, value] : gNameMap)
         {
-            value.IsValid = CalculatePropertyID(*value.Name, *gHashToTypeName[key.TypeHash]) == key.ID;
+            value.IsValid = CalculatePropertyID(value.Name, gHashToTypeName[key.TypeHash]) == key.ID;
         }
     }
 
@@ -254,29 +254,29 @@ const char* GetPropertyName(const IProperty* pInProperty)
 /** Given a property name and type, returns the name of the property.
  *  This requires you to provide the exact type string used in the hash.
  */
-const char* GetPropertyName(uint32 ID, const char* pkTypeName)
+const char* GetPropertyName(uint32_t ID, std::string_view typeName)
 {
     // Does not support legacy map
     ConditionalLoadMap();
 
-    const SNameKey Key = CreateKey(ID, pkTypeName);
+    const SNameKey Key = CreateKey(ID, typeName);
     const auto MapFind = gNameMap.find(Key);
     return MapFind == gNameMap.cend() ? "Unknown" : *MapFind->second.Name;
 }
 
 /** Calculate the property ID of a given name/type. */
-uint32 CalculatePropertyID(const char* pkName, const char* pkTypeName)
+uint32_t CalculatePropertyID(std::string_view name, std::string_view typeName)
 {
     CCRC32 CRC;
-    CRC.Hash(pkName);
-    CRC.Hash(pkTypeName);
+    CRC.Hash(name);
+    CRC.Hash(typeName);
     return CRC.Digest();
 }
 
 /** Returns whether the specified ID is in the map. */
-bool IsValidPropertyID(uint32 ID, const char* pkTypeName, bool* pOutIsValid /*= nullptr*/)
+bool IsValidPropertyID(uint32_t ID, std::string_view typeName, bool* pOutIsValid /*= nullptr*/)
 {
-    const SNameKey Key = CreateKey(ID, pkTypeName);
+    const SNameKey Key = CreateKey(ID, typeName);
     const auto MapFind = gNameMap.find(Key);
 
     if (MapFind != gNameMap.cend())
@@ -293,9 +293,9 @@ bool IsValidPropertyID(uint32 ID, const char* pkTypeName, bool* pOutIsValid /*= 
 }
 
 /** Retrieves a list of all properties that match the requested property ID. */
-std::vector<IProperty*> RetrievePropertiesWithID(uint32 ID, const char* pkTypeName)
+std::vector<IProperty*> RetrievePropertiesWithID(uint32_t ID, std::string_view typeName)
 {
-    const SNameKey Key = CreateKey(ID, pkTypeName);
+    const SNameKey Key = CreateKey(ID, typeName);
     const auto MapFind = gNameMap.find(Key);
 
     if (MapFind == gNameMap.cend())
@@ -306,9 +306,9 @@ std::vector<IProperty*> RetrievePropertiesWithID(uint32 ID, const char* pkTypeNa
 }
 
 /** Retrieves a list of all XML templates that contain a given property ID. */
-std::set<TString> RetrieveXMLsWithProperty(uint32 ID, const char* pkTypeName)
+std::set<TString> RetrieveXMLsWithProperty(uint32_t ID, std::string_view typeName)
 {
-    const SNameKey Key = CreateKey(ID, pkTypeName);
+    const SNameKey Key = CreateKey(ID, typeName);
     const auto MapFind = gNameMap.find(Key);
 
     if (MapFind == gNameMap.cend())
@@ -325,21 +325,21 @@ std::set<TString> RetrieveXMLsWithProperty(uint32 ID, const char* pkTypeName)
 }
 
 /** Updates the name of a given property in the map */
-void SetPropertyName(uint32 ID, const char* pkTypeName, const char* pkNewName)
+void SetPropertyName(uint32_t ID, std::string_view typeName, std::string_view newName)
 {
     if constexpr (gkUseLegacyMapForUpdates)
     {
         auto Iter = gLegacyNameMap.find(ID);
 
-        if (Iter == gLegacyNameMap.end() || Iter->second != pkNewName)
+        if (Iter == gLegacyNameMap.end() || Iter->second != newName)
         {
-            Iter->second = pkNewName;
+            Iter->second = TString(newName);
             gMapIsDirty = true;
         }
     }
     else
     {
-        const SNameKey Key = CreateKey(ID, pkTypeName);
+        const SNameKey Key = CreateKey(ID, typeName);
         auto MapFind = gNameMap.find(Key);
 
         if (MapFind == gNameMap.cend())
@@ -347,11 +347,11 @@ void SetPropertyName(uint32 ID, const char* pkTypeName, const char* pkNewName)
 
         SNameValue& Value = MapFind->second;
 
-        if (Value.Name == pkNewName)
+        if (Value.Name == newName)
             return;
 
         const TString OldName = std::move(Value.Name);
-        Value.Name = pkNewName;
+        Value.Name = TString(newName);
         gMapIsDirty = true;
 
         // Update all properties with this ID with the new name
@@ -367,10 +367,10 @@ void SetPropertyName(uint32 ID, const char* pkTypeName, const char* pkNewName)
 }
 
 /** Change a type name of a property. */
-void ChangeTypeName(IProperty* pProperty, const char* pkOldTypeName, const char* pkNewTypeName)
+void ChangeTypeName(IProperty* pProperty, std::string_view oldTypeName, std::string_view newTypeName)
 {
-    const uint32 OldTypeHash = CCRC32::StaticHashString(pkOldTypeName);
-    const uint32 NewTypeHash = CCRC32::StaticHashString(pkNewTypeName);
+    const uint32 OldTypeHash = CCRC32::StaticHashString(oldTypeName);
+    const uint32 NewTypeHash = CCRC32::StaticHashString(newTypeName);
 
     if (OldTypeHash == NewTypeHash)
     {
@@ -408,7 +408,7 @@ void ChangeTypeName(IProperty* pProperty, const char* pkOldTypeName, const char*
             {
                 SNameValue Value;
                 Value.Name = pProperty->Name();
-                Value.IsValid = CalculatePropertyID(*Value.Name, pkNewTypeName) == pProperty->ID();
+                Value.IsValid = CalculatePropertyID(Value.Name, newTypeName) == pProperty->ID();
                 Find = gNameMap.insert_or_assign(NewKey, std::move(Value)).first;
             }
             ASSERT(Find != gNameMap.cend());
@@ -422,14 +422,14 @@ void ChangeTypeName(IProperty* pProperty, const char* pkOldTypeName, const char*
         }
     }
 
-    RegisterTypeName(NewTypeHash, pkNewTypeName);
+    RegisterTypeName(NewTypeHash, TString(newTypeName));
 }
 
 /** Change a type name. */
-void ChangeTypeNameGlobally(const char* pkOldTypeName, const char* pkNewTypeName)
+void ChangeTypeNameGlobally(std::string_view oldTypeName, std::string_view newTypeName)
 {
-    const uint32 OldTypeHash = CCRC32::StaticHashString(pkOldTypeName);
-    const uint32 NewTypeHash = CCRC32::StaticHashString(pkNewTypeName);
+    const uint32 OldTypeHash = CCRC32::StaticHashString(oldTypeName);
+    const uint32 NewTypeHash = CCRC32::StaticHashString(newTypeName);
 
     if (OldTypeHash == NewTypeHash)
     {
@@ -458,8 +458,8 @@ void ChangeTypeNameGlobally(const char* pkOldTypeName, const char* pkNewTypeName
         }
     }
 
-    RegisterTypeName(NewTypeHash, pkNewTypeName);
-    gHashToTypeName[NewTypeHash] = pkNewTypeName;
+    RegisterTypeName(NewTypeHash, TString(newTypeName));
+    gHashToTypeName.insert_or_assign(NewTypeHash, TString(newTypeName));
 }
 
 /** Registers a property in the name map. Should be called on all properties that use the map */
@@ -488,7 +488,7 @@ void RegisterProperty(IProperty* pProperty)
 
             SNameValue Value;
             Value.Name = LegacyMapFind->second;
-            Value.IsValid = (CalculatePropertyID(*Value.Name, pProperty->HashableTypeName()) == pProperty->ID());
+            Value.IsValid = (CalculatePropertyID(Value.Name, pProperty->HashableTypeName()) == pProperty->ID());
             pProperty->SetName(Value.Name);
 
             MapFind = gNameMap.insert_or_assign(Key, Value).first;

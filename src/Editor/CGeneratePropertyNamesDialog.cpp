@@ -287,7 +287,7 @@ void CGeneratePropertyNamesDialog::ApplyChanges()
         const TString Type = TO_TSTRING(pItem->text(1));
         const TString NewName = TO_TSTRING(pItem->text(0));
 
-        NPropertyMap::SetPropertyName(ID, *Type, *NewName);
+        NPropertyMap::SetPropertyName(ID, Type, NewName);
         pItem->setText(3, TO_QSTRING(NewName));
     }
 
@@ -318,7 +318,7 @@ void CGeneratePropertyNamesDialog::CheckForNewResults()
                 TO_QSTRING(rkName.Name),
                 TO_QSTRING(rkName.Type),
                 TO_QSTRING(TString::HexString(rkName.ID)),
-                TO_QSTRING(std::string(NPropertyMap::GetPropertyName(rkName.ID, *rkName.Type))),
+                TO_QSTRING(std::string(NPropertyMap::GetPropertyName(rkName.ID, rkName.Type))),
             };
 
             auto* pItem = new CCheckableTreeWidgetItem(pTreeWidget, ColumnText);

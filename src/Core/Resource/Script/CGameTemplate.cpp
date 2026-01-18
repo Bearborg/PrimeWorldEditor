@@ -256,7 +256,7 @@ bool CGameTemplate::RenamePropertyArchetype(const TString& kTypeName, const TStr
                     // For MP2 and up, we also need to update the type names stored in the property map.
                     if (pArchetype->Game() >= EGame::EchoesDemo)
                     {
-                        NPropertyMap::ChangeTypeName(pArchetype, *OldTypeName, *kNewTypeName);
+                        NPropertyMap::ChangeTypeName(pArchetype, OldTypeName, kNewTypeName);
                     }
 
                     // MP1 has a lot of unnamed properties that just use the type name as their name.

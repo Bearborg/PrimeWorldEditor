@@ -147,7 +147,7 @@ void CTemplateEditDialog::ApplyChanges()
         // Rename properties
         if (RenameAll && (mGame >= EGame::EchoesDemo || mpProperty->Archetype() != nullptr))
         {
-            NPropertyMap::SetPropertyName(mpProperty->ID(), mpProperty->HashableTypeName(), *NewName);
+            NPropertyMap::SetPropertyName(mpProperty->ID(), mpProperty->HashableTypeName(), NewName);
         }
     }
 

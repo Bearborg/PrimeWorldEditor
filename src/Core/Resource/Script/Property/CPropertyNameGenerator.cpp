@@ -207,7 +207,7 @@ void CPropertyNameGenerator::GenerateTask(const SPropertyNameGenerationParameter
         {
             CCRC32 FullHash = BaseHash;
             const char* pkTypeName = *typeName;
-            FullHash.Hash( pkTypeName );
+            FullHash.Hash(pkTypeName);
             const uint32 PropertyID = FullHash.Digest();
 
             // Check if this hash is a property ID
