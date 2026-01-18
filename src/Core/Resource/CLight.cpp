@@ -194,11 +194,11 @@ CStructProperty* CLight::GetProperties() const
 // ************ OTHER ************
 void CLight::Load() const
 {
-    const auto Index = static_cast<uint8>(CGraphics::sNumLights);
+    const auto Index = static_cast<uint8_t>(CGraphics::sNumLights);
     if (Index >= CGraphics::sLightBlock.Lights.size())
         return;
 
-    CGraphics::SLightBlock::SGXLight *pLight = &CGraphics::sLightBlock.Lights[Index];
+    auto& pLight = CGraphics::sLightBlock.Lights[Index];
 
     switch (mType)
     {
@@ -206,25 +206,25 @@ void CLight::Load() const
         // LocalAmbient is already accounted for in CGraphics::sAreaAmbientColor
         return;
     case ELightType::Directional:
-        pLight->Position = CVector4f(-mDirection * 1048576.f, 1.f);
-        pLight->Direction = CVector4f(mDirection, 0.f);
-        pLight->Color = mColor * CGraphics::sWorldLightMultiplier;
-        pLight->DistAtten = CVector4f(1.f, 0.f, 0.f, 0.f);
-        pLight->AngleAtten = CVector4f(1.f, 0.f, 0.f, 0.f);
+        pLight.Position = CVector4f(-mDirection * 1048576.f, 1.f);
+        pLight.Direction = CVector4f(mDirection, 0.f);
+        pLight.Color = mColor * CGraphics::sWorldLightMultiplier;
+        pLight.DistAtten = CVector4f(1.f, 0.f, 0.f, 0.f);
+        pLight.AngleAtten = CVector4f(1.f, 0.f, 0.f, 0.f);
         break;
     case ELightType::Spot:
-        pLight->Position = CVector4f(mPosition,  1.f);
-        pLight->Direction = CVector4f(mDirection, 0.f);
-        pLight->Color = mColor * CGraphics::sWorldLightMultiplier;
-        pLight->DistAtten = mDistAttenCoefficients;
-        pLight->AngleAtten = mAngleAttenCoefficients;
+        pLight.Position = CVector4f(mPosition,  1.f);
+        pLight.Direction = CVector4f(mDirection, 0.f);
+        pLight.Color = mColor * CGraphics::sWorldLightMultiplier;
+        pLight.DistAtten = mDistAttenCoefficients;
+        pLight.AngleAtten = mAngleAttenCoefficients;
         break;
     case ELightType::Custom:
-        pLight->Position = CVector4f(mPosition,  1.f);
-        pLight->Direction = CVector4f(mDirection, 0.f);
-        pLight->Color = mColor * CGraphics::sWorldLightMultiplier;
-        pLight->DistAtten = mDistAttenCoefficients;
-        pLight->AngleAtten = mAngleAttenCoefficients;
+        pLight.Position = CVector4f(mPosition,  1.f);
+        pLight.Direction = CVector4f(mDirection, 0.f);
+        pLight.Color = mColor * CGraphics::sWorldLightMultiplier;
+        pLight.DistAtten = mDistAttenCoefficients;
+        pLight.AngleAtten = mAngleAttenCoefficients;
         break;
     }
     CGraphics::sNumLights++;
