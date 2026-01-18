@@ -101,6 +101,8 @@ if(MSVC)
     set_target_properties(assimp PROPERTIES COMPILE_OPTIONS "${EXTLIB_COMPILE_FLAGS}")
 
     add_compile_options(
+        /MP     # Multiprocessor compilation
+
         /WX     # Warnings as errors
         /wd4267 # 'var' : conversion from 'size_t' to 'type', possible loss of data
         /wd4100 # 'identifier' : unreferenced formal parameter
