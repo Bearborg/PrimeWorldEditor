@@ -3,6 +3,7 @@
 
 #include "Core/Resource/Script/Property/IProperty.h"
 #include <cstdint>
+#include <string>
 
 /** There are two types of enum properties in the game data: enum and choice.
  *
@@ -96,7 +97,7 @@ public:
 
     TString ValueAsString(const void* pData) const override
     {
-        return TString::FromInt32(base::Value(pData), 0, 10);
+        return std::to_string(base::Value(pData));
     }
 
     void AddValue(TString ValueName, uint32_t ValueID)

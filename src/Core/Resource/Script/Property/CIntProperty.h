@@ -2,6 +2,7 @@
 #define CINTPROPERTY_H
 
 #include "Core/Resource/Script/Property/IProperty.h"
+#include <string>
 
 class CIntProperty : public TNumericalProperty<int32_t, EPropertyType::Int>
 {
@@ -20,7 +21,7 @@ public:
 
     TString ValueAsString(const void* pData) const override
     {
-        return TString::FromInt32(Value(pData), 0, 10);
+        return std::to_string(Value(pData));
     }
 };
 

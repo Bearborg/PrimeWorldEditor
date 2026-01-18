@@ -1,5 +1,6 @@
 #include "Core/Resource/Script/Property/CFlagsProperty.h"
 #include "Core/Resource/Script/CGameTemplate.h"
+#include <string>
 
 void CFlagsProperty::Serialize(IArchive& rArc)
 {
@@ -39,7 +40,7 @@ void CFlagsProperty::InitFromArchetype(IProperty* pOther)
 
 TString CFlagsProperty::ValueAsString(const void* pData) const
 {
-    return TString::FromInt32(Value(pData), 0, 10);
+    return std::to_string(Value(pData));
 }
 
 /**

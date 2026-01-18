@@ -2,6 +2,7 @@
 #define CSOUNDPROPERTY_H
 
 #include "Core/Resource/Script/Property/IProperty.h"
+#include <string>
 
 class CSoundProperty : public TSerializeableTypedProperty<int32_t, EPropertyType::Sound>
 {
@@ -20,7 +21,7 @@ public:
 
     TString ValueAsString(const void* pData) const override
     {
-        return TString::FromInt32(Value(pData), 0, 10);
+        return std::to_string(Value(pData));
     }
 };
 

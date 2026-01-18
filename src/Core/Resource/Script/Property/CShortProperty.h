@@ -3,6 +3,7 @@
 
 #include "Core/Resource/Script/Property/IProperty.h"
 #include <cstdint>
+#include <string>
 
 class CShortProperty : public TNumericalProperty<int16_t, EPropertyType::Short>
 {
@@ -21,7 +22,7 @@ public:
 
     TString ValueAsString(const void* pData) const override
     {
-        return TString::FromInt32(Value(pData), 0, 10);
+        return std::to_string(Value(pData));
     }
 };
 

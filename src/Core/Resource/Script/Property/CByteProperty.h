@@ -2,6 +2,7 @@
 #define CBYTEPROPERTY_H
 
 #include "Core/Resource/Script/Property/IProperty.h"
+#include <string>
 
 class CByteProperty : public TNumericalProperty<int8_t, EPropertyType::Byte>
 {
@@ -20,7 +21,7 @@ public:
 
     TString ValueAsString(const void* pData) const override
     {
-        return TString::FromInt32(Value(pData), 0, 10);
+        return std::to_string(Value(pData));
     }
 };
 
