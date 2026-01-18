@@ -52,7 +52,7 @@ void CAudioManager::LoadAssets()
     if (AudioLookupID.IsValid())
         mpAudioLookupTable = mpProject->ResourceStore()->LoadResource<CAudioLookupTable>(AudioLookupID);
 
-    if (mpProject->Game() >= EGame::EchoesDemo)
+    if (mpProject->Game() >= EGame::Prime)
     {
         const CAssetID SfxNameListID = mpProject->FindNamedResource("audio_name_lookup_STLC");
 
@@ -82,7 +82,7 @@ SSoundInfo CAudioManager::GetSoundInfo(uint32_t SoundID) const
         if (Iter != mSfxIdMap.cend())
             Out.pAudioGroup = Iter->second;
 
-        if (mpProject->Game() >= EGame::EchoesDemo)
+        if (mpProject->Game() >= EGame::Prime && mpSfxNameList != nullptr)
             Out.Name = mpSfxNameList->StringByIndex(Out.DefineID);
     }
 

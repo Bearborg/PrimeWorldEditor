@@ -385,7 +385,7 @@ void CResTypeInfo::CResTypeInfoFactory::InitTypes()
     }
     {
         auto* pType = new CResTypeInfo(EResourceType::StringList, "String List", "stlc");
-        AddExtension(pType, CFourCC("STLC"), EGame::EchoesDemo, EGame::CorruptionProto);
+        AddExtension(pType, CFourCC("STLC"), EGame::Prime, EGame::CorruptionProto);
         pType->mCanHaveDependencies = false;
     }
     {
