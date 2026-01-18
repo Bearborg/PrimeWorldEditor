@@ -58,24 +58,6 @@ void RegisterProperty(IProperty* pProperty);
 /** Unregisters a property from the name map. Should be called on all properties that use the map on destruction. */
 void UnregisterProperty(IProperty* pProperty);
 
-/** Class that allows for iteration through the name map */
-class CIterator
-{
-    /** Private implementation */
-    class CIteratorImpl* mpImpl;
-
-public:
-    CIterator();
-    ~CIterator();
-
-    uint32_t ID() const;
-    const char* Name() const;
-    const char* TypeName() const;
-
-    explicit operator bool() const;
-    void operator ++();
-};
-
-}
+} // namespace NPropertyMap
 
 #endif // NPROPERTYMAP_H
